@@ -35,6 +35,6 @@ class LessonController extends Controller
 
         $course = $lesson->chapter->course;
 
-        return view('student.lessons.show', compact('lesson', 'course'));
+        return view('Student.lesson-show', compact('lesson', 'course'));
     }
 }

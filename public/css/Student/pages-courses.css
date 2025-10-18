@@ -1,0 +1,61 @@
+.hero--courses .hero__text h1 {
+    max-width: 540px;
+}
+
+.hero--courses .hero__meta span {
+    background: rgba(37, 99, 235, 0.16);
+}
+
+.hero--courses .hero__media::before {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(
+        140deg,
+        rgba(37, 99, 235, 0.08),
+        rgba(96, 165, 250, 0.04)
+    );
+}
+
+.hero--courses .hero__media img {
+    position: relative;
+    z-index: 1;
+    object-fit: cover;
+    max-height: 280px;
+}
+
+.course-card__meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.course-card__meta span::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    opacity: 0.35;
+}
+
+.pagination nav {
+    display: flex;
+    gap: 8px;
+}
+
+.pagination nav a,
+.pagination nav span {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--color-border);
+    color: var(--color-muted);
+}
+
+.pagination nav span[aria-current="page"],
+.pagination nav a:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    font-weight: 600;
+}

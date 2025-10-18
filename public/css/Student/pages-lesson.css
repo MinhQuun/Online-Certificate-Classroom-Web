@@ -1,0 +1,29 @@
+.lesson-layout {
+    display: grid;
+    gap: 32px;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    align-items: start;
+}
+
+.lesson-layout__main {
+    display: grid;
+    gap: 32px;
+}
+
+.lesson-layout__aside {
+    display: grid;
+}
+
+.lesson-pdfs iframe {
+    min-height: 360px;
+}
+
+.lesson-docs .doc-card {
+    min-height: 150px;
+}
+
+@media (max-width: 992px) {
+    .lesson-layout {
+        grid-template-columns: 1fr;
+    }
+}

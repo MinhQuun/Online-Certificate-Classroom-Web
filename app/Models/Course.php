@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Course extends Model
@@ -24,6 +25,11 @@ class Course extends Model
     public function finalTests(): HasMany
     {
         return $this->hasMany(CourseTest::class, 'maKH', 'maKH')->orderBy('maTest');
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'maDanhMuc', 'maDanhMuc');
     }
 
     public function scopePublished($query)

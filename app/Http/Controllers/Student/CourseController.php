@@ -16,7 +16,7 @@ class CourseController extends Controller
             ->orderByDesc('created_at')
             ->paginate(12);
 
-        return view('student.courses.index', compact('courses', 'q'));
+        return view('Student.course-index', compact('courses', 'q'));
     }
 
     public function show(string $slug)
@@ -39,6 +39,6 @@ class CourseController extends Controller
             ])
             ->firstOrFail();
 
-        return view('student.courses.show', compact('course'));
+        return view('Student.course-show', compact('course'));
     }
 }
