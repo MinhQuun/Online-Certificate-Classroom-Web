@@ -11,247 +11,321 @@ SET @R2_BASE_PUBLIC := 'https://pub-9b3a3b8712d849d7b4e15e85e6beca8d.r2.dev';
 -- NÓI - VIẾT
 -- =========================================================
 INSERT INTO TAILIEUHOCTAP
-(maBH, tenTL, loai, kichThuoc, moTa, storage_key, r2_bucket, mime_type, size_bytes, duration_sec, visibility, public_url) VALUES
--- Chương 1 - Bài 1
-(@bh_nv_1_1, 'Read a Text Aloud 1 (Video)', 'Video', '300MB', 'Giới thiệu về trọng âm từ, trọng âm câu và ngữ điệu cơ bản để đọc tự nhiên.',
-NULL, NULL, 'video/mp4', 314572800, NULL, 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/BaiGiang/Bai1/BaiGiang1_N1.%20Read%20a%20Text%20Aloud.mp4')
-),
+(maBH, tenTL, loai, kichThuoc, moTa, mime_type, visibility, public_url) VALUES
+-- Chương 1 - Read a Text Aloud
+-- Bài 1 
+(@bh_nv_1_1, 'Read a Text Aloud 1 (Video)', 'Video', '300MB', 'Giới thiệu về trọng âm từ, trọng âm câu và ngữ điệu cơ bản để đọc tự nhiên.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/BaiGiang/Bai1/BaiGiang1_N1.%20Read%20a%20Text%20Aloud.mp4')),
 
-(@bh_nv_1_1, 'Read a Text Aloud 1 (PDF)', 'PDF', '10MB', 'Giới thiệu về trọng âm từ, trọng âm câu và ngữ điệu cơ bản để đọc tự nhiên.',
-NULL, NULL, 'application/pdf', 10485760, NULL, 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/TaiLieuHocTap/Bai1/TaiLieuBai1_N1.%20Read%20a%20Text%20Aloud.pdf')
-),
+(@bh_nv_1_1, 'Read a Text Aloud 1 (PDF)',   'PDF',   '10MB',  'Giới thiệu về trọng âm từ, trọng âm câu và ngữ điệu cơ bản để đọc tự nhiên.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/TaiLieuHocTap/Bai1/TaiLieuBai1_N1.%20Read%20a%20Text%20Aloud.pdf')),
 
--- Chương 1 - Bài 2
-(@bh_nv_1_3, 'Read a Text Aloud 2 (Video)', 'Video', '300MB', 'Giới thiệu về trọng âm từ, trọng âm câu và ngữ điệu cơ bản để đọc tự nhiên.',
-NULL, NULL, 'video/mp4', 314572800, NULL, 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/BaiGiang/Bai1/BaiGiang1_N1.%20Read%20a%20Text%20Aloud.mp4')
-),
+-- Bài 2
+(@bh_nv_1_2, 'Read a Text Aloud 2 (Video)', 'Video', '300MB', 'Thực hành các mẫu câu phổ biến để làm quen với ngữ điệu lên và xuống trong tiếng Anh.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/BaiGiang/Bai2/BaiGiang2_N1.%20Read%20a%20Text%20Aloud.mp4')),
 
-(@bh_nv_1_4, 'Read a Text Aloud 2 (PDF)', 'PDF', '10MB', 'Giới thiệu về trọng âm từ, trọng âm câu và ngữ điệu cơ bản để đọc tự nhiên.',
-NULL, NULL, 'application/pdf', 10485760, NULL, 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/TaiLieuHocTap/Bai1/TaiLieuBai1_N1.%20Read%20a%20Text%20Aloud.pdf')
-),
+(@bh_nv_1_2, 'Read a Text Aloud 2 (PDF)',   'PDF',   '10MB',  'Thực hành các mẫu câu phổ biến để làm quen với ngữ điệu lên và xuống trong tiếng Anh.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/TaiLieuHocTap/Bai2/TaiLieuBai2_N1.%20Read%20a%20Text%20Aloud.pdf')),
 
--- Chương 1 - Bài 3
-(@bh_nv_1_5, 'Read a Text Aloud 3 (Video)', 'Video', '300MB', 'Giới thiệu về trọng âm từ, trọng âm câu và ngữ điệu cơ bản để đọc tự nhiên.',
-NULL, NULL, 'video/mp4', 314572800, NULL, 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/BaiGiang/Bai1/BaiGiang1_N1.%20Read%20a%20Text%20Aloud.mp4')
-),
+-- Bài 3
+(@bh_nv_1_3, 'Read a Text Aloud 3 (Video)', 'Video', '300MB', 'Giải đáp các thắc mắc thường gặp và mẹo thực hành để cải thiện kỹ năng đọc thành tiếng.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/BaiGiang/Bai3/BaiGiang3_N1.%20Read%20a%20Text%20Aloud.mp4')),
 
-(@bh_nv_1_6, 'Read a Text Aloud 3 (PDF)', 'PDF', '10MB', 'Giới thiệu về trọng âm từ, trọng âm câu và ngữ điệu cơ bản để đọc tự nhiên.',
-NULL, NULL, 'application/pdf', 10485760, NULL, 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/TaiLieuHocTap/Bai1/TaiLieuBai1_N1.%20Read%20a%20Text%20Aloud.pdf')
-),
+(@bh_nv_1_3, 'Read a Text Aloud 3 (PDF)',   'PDF',   '10MB',  'Giải đáp các thắc mắc thường gặp và mẹo thực hành để cải thiện kỹ năng đọc thành tiếng.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/TaiLieuHocTap/Bai3/TaiLieuBai3_N1.%20Read%20a%20Text%20Aloud.pdf')),
 
--- Chương 2 - Bài 1
-(@bh_nv_2_1, 'Part 1 Q&A video', 'Video', '400MB', 'Lesson video',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_2_1, '-part1.mp4'), NULL, 'video/mp4', 419430400, NULL, 'public', NULL),
-(@bh_nv_2_2, 'Describe picture samples', 'ZIP', '100MB', 'Images + audio',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_2_2, '-pictures.zip'), NULL, 'application/zip', 104857600, NULL, 'public', NULL),
+-- Chương 2 - Describe a Picture
+-- Bài 1
+(@bh_nv_2_1, 'Describe a Picture 1 (Video)', 'Video', '350MB', 'Chiến lược quản lý thời gian và xây dựng cấu trúc câu cơ bản để miêu tả một bức ảnh.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N2.%20Describe%20a%20Picture/BaiGiang/Bai1/BaiGiang1_N2.%20Describe%20a%20Picture.mp4')),
 
--- Chương 2 - Bài 2
-(@bh_nv_2_3, 'Part 2 response video', 'Video', '350MB', 'Q/R strategies',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_2_3, '-part2.mp4'), NULL, 'video/mp4', 367001600, NULL, 'public', NULL),
-(@bh_nv_2_4, 'Common questions quiz', 'ZIP', '80MB', 'Drills',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_2_4, '-questions.zip'), NULL, 'application/zip', 83886080, NULL, 'public', NULL),
+(@bh_nv_2_1, 'Describe a Picture 1 (PDF)',   'PDF',   '10MB',  'Chiến lược quản lý thời gian và xây dựng cấu trúc câu cơ bản để miêu tả một bức ảnh.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N2.%20Describe%20a%20Picture/TaiLieuHocTap/Bai1/TaiLieuBai1_N2.%20Describe%20a%20Picture.pdf')),
 
--- Chương 3 - Bài 1
-(@bh_nv_3_1, 'Email template PDF', 'PDF', '4MB', 'Layouts',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_3_1, '-email.pdf'), NULL, 'application/pdf', 4194304, NULL, 'public', NULL),
-(@bh_nv_3_2, 'Notice writing video', 'Video', '250MB', 'Demo video',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_3_2, '-notice.mp4'), NULL, 'video/mp4', 262144000, NULL, 'public', NULL),
+-- Bài 2
+(@bh_nv_2_2, 'Describe a Picture 2 (Video)', 'Video', '350MB', 'Hướng dẫn cách thêm các chi tiết về vị trí, hành động, và đối tượng để bài miêu tả sinh động hơn.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N2.%20Describe%20a%20Picture/BaiGiang/Bai2/BaiGiang2_N2.%20Describe%20a%20Picture.mp4')),
 
--- Chương 3 - Bài 2
-(@bh_nv_3_3, 'Sample exercises ZIP', 'ZIP', '15MB', 'Tasks',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_3_3, '-exercises.zip'), NULL, 'application/zip', 15728640, NULL, 'public', NULL),
-(@bh_nv_3_4, 'Errors quiz', 'ZIP', '25MB', 'Quiz pack',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_3_4, '-errors.zip'), NULL, 'application/zip', 26214400, NULL, 'public', NULL),
+(@bh_nv_2_2, 'Describe a Picture 2 (PDF)',   'PDF',   '10MB',  'Hướng dẫn cách thêm các chi tiết về vị trí, hành động, và đối tượng để bài miêu tả sinh động hơn.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N2.%20Describe%20a%20Picture/TaiLieuHocTap/Bai2/TaiLieuBai2_N2.%20Describe%20a%20Picture.pdf')),
 
--- Chương 4 - Bài 1
-(@bh_nv_4_1, 'Argument structure PDF', 'PDF', '6MB', 'Guide',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_4_1, '-structure.pdf'), NULL, 'application/pdf', 6291456, NULL, 'public', NULL),
-(@bh_nv_4_2, 'Opinion samples video', 'Video', '350MB', 'Examples',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_4_2, '-samples.mp4'), NULL, 'video/mp4', 367001600, NULL, 'public', NULL),
+-- Bài 3
+(@bh_nv_2_3, 'Describe a Picture 3 (Video)', 'Video', '350MB', 'Thực hành với các bài tập mô phỏng phần Đọc và Miêu tả ảnh để làm quen với áp lực phòng thi.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N2.%20Describe%20a%20Picture/BaiGiang/Bai3/BaiGiang3_N2.%20Describe%20a%20Picture.mp4')),
+(@bh_nv_2_3, 'Describe a Picture 3 (PDF)',   'PDF',   '10MB',  'Thực hành với các bài tập mô phỏng phần Đọc và Miêu tả ảnh để làm quen với áp lực phòng thi.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N2.%20Describe%20a%20Picture/TaiLieuHocTap/Bai3/TaiLieuBai3_N2.%20Describe%20a%20Picture.pdf')),
 
--- Chương 4 - Bài 2
-(@bh_nv_4_3, 'Prompt practice assignment', 'DOC', '2MB', 'Templates',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_4_3, '-prompt.doc'), NULL, 'application/msword', 2097152, NULL, 'public', NULL),
-(@bh_nv_4_4, 'Cohesion tips PDF', 'PDF', '3MB', 'Tips',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_4_4, '-cohesion.pdf'), NULL, 'application/pdf', 3145728, NULL, 'public', NULL),
 
--- Chương 4 - Bài 3
-(@bh_nv_4_5, 'Task 2 graded quiz', 'ZIP', '40MB', 'Mock graded',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_4_5, '-task2.zip'), NULL, 'application/zip', 41943040, NULL, 'public', NULL),
+-- Chương 3 - Respond to Questions
+-- Bài 1
+(@bh_nv_3_1, 'Respond to Questions 1 (Video)', 'Video', '250MB', 'Phân tích các dạng câu hỏi thường gặp và phương pháp trả lời ngắn gọn, đúng trọng tâm.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C3/B1/BaiGiang.mp4')),
 
--- Chương 5 - Bài 1
-(@bh_nv_5_1, 'Integrated task video', 'Video', '450MB', 'Demo',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_5_1, '-integrated.mp4'), NULL, 'video/mp4', 471859200, NULL, 'public', NULL),
-(@bh_nv_5_2, 'Skills drill quiz', 'ZIP', '60MB', 'Drills',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_5_2, '-drill.zip'), NULL, 'application/zip', 62914560, NULL, 'public', NULL),
+(@bh_nv_3_1, 'Respond to Questions 1 (PDF)',   'PDF',   '10MB',  'Phân tích các dạng câu hỏi thường gặp và phương pháp trả lời ngắn gọn, đúng trọng tâm.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C3/B1/TaiLieu.pdf')),
 
--- Chương 5 - Bài 2
-(@bh_nv_5_3, 'Context practice assignment', 'PDF', '7MB', 'Sheets',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_5_3, '-context.pdf'), NULL, 'application/pdf', 7340032, NULL, 'public', NULL),
-(@bh_nv_5_4, 'Errors review doc', 'DOC', '4MB', 'Analysis',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_5_4, '-review.doc'), NULL, 'application/msword', 4194304, NULL, 'public', NULL),
+-- Bài 2
+(@bh_nv_3_2, 'Respond to Questions 2 (Video)', 'Video', '250MB', 'Thực hành trả lời các câu hỏi về chủ đề quen thuộc như công việc, sở thích và hoạt động hàng ngày.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C3/B2/BaiGiang.mp4')),
 
--- Chương 5 - Bài 3
-(@bh_nv_5_5, 'Mock integrated ZIP', 'ZIP', '130MB', 'Full test',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_5_5, '-mock-integrated.zip'), NULL, 'application/zip', 136314880, NULL, 'public', NULL),
+(@bh_nv_3_2, 'Respond to Questions 2 (PDF)',   'PDF',   '10MB',  'Thực hành trả lời các câu hỏi về chủ đề quen thuộc như công việc, sở thích và hoạt động hàng ngày.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C3/B2/TaiLieu.pdf')),
 
--- Chương 6 - Bài 1
-(@bh_nv_6_1, 'Debate video', 'Video', '500MB', 'Advanced debate',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_6_1, '-debate.mp4'), NULL, 'video/mp4', 524288000, NULL, 'public', NULL),
-(@bh_nv_6_2, 'Speed quiz', 'ZIP', '80MB', 'Quick drills',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_6_2, '-speed.zip'), NULL, 'application/zip', 83886080, NULL, 'public', NULL),
+-- Bài 3
+(@bh_nv_3_3, 'Respond to Questions 3 (Video)', 'Video', '250MB', 'Luyện tập với các câu hỏi mô phỏng, tập trung cải thiện tốc độ và sự trôi chảy.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C3/B3/BaiGiang.mp4')),
 
--- Chương 6 - Bài 2
-(@bh_nv_6_3, 'Advanced pron video', 'Video', '200MB', 'Idioms',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_6_3, '-pron.mp4'), NULL, 'video/mp4', 209715200, NULL, 'public', NULL),
-(@bh_nv_6_4, 'Mock Part 3-4 assignment', 'ZIP', '120MB', 'Files',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_6_4, '-mock34.zip'), NULL, 'application/zip', 125829120, NULL, 'public', NULL),
+(@bh_nv_3_3, 'Respond to Questions 3 (PDF)',   'PDF',   '10MB',  'Luyện tập với các câu hỏi mô phỏng, tập trung cải thiện tốc độ và sự trôi chảy.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C3/B3/TaiLieu.pdf')),
 
--- Chương 6 - Bài 3
-(@bh_nv_6_5, 'Final speaking test PDF', 'PDF', '15MB', 'Full test',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_6_5, '-final-speaking.pdf'), NULL, 'application/pdf', 15728640, NULL, 'public', NULL),
 
--- Chương 7 - Bài 1
-(@bh_nv_7_1, 'Complex sentences PDF', 'PDF', '5MB', 'Grammar',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_7_1, '-sentences.pdf'), NULL, 'application/pdf', 5242880, NULL, 'public', NULL),
-(@bh_nv_7_2, 'Vocab video', 'Video', '300MB', 'Specialized',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_7_2, '-vocab.mp4'), NULL, 'video/mp4', 314572800, NULL, 'public', NULL),
+-- Chương 4 - Respond to Questions Using Information
+-- Bài 1
+(@bh_nv_4_1, 'Respond to Questions Using Information 1 (Video)', 'Video', '350MB', 'Hướng dẫn cách đọc và phân tích nhanh các loại tài liệu cho sẵn như lịch trình, biểu đồ.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C4/B1/BaiGiang.mp4')),
 
--- Chương 7 - Bài 2
-(@bh_nv_7_3, 'Advanced structures doc', 'DOC', '6MB', 'Samples',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_7_3, '-structures.doc'), NULL, 'application/msword', 6291456, NULL, 'public', NULL),
-(@bh_nv_7_4, 'Peer review quiz', 'ZIP', '50MB', 'Templates',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_7_4, '-peer.zip'), NULL, 'application/zip', 52428800, NULL, 'public', NULL),
+(@bh_nv_4_1, 'Respond to Questions Using Information 1 (PDF)',   'PDF',   '10MB',  'Hướng dẫn cách đọc và phân tích nhanh các loại tài liệu cho sẵn như lịch trình, biểu đồ.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C4/B1/TaiLieu.pdf')),
 
--- Chương 7 - Bài 3
-(@bh_nv_7_5, 'Final drills assignment', 'PDF', '10MB', 'Full practice',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_7_5, '-drills.pdf'), NULL, 'application/pdf', 10485760, NULL, 'public', NULL),
+-- Bài 2
+(@bh_nv_4_2, 'Respond to Questions Using Information 2 (Video)', 'Video', '350MB', 'Thực hành kỹ năng tìm kiếm và tổng hợp thông tin từ tài liệu để trả lời câu hỏi.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C4/B2/BaiGiang.mp4')),
 
--- Chương 8 - Bài 1
-(@bh_nv_8_1, 'Full speaking mock ZIP', 'ZIP', '150MB', 'Test pack',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_8_1, '-speaking-mock.zip'), NULL, 'application/zip', 157286400, NULL, 'public', NULL),
-(@bh_nv_8_2, 'Full writing mock PDF', 'PDF', '12MB', 'Essay mocks',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_8_2, '-writing-mock.pdf'), NULL, 'application/pdf', 12582912, NULL, 'public', NULL),
+(@bh_nv_4_2, 'Respond to Questions Using Information 2 (PDF)',   'PDF',   '10MB',  'Thực hành kỹ năng tìm kiếm và tổng hợp thông tin từ tài liệu để trả lời câu hỏi.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C4/B2/TaiLieu.pdf')),
 
--- Chương 8 - Bài 2
-(@bh_nv_8_3, 'Analysis video', 'Video', '400MB', 'Session',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_8_3, '-analysis.mp4'), NULL, 'video/mp4', 419430400, NULL, 'public', NULL),
-(@bh_nv_8_4, 'Final tips doc', 'DOC', '2MB', 'Tips',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_8_4, '-tips.doc'), NULL, 'application/msword', 2097152, NULL, 'public', NULL),
+-- Bài 3
+(@bh_nv_4_3, 'Respond to Questions Using Information 3 (Video)', 'Video', '350MB', 'Áp dụng kỹ năng vào các bài tập mô phỏng với nhiều dạng tài liệu và câu hỏi phức tạp.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C4/B3/BaiGiang.mp4')),
 
--- Chương 8 - Bài 3
-(@bh_nv_8_5, 'Complete resource pack ZIP', 'ZIP', '200MB', 'All materials',
-CONCAT('courses/', @kh_noiviet, '/', @bh_nv_8_5, '-complete-pack.zip'), NULL, 'application/zip', 209715200, NULL, 'public', NULL);
+(@bh_nv_4_3, 'Respond to Questions Using Information 3 (PDF)',   'PDF',   '10MB',  'Áp dụng kỹ năng vào các bài tập mô phỏng với nhiều dạng tài liệu và câu hỏi phức tạp.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C4/B3/TaiLieu.pdf')),
+
+
+-- Chương 5 - Express an Opinion
+-- Bài 1
+(@bh_nv_5_1, 'Express an Opinion 1 (Video)', 'Video', '450MB', 'Xây dựng cấu trúc cho một bài trình bày quan điểm: Mở đầu, luận điểm, và kết luận.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C5/B1/BaiGiang.mp4')),
+
+(@bh_nv_5_1, 'Express an Opinion 1 (PDF)',   'PDF',   '10MB',  'Xây dựng cấu trúc cho một bài trình bày quan điểm: Mở đầu, luận điểm, và kết luận.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C5/B1/TaiLieu.pdf')),
+
+-- Bài 2
+(@bh_nv_5_2, 'Express an Opinion 2 (Video)', 'Video', '450MB', 'Cách sử dụng các cụm từ nối và từ vựng để thể hiện quan điểm một cách thuyết phục.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C5/B2/BaiGiang.mp4')),
+
+(@bh_nv_5_2, 'Express an Opinion 2 (PDF)',   'PDF',   '10MB',  'Cách sử dụng các cụm từ nối và từ vựng để thể hiện quan điểm một cách thuyết phục.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C5/B2/TaiLieu.pdf')),
+
+-- Bài 3
+(@bh_nv_5_3, 'Express an Opinion 3 (Video)', 'Video', '450MB', 'Thực hành trình bày quan điểm về các chủ đề xã hội và công việc thường gặp.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C5/B3/BaiGiang.mp4')),
+
+(@bh_nv_5_3, 'Express an Opinion 3 (PDF)',   'PDF',   '10MB',  'Thực hành trình bày quan điểm về các chủ đề xã hội và công việc thường gặp.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C5/B3/TaiLieu.pdf')),
+
+-- Chương 6 - Write a Sentence Based on a Picture
+-- Bài 1
+(@bh_nv_6_1, 'Write a Sentence Based on a Picture 1 (Video)', 'Video', '500MB', 'Các cấu trúc ngữ pháp và từ vựng cần thiết để viết một câu miêu tả ảnh chính xác.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C6/B1/BaiGiang.mp4')),
+
+(@bh_nv_6_1, 'Write a Sentence Based on a Picture 1 (PDF)',   'PDF',   '10MB',  'Các cấu trúc ngữ pháp và từ vựng cần thiết để viết một câu miêu tả ảnh chính xác.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C6/B1/TaiLieu.pdf')),
+
+-- Bài 2
+(@bh_nv_6_2, 'Write a Sentence Based on a Picture 2 (Video)', 'Video', '300MB', 'Luyện tập viết câu tập trung vào việc sử dụng đúng giới từ, thì và dạng của từ.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C6/B2/BaiGiang.mp4')),
+
+(@bh_nv_6_2, 'Write a Sentence Based on a Picture 2 (PDF)',   'PDF',   '10MB',  'Luyện tập viết câu tập trung vào việc sử dụng đúng giới từ, thì và dạng của từ.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C6/B2/TaiLieu.pdf')),
+
+-- Bài 3
+(@bh_nv_6_3, 'Write a Sentence Based on a Picture 3 (Video)', 'Video', '300MB', 'Phân tích các lỗi sai thường gặp khi viết câu miêu tả ảnh và cách khắc phục.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C6/B3/BaiGiang.mp4')),
+
+(@bh_nv_6_3, 'Write a Sentence Based on a Picture 3 (PDF)',   'PDF',   '10MB',  'Phân tích các lỗi sai thường gặp khi viết câu miêu tả ảnh và cách khắc phục.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C6/B3/TaiLieu.pdf')),
+
+-- Chương 7 - Respond to Written Resquest
+-- Bài 1
+(@bh_nv_7_1, 'Respond to Written Resquest 1 (Video)', 'Video', '250MB', 'Tìm hiểu cấu trúc chuẩn của một email công việc: Chào hỏi, nội dung chính, và kết thúc.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C7/B1/BaiGiang.mp4')),
+
+(@bh_nv_7_1, 'Respond to Written Resquest 1 (PDF)',   'PDF',   '10MB',  'Tìm hiểu cấu trúc chuẩn của một email công việc: Chào hỏi, nội dung chính, và kết thúc.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C7/B1/TaiLieu.pdf')),
+
+-- Bài 2
+(@bh_nv_7_2, 'Respond to Written Resquest 2 (Video)', 'Video', '300MB', 'Phân tích các yêu cầu thường gặp và cách trả lời email một cách lịch sự, chuyên nghiệp.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C7/B2/BaiGiang.mp4')),
+
+(@bh_nv_7_2, 'Respond to Written Resquest 2 (PDF)',   'PDF',   '10MB',  'Phân tích các yêu cầu thường gặp và cách trả lời email một cách lịch sự, chuyên nghiệp.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C7/B2/TaiLieu.pdf')),
+
+-- Bài 3
+(@bh_nv_7_3, 'Respond to Written Resquest 3 (Video)', 'Video', '300MB', 'Thực hành viết email phản hồi cho các tình huống công việc cụ thể.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C7/B3/BaiGiang.mp4')),
+
+(@bh_nv_7_3, 'Respond to Written Resquest 3 (PDF)',   'PDF',   '10MB',  'Thực hành viết email phản hồi cho các tình huống công việc cụ thể.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C7/B3/TaiLieu.pdf')),
+
+-- Chương 8 - Write an Opinion Essay
+-- Bài 1
+(@bh_nv_8_1, 'Write an Opinion Essay 1 (Video)', 'Video', '350MB', 'Hướng dẫn cách lên dàn ý chi tiết cho một bài luận trình bày quan điểm.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C8/B1/BaiGiang.mp4')),
+
+(@bh_nv_8_1, 'Write an Opinion Essay 1 (PDF)',   'PDF',   '10MB',  'Hướng dẫn cách lên dàn ý chi tiết cho một bài luận trình bày quan điểm.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C8/B1/TaiLieu.pdf')),
+
+-- Bài 2
+(@bh_nv_8_2, 'Write an Opinion Essay 2 (Video)', 'Video', '350MB', 'Phát triển luận điểm, đưa ra ví dụ và dẫn chứng để bài viết có sức thuyết phục.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C8/B2/BaiGiang.mp4')),
+
+(@bh_nv_8_2, 'Write an Opinion Essay 2 (PDF)',   'PDF',   '10MB',  'Phát triển luận điểm, đưa ra ví dụ và dẫn chứng để bài viết có sức thuyết phục.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C8/B2/TaiLieu.pdf')),
+
+-- Bài 3
+(@bh_nv_8_3, 'Write an Opinion Essay 3 (Video)', 'Video', '350MB', 'Thực hành viết một bài luận hoàn chỉnh và các tiêu chí tự đánh giá.', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C8/B3/BaiGiang.mp4')),
+
+(@bh_nv_8_3, 'Write an Opinion Essay 3 (PDF)',   'PDF',   '10MB',  'Thực hành viết một bài luận hoàn chỉnh và các tiêu chí tự đánh giá.', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NoiViet/C8/B3/TaiLieu.pdf'));
+
 
 -- =========================================================
 -- NGHE - ĐỌC
 -- =========================================================
 INSERT INTO TAILIEUHOCTAP
 (maBH, tenTL, loai, kichThuoc, moTa, storage_key, r2_bucket, mime_type, size_bytes, duration_sec, visibility, public_url) VALUES
--- Chương 1 - Bài 1
-(@bh_nd_1_1, 'Overview video', 'Video', '250MB', 'Strategy video',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_1_1, '-overview.mp4'), NULL, 'video/mp4', 262144000, NULL, 'public', NULL),
-(@bh_nd_1_2, 'Part 1 strategy audio', 'MP3', '30MB', 'Photos audio',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_1_2, '-part1.mp3'), NULL, 'audio/mpeg', 31457280, NULL, 'public', NULL),
+-- Chương 1 - Photographs
+-- Bài 1
+(@bh_nd_1_1, 'Video Bài 1', 'Video', '250MB', '', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C1/B1/BaiGiang.mp4')),
 
--- Chương 1 - Bài 2
-(@bh_nd_1_3, 'Note-taking quiz', 'ZIP', '40MB', 'Drills',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_1_3, '-notes.zip'), NULL, 'application/zip', 41943040, NULL, 'public', NULL),
-(@bh_nd_1_4, 'Prediction PDF', 'PDF', '4MB', 'Exercises',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_1_4, '-prediction.pdf'), NULL, 'application/pdf', 4194304, NULL, 'public', NULL),
+(@bh_nd_1_1, 'PDF Bài 1',   'PDF',   '8MB',   '', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C1/B1/TaiLieu.pdf')),
 
--- Chương 1 - Bài 3
-(@bh_nd_1_5, 'Part 2 drills video', 'Video', '300MB', 'Practice',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_1_5, '-part2-drills.mp4'), NULL, 'video/mp4', 314572800, NULL, 'public', NULL),
-(@bh_nd_1_6, 'Listening vocab doc', 'DOC', '3MB', 'Word list',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_1_6, '-vocab.doc'), NULL, 'application/msword', 3145728, NULL, 'public', NULL),
+-- Bài 2
+(@bh_nd_1_2, 'Video Bài 2', 'Video', '250MB', '', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C1/B2/BaiGiang.mp4')),
 
--- Chương 2 - Bài 1
-(@bh_nd_2_1, 'Part 2 video', 'Video', '350MB', 'Q/R lesson',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_2_1, '-part2.mp4'), NULL, 'video/mp4', 367001600, NULL, 'public', NULL),
-(@bh_nd_2_2, 'Audio drills quiz', 'ZIP', '100MB', 'Part 1-2 pack',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_2_2, '-audio-drills.zip'), NULL, 'application/zip', 104857600, NULL, 'public', NULL),
+(@bh_nd_1_2, 'PDF Bài 2',   'PDF',   '8MB',   '', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C1/B2/TaiLieu.pdf')),
 
--- Chương 2 - Bài 2
-(@bh_nd_2_3, 'Traps analysis doc', 'DOC', '3MB', 'Guide',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_2_3, '-traps.doc'), NULL, 'application/msword', 3145728, NULL, 'public', NULL),
-(@bh_nd_2_4, 'Speed practice assignment', 'MP3', '60MB', 'Fast audio',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_2_4, '-speed.mp3'), NULL, 'audio/mpeg', 62914560, NULL, 'public', NULL),
+-- Bài 3
+(@bh_nd_1_3, 'Video Bài 3', 'Video', '250MB', '', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C1/B3/BaiGiang.mp4')),
 
--- Chương 2 - Bài 3
-(@bh_nd_2_5, 'Mini drill ZIP', 'ZIP', '70MB', 'Quick set',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_2_5, '-mini.zip'), NULL, 'application/zip', 73400320, NULL, 'public', NULL),
+(@bh_nd_1_3, 'PDF Bài 3',   'PDF',   '8MB',   '', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C1/B3/TaiLieu.pdf')),
 
--- Chương 3 - Bài 1
-(@bh_nd_3_1, 'Skimming video', 'Video', '200MB', 'Techniques',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_3_1, '-skimming.mp4'), NULL, 'video/mp4', 209715200, NULL, 'public', NULL),
-(@bh_nd_3_2, 'Vocab PDF', 'PDF', '8MB', 'List',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_3_2, '-vocab.pdf'), NULL, 'application/pdf', 8388608, NULL, 'public', NULL),
+-- Chương 2 - Question - Response
+-- Bài 1
+(@bh_nd_2_1, 'Video Bài 1', 'Video', '300MB', '', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C2/B1/BaiGiang.mp4')),
 
--- Chương 3 - Bài 2
-(@bh_nd_3_3, 'Skimming drills video', 'Video', '150MB', 'Practice',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_3_3, '-drills.mp4'), NULL, 'video/mp4', 157286400, NULL, 'public', NULL),
-(@bh_nd_3_4, 'Part 5 quiz', 'ZIP', '50MB', 'Sentences',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_3_4, '-part5.zip'), NULL, 'application/zip', 52428800, NULL, 'public', NULL),
+(@bh_nd_2_1, 'PDF Bài 1',   'PDF',   '8MB',   '', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C2/B1/TaiLieu.pdf')),
 
--- Chương 3 - Bài 3
-(@bh_nd_3_5, 'Part 6 practice doc', 'DOC', '4MB', 'Completion',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_3_5, '-part6.doc'), NULL, 'application/msword', 4194304, NULL, 'public', NULL),
-(@bh_nd_3_6, 'Reading strategies quiz', 'ZIP', '60MB', 'Techniques',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_3_6, '-strategies.zip'), NULL, 'application/zip', 62914560, NULL, 'public', NULL),
+-- Bài 2
+(@bh_nd_2_2, 'Video Bài 2', 'Video', '300MB', '', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C2/B2/BaiGiang.mp4')),
 
--- Chương 4 - Bài 1
-(@bh_nd_4_1, 'Part 5 quiz pack', 'ZIP', '80MB', 'Grammar drills',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_4_1, '-part5-quiz.zip'), NULL, 'application/zip', 83886080, NULL, 'public', NULL),
-(@bh_nd_4_2, 'Part 6 doc', 'DOC', '5MB', 'Completion',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_4_2, '-part6.doc'), NULL, 'application/msword', 5242880, NULL, 'public', NULL),
+(@bh_nd_2_2, 'PDF Bài 2',   'PDF',   '8MB',   '', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C2/B2/TaiLieu.pdf')),
 
--- Chương 4 - Bài 2
-(@bh_nd_4_3, 'Mock 5-6 PDF', 'PDF', '10MB', 'Test',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_4_3, '-mock56.pdf'), NULL, 'application/pdf', 10485760, NULL, 'public', NULL),
-(@bh_nd_4_4, 'Context vocab video', 'Video', '300MB', 'Lesson',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_4_4, '-context.mp4'), NULL, 'video/mp4', 314572800, NULL, 'public', NULL),
+-- Bài 3
+(@bh_nd_2_3, 'Video Bài 3', 'Video', '300MB', '', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C2/B3/BaiGiang.mp4')),
 
--- Chương 4 - Bài 3
-(@bh_nd_4_5, 'Error spotting assignment', 'ZIP', '20MB', 'Files',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_4_5, '-spotting.zip'), NULL, 'application/zip', 20971520, NULL, 'public', NULL),
+(@bh_nd_2_3, 'PDF Bài 3',   'PDF',   '8MB',   '', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C2/B3/TaiLieu.pdf')),
 
--- Chương 5 - 6 - Bài 1
-(@bh_nd_5_1, 'Part 3 video', 'Video', '400MB', 'Conversations',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_5_1, '-part3.mp4'), NULL, 'video/mp4', 419430400, NULL, 'public', NULL),
-(@bh_nd_5_2, 'Part 4 quiz', 'ZIP', '90MB', 'Talks audio',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_5_2, '-part4.zip'), NULL, 'application/zip', 94371840, NULL, 'public', NULL),
+-- Chương 3 - Short Conversations
+-- Bài 1
+(@bh_nd_3_1, 'Video Bài 1', 'Video', '200MB', '', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B1/BaiGiang.mp4')),
 
--- Chương 5 - 6 - Bài 2
-(@bh_nd_5_3, 'Inference doc', 'DOC', '4MB', 'Skills',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_5_3, '-inference.doc'), NULL, 'application/msword', 4194304, NULL, 'public', NULL),
-(@bh_nd_5_4, 'Audio pack MP3', 'MP3', '100MB', 'Part 3-4',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_5_4, '-audio-pack.mp3'), NULL, 'audio/mpeg', 104857600, NULL, 'public', NULL),
+(@bh_nd_3_1, 'PDF Bài 1',   'PDF',   '8MB',   '', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B1/TaiLieu.pdf')),
 
--- Chương 5 - 6 - Bài 3
-(@bh_nd_5_5, 'Mock Part 3-4 PDF', 'PDF', '20MB', 'Full test',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_5_5, '-mock34.pdf'), NULL, 'application/pdf', 20971520, NULL, 'public', NULL),
+-- Bài 2
+(@bh_nd_3_2, 'Video Bài 2', 'Video', '200MB', '', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B2/BaiGiang.mp4')),
 
--- Chương 7 (biến nd_6_*) - Bài 1
-(@bh_nd_6_1, 'Part 7 single video', 'Video', '250MB', 'Passages',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_6_1, '-part7-single.mp4'), NULL, 'video/mp4', 262144000, NULL, 'public', NULL),
-(@bh_nd_6_2, 'Double passages quiz', 'ZIP', '120MB', 'Practice',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_6_2, '-double.zip'), NULL, 'application/zip', 125829120, NULL, 'public', NULL),
+(@bh_nd_3_2, 'PDF Bài 2',   'PDF',   '8MB',   '', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B2/TaiLieu.pdf')),
 
--- Chương 7 - Bài 2
-(@bh_nd_6_3, 'Time management PDF', 'PDF', '3MB', 'Tips',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_6_3, '-time.pdf'), NULL, 'application/pdf', 3145728, NULL, 'public', NULL),
-(@bh_nd_6_4, 'Intensive drills assignment', 'DOC', '6MB', 'Sheets',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_6_4, '-drills.doc'), NULL, 'application/msword', 6291456, NULL, 'public', NULL),
+-- Bài 3
+(@bh_nd_3_3, 'Video Bài 3', 'Video', '200MB', '', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B3/BaiGiang.mp4')),
 
--- Chương 7 - Bài 3
-(@bh_nd_6_5, 'Mock Part 7 ZIP', 'ZIP', '150MB', 'Full test',
-CONCAT('courses/', @kh_nghedoc, '/', @bh_nd_6_5, '-mock7.zip'), NULL, 'application/zip', 157286400, NULL, 'public', NULL);
+(@bh_nd_3_3, 'PDF Bài 3',   'PDF',   '8MB',   '', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B3/TaiLieu.pdf')),
+
+-- Chương 4 - Short Talks
+-- Bài 1
+(@bh_nd_4_1, 'Video Bài 1', 'Video', '300MB', '', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B1/BaiGiang.mp4')),
+
+(@bh_nd_4_1, 'PDF Bài 1',   'PDF',   '8MB',   '', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B1/TaiLieu.pdf')),
+
+-- Bài 2
+(@bh_nd_4_2, 'Video Bài 2', 'Video', '300MB', '', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B2/BaiGiang.mp4')),
+
+(@bh_nd_4_2, 'PDF Bài 2',   'PDF',   '8MB',   '', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B2/TaiLieu.pdf')),
+
+-- Bài 3
+(@bh_nd_4_3, 'Video Bài 3', 'Video', '300MB', '', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B3/BaiGiang.mp4')),
+
+(@bh_nd_4_3, 'PDF Bài 3',   'PDF',   '8MB',   '', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B3/TaiLieu.pdf')),
+
+-- Chương 5 - 6 - Incomplete Sentences
+-- Bài 1
+(@bh_nd_5_1, 'Video Bài 1', 'Video', '400MB', '', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B1/BaiGiang.mp4')),
+
+(@bh_nd_5_1, 'PDF Bài 1',   'PDF',   '8MB',   '', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B1/TaiLieu.pdf')),
+
+-- Bài 2
+(@bh_nd_5_2, 'Video Bài 2', 'Video', '400MB', '', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B2/BaiGiang.mp4')),
+
+(@bh_nd_5_2, 'PDF Bài 2',   'PDF',   '8MB',   '', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B2/TaiLieu.pdf')),
+
+-- Bài 3
+(@bh_nd_5_3, 'Video Bài 3', 'Video', '400MB', '', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B3/BaiGiang.mp4')),
+
+(@bh_nd_5_3, 'PDF Bài 3',   'PDF',   '8MB',   '', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B3/TaiLieu.pdf')),
+
+-- Chương 7 - Vocabulary & Reading Comprhension Practice
+-- Bài 1
+(@bh_nd_6_1, 'Video Bài 1', 'Video', '250MB', '', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B1/BaiGiang.mp4')),
+
+(@bh_nd_6_1, 'PDF Bài 1',   'PDF',   '8MB',   '', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B1/TaiLieu.pdf')),
+
+-- Bài 2
+(@bh_nd_6_2, 'Video Bài 2', 'Video', '250MB', '', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B2/BaiGiang.mp4')),
+
+(@bh_nd_6_2, 'PDF Bài 2',   'PDF',   '8MB',   '', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B2/TaiLieu.pdf')),
+
+-- Bài 3
+(@bh_nd_6_3, 'Video Bài 3', 'Video', '250MB', '', 'video/mp4', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B3/BaiGiang.mp4')),
+
+(@bh_nd_6_3, 'PDF Bài 3',   'PDF',   '8MB',   '', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B3/TaiLieu.pdf'));
 
 COMMIT;
