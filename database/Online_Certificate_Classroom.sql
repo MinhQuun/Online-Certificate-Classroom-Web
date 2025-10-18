@@ -129,7 +129,7 @@ CREATE TABLE TAILIEUHOCTAP (
     moTa VARCHAR(1000),
     mime_type  VARCHAR(100),
     visibility ENUM('public','private') DEFAULT 'public',
-    public_url TEXT,
+    public_url VARCHAR(700) COLLATE utf8mb4_bin NOT NULL,
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (maTL),
@@ -138,8 +138,8 @@ CREATE TABLE TAILIEUHOCTAP (
     CONSTRAINT FK_TL_BH FOREIGN KEY (maBH) REFERENCES BAIHOC(maBH) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Ngăn trùng tài nguyên theo từng bài học (dùng prefix 191 cho TEXT)
-CREATE UNIQUE INDEX uq_tl_public ON TAILIEUHOCTAP (maBH, public_url(191));
+-- Ngăn trùng tài nguyên theo từng bài học (full column, không prefix)
+CREATE UNIQUE INDEX uq_tl_public ON TAILIEUHOCTAP (maBH, public_url);
 
 -- =========================================================
 -- 4) ENROLL, MINI-TEST (THEO CHƯƠNG) & KẾT QUẢ
@@ -163,7 +163,7 @@ CREATE TABLE HOCVIEN_KHOAHOC (
     CONSTRAINT FK_HVK_LAST FOREIGN KEY (last_lesson_id) REFERENCES BAIHOC(maBH) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- MINI-TEST CHỈ THEO CHƯƠNG (khóa chặt ở DB)
+-- MINI-TEST CHỈ THEO CHƯƠNG
 CREATE TABLE CHUONG_MINITEST (
     maMT INT NOT NULL AUTO_INCREMENT,
     maKH INT NOT NULL,
@@ -193,7 +193,7 @@ CREATE TABLE MINITEST_TAILIEU (
     loai VARCHAR(50) NOT NULL,             -- PDF/ZIP/Video...
     mime_type VARCHAR(100) NOT NULL,
     visibility ENUM('public','private') DEFAULT 'public',
-    public_url TEXT NOT NULL,
+    public_url VARCHAR(700) COLLATE utf8mb4_bin NOT NULL,
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
@@ -201,8 +201,8 @@ CREATE TABLE MINITEST_TAILIEU (
     CONSTRAINT FK_MTTL_MT FOREIGN KEY (maMT) REFERENCES CHUONG_MINITEST(maMT) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Không trùng file theo mini-test
-CREATE UNIQUE INDEX uq_mttl_public ON MINITEST_TAILIEU (maMT, public_url(191));
+-- Không trùng file theo mini-test (full column)
+CREATE UNIQUE INDEX uq_mttl_public ON MINITEST_TAILIEU (maMT, public_url);
 
 -- Kết quả mini-test (ràng buộc vào lần ghi danh)
 CREATE TABLE KETQUA_MINITEST (
@@ -249,7 +249,7 @@ CREATE TABLE TEST_TAILIEU (
     loai VARCHAR(50) NOT NULL,             -- PDF/ZIP/Video...
     mime_type VARCHAR(100) NOT NULL,
     visibility ENUM('public','private') DEFAULT 'public',
-    public_url TEXT NOT NULL,
+    public_url VARCHAR(700) COLLATE utf8mb4_bin NOT NULL,
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
@@ -257,8 +257,8 @@ CREATE TABLE TEST_TAILIEU (
     CONSTRAINT FK_TESTTL_TEST FOREIGN KEY (maTest) REFERENCES TEST(maTest) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Không trùng file theo final test
-CREATE UNIQUE INDEX uq_testtl_public ON TEST_TAILIEU (maTest, public_url(191));
+-- Không trùng file theo final test (full column)
+CREATE UNIQUE INDEX uq_testtl_public ON TEST_TAILIEU (maTest, public_url);
 
 CREATE TABLE KETQUAHOCTAP (
     maKQ INT NOT NULL AUTO_INCREMENT,
