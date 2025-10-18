@@ -304,7 +304,7 @@ SET @mt_nd_4_1 := LAST_INSERT_ID(); SET @mt_nd_4_2 := @mt_nd_4_1 + 1; SET @mt_nd
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
 (@mt_nd_4_1, 'Audio', 'MP3', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test1/Audio/mp3.1.mp3')),\
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test1/Audio/mp3.1.mp3')),
 
 (@mt_nd_4_1, 'Audio', 'MP3', 'audio/mpeg', 'public', 
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test1/Audio/mp3.2.mp3')),

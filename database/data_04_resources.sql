@@ -195,7 +195,7 @@ CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA
 -- NGHE - ĐỌC
 -- =========================================================
 INSERT INTO TAILIEUHOCTAP
-(maBH, tenTL, loai, kichThuoc, moTa, storage_key, r2_bucket, mime_type, size_bytes, duration_sec, visibility, public_url) VALUES
+(maBH, tenTL, loai, kichThuoc, moTa, mime_type, visibility, public_url) VALUES
 -- Chương 1 - Photographs
 -- Bài 1
 (@bh_nd_1_1, 'Photographs Video Bài 1', 'Video', '350MB', 'Chiến lược làm bài thi Nghe tổng quan và các mẹo để tập trung tối đa.', 'video/mp4', 'public', 
