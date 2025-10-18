@@ -303,197 +303,151 @@ CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB
 -- Chương 3 - Short Conversations
 -- Bài 1
 (@bh_nd_3_1, 'Short Conversations Video Bài 1', 'Video', '350MB', 'Kỹ năng đọc trước câu hỏi để định hướng thông tin cần nghe trong đoạn hội thoại.', 'video/mp4', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B1/BaiGiang.mp4')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/BaiGiang/Bai1/K%C4%A9%20n%C4%83ng%20x%E1%BB%AD%20l%C3%AD%20%C4%91o%E1%BA%A1n%20h%E1%BB%99i%20tho%E1%BA%A1i%20ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20Service.mp4')),
 
 (@bh_nd_3_1, 'Short Conversations PDF Bài 1',   'PDF',   '10MB', 'Kỹ năng đọc trước câu hỏi để định hướng thông tin cần nghe trong đoạn hội thoại.', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B1/TaiLieu.pdf')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/TaiLieuHocTap/Bai1/TaiLieuBai1_P3.%20Short%20Conversations.pdf')),
 
 (@bh_nd_3_1, 'Short Conversations Audio 1 Bài 1','Audio', '20MB', 'Kỹ năng đọc trước câu hỏi để định hướng thông tin cần nghe trong đoạn hội thoại.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B1/Audio1.mp3')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/Audio/Bai1/mp3.1%20P3%20B1.mp3')),
 
 (@bh_nd_3_1, 'Short Conversations Audio 2 Bài 1','Audio', '20MB', 'Kỹ năng đọc trước câu hỏi để định hướng thông tin cần nghe trong đoạn hội thoại.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B1/Audio2.mp3')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/Audio/Bai1/mp3.2%20P3%20B1.mp3')),
 
 (@bh_nd_3_1, 'Short Conversations Audio 3 Bài 1','Audio', '20MB', 'Kỹ năng đọc trước câu hỏi để định hướng thông tin cần nghe trong đoạn hội thoại.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B1/Audio3.mp3')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/Audio/Bai1/mp3.3%20P3%20B1.mp3')),
 
 -- Bài 2
 (@bh_nd_3_2, 'Short Conversations Video Bài 2', 'Video', '350MB', 'Luyện nghe các đoạn hội thoại về chủ đề công sở, mua sắm, và đời sống hàng ngày.', 'video/mp4', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B2/BaiGiang.mp4')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/BaiGiang/Bai2/K%C4%A9%20n%C4%83ng%20x%E1%BB%AD%20l%C3%AD%20%C4%91o%E1%BA%A1n%20h%E1%BB%99i%20tho%E1%BA%A1i%20ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20At%20the%20office.mp4')),
 
 (@bh_nd_3_2, 'Short Conversations PDF Bài 2',   'PDF',   '10MB', 'Luyện nghe các đoạn hội thoại về chủ đề công sở, mua sắm, và đời sống hàng ngày.', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B2/TaiLieu.pdf')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/TaiLieuHocTap/Bai2/TaiLieuBai2_P3.%20Short%20Conversations.pdf')),
 
 (@bh_nd_3_2, 'Short Conversations Audio 1 Bài 2','Audio', '20MB', 'Luyện nghe các đoạn hội thoại về chủ đề công sở, mua sắm, và đời sống hàng ngày.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B2/Audio1.mp3')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/Audio/Bai2/mp3.1%20P3%20B2.mp3')),
 
 (@bh_nd_3_2, 'Short Conversations Audio 2 Bài 2','Audio', '20MB', 'Luyện nghe các đoạn hội thoại về chủ đề công sở, mua sắm, và đời sống hàng ngày.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B2/Audio2.mp3')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/Audio/Bai2/mp3.2%20P3%20B2.mp3')),
 
 (@bh_nd_3_2, 'Short Conversations Audio 3 Bài 2','Audio', '20MB', 'Luyện nghe các đoạn hội thoại về chủ đề công sở, mua sắm, và đời sống hàng ngày.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B2/Audio3.mp3')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/Audio/Bai2/mp3.3%20P3%20B2.mp3')),
 
 -- Bài 3
 (@bh_nd_3_3, 'Short Conversations Video Bài 3', 'Video', '350MB', 'Cách suy luận ý của người nói và mục đích của cuộc hội thoại.', 'video/mp4', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B3/BaiGiang.mp4')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/BaiGiang/Bai3/K%C4%A9%20n%C4%83ng%20x%E1%BB%AD%20l%C3%AD%20%C4%91o%E1%BA%A1n%20h%E1%BB%99i%20tho%E1%BA%A1i%20ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20Shopping%20and%20Entertainment.mp4')),
 
 (@bh_nd_3_3, 'Short Conversations PDF Bài 3',   'PDF',   '10MB', 'Cách suy luận ý của người nói và mục đích của cuộc hội thoại.', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B3/TaiLieu.pdf')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/TaiLieuHocTap/Bai3/TaiLieuBai3_P3.%20Short%20Conversations.pdf')),
 
 (@bh_nd_3_3, 'Short Conversations Audio 1 Bài 3','Audio', '20MB', 'Cách suy luận ý của người nói và mục đích của cuộc hội thoại.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B3/Audio1.mp3')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/Audio/Bai3/mp3.1%20P3%20B3.mp3')),
 
 (@bh_nd_3_3, 'Short Conversations Audio 2 Bài 3','Audio', '20MB', 'Cách suy luận ý của người nói và mục đích của cuộc hội thoại.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B3/Audio2.mp3')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/Audio/Bai3/mp3.2%20P3%20B3.mp3')),
 
 (@bh_nd_3_3, 'Short Conversations Audio 3 Bài 3','Audio', '20MB', 'Cách suy luận ý của người nói và mục đích của cuộc hội thoại.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C3/B3/Audio3.mp3')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/Audio/Bai3/mp3.3%20P3%20B3.mp3')),
 
 -- Chương 4 - Short Talks
 -- Bài 1
 (@bh_nd_4_1, 'Short Talks Video Bài 1', 'Video', '350MB', 'Nhận diện các dạng bài nói ngắn: tin nhắn thoại, thông báo, quảng cáo, báo cáo.', 'video/mp4', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B1/BaiGiang.mp4')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/BaiGiang/Bai1/K%C4%A9%20n%C4%83ng%20x%E1%BB%AD%20l%C3%AD%20nh%E1%BB%AFng%20c%C3%A2u%20h%E1%BB%8Fi%20thu%E1%BB%99c%20ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20Office.mp4')),
 
 (@bh_nd_4_1, 'Short Talks PDF Bài 1',   'PDF',   '10MB', 'Nhận diện các dạng bài nói ngắn: tin nhắn thoại, thông báo, quảng cáo, báo cáo.', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B1/TaiLieu.pdf')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/TaiLieuHocTap/Bai1/TaiLieuBai1_P4.%20Short%20Talks.pdf')),
 
 (@bh_nd_4_1, 'Short Talks Audio 1 Bài 1','Audio', '20MB', 'Nhận diện các dạng bài nói ngắn: tin nhắn thoại, thông báo, quảng cáo, báo cáo.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B1/Audio1.mp3')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/Audio/Bai1/mp3.1%20P4%20B1.mp3')),
 
 (@bh_nd_4_1, 'Short Talks Audio 2 Bài 1','Audio', '20MB', 'Nhận diện các dạng bài nói ngắn: tin nhắn thoại, thông báo, quảng cáo, báo cáo.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B1/Audio2.mp3')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/Audio/Bai1/mp3.2%20P4%20B1.mp3')),
 
 (@bh_nd_4_1, 'Short Talks Audio 3 Bài 1','Audio', '20MB', 'Nhận diện các dạng bài nói ngắn: tin nhắn thoại, thông báo, quảng cáo, báo cáo.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B1/Audio3.mp3')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/Audio/Bai1/mp3.3%20P4%20B1.mp3')),
 
 -- Bài 2
 (@bh_nd_4_2, 'Short Talks Video Bài 2', 'Video', '350MB', 'Luyện nghe và nắm bắt các thông tin chi tiết như số liệu, thời gian, địa điểm.', 'video/mp4', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B2/BaiGiang.mp4')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/BaiGiang/Bai2/K%C4%A9%20n%C4%83ng%20x%E1%BB%AD%20l%C3%AD%20nh%E1%BB%AFng%20c%C3%A2u%20h%E1%BB%8Fi%20thu%E1%BB%99c%20ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20Shopping%20and%20Entertainment.mp4')),
 
 (@bh_nd_4_2, 'Short Talks PDF Bài 2',   'PDF',   '10MB', 'Luyện nghe và nắm bắt các thông tin chi tiết như số liệu, thời gian, địa điểm.', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B2/TaiLieu.pdf')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/TaiLieuHocTap/Bai2/TaiLieuBai2_P4.%20Short%20Talks.pdf')),
 
 (@bh_nd_4_2, 'Short Talks Audio 1 Bài 2','Audio', '20MB', 'Luyện nghe và nắm bắt các thông tin chi tiết như số liệu, thời gian, địa điểm.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B2/Audio1.mp3')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/Audio/Bai2/mp3.1%20P4%20B2.mp3')),
 
 (@bh_nd_4_2, 'Short Talks Audio 2 Bài 2','Audio', '20MB', 'Luyện nghe và nắm bắt các thông tin chi tiết như số liệu, thời gian, địa điểm.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B2/Audio2.mp3')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/Audio/Bai2/mp3.2%20P4%20B2.mp3')),
 
 (@bh_nd_4_2, 'Short Talks Audio 3 Bài 2','Audio', '20MB', 'Luyện nghe và nắm bắt các thông tin chi tiết như số liệu, thời gian, địa điểm.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B2/Audio3.mp3')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/Audio/Bai2/mp3.3%20P4%20B2.mp3')),
 
 -- Bài 3
 (@bh_nd_4_3, 'Short Talks Video Bài 3', 'Video', '350MB', 'Thực hành với các bài nói có tốc độ nhanh và chứa nhiều thông tin.', 'video/mp4', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B3/BaiGiang.mp4')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/BaiGiang/Bai3/K%C4%A9%20n%C4%83ng%20x%E1%BB%AD%20l%C3%AD%20nh%E1%BB%AFng%20c%C3%A2u%20h%E1%BB%8Fi%20ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20Conference%20-%20Meeting%20-%20Training%20Session.mp4')),
 
 (@bh_nd_4_3, 'Short Talks PDF Bài 3',   'PDF',   '10MB', 'Thực hành với các bài nói có tốc độ nhanh và chứa nhiều thông tin.', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B3/TaiLieu.pdf')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/TaiLieuHocTap/Bai3/TaiLieuBai3_P4.%20Short%20Talks.pdf')),
 
 (@bh_nd_4_3, 'Short Talks Audio 1 Bài 3','Audio', '20MB', 'Thực hành với các bài nói có tốc độ nhanh và chứa nhiều thông tin.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B3/Audio1.mp3')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/Audio/Bai3/mp3.1%20P4%20B3.mp3')),
 
 (@bh_nd_4_3, 'Short Talks Audio 2 Bài 3','Audio', '20MB', 'Thực hành với các bài nói có tốc độ nhanh và chứa nhiều thông tin.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B3/Audio2.mp3')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/Audio/Bai3/mp3.2%20P4%20B3.mp3')),
 
 (@bh_nd_4_3, 'Short Talks Audio 3 Bài 3','Audio', '20MB', 'Thực hành với các bài nói có tốc độ nhanh và chứa nhiều thông tin.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C4/B3/Audio3.mp3')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/Audio/Bai3/mp3.3%20P4%20B3.mp3')),
 
 -- Chương 5 - 6 - Incomplete Sentences
 -- Bài 1
 (@bh_nd_5_1, 'Incomplete Sentences Video Bài 1', 'Video', '350MB', 'Ôn tập các chủ điểm ngữ pháp cốt lõi thường gặp trong bài thi (thì, dạng từ, giới từ).', 'video/mp4', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B1/BaiGiang.mp4')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/BaiGiang/Bai1/Sentence%20Structure%20-%20C%C3%A1c%20th%C3%A0nh%20ph%E1%BA%A7n%20c%C6%A1%20b%E1%BA%A3n%20c%E1%BB%A7a%20c%C3%A2u.mp4')),
 
 (@bh_nd_5_1, 'Incomplete Sentences PDF Bài 1',   'PDF',   '10MB', 'Ôn tập các chủ điểm ngữ pháp cốt lõi thường gặp trong bài thi (thì, dạng từ, giới từ).', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B1/TaiLieu.pdf')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/TaiLieuHocTap/Bai1/TaiLieuBai1_P5-6.%20Incomplete%20Sentences.pdf')),
 
-(@bh_nd_5_1, 'Incomplete Sentences Audio 1 Bài 1','Audio', '20MB', 'Ôn tập các chủ điểm ngữ pháp cốt lõi thường gặp trong bài thi (thì, dạng từ, giới từ).', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B1/Audio1.mp3')),
-
-(@bh_nd_5_1, 'Incomplete Sentences Audio 2 Bài 1','Audio', '20MB', 'Ôn tập các chủ điểm ngữ pháp cốt lõi thường gặp trong bài thi (thì, dạng từ, giới từ).', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B1/Audio2.mp3')),
-
-(@bh_nd_5_1, 'Incomplete Sentences Audio 3 Bài 1','Audio', '20MB', 'Ôn tập các chủ điểm ngữ pháp cốt lõi thường gặp trong bài thi (thì, dạng từ, giới từ).', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B1/Audio3.mp3')),
 
 -- Bài 2
 (@bh_nd_5_2, 'Incomplete Sentences Video Bài 2', 'Video', '350MB', 'Mở rộng vốn từ vựng theo các chủ đề thương mại, văn phòng và giao dịch.', 'video/mp4', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B2/BaiGiang.mp4')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/BaiGiang/Bai2/Sentence%20Structure-%20Ch%E1%BB%AFa%20b%C3%A0i%20t%E1%BA%ADp%20c%C3%A1c%20th%C3%A0nh%20ph%E1%BA%A7n%20c%C6%A1%20b%E1%BA%A3n%20c%E1%BB%A7a%20c%C3%A2u.mp4')),
 
-(@bh_nd_5_2, 'Incomplete Sentences PDF Bài 2',   'PDF',   '10MB', 'Mở rộng vốn từ vựng theo các chủ đề thương mại, văn phòng và giao dịch.', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B2/TaiLieu.pdf')),
+(@bh_nd_5_2, 'Incomplete Sentences PDF 1 Bài 2',   'PDF',   '10MB', 'Mở rộng vốn từ vựng theo các chủ đề thương mại, văn phòng và giao dịch.', 'application/pdf', 'public', 
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/TaiLieuHocTap/Bai2/TaiLieuBai2.1_P5-6.%20Incomplete%20Sentences.pdf')),
 
-(@bh_nd_5_2, 'Incomplete Sentences Audio 1 Bài 2','Audio', '20MB', 'Mở rộng vốn từ vựng theo các chủ đề thương mại, văn phòng và giao dịch.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B2/Audio1.mp3')),
+(@bh_nd_5_2, 'Incomplete Sentences PDF 2 Bài 2',   'PDF',   '10MB', 'Mở rộng vốn từ vựng theo các chủ đề thương mại, văn phòng và giao dịch.', 'application/pdf', 'public', 
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/TaiLieuHocTap/Bai2/TaiLieuBai2.2_P5-6.%20Incomplete%20Sentences.pdf')),
 
-(@bh_nd_5_2, 'Incomplete Sentences Audio 2 Bài 2','Audio', '20MB', 'Mở rộng vốn từ vựng theo các chủ đề thương mại, văn phòng và giao dịch.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B2/Audio2.mp3')),
-
-(@bh_nd_5_2, 'Incomplete Sentences Audio 3 Bài 2','Audio', '20MB', 'Mở rộng vốn từ vựng theo các chủ đề thương mại, văn phòng và giao dịch.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B2/Audio3.mp3')),
 
 -- Bài 3
 (@bh_nd_5_3, 'Incomplete Sentences Video Bài 3', 'Video', '350MB', 'Chiến lược đọc và phân tích ngữ cảnh để lựa chọn đáp án đúng cho đoạn văn.', 'video/mp4', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B3/BaiGiang.mp4')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/BaiGiang/Bai3/C%C3%A2u%20gi%E1%BA%A3%20%C4%91%E1%BB%8Bnh.mp4')),
 
 (@bh_nd_5_3, 'Incomplete Sentences PDF Bài 3',   'PDF',   '10MB', 'Chiến lược đọc và phân tích ngữ cảnh để lựa chọn đáp án đúng cho đoạn văn.', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B3/TaiLieu.pdf')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/TaiLieuHocTap/Bai3/TaiLieuBai3_P5-6.%20Incomplete%20Sentences.pdf')),
 
-(@bh_nd_5_3, 'Incomplete Sentences Audio 1 Bài 3','Audio', '20MB', 'Chiến lược đọc và phân tích ngữ cảnh để lựa chọn đáp án đúng cho đoạn văn.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B3/Audio1.mp3')),
-
-(@bh_nd_5_3, 'Incomplete Sentences Audio 2 Bài 3','Audio', '20MB', 'Chiến lược đọc và phân tích ngữ cảnh để lựa chọn đáp án đúng cho đoạn văn.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B3/Audio2.mp3')),
-
-(@bh_nd_5_3, 'Incomplete Sentences Audio 3 Bài 3','Audio', '20MB', 'Chiến lược đọc và phân tích ngữ cảnh để lựa chọn đáp án đúng cho đoạn văn.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C5/B3/Audio3.mp3')),
 
 -- Chương 7 - Vocabulary & Reading Comprhension Practice
 -- Bài 1
 (@bh_nd_6_1, 'Vocabulary & Reading Comprhension Practice Video Bài 1', 'Video', '350MB', 'Kỹ năng đọc lướt (skimming) và đọc quét (scanning) để tìm thông tin trong một đoạn văn.', 'video/mp4', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B1/BaiGiang.mp4')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/BaiGiang/Bai1/An%20Introduction%20to%20Part%207.mp4')),
 
 (@bh_nd_6_1, 'Vocabulary & Reading Comprhension Practice PDF Bài 1',   'PDF',   '10MB', 'Kỹ năng đọc lướt (skimming) và đọc quét (scanning) để tìm thông tin trong một đoạn văn.', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B1/TaiLieu.pdf')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/TaiLieuHocTap/Bai1/TaiLieuBai1_P7.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice.pdf')),
 
-(@bh_nd_6_1, 'Vocabulary & Reading Comprhension Practice Audio 1 Bài 1','Audio', '20MB', 'Kỹ năng đọc lướt (skimming) và đọc quét (scanning) để tìm thông tin trong một đoạn văn.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B1/Audio1.mp3')),
-
-(@bh_nd_6_1, 'Vocabulary & Reading Comprhension Practice Audio 2 Bài 1','Audio', '20MB', 'Kỹ năng đọc lướt (skimming) và đọc quét (scanning) để tìm thông tin trong một đoạn văn.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B1/Audio2.mp3')),
-
-(@bh_nd_6_1, 'Vocabulary & Reading Comprhension Practice Audio 3 Bài 1','Audio', '20MB', 'Kỹ năng đọc lướt (skimming) và đọc quét (scanning) để tìm thông tin trong một đoạn văn.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B1/Audio3.mp3')),
 
 -- Bài 2
 (@bh_nd_6_2, 'Vocabulary & Reading Comprhension Practice Video Bài 2', 'Video', '350MB', 'Hướng dẫn cách liên kết thông tin giữa hai hoặc ba đoạn văn để trả lời câu hỏi.', 'video/mp4', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B2/BaiGiang.mp4')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/BaiGiang/Bai2/K%C4%A9%20n%C4%83ng%20x%E1%BB%AD%20l%C3%AD%20c%C3%A2u%20h%E1%BB%8Fi%20thu%E1%BB%99c%20ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20E-%20mail-Letter-Fax.mp4')),
 
 (@bh_nd_6_2, 'Vocabulary & Reading Comprhension Practice PDF Bài 2',   'PDF',   '10MB', 'Hướng dẫn cách liên kết thông tin giữa hai hoặc ba đoạn văn để trả lời câu hỏi.', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B2/TaiLieu.pdf')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/TaiLieuHocTap/Bai2/TaiLieuBai2_P7.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice.pdf')),
 
-(@bh_nd_6_2, 'Vocabulary & Reading Comprhension Practice Audio 1 Bài 2','Audio', '20MB', 'Hướng dẫn cách liên kết thông tin giữa hai hoặc ba đoạn văn để trả lời câu hỏi.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B2/Audio1.mp3')),
-
-(@bh_nd_6_2, 'Vocabulary & Reading Comprhension Practice Audio 2 Bài 2','Audio', '20MB', 'Hướng dẫn cách liên kết thông tin giữa hai hoặc ba đoạn văn để trả lời câu hỏi.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B2/Audio2.mp3')),
-
-(@bh_nd_6_2, 'Vocabulary & Reading Comprhension Practice Audio 3 Bài 2','Audio', '20MB', 'Hướng dẫn cách liên kết thông tin giữa hai hoặc ba đoạn văn để trả lời câu hỏi.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B2/Audio3.mp3')),
 
 -- Bài 3
 (@bh_nd_6_3, 'Vocabulary & Reading Comprhension Practice Video Bài 3', 'Video', '350MB', 'Chiến lược quản lý thời gian hiệu quả và xử lý các câu hỏi về từ vựng và suy luận.', 'video/mp4', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B3/BaiGiang.mp4')),
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/BaiGiang/Bai3/K%C4%A9%20n%C4%83ng%20x%E1%BB%AD%20l%C3%AD%20c%C3%A2u%20h%E1%BB%8Fi%20thu%E1%BB%99c%20ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20Memo%20-Notice%20-Announcement.mp4')),
 
 (@bh_nd_6_3, 'Vocabulary & Reading Comprhension Practice PDF Bài 3',   'PDF',   '10MB', 'Chiến lược quản lý thời gian hiệu quả và xử lý các câu hỏi về từ vựng và suy luận.', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B3/TaiLieu.pdf')),
-
-(@bh_nd_6_3, 'Vocabulary & Reading Comprhension Practice Audio 1 Bài 3','Audio', '20MB', 'Chiến lược quản lý thời gian hiệu quả và xử lý các câu hỏi về từ vựng và suy luận.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B3/Audio1.mp3')),
-
-(@bh_nd_6_3, 'Vocabulary & Reading Comprhension Practice Audio 2 Bài 3','Audio', '20MB', 'Chiến lược quản lý thời gian hiệu quả và xử lý các câu hỏi về từ vựng và suy luận.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B3/Audio2.mp3')),
-
-(@bh_nd_6_3, 'Vocabulary & Reading Comprhension Practice Audio 3 Bài 3','Audio', '20MB', 'Chiến lược quản lý thời gian hiệu quả và xử lý các câu hỏi về từ vựng và suy luận.', 'audio/mpeg', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/NgheDoc/C6/B3/Audio3.mp3'));
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/TaiLieuHocTap/Bai3/TaiLieuBai3_P7.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice.pdf'));
 
 COMMIT;
