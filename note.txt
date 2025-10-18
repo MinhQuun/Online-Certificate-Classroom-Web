@@ -24,11 +24,13 @@ cũng không thấy được, nên buộc phải tự tạo)
 
 6. Chạy lệnh composer require maatwebsite/excel barryvdh/laravel-dompdf spatie/laravel-permission
 
-7. Chạy lệnh  npm install  để cài đặt
+7. Chạy lệnh composer require league/flysystem-aws-s3-v3:^3
 
-8. Chạy lệnh để tạo user phân quyền mặc định: php artisan db:seed  
+8. Chạy lệnh  npm install  để cài đặt
 
-9. Khởi động server: php artisan serve
+9. Chạy lệnh để tạo user phân quyền mặc định: php artisan db:seed  
+
+10. Khởi động server: php artisan serve
 
 # Clear cache (nếu lỗi view/config)
 php artisan cache:clear
