@@ -92,7 +92,17 @@ class UserAdminController extends Controller
             'phone'    => ['nullable', 'regex:/^0\d{9}$/'],
             'MAQUYEN'  => ['required', 'exists:QUYEN,maQuyen'],
         ], [
-            'phone.regex' => 'So dien thoai phai gom 10 chu so va bat dau bang 0.',
+            'name.required'      => 'Vui lòng nhập họ tên.',
+            'name.min'           => 'Họ tên phải có ít nhất :min ký tự.',
+            'email.required'     => 'Vui lòng nhập email.',
+            'email.email'        => 'Email không hợp lệ.',
+            'email.unique'       => 'Email đã được sử dụng.',
+            'password.required'  => 'Vui lòng nhập mật khẩu.',
+            'password.confirmed' => 'Xác nhận mật khẩu không đúng.',
+            'password.min'       => 'Mật khẩu phải có ít nhất :min ký tự.',
+            'phone.regex'        => 'Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 0.',
+            'MAQUYEN.required'   => 'Vui lòng chọn quyền.',
+            'MAQUYEN.exists'     => 'Quyền không hợp lệ.',
         ]);
 
         $user = User::create([
@@ -114,7 +124,7 @@ class UserAdminController extends Controller
             app(EnsureCustomerProfile::class)->handle($user);
         }
 
-        return back()->with('success', 'Tao nguoi dung thanh cong.');
+        return back()->with('success', 'Tạo người dùng thành công.');
     }
 
     public function update(Request $request, User $user)
@@ -125,7 +135,14 @@ class UserAdminController extends Controller
             'phone'    => ['nullable', 'regex:/^0\d{9}$/'],
             'password' => ['nullable', 'confirmed', Password::min(6)],
         ], [
-            'phone.regex' => 'So dien thoai phai gom 10 chu so va bat dau bang 0.',
+            'name.required'      => 'Vui lòng nhập họ tên.',
+            'name.min'           => 'Họ tên phải có ít nhất :min ký tự.',
+            'email.required'     => 'Vui lòng nhập email.',
+            'email.email'        => 'Email không hợp lệ.',
+            'email.unique'       => 'Email đã được sử dụng.',
+            'phone.regex'        => 'Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 0.',
+            'password.confirmed' => 'Xác nhận mật khẩu không đúng.',
+            'password.min'       => 'Mật khẩu phải có ít nhất :min ký tự.',
         ]);
 
         $data = [
@@ -140,47 +157,50 @@ class UserAdminController extends Controller
 
         $user->update($data);
 
-        return back()->with('success', 'Cap nhat nguoi dung thanh cong.');
+        return back()->with('success', 'Cập nhật người dùng thành công.');
     }
 
     public function updateRole(Request $request, User $user)
     {
         $request->validate([
             'MAQUYEN' => ['required', 'exists:QUYEN,maQuyen'],
+        ], [
+            'MAQUYEN.required' => 'Vui lòng chọn quyền.',
+            'MAQUYEN.exists'   => 'Quyền không hợp lệ.',
         ]);
 
-        $newRole = $request->MAQUYEN;
-        $adminId = $this->roleId('admin');
-        $staffId = $this->roleId('nhanvien');
-        $customerId = $this->roleId('khachhang');
+        $newRole     = $request->MAQUYEN;
+        $adminId     = $this->roleId('admin');
+        $staffId     = $this->roleId('nhanvien');
+        $customerId  = $this->roleId('khachhang');
 
         $currentRoleId = optional($user->roles()->first())->maQuyen;
 
         if ($currentRoleId === $customerId && $newRole !== $customerId) {
-            return back()->with('error', 'Khach hang khong the doi sang quyen khac.');
+            return back()->with('error', 'Khách hàng không thể đổi sang quyền khác.');
         }
 
         if ($currentRoleId === $adminId && $newRole !== $adminId) {
-            return back()->with('error', 'Tai khoan admin khong the doi sang quyen khac.');
+            return back()->with('error', 'Tài khoản admin không thể đổi sang quyền khác.');
         }
 
         if ($currentRoleId === $staffId && $newRole === $customerId) {
-            return back()->with('error', 'Nhan vien khong the doi xuong khach hang.');
+            return back()->with('error', 'Nhân viên không thể đổi xuống khách hàng.');
         }
 
         if ($currentRoleId === $adminId && $this->adminCount() <= 1) {
-            return back()->with('error', 'Day la admin cuoi cung, khong the thay doi.');
+            return back()->with('error', 'Đây là admin cuối cùng, không thể thay đổi.');
         }
 
         $user->roles()->sync([$newRole]);
         $user->update(['vaiTro' => $newRole]);
 
-        return back()->with('success', 'Cap nhat quyen thanh cong.');
+        return back()->with('success', 'Cập nhật quyền thành công.');
     }
 
     public function destroy(User $user)
     {
-        $adminId = $this->roleId('admin');
+        $adminId    = $this->roleId('admin');
         $customerId = $this->roleId('khachhang');
 
         $isAdmin = $adminId
@@ -188,7 +208,7 @@ class UserAdminController extends Controller
             : false;
 
         if ($isAdmin) {
-            return back()->with('error', 'Khong the xoa tai khoan co quyen admin.');
+            return back()->with('error', 'Không thể xoá tài khoản có quyền admin.');
         }
 
         $isCustomer = $customerId
@@ -196,13 +216,12 @@ class UserAdminController extends Controller
             : false;
 
         if ($isCustomer && $user->khachHang && $user->khachHang->donHangs()->exists()) {
-            return back()->with('error', 'Khach hang da co don hang, khong the xoa.');
+            return back()->with('error', 'Khách hàng đã có đơn hàng, không thể xoá.');
         }
 
         $user->roles()->detach();
         $user->delete();
 
-        return back()->with('success', 'Da xoa nguoi dung.');
+        return back()->with('success', 'Đã xoá người dùng.');
     }
 }
-
