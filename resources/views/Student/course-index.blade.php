@@ -5,6 +5,11 @@
 @push('styles')
     @php
         $pageStyle = 'css/Student/pages-courses.css';
+        $heroBanners = [
+            ['file' => 'Assets/Banner/banner1.png', 'alt' => 'Không gian học chứng chỉ trực tuyến hiện đại'],
+            ['file' => 'Assets/Banner/banner2.png', 'alt' => 'Lộ trình học tập cá nhân hoá'],
+            ['file' => 'Assets/Banner/banner3.png', 'alt' => 'Cộng đồng mentor đồng hành'],
+        ];
     @endphp
     <link rel="stylesheet" href="{{ asset($pageStyle) }}?v={{ student_asset_version($pageStyle) }}">
 @endpush
@@ -25,11 +30,25 @@
                     <span>Mentor theo sát</span>
                 </div>
             </div>
-            {{-- <div class="hero__media">
-                <img src="{{ $firstCourse && $firstCourse->hinhanh ? asset('Assets/' . $firstCourse->hinhanh) : asset('Assets/logo.png') }}" alt="Khóa học nổi bật">
-            </div> --}}
-            <div class="hero__media">
-                <img src="{{ asset('Assets/Duy4.jpg') }}" alt="Khoá học nổi bật">
+            <div class="hero__media hero-banner" data-hero-banner>
+                <div class="hero-banner__slides">
+                    @foreach ($heroBanners as $banner)
+                        <div class="hero-banner__slide {{ $loop->first ? 'is-active' : '' }}">
+                            <img src="{{ asset($banner['file']) }}" alt="{{ $banner['alt'] }}">
+                        </div>
+                    @endforeach
+                </div>
+                <div class="hero-banner__dots" role="tablist" aria-label="Chuyển banner khóa học">
+                    @foreach ($heroBanners as $banner)
+                        <button
+                            type="button"
+                            class="hero-banner__dot {{ $loop->first ? 'is-active' : '' }}"
+                            data-hero-banner-dot
+                            aria-label="Xem banner {{ $loop->iteration }}"
+                            aria-pressed="{{ $loop->first ? 'true' : 'false' }}"
+                        ></button>
+                    @endforeach
+                </div>
             </div>
 
         </div>
@@ -77,3 +96,7 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/Student/hero-banner.js') }}" defer></script>
+@endpush

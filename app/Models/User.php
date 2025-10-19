@@ -2,46 +2,70 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    protected $table = 'nguoidung';
+    protected $primaryKey = 'maND';
+    protected $keyType = 'int';
+
     protected $fillable = [
-        'name',
+        'hoTen',
         'email',
-        'password',
+        'sdt',
+        'matKhau',
+        'chuyenMon',
+        'vaiTro',
+        'trangThai',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'matKhau',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    public function getAuthPassword()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->matKhau;
+    }
+
+    public function getPasswordAttribute(): ?string
+    {
+        return $this->matKhau;
+    }
+
+    public function setPasswordAttribute($value): void
+    {
+        $this->attributes['matKhau'] = $value;
+    }
+
+    public function getNameAttribute(): ?string
+    {
+        return $this->hoTen;
+    }
+
+    public function assignRole(string $roleId): void
+    {
+        if (!$this->exists) {
+            return;
+        }
+
+        DB::table('QUYEN_NGUOIDUNG')->updateOrInsert(
+            [
+                'maND' => $this->getKey(),
+                'maQuyen' => $roleId,
+            ],
+            []
+        );
     }
 }
