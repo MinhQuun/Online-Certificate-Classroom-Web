@@ -233,7 +233,7 @@
                                     $optionName = $r->TENQUYEN ?? $r->tenQuyen ?? $optionCode;
                                 @endphp
                                 <option value="{{ $optionCode }}">{{ $optionName }} ({{ $optionCode }})</option>
-                            @endforeach
+                            
                         </select>
                     </div>
                 </div>
