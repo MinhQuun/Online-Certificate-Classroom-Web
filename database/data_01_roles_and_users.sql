@@ -25,7 +25,7 @@ INSERT INTO NGUOIDUNG (hoTen, email, sdt, matKhau, chuyenMon, vaiTro) VALUES
 ('Nghê Minh Trí',          'tringhe2004@gmail.com',            '0856780003', '123456',  NULL,               'HOC_VIEN');
 
 -- Lấy id theo email để map quyền/học viên
-SELECT maND INTO @nd_admin1   FROM NGUOIDUNG WHERE email='vonguyenminhquan20052004@.com';
+SELECT maND INTO @nd_admin1   FROM NGUOIDUNG WHERE email='vonguyenminhquan20052004@gmail.com';
 SELECT maND INTO @nd_teacher1 FROM NGUOIDUNG WHERE email='nptduyc920@gmail.com';
 SELECT maND INTO @nd_teacher2 FROM NGUOIDUNG WHERE email='truongdoan76qn@gmail.com';
 SELECT maND INTO @nd_student1 FROM NGUOIDUNG WHERE email='nguyenthitutrinh120504@gmail.com';
