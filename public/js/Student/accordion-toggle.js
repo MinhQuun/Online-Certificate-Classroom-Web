@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   accordions.forEach(wrapper => {
-    const button = wrapper.querySelector('.accordion__header');
+    const button = wrapper.querySelector('.module__toggle, .accordion__header');
     const group = Array.from(wrapper.parentElement?.querySelectorAll('[data-accordion]') || []);
     const hasActive = wrapper.querySelector('.is-active');
 
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
       group.forEach(item => {
         if (item !== wrapper) {
           item.classList.remove('is-open');
-          updateAria(item, item.querySelector('.accordion__header'));
+          updateAria(item, item.querySelector('.module__toggle, .accordion__header'));
         }
       });
       wrapper.classList.toggle('is-open', willOpen);
@@ -30,4 +30,3 @@ document.addEventListener('DOMContentLoaded', () => {
     updateAria(wrapper, button);
   });
 });
-

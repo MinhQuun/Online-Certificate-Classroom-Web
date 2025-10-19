@@ -1,7 +1,8 @@
 :root {
     --color-bg: #f5f7fb;
-    --color-surface: #ffffff;
-    --color-surface-muted: #f1f5ff;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f1f5ff;
+  --color-surface-soft: #eef4ff;
     --color-accent: #2563eb;
     --color-accent-soft: #60a5fa;
     --color-accent-strong: #1d4ed8;

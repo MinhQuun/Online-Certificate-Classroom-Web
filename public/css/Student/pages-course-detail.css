@@ -1,3 +1,5 @@
+
+/* Course detail styling */
 .course-hero {
     position: relative;
     padding: 92px 0 72px;
@@ -7,24 +9,22 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: radial-gradient(
-            circle at 20% 0%,
-            rgba(96, 165, 250, 0.22),
-            transparent 60%
-        ),
-        linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.85),
-            rgba(245, 247, 251, 0.95)
-        );
+    background: radial-gradient(circle at 20% 0%, rgba(96, 165, 250, 0.22), transparent 60%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(245, 247, 251, 0.95));
 }
 
 .course-hero__grid {
     position: relative;
     display: grid;
     gap: 40px;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    align-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    align-items: stretch;
+}
+
+@media (min-width: 1024px) {
+    .course-hero__grid {
+        grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    }
 }
 
 .course-hero__text h1 {
@@ -73,6 +73,17 @@
     border-radius: var(--radius-lg);
     padding: 24px;
     box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.course-hero__media img {
+    width: 100%;
+    max-height: 340px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
 }
 
 .course-layout {
@@ -84,6 +95,224 @@
 
 .course-layout__main {
     display: grid;
+    gap: 28px;
+}
+
+.module {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.module--final .module__toggle {
+    background: rgba(37, 99, 235, 0.08);
+}
+
+.module--final .module__title {
+    color: var(--color-accent);
+}
+
+.module__header {
+    background: var(--color-surface);
+}
+
+.module__toggle {
+    width: 100%;
+    background: transparent;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 22px;
+    cursor: pointer;
+}
+
+.module__info {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.module__eyebrow {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+}
+
+.module__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.module__chevron {
+    width: 12px;
+    height: 12px;
+    border-right: 2px solid var(--color-accent);
+    border-bottom: 2px solid var(--color-accent);
+    transform: rotate(45deg);
+    transition: var(--transition);
+}
+
+.module.is-open .module__chevron {
+    transform: rotate(-135deg);
+}
+
+.module__panel {
+    display: none;
+    border-top: 1px solid var(--color-border);
+}
+
+.module.is-open .module__panel {
+    display: block;
+}
+
+.module__body {
+    padding: 20px 22px 24px;
+    background: var(--color-surface-muted);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.lesson-list--module {
+    gap: 10px;
+    margin: 0 0 18px;
+}
+
+.lesson-list--module a {
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--color-surface);
+    border-radius: 12px;
+    border: 1px solid transparent;
+    transition: var(--transition);
+}
+
+.lesson-list--module a:hover {
+    border-color: rgba(37, 99, 235, 0.24);
+    box-shadow: 0 12px 22px rgba(37, 99, 235, 0.08);
+}
+
+.lesson-list__meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.lesson-list__eyebrow {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+}
+
+.lesson-list__title {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.mini-tests {
+    margin-top: 18px;
+}
+
+.mini-tests__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    color: var(--color-muted);
+    font-size: 14px;
+}
+
+.mini-tests__grid,
+.final-tests__grid,
+.pdf-grid,
+.doc-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.mini-test-card,
+.final-test-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.mini-test-card:hover,
+.final-test-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.mini-test-card header,
+.final-test-card header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.meta-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 12px;
+    color: var(--color-muted);
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.meta-list--inline {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.mini-test-card footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--color-muted);
+    margin-bottom: 12px;
+}
+
+.resource-list {
+    display: grid;
+    gap: 10px;
+}
+
+.resource-list a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--color-surface-soft);
+    border: 1px solid rgba(37, 99, 235, 0.12);
+    color: var(--color-accent);
+    font-size: 14px;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.resource-list--compact a {
+    padding: 10px 12px;
+    font-size: 13px;
+}
+
+.resource-list a:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-accent);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
 }
 
 .course-sidebar {
@@ -118,6 +347,16 @@
 
 .course-sidebar__card--muted {
     background: var(--color-surface-muted);
+}
+
+.course-sidebar__card--muted ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+    color: var(--color-muted);
+    font-size: 14px;
 }
 
 @media (max-width: 992px) {

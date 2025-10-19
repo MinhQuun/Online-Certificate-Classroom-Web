@@ -47,5 +47,38 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-});
 
+  const profile = document.querySelector('[data-profile]');
+  if (profile) {
+    const trigger = profile.querySelector('[data-profile-trigger]');
+    const menu = profile.querySelector('[data-profile-menu]');
+
+    const closeProfile = () => {
+      profile.classList.remove('is-open');
+      trigger?.setAttribute('aria-expanded', 'false');
+    };
+
+    trigger?.addEventListener('click', event => {
+      event.preventDefault();
+      const willOpen = !profile.classList.contains('is-open');
+      if (willOpen) {
+        profile.classList.add('is-open');
+        trigger.setAttribute('aria-expanded', 'true');
+      } else {
+        closeProfile();
+      }
+    });
+
+    document.addEventListener('click', event => {
+      if (!profile.contains(event.target)) {
+        closeProfile();
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.matchMedia('(max-width: 860px)').matches) {
+        closeProfile();
+      }
+    });
+  }
+});
