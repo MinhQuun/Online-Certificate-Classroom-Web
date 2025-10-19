@@ -14,48 +14,47 @@
 
         <nav class="main-nav" aria-label="Thanh điều hướng chính">
             <ul class="nav-list">
+
+                <!-- DROPDOWN: Danh mục khóa học -->
                 <li class="nav-item nav-item--mega" data-dropdown>
-                    <button class="nav-link" type="button" data-dropdown-trigger aria-expanded="false">
+                    <button class="nav-link" data-dropdown-trigger aria-expanded="false" aria-haspopup="true" aria-controls="menu-categories">
                         <span>Danh mục khóa học</span>
-                        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.24l3.7-3.01a.75.75 0 0 1 .95 1.17l-4.2 3.4a.75.75 0 0 1-.95 0l-4.2-3.4a.75.75 0 0 1 .02-1.19z"/></svg>
+                        <i class="fa-solid fa-angle-down" aria-hidden="true"></i>
                     </button>
-                    <div class="dropdown-panel" data-dropdown-panel>
-                        @if ($categories->isEmpty())
-                            <div class="dropdown-empty-state">Chưa có danh mục nào.</div>
-                        @else
-                            <div class="dropdown-panel__cols" data-category-container>
-                                <div class="dropdown-col dropdown-col--cats">
-                                    <ul>
-                                        @foreach ($categories as $category)
-                                            <li>
-                                                <button type="button" class="dropdown-cat" data-category-trigger="{{ $category->maDanhMuc }}">
-                                                    {{ $category->tenDanhMuc }}
-                                                </button>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                                <div class="dropdown-col dropdown-col--courses">
-                                    <div class="dropdown-placeholder" data-category-placeholder>Chọn danh mục để xem khóa học</div>
-                                    @foreach ($categories as $category)
-                                        <div class="dropdown-courses" data-category-panel="{{ $category->maDanhMuc }}">
-                                            <h4>{{ $category->tenDanhMuc }}</h4>
-                                            <ul>
-                                                @forelse ($category->courses as $course)
+
+                    <div id="menu-categories" class="dropdown-panel" data-dropdown-panel role="menu" aria-label="Danh mục">
+                        <ul class="dropdown-categories">
+                            @foreach($categories as $cat)
+                                <li class="dropdown-category-item" data-subdropdown>
+                                    <button class="dropdown-category-trigger" data-subdropdown-trigger aria-expanded="false" aria-haspopup="true">
+                                        <span>{{ $cat->tenDanhMuc }}</span>
+                                        <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
+                                    </button>
+
+                                    <div class="subdropdown-panel" data-subdropdown-panel role="menu" aria-label="Khóa học {{ $cat->tenDanhMuc }}">
+                                        <h4 class="subdropdown-title">{{ $cat->tenDanhMuc }}</h4>
+
+                                        @if($cat->courses->isNotEmpty())
+                                            <ul class="subdropdown-courses">
+                                                @foreach($cat->courses as $course)
                                                     <li>
-                                                        <a href="{{ route('student.courses.show', $course->slug) }}">{{ $course->tenKH }}</a>
+                                                        <a href="{{ route('student.courses.show', $course->slug) }}" role="menuitem">
+                                                            {{ $course->tenKH }}
+                                                        </a>
                                                     </li>
-                                                @empty
-                                                    <li class="dropdown-empty">Đang cập nhật khóa học</li>
-                                                @endforelse
+                                                @endforeach
                                             </ul>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        @endif
+                                        @else
+                                            <div class="dropdown-empty-state">Chưa có khóa học</div>
+                                        @endif
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
                     </div>
                 </li>
+
+                <!-- Các mục menu khác -->
                 <li class="nav-item"><a class="nav-link" href="#services">Dịch vụ</a></li>
                 <li class="nav-item"><a class="nav-link" href="#about">Về chúng tôi</a></li>
                 <li class="nav-item"><a class="nav-link" href="#contact">Liên hệ</a></li>
@@ -107,10 +106,16 @@
             </a>
 
             <button class="header-toggle" type="button" data-header-toggle aria-expanded="false" aria-label="Mở menu">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </button>
         </div>
     </div>
 </header>
+
+@push('styles')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer" />
+@endpush
+
+@push('scripts')
+    <script src="{{ asset('js/dropdown.js') }}" defer></script>
+@endpush

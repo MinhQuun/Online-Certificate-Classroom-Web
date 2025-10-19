@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Services\EnsureCustomerProfile;
+use App\Support\RoleResolver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -58,7 +59,7 @@ class UserController extends Controller
                 'trangThai' => 'ACTIVE',
             ]);
 
-            if ($roleId = $this->findStudentRoleId()) {
+            if ($roleId = RoleResolver::findRoleId(['hoc-vien', 'hocvien', 'khach-hang', 'khachhang', 'student'])) {
                 $user->assignRole($roleId);
             }
 
@@ -81,7 +82,7 @@ class UserController extends Controller
         if (Auth::check()) {
             /** @var \App\Models\User $user */
             $user = Auth::user();
-            $role = $this->resolveRole($user);
+            $role = RoleResolver::resolve($user);
 
             if ($role === 'admin' && Route::has('admin.dashboard')) {
                 return redirect()->route('admin.dashboard');
@@ -126,7 +127,7 @@ class UserController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        $role = $this->resolveRole($user);
+        $role = RoleResolver::resolve($user);
 
         if ($role === 'student') {
             app(EnsureCustomerProfile::class)->handle($user);
@@ -230,66 +231,6 @@ class UserController extends Controller
         return redirect()
             ->route('users.index')
             ->with('success', 'Đã xóa người dùng!');
-    }
-
-    private function resolveRole(User $user): string
-    {
-        $role = DB::table('QUYEN_NGUOIDUNG')
-            ->join('QUYEN', 'QUYEN.MAQUYEN', '=', 'QUYEN_NGUOIDUNG.MAQUYEN')
-            ->select('QUYEN_NGUOIDUNG.MAQUYEN as code', 'QUYEN.TENQUYEN as name')
-            ->where('QUYEN_NGUOIDUNG.maND', $user->getKey())
-            ->first();
-
-        if ($role) {
-            if ($slug = $this->mapRole($role->code, $role->name)) {
-                return $slug;
-            }
-        }
-
-        return $this->mapRole(null, $user->vaiTro) ?? 'student';
-    }
-
-    private function mapRole(?string $code, ?string $name): ?string
-    {
-        $code = $code ? strtoupper($code) : null;
-
-        $mapByCode = [
-            'Q001' => 'admin',
-            'Q002' => 'teacher',
-            'Q003' => 'student',
-        ];
-
-        if ($code && isset($mapByCode[$code])) {
-            return $mapByCode[$code];
-        }
-
-        if (!$name) {
-            return null;
-        }
-
-        $slug = Str::slug($name);
-
-        return match ($slug) {
-            'admin', 'quan-tri-vien' => 'admin',
-            'giao-vu', 'nhan-vien', 'staff' => 'staff',
-            'giang-vien', 'teacher' => 'teacher',
-            'hoc-vien', 'hocvien', 'hoc-sinh', 'student', 'khach-hang', 'khachhang' => 'student',
-            default => null,
-        };
-    }
-
-    private function findStudentRoleId(): ?string
-    {
-        $roles = DB::table('QUYEN')->get();
-
-        foreach ($roles as $role) {
-            $slug = Str::slug($role->TENQUYEN);
-            if (in_array($slug, ['hoc-vien', 'hocvien', 'khach-hang', 'khachhang', 'student'], true)) {
-                return $role->MAQUYEN;
-            }
-        }
-
-        return null;
     }
 
     private function sanitizeRedirect(?string $target): ?string

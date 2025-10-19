@@ -1,6 +1,6 @@
 @extends('layouts.student')
 
-@section('title', 'Khóa học')
+@section('title', 'Trang chủ')
 
 @push('styles')
     @php

@@ -24,9 +24,9 @@
             <form class="row g-2 align-items-center" method="get" action="{{ route('admin.users.index') }}">
                 <div class="col-lg-5">
                     <input class="form-control"
-                            name="q"
-                            value="{{ $q ?? request('q') }}"
-                            placeholder="Tim theo ten, email, dien thoai...">
+                           name="q"
+                           value="{{ $q ?? request('q') }}"
+                           placeholder="Tim theo ten, email, dien thoai...">
                 </div>
                 <div class="col-lg-3">
                     <select name="role" class="form-select">
@@ -136,7 +136,9 @@
                                     data-id="{{ $u->id }}"
                                     data-name="{{ $u->name }}"
                                     data-email="{{ $u->email }}"
-                                    data-phone="{{ $u->phone }}">
+                                    data-phone="{{ $u->phone }}"
+                                    data-role-id="{{ $roleId }}"
+                                    data-role-name="{{ $roleName }}">
                                 <i class="bi bi-pencil me-1"></i>
                             </button>
 
@@ -193,17 +195,26 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body row g-3">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <div class="col-md-6">
                         <label class="form-label">Ho ten</label>
-                        <input name="name" class="form-control" required>
+                        <input name="name" class="form-control" value="{{ old('name') }}" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Email</label>
-                        <input type="email" name="email" class="form-control" required>
+                        <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">So dien thoai</label>
-                        <input name="phone" class="form-control" placeholder="0xxxxxxxxx" pattern="0\d{9}">
+                        <input name="phone" class="form-control" value="{{ old('phone') }}" placeholder="0xxxxxxxxx" pattern="0\d{9}">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Mat khau</label>
@@ -236,16 +247,22 @@
 
     <div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
-            <form id="formEdit"
-                    class="modal-content"
-                    method="post"
-                    data-action-template="{{ route('admin.users.update', ':id') }}">
+            <form id="formEdit" class="modal-content" method="post">
                 @csrf @method('put')
                 <div class="modal-header">
                     <h5 class="modal-title">Sua nguoi dung</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                    <div class="modal-body row g-3">
+                <div class="modal-body row g-3">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <div class="col-md-6">
                         <label class="form-label">Ho ten</label>
                         <input id="e_name" name="name" class="form-control" required>
@@ -265,6 +282,18 @@
                     <div class="col-md-6">
                         <label class="form-label">Xac nhan mat khau (tuy chon)</label>
                         <input type="password" name="password_confirmation" class="form-control" minlength="6" placeholder="De trong neu khong doi">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Quyen</label>
+                        <select id="e_role" name="MAQUYEN" class="form-select" required>
+                            @foreach($roles as $r)
+                                @php
+                                    $optionCode = $r->MAQUYEN ?? $r->maQuyen ?? '';
+                                    $optionName = $r->TENQUYEN ?? $r->tenQuyen ?? $optionCode;
+                                @endphp
+                                <option value="{{ $optionCode }}">{{ $optionName }} ({{ $optionCode }})</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">

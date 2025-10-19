@@ -17,7 +17,7 @@ ON DUPLICATE KEY UPDATE tenQuyen=VALUES(tenQuyen);
 --  Mật khẩu là ví dụ placeholder, thay bằng hash thật trong Laravel.
 -- =========================================================
 INSERT INTO NGUOIDUNG (hoTen, email, sdt, matKhau, chuyenMon, vaiTro) VALUES
-('Võ Nguyễn Minh Quân',    'vonguyenminhquan20052004@.com',    '0966546750', '123456', 'Quản trị hệ thống', 'ADMIN'),
+('Võ Nguyễn Minh Quân',    'vonguyenminhquan20052004@gmail.com',    '0966546750', '123456', 'Quản trị hệ thống', 'ADMIN'),
 ('Nguyễn Phạm Trường Duy', 'nptduyc920@gmail.com',             '0796177075', '123456', 'Ngôn ngữ Anh',      'GIANG_VIEN'),
 ('Trương Quang Như Đoan',  'truongdoan76qn@gmail.com',         '0866503201', '123456', 'Ngôn ngữ Anh',      'GIANG_VIEN'),
 ('Nguyễn Thị Tú Trinh',    'nguyenthitutrinh120504@gmail.com', '0564609210', '123456',  NULL,               'HOC_VIEN'),

@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\UserAdminController;
 
 use App\Http\Controllers\Student\ForgotPasswordController;
 
@@ -12,6 +14,7 @@ use App\Http\Controllers\Student\ForgotPasswordController;
 Route::get('/', [\App\Http\Controllers\Student\CourseController::class, 'index'])->name('student.courses.index');
 Route::get('/courses/{slug}', [\App\Http\Controllers\Student\CourseController::class, 'show'])->name('student.courses.show');
 Route::get('/lessons/{maBH}', [\App\Http\Controllers\Student\LessonController::class, 'show'])->name('student.lessons.show');
+Route::get('/home', fn() => redirect()->route('student.courses.index'))->name('home');
 
 // Legacy student paths redirect to new URLs
 Route::redirect('/student/courses', '/');
@@ -39,3 +42,16 @@ Route::name('password.')->group(function () {
     Route::post('/verify-otp',      [ForgotPasswordController::class, 'verifyOtp'])->name('verify');      // POST -> password.verify
     Route::post('/reset-password',  [ForgotPasswordController::class, 'resetPassword'])->name('update');  // POST -> password.update
 });
+
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::get('/users', [UserAdminController::class, 'index'])->name('users.index');
+        Route::post('/users', [UserAdminController::class, 'store'])->name('users.store');
+        Route::put('/users/{user}', [UserAdminController::class, 'update'])->name('users.update');
+        Route::post('/users/{user}/role', [UserAdminController::class, 'updateRole'])->name('users.updateRole');
+        Route::delete('/users/{user}', [UserAdminController::class, 'destroy'])->name('users.destroy');
+    });

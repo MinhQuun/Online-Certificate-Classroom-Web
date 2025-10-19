@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
@@ -17,9 +18,12 @@ class User extends Authenticatable
 
     protected $fillable = [
         'hoTen',
+        'name',
         'email',
         'sdt',
+        'phone',
         'matKhau',
+        'password',
         'chuyenMon',
         'vaiTro',
         'trangThai',
@@ -27,6 +31,7 @@ class User extends Authenticatable
 
     protected $hidden = [
         'matKhau',
+        'password',
     ];
 
     protected $casts = [
@@ -54,6 +59,36 @@ class User extends Authenticatable
         return $this->hoTen;
     }
 
+    public function setNameAttribute($value): void
+    {
+        $this->attributes['hoTen'] = $value;
+    }
+
+    public function getPhoneAttribute(): ?string
+    {
+        return $this->sdt;
+    }
+
+    public function setPhoneAttribute($value): void
+    {
+        $this->attributes['sdt'] = $value;
+    }
+
+    /**
+     * Roles that belong to the user via QUYEN_NGUOIDUNG pivot.
+     */
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Role::class,
+            'QUYEN_NGUOIDUNG',
+            'maND',
+            'maQuyen',
+            $this->getKeyName(),
+            'maQuyen'
+        );
+    }
+
     public function assignRole(string $roleId): void
     {
         if (!$this->exists) {
@@ -67,5 +102,7 @@ class User extends Authenticatable
             ],
             []
         );
+
+        $this->forceFill(['vaiTro' => $roleId])->save();
     }
 }
