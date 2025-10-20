@@ -103,17 +103,18 @@
                                 <button class="btn btn-sm btn-primary-soft action-btn"
                                         data-bs-toggle="modal"
                                         data-bs-target="#modalEdit"
-                                        data-id="{{ $course->maKH }}"tie
+                                        data-id="{{ $course->maKH }}"
                                         data-name="{{ $course->tenKH }}"
                                         data-category="{{ $course->maDanhMuc }}"
                                         data-teacher="{{ $course->maND }}"
                                         data-fee="{{ $course->hocPhi }}"
                                         data-duration="{{ $course->thoiHanNgay }}"
-                                        data-start="{{ $course->ngayBatDau }}"
-                                        data-end="{{ $course->ngayKetThuc }}"
+                                        data-start="{{ optional($course->ngayBatDau)->format('Y-m-d') }}"
+                                        data-end="{{ optional($course->ngayKetThuc)->format('Y-m-d') }}"
                                         data-desc="{{ $course->moTa }}"
                                         data-status="{{ $course->trangThai }}"
-                                        data-image="{{ $course->hinhAnh }}">
+                                        data-image="{{ $course->hinhanh }}"
+                                        data-image-url="{{ $course->cover_image_url }}">
                                     <i class="bi bi-pencil me-1"></i>
                                 </button>
                                 <form action="{{ route('admin.courses.destroy', $course->maKH) }}" method="post" class="d-inline form-delete">

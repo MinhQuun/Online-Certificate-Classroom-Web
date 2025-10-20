@@ -128,16 +128,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (el.tagName === "SELECT") {
                     if (fid === "e_status") {
-                        el.value = val || "DRAFT"; // chỉ mặc định cho trạng thái
-                    } else {
-                        if (val) el.value = val; // category/teacher: chỉ set khi có giá trị
+                        el.value = val || "DRAFT"; // ch??% m???c ?`??<nh cho tr???ng thA?i
+                    } else if (val) {
+                        el.value = val; // category/teacher: ch??% set khi cA3 giA? tr??<
                     }
                 } else {
                     el.value = val;
                 }
             });
 
-            // Định dạng và lưu giá trị gốc cho hocPhi sau khi tải dữ liệu
+            const fileInput = modalEdit.querySelector('input[name="hinhanh"]');
+            let previewWrapper = modalEdit.querySelector(
+                "[data-current-image-wrapper]"
+            );
+            if (!previewWrapper && fileInput) {
+                const fileCol =
+                    fileInput.closest(".col-12") || fileInput.parentElement;
+                if (fileCol && fileCol.parentElement) {
+                    previewWrapper = document.createElement("div");
+                    previewWrapper.className = fileCol.className || "col-12";
+                    previewWrapper.setAttribute(
+                        "data-current-image-wrapper",
+                        ""
+                    );
+                    previewWrapper.innerHTML = `
+                        <label class="form-label d-block">Hình ảnh hiện tại</label>
+                        <div class="d-flex align-items-center gap-3 flex-wrap" data-current-image-container>
+                            <img src="" alt="Hinh khoa hoc" class="img-thumbnail mb-2 d-none" style="max-height: 160px;" data-current-image>
+                            <span class="text-muted" data-current-image-empty>Khoa hoc chua co hinh.</span>
+                        </div>
+                    `;
+                    fileCol.parentElement.insertBefore(previewWrapper, fileCol);
+                }
+            }
+
+            const previewImg = modalEdit.querySelector("[data-current-image]");
+            const previewEmpty = modalEdit.querySelector(
+                "[data-current-image-empty]"
+            );
+            if (previewImg && previewEmpty) {
+                const imageUrl =
+                    btn?.getAttribute("data-image-url") ||
+                    btn?.getAttribute("data-image") ||
+                    "";
+                if (imageUrl) {
+                    previewImg.src = imageUrl;
+                    previewImg.alt =
+                        btn?.getAttribute("data-name") || "Hinh anh khoa hoc";
+                    previewImg.classList.remove("d-none");
+                    previewEmpty.classList.add("d-none");
+                } else {
+                    previewImg.src = "";
+                    previewImg.classList.add("d-none");
+                    previewEmpty.classList.remove("d-none");
+                }
+            }
+
             const feeInput = modalEdit.querySelector("#e_fee");
             if (feeInput && feeInput.value) {
                 const raw = feeInput.value.replace(/\D/g, "");
@@ -146,7 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     ? parseInt(raw, 10).toLocaleString("vi-VN")
                     : "";
             }
-            
+
             // Reset lỗi cũ
             modalEdit
                 .querySelectorAll(".is-invalid")

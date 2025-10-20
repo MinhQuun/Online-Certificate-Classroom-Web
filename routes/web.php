@@ -3,15 +3,38 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| Controllers (Common)
+|--------------------------------------------------------------------------
+*/
+use App\Http\Controllers\UserController;
+
+/*
+|--------------------------------------------------------------------------
+| Controllers (Admin)
+|--------------------------------------------------------------------------
+*/
 use App\Http\Controllers\Admin\CategoryAdminController;
 use App\Http\Controllers\Admin\CourseAdminController as CourseAdminController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserAdminController;
+
+/*
+|--------------------------------------------------------------------------
+| Controllers (Teacher)
+|--------------------------------------------------------------------------
+*/
+use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
+
+/*
+|--------------------------------------------------------------------------
+| Controllers (Student)
+|--------------------------------------------------------------------------
+*/
 use App\Http\Controllers\Student\CourseController as StudentCourseController;
 use App\Http\Controllers\Student\ForgotPasswordController;
 use App\Http\Controllers\Student\LessonController as StudentLessonController;
-use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
-use App\Http\Controllers\UserController;
 
 // =====================
 // Public (Student-facing)
@@ -30,9 +53,12 @@ Route::redirect('/student/courses', '/');
 Route::get('/student/courses/{slug}', fn ($slug)   => redirect()->route('student.courses.show', $slug));
 Route::get('/student/lessons/{maBH}', fn ($maBH)   => redirect()->route('student.lessons.show', $maBH));
 
-// =====================
-// Auth (Login/Register/Logout) + OTP Password Reset
-// =====================
+
+/*
+|--------------------------------------------------------------------------
+| AUTH & USER (đăng nhập/đăng ký/đổi mật khẩu qua OTP)
+|--------------------------------------------------------------------------
+*/
 
 // Mở modal đăng nhập/đăng ký trên trang chủ (giữ nguyên name & hành vi)
 Route::get('/login', function (Request $request) {
@@ -57,10 +83,11 @@ Route::name('password.')->group(function () {
     Route::post('/reset-password',  [ForgotPasswordController::class, 'resetPassword'])->name('update');  // password.update
 });
 
-// =====================
-// Admin Area
-// =====================
-
+/*
+|--------------------------------------------------------------------------
+| ADMIN (role: admin)
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->name('admin.')
@@ -89,6 +116,11 @@ Route::middleware(['auth', 'admin'])
         Route::delete('/courses/{course}', [CourseAdminController::class, 'destroy'])->name('courses.destroy');
     });
 
+/*
+|--------------------------------------------------------------------------
+| TEACHER (role: teacher)
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['auth', 'teacher'])
     ->prefix('teacher')
     ->name('teacher.')

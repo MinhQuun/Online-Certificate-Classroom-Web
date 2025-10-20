@@ -68,9 +68,7 @@
 
                 @foreach ($courses as $course)
                     @php
-                        $startDate = $course->ngayBatDau
-                            ? \Carbon\Carbon::parse($course->ngayBatDau)->format('d/m/Y')
-                            : 'Đang cập nhật';
+                        $startDate = $course->start_date_label;
                     @endphp
                     <article class="course-card">
                         <a href="{{ route('student.courses.show', $course->slug) }}" class="course-card__thumb">
@@ -99,3 +97,4 @@
 @push('scripts')
     <script src="{{ asset('js/Student/hero-banner.js') }}" defer></script>
 @endpush
+

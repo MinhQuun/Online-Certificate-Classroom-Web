@@ -12,8 +12,8 @@
 @section('content')
     @php
         $courseCover = $course->cover_image_url;
-        $startDate = $course->ngayBatDau ? \Carbon\Carbon::parse($course->ngayBatDau)->format('d/m/Y') : 'Đang cập nhật';
-        $endDate = $course->ngayKetThuc ? \Carbon\Carbon::parse($course->ngayKetThuc)->format('d/m/Y') : 'Đang cập nhật';
+        $startDate = $course->start_date_label;
+        $endDate = $course->end_date_label;
     @endphp
 
     <section class="course-hero">
@@ -192,3 +192,4 @@
         </div>
     </section>
 @endsection
+

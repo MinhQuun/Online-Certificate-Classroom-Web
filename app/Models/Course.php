@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -97,5 +98,26 @@ class Course extends Model
         }
 
         return asset('Assets/' . $normalized);
+    }
+
+    public function getStartDateLabelAttribute(): string
+    {
+        return $this->formatDisplayDate($this->ngayBatDau) ?? 'Đang cập nhật';
+    }
+
+    public function getEndDateLabelAttribute(): string
+    {
+        return $this->formatDisplayDate($this->ngayKetThuc) ?? 'Đang cập nhật';
+    }
+
+    protected function formatDisplayDate($value): ?string
+    {
+        if (!$value) {
+            return null;
+        }
+
+        $date = $value instanceof Carbon ? $value : Carbon::parse($value);
+
+        return $date->format('d/m/Y');
     }
 }
