@@ -26,6 +26,9 @@ use App\Http\Controllers\Admin\UserAdminController;
 |--------------------------------------------------------------------------
 */
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
+use App\Http\Controllers\Teacher\LectureController;
+use App\Http\Controllers\Teacher\ExamController;
+use App\Http\Controllers\Teacher\ProgressController;
 
 /*
 |--------------------------------------------------------------------------
@@ -128,39 +131,20 @@ Route::middleware(['auth', 'teacher'])
         Route::get('/', [TeacherDashboardController::class, 'index'])->name('dashboard');
         Route::get('/dashboard', fn () => redirect()->route('teacher.dashboard'));
 
-        Route::get('/lectures', [TeacherDashboardController::class, 'placeholder'])
-            ->name('lectures.index')
-            ->defaults('section', 'lectures');
+        Route::get('/lectures', [LectureController::class, 'index'])->name('lectures.index');
+        Route::post('/lectures', [LectureController::class, 'store'])->name('lectures.store');
+        Route::patch('/lectures/{lesson}', [LectureController::class, 'update'])->name('lectures.update');
+        Route::delete('/lectures/{lesson}', [LectureController::class, 'destroy'])->name('lectures.destroy');
+        Route::post('/lectures/{lesson}/materials', [LectureController::class, 'storeMaterial'])->name('lectures.materials.store');
+        Route::delete('/materials/{material}', [LectureController::class, 'destroyMaterial'])->name('lectures.materials.destroy');
 
-        Route::get('/videos', [TeacherDashboardController::class, 'placeholder'])
-            ->name('videos.index')
-            ->defaults('section', 'videos');
+        Route::get('/progress', [ProgressController::class, 'index'])->name('progress.index');
+        Route::patch('/progress/{course}/{student}', [ProgressController::class, 'update'])->name('progress.update');
 
-        Route::get('/documents', [TeacherDashboardController::class, 'placeholder'])
-            ->name('documents.index')
-            ->defaults('section', 'documents');
-
-        Route::get('/assignments', [TeacherDashboardController::class, 'placeholder'])
-            ->name('assignments.index')
-            ->defaults('section', 'assignments');
-
-        Route::get('/students', [TeacherDashboardController::class, 'placeholder'])
-            ->name('students.index')
-            ->defaults('section', 'students');
-
-        Route::get('/progress', [TeacherDashboardController::class, 'placeholder'])
-            ->name('progress.index')
-            ->defaults('section', 'progress');
-
-        Route::get('/exams', [TeacherDashboardController::class, 'placeholder'])
-            ->name('exams.index')
-            ->defaults('section', 'exams');
-
-        Route::get('/reports/progress', [TeacherDashboardController::class, 'placeholder'])
-            ->name('reports.progress')
-            ->defaults('section', 'reports-progress');
-
-        Route::get('/reports/exams', [TeacherDashboardController::class, 'placeholder'])
-            ->name('reports.exams')
-            ->defaults('section', 'reports-exams');
+        Route::get('/exams', [ExamController::class, 'index'])->name('exams.index');
+        Route::post('/exams', [ExamController::class, 'store'])->name('exams.store');
+        Route::patch('/exams/{exam}', [ExamController::class, 'update'])->name('exams.update');
+        Route::delete('/exams/{exam}', [ExamController::class, 'destroy'])->name('exams.destroy');
+        Route::post('/exams/{exam}/materials', [ExamController::class, 'storeMaterial'])->name('exams.materials.store');
+        Route::delete('/exams/materials/{material}', [ExamController::class, 'destroyMaterial'])->name('exams.materials.destroy');
     });
