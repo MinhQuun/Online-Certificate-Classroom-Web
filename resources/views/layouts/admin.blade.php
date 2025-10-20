@@ -80,6 +80,13 @@
           {{-- Học vụ --}}
           <li class="nav-item mt-3 text-muted small">Học vụ</li>
           <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}"
+              href="{{ route('admin.categories.index') }}"
+              title="Quản lý danh mục">
+              <i class="bi bi-folder2-open me-2"></i> Danh mục
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.courses.*') ? 'active' : '' }}"
                 href="#"
                 title="Quản lý khóa học">
@@ -92,7 +99,8 @@
             <a class="nav-link {{ $usersBaseActive ? 'active' : '' }}"
                 href="{{ route('admin.users.index') }}"
                 title="Quản lý người dùng và phân quyền">
-              <i class="bi bi-people me-2"></i> Người dùng &amp; Phân quyền
+              <i class="bi bi-people me-2"></i> Người dùng 
+              {{-- <i class="bi bi-people me-2"></i> Người dùng &amp; Phân quyền --}}
             </a>
           </li>
           <li class="nav-item">
