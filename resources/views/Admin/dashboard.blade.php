@@ -2,59 +2,58 @@
 @section('title','Bảng điều khiển')
 
 @section('content')
+@php
+    $filters = $roleFilters ?? ['admin' => 'admin', 'teacher' => 'teacher', 'student' => 'student'];
+@endphp
 <section class="page-header">
   <span class="kicker">Quản trị hệ thống</span>
   <h1 class="title">Bảng điều khiển</h1>
-  <p class="muted">Tổng quan nhanh & lối tắt tới các khu vực chính.</p>
+  <p class="muted">Tổng quan nhanh và lối tắt tới các khu vực chính.</p>
 </section>
 
 <div class="row g-3 mb-4 stat-row">
   {{-- Tổng người dùng --}}
   <div class="col-md-6 col-lg-3">
-    <div class="stat-card">
+    <a class="stat-card" href="{{ route('admin.users.index') }}">
       <div class="icon"><i class="bi bi-people"></i></div>
       <div>
         <div class="n">{{ $counts['total'] ?? 0 }}</div>
         <div class="t">Người dùng</div>
       </div>
-      <a href="{{ route('admin.users.index') }}" class="btn btn-ghost">Chi tiết</a>
-    </div>
+    </a>
   </div>
 
-  {{-- Admin --}}
+  {{-- Admin (Giáo vụ) --}}
   <div class="col-md-6 col-lg-3">
-    <div class="stat-card">
+    <a class="stat-card" href="{{ route('admin.users.index', ['role' => $filters['admin'] ?? 'admin']) }}">
       <div class="icon"><i class="bi bi-shield-lock"></i></div>
       <div>
         <div class="n">{{ $counts['admin'] ?? 0 }}</div>
-        <div class="t">Admin</div>
+        <div class="t">Admin </div>
       </div>
-      <a href="{{ route('admin.users.index',['role'=>'admin']) }}" class="btn btn-ghost">Xem</a>
-    </div>
+    </a>
   </div>
 
-  {{-- Nhân viên --}}
+  {{-- Giảng viên --}}
   <div class="col-md-6 col-lg-3">
-    <div class="stat-card">
+    <a class="stat-card" href="{{ route('admin.users.index', ['role' => $filters['teacher'] ?? 'teacher']) }}">
       <div class="icon"><i class="bi bi-person-badge"></i></div>
       <div>
-        <div class="n">{{ $counts['nhanvien'] ?? 0 }}</div>
-        <div class="t">Nhân viên</div>
+        <div class="n">{{ $counts['teacher'] ?? 0 }}</div>
+        <div class="t">Giảng viên</div>
       </div>
-      <a href="{{ route('admin.users.index',['role'=>'nhanvien']) }}" class="btn btn-ghost">Xem</a>
-    </div>
+    </a>
   </div>
 
-  {{-- Khách hàng --}}
+  {{-- Học viên --}}
   <div class="col-md-6 col-lg-3">
-    <div class="stat-card">
+    <a class="stat-card" href="{{ route('admin.users.index', ['role' => $filters['student'] ?? 'student']) }}">
       <div class="icon"><i class="bi bi-person"></i></div>
       <div>
-        <div class="n">{{ $counts['khachhang'] ?? 0 }}</div>
-        <div class="t">Khách hàng</div>
+        <div class="n">{{ $counts['student'] ?? 0 }}</div>
+        <div class="t">Học viên</div>
       </div>
-      <a href="{{ route('admin.users.index',['role'=>'khachhang']) }}" class="btn btn-ghost">Xem</a>
-    </div>
+    </a>
   </div>
 </div>
 
@@ -69,3 +68,4 @@
   </div>
 </div>
 @endsection
+

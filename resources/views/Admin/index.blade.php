@@ -2,11 +2,11 @@
 @section('title', 'Quản lý người dùng')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/admin-users.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/admin-users.css') }}">
 @endpush
 
 @section('content')
-    <div id="flash"
+    <div id="flash-data"
         data-success="{{ session('success') }}"
         data-error="{{ session('error') }}"
         data-info="{{ session('info') }}"
@@ -16,27 +16,34 @@
     <section class="page-header">
         <span class="kicker">Admin</span>
         <h1 class="title">Quản lý người dùng</h1>
-        <p class="muted">Thêm, sửa, xoá và phân quyền tài khoản.</p>
+        <p class="muted">Thêm, chỉnh sửa, xóa và phân quyền tài khoản.</p>
     </section>
 
+    {{-- Bộ lọc --}}
     <div class="card users-filter mb-3">
         <div class="card-body">
             <form class="row g-2 align-items-center" method="get" action="{{ route('admin.users.index') }}">
                 <div class="col-lg-5">
                     <input class="form-control"
-                            name="q"
-                            value="{{ $q ?? request('q') }}"
-                            placeholder="Tìm theo tên, email, điện thoại...">
+                           name="q"
+                           value="{{ $q ?? request('q') }}"
+                           placeholder="Tìm theo tên, email, số điện thoại...">
                 </div>
                 <div class="col-lg-3">
                     <select name="role" class="form-select">
-                        @php $rf = $roleFilter ?? request('role'); @endphp
+                        @php
+                            $requestRole = (string) request('role');
+                            $rf = $roleFilter ?? (\App\Support\RoleResolver::map(strtoupper($requestRole), $requestRole)
+                                ?? \Illuminate\Support\Str::slug($requestRole));
+                        @endphp
                         <option value="">— Tất cả quyền —</option>
                         @foreach($roles as $r)
                             @php
                                 $code = $r->MAQUYEN ?? $r->maQuyen ?? '';
                                 $name = $r->TENQUYEN ?? $r->tenQuyen ?? $code;
-                                $val  = strtolower(\Illuminate\Support\Str::slug($name));
+                                $slug = \App\Support\RoleResolver::map($code, $name)
+                                    ?? \Illuminate\Support\Str::slug($name);
+                                $val  = strtolower((string) $slug);
                             @endphp
                             <option value="{{ $val }}" {{ $rf === $val ? 'selected' : '' }}>
                                 {{ $name }} ({{ $code }})
@@ -46,12 +53,13 @@
                 </div>
                 <div class="col-lg-2 d-flex gap-2 justify-content-lg-end">
                     <button class="btn btn-outline-primary">Lọc</button>
-                    <a class="btn btn-outline-secondary" href="{{ route('admin.users.index') }}">Xoá lọc</a>
+                    <a class="btn btn-outline-secondary" href="{{ route('admin.users.index') }}">Xóa lọc</a>
                 </div>
             </form>
         </div>
     </div>
 
+    {{-- Bảng danh sách --}}
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
             <h5 class="m-0">Danh sách người dùng</h5>
@@ -59,6 +67,7 @@
                 <i class="bi bi-plus-circle me-1"></i> Thêm mới
             </button>
         </div>
+
         <div class="table-responsive">
             <table class="table align-middle mb-0 table-hover users-table table-fixed">
                 <colgroup>
@@ -86,7 +95,8 @@
                         $roleId    = $firstRole->maQuyen ?? null;
                         $roleName  = $firstRole->tenQuyen ?? null;
                         $isAdmin   = ($adminId && $roleId === $adminId);
-                        $isKhach   = ($khachhangId && $roleId === $khachhangId);
+                        $isTeacher = ($teacherId && $roleId === $teacherId);
+                        $isStudent = ($studentId && $roleId === $studentId);
                     @endphp
                     <tr>
                         <td>{{ $u->id }}</td>
@@ -97,33 +107,25 @@
                             <form action="{{ route('admin.users.updateRole', $u) }}" method="post">
                                 @csrf
                                 <div class="role-wrap">
-                                    <span class="badge rounded-pill {{ $isAdmin ? 'text-bg-danger' : ($isKhach ? 'text-bg-secondary' : 'text-bg-success') }}">
+                                    <span class="badge rounded-pill {{ $isAdmin ? 'text-bg-danger' : ($isTeacher ? 'text-bg-primary' : 'text-bg-success') }}">
                                         {{ $roleName ?? 'Chưa gán' }}
                                     </span>
 
                                     <select name="MAQUYEN"
                                             class="form-select form-select-sm role-select"
-                                            data-lock="{{ $isAdmin ? 'admin' : '' }}"
-                                            data-staff="{{ $nhanvienId ?? '' }}"
-                                            data-khach="{{ $khachhangId ?? '' }}"
-                                            @if($isKhach) disabled title="Khách hàng không thể đổi quyền" @endif>
+                                            data-lock="{{ $isAdmin ? 'admin' : '' }}">
                                         @foreach($roles as $r)
                                             @php
                                                 $optionCode = $r->MAQUYEN ?? $r->maQuyen ?? '';
                                                 $optionName = $r->TENQUYEN ?? $r->tenQuyen ?? $optionCode;
                                             @endphp
-                                            <option value="{{ $optionCode }}"
-                                                    {{ $roleId === $optionCode ? 'selected' : '' }}
-                                                    @if($nhanvienId && $khachhangId && $roleId === $nhanvienId && $optionCode === $khachhangId)
-                                                        disabled title="Nhân viên không thể giảm xuống khách hàng"
-                                                    @endif>
-                                                {{ $optionName }}
+                                            <option value="{{ $optionCode }}" {{ $roleId === $optionCode ? 'selected' : '' }}>
+                                                {{ $optionName }} ({{ $optionCode }})
                                             </option>
                                         @endforeach
                                     </select>
 
-                                    <button class="btn btn-sm btn-success-soft role-save"
-                                            {{ $isKhach ? 'disabled' : '' }}>
+                                    <button class="btn btn-sm btn-success-soft role-save">
                                         <i class="bi bi-check2-circle me-1"></i>Lưu
                                     </button>
                                 </div>
@@ -145,7 +147,7 @@
                             <form action="{{ route('admin.users.destroy', $u) }}" method="post" class="d-inline form-delete">
                                 @csrf @method('delete')
                                 <button class="btn btn-sm btn-danger-soft action-btn"
-                                        @if($isAdmin) disabled title="Không thể xoá tài khoản admin" @endif>
+                                        @if($isAdmin) disabled title="Không thể xóa tài khoản admin" @endif>
                                     <i class="bi bi-trash me-1"></i>
                                 </button>
                             </form>
@@ -160,7 +162,10 @@
             </table>
         </div>
 
-        @php($sp = $users)
+        {{-- Phân trang --}}
+        @php
+            $sp = $users;
+        @endphp
         @if ($sp->lastPage() > 1)
             <nav aria-label="Điều hướng trang" class="mt-4">
                 <ul class="pagination justify-content-center">
@@ -186,6 +191,7 @@
         @endif
     </div>
 
+    {{-- Modal: Thêm người dùng --}}
     <div class="modal fade" id="modalCreate" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <form class="modal-content" action="{{ route('admin.users.store') }}" method="post">
@@ -204,6 +210,7 @@
                             </ul>
                         </div>
                     @endif
+
                     <div class="col-md-6">
                         <label class="form-label">Họ tên</label>
                         <input name="name" class="form-control" value="{{ old('name') }}" required>
@@ -229,11 +236,13 @@
                         <select name="MAQUYEN" class="form-select" required>
                             @foreach($roles as $r)
                                 @php
-                                    $optionCode = $r->MAQUYEN ?? $r->maQuyen ?? '';
-                                    $optionName = $r->TENQUYEN ?? $r->tenQuyen ?? $optionCode;
+                                    $code = $r->MAQUYEN ?? $r->maQuyen ?? '';
+                                    $name = $r->TENQUYEN ?? $r->tenQuyen ?? $code;
                                 @endphp
-                                <option value="{{ $optionCode }}">{{ $optionName }} ({{ $optionCode }})</option>
-                            
+                                <option value="{{ $code }}">
+                                    {{ $name }} ({{ $code }})
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -245,6 +254,7 @@
         </div>
     </div>
 
+    {{-- Modal: Sửa người dùng --}}
     <div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <form id="formEdit" class="modal-content" method="post">
@@ -263,6 +273,7 @@
                             </ul>
                         </div>
                     @endif
+
                     <div class="col-md-6">
                         <label class="form-label">Họ tên</label>
                         <input id="e_name" name="name" class="form-control" required>
@@ -288,10 +299,12 @@
                         <select id="e_role" name="MAQUYEN" class="form-select" required>
                             @foreach($roles as $r)
                                 @php
-                                    $optionCode = $r->MAQUYEN ?? $r->maQuyen ?? '';
-                                    $optionName = $r->TENQUYEN ?? $r->tenQuyen ?? $optionCode;
+                                    $code = $r->MAQUYEN ?? $r->maQuyen ?? '';
+                                    $name = $r->TENQUYEN ?? $r->tenQuyen ?? $code;
                                 @endphp
-                                <option value="{{ $optionCode }}">{{ $optionName }} ({{ $optionCode }})</option>
+                                <option value="{{ $code }}">
+                                    {{ $name }} ({{ $code }})
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -306,5 +319,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/admin-users.js') }}"></script>
+    <script src="{{ asset('js/Admin/admin-users.js') }}"></script>
 @endpush

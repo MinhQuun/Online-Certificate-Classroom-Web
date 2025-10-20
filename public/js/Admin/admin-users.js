@@ -3,8 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
     (function showFlash() {
         const el = document.getElementById("flash-data");
         if (!el || typeof Swal === "undefined") return;
-        const success = el.dataset.success;
-        const error = el.dataset.error;
+
+        const { success, error } = el.dataset;
+
         if (error) {
             Swal.fire({
                 icon: "error",
@@ -23,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     })();
 
-    // --- 1) Modal Sửa: đổ dữ liệu vào form ---
+    // --- 1) Modal sửa: đổ dữ liệu vào form ---
     const modal = document.getElementById("modalEdit");
     if (modal) {
         modal.addEventListener("show.bs.modal", (evt) => {
@@ -42,20 +43,17 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- 2) Đổi quyền với SweetAlert2 (Admin lock, Staff→Khách bị chặn) ---
-    document.querySelectorAll(".role-cell form").forEach((f) => {
-        const wrap = f.querySelector(".role-wrap");
-        const sel = f.querySelector(".role-select");
-        if (!sel) return;
+    // --- 2) Đổi quyền với SweetAlert2 (khóa admin) ---
+    document.querySelectorAll(".role-cell form").forEach((form) => {
+        const wrap = form.querySelector(".role-wrap");
+        const select = form.querySelector(".role-select");
+        if (!select) return;
 
-        const init = sel.value;
-        const lock = sel.dataset.lock; // 'admin' hoặc ''
-        const staffId = sel.dataset.staff;
-        const khachId = sel.dataset.khach;
+        const initial = select.value;
+        const lock = select.dataset.lock; // 'admin' hoặc ''
 
-        sel.addEventListener("change", () => {
-            // Không cho đổi nếu là admin
-            if (lock === "admin" && sel.value !== init) {
+        select.addEventListener("change", () => {
+            if (lock === "admin" && select.value !== initial) {
                 if (typeof Swal !== "undefined") {
                     Swal.fire({
                         icon: "error",
@@ -64,28 +62,13 @@ document.addEventListener("DOMContentLoaded", () => {
                         confirmButtonText: "OK",
                     });
                 }
-                sel.value = init;
+
+                select.value = initial;
                 wrap?.classList.remove("show-save");
                 return;
             }
 
-            // Chặn hạ từ Nhân viên xuống Khách hàng
-            if (init === staffId && sel.value === khachId) {
-                if (typeof Swal !== "undefined") {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Không hợp lệ",
-                        text: "Nhân viên không thể hạ xuống Khách hàng.",
-                        confirmButtonText: "OK",
-                    });
-                }
-                sel.value = init;
-                wrap?.classList.remove("show-save");
-                return;
-            }
-
-            // Hợp lệ: hiển thị nút Lưu khi thay đổi
-            if (sel.value !== init) {
+            if (select.value !== initial) {
                 wrap?.classList.add("show-save");
                 if (typeof Swal !== "undefined") {
                     Swal.fire({
@@ -102,32 +85,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // --- 3) Xác nhận xoá bằng SweetAlert2 ---
-    // Nhận diện form xoá: có input hidden _method=DELETE
     const isDeleteForm = (form) => {
         const hiddenMethod = form.querySelector("input[name='_method']");
-        return (
-            hiddenMethod &&
-            String(hiddenMethod.value).toLowerCase() === "delete"
-        );
+        return hiddenMethod && String(hiddenMethod.value).toLowerCase() === "delete";
     };
 
     document.querySelectorAll("form").forEach((form) => {
         if (!isDeleteForm(form)) return;
 
-        form.addEventListener("submit", function (e) {
-            // Nếu đã xác nhận trước đó (do submit lại), cho đi qua
+        form.addEventListener("submit", function (event) {
             if (form.dataset.confirmed === "true") return;
 
-            e.preventDefault();
+            event.preventDefault();
 
-            // Nếu nút xoá đang disabled (vd: Admin) thì thôi
-            const submitBtn = form.querySelector(
-                "button[type='submit'], .btn-danger, .btn-danger-soft"
-            );
+            const submitBtn = form.querySelector("button[type='submit'], .btn-danger, .btn-danger-soft");
             if (submitBtn?.disabled) return;
 
             if (typeof Swal === "undefined") {
-                // Fallback: nếu không có Swal, confirm mặc định
                 if (confirm("Xoá người dùng này?")) {
                     form.dataset.confirmed = "true";
                     form.submit();
@@ -152,3 +126,4 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+

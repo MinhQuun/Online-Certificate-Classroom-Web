@@ -11,19 +11,24 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $adminId    = RoleResolver::findRoleId(['admin']);
-        $staffId    = RoleResolver::findRoleId(['nhan-vien', 'nhanvien', 'giao-vu', 'staff']);
-        $customerId = RoleResolver::findRoleId(['hoc-vien', 'hocvien', 'student', 'khach-hang', 'khachhang']);
+        // Resolve role codes (maQuyen) for the 3 roles used on the dashboard
+        $adminId   = RoleResolver::findRoleId(['admin']);
+        $teacherId = RoleResolver::findRoleId(['giang-vien', 'giangvien', 'teacher']);
+        $studentId = RoleResolver::findRoleId(['hoc-vien', 'hocvien', 'student']);
 
         $counts = [
-            'total'     => (int) User::count(),
-            'admin'     => $adminId ? (int) DB::table('QUYEN_NGUOIDUNG')->where('maQuyen', $adminId)->count() : 0,
-            'nhanvien'  => $staffId ? (int) DB::table('QUYEN_NGUOIDUNG')->where('maQuyen', $staffId)->count() : 0,
-            'khachhang' => $customerId ? (int) DB::table('QUYEN_NGUOIDUNG')->where('maQuyen', $customerId)->count() : 0,
+            'total'   => (int) User::count(),
+            'admin'   => $adminId ? (int) DB::table('QUYEN_NGUOIDUNG')->where('maQuyen', $adminId)->count() : 0,
+            'teacher' => $teacherId ? (int) DB::table('QUYEN_NGUOIDUNG')->where('maQuyen', $teacherId)->count() : 0,
+            'student' => $studentId ? (int) DB::table('QUYEN_NGUOIDUNG')->where('maQuyen', $studentId)->count() : 0,
         ];
 
-        return view('admin.dashboard', compact('counts'));
+        $roleFilters = [
+            'admin'   => 'admin',
+            'teacher' => 'teacher',
+            'student' => 'student',
+        ];
+
+        return view('admin.dashboard', compact('counts', 'roleFilters'));
     }
 }
-
-

@@ -18,6 +18,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
+
         return view('users.index', compact('users'));
     }
 
@@ -28,38 +29,35 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate(
-            [
-                'name' => ['required', 'string', 'min:2', 'max:255'],
-                'email' => ['required', 'email:rfc,dns', 'max:255', 'unique:nguoidung,email'],
-                'password' => ['required', 'confirmed', Password::min(6)],
-                'phone' => ['nullable', 'regex:/^0\d{9}$/'],
-            ],
-            [
-                'name.required' => 'Vui lòng nhập họ tên.',
-                'name.min' => 'Họ tên phải có ít nhất :min ký tự.',
-                'email.required' => 'Vui lòng nhập email.',
-                'email.email' => 'Email không hợp lệ.',
-                'email.unique' => 'Email đã được sử dụng.',
-                'password.required' => 'Vui lòng nhập mật khẩu.',
-                'password.confirmed' => 'Xác nhận mật khẩu không đúng.',
-                'password.min' => 'Mật khẩu phải có ít nhất :min ký tự.',
-                'phone.regex' => 'Số điện thoại phải gồm 10 số và bắt đầu bằng 0.',
-            ]
-        );
+        $validated = $request->validate([
+            'name'     => ['required', 'string', 'min:2', 'max:255'],
+            'email'    => ['required', 'email:rfc,dns', 'max:255', 'unique:nguoidung,email'],
+            'password' => ['required', 'confirmed', Password::min(6)],
+            'phone'    => ['nullable', 'regex:/^0\d{9}$/'],
+        ], [
+            'name.required'     => 'Vui lòng nhập họ tên.',
+            'name.min'          => 'Họ tên phải có ít nhất :min ký tự.',
+            'email.required'    => 'Vui lòng nhập email.',
+            'email.email'       => 'Email không hợp lệ.',
+            'email.unique'      => 'Email đã được sử dụng.',
+            'password.required' => 'Vui lòng nhập mật khẩu.',
+            'password.confirmed'=> 'Xác nhận mật khẩu không khớp.',
+            'password.min'      => 'Mật khẩu phải có ít nhất :min ký tự.',
+            'phone.regex'       => 'Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 0.',
+        ]);
 
         return DB::transaction(function () use ($validated, $request) {
-            /** @var \App\Models\User $user */
+            /** @var User $user */
             $user = User::create([
-                'hoTen' => $validated['name'],
-                'email' => $validated['email'],
-                'sdt' => $validated['phone'] ?? null,
-                'matKhau' => Hash::make($validated['password']),
-                'vaiTro' => 'HOC_VIEN',
+                'hoTen'     => $validated['name'],
+                'email'     => $validated['email'],
+                'sdt'       => $validated['phone'] ?? null,
+                'matKhau'   => Hash::make($validated['password']),
+                'vaiTro'    => 'HOC_VIEN',
                 'trangThai' => 'ACTIVE',
             ]);
 
-            if ($roleId = RoleResolver::findRoleId(['hoc-vien', 'hocvien', 'khach-hang', 'khachhang', 'student'])) {
+            if ($roleId = RoleResolver::findRoleId(['student'])) {
                 $user->assignRole($roleId);
             }
 
@@ -80,7 +78,7 @@ class UserController extends Controller
     public function showLogin(Request $request)
     {
         if (Auth::check()) {
-            /** @var \App\Models\User $user */
+            /** @var User $user */
             $user = Auth::user();
             $role = RoleResolver::resolve($user);
 
@@ -88,8 +86,8 @@ class UserController extends Controller
                 return redirect()->route('admin.dashboard');
             }
 
-            if (in_array($role, ['staff', 'teacher'], true) && Route::has('staff.dashboard')) {
-                return redirect()->route('staff.dashboard');
+            if ($role === 'teacher' && Route::has('teacher.dashboard')) {
+                return redirect()->route('teacher.dashboard');
             }
 
             return redirect()->route('student.courses.index');
@@ -102,19 +100,16 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate(
-            [
-                'email' => ['required', 'email'],
-                'password' => ['required'],
-            ],
-            [
-                'email.required' => 'Vui lòng nhập email.',
-                'email.email' => 'Email không hợp lệ.',
-                'password.required' => 'Vui lòng nhập mật khẩu.',
-            ]
-        );
+        $credentials = $request->validate([
+            'email'    => ['required', 'email'],
+            'password' => ['required'],
+        ], [
+            'email.required'    => 'Vui lòng nhập email.',
+            'email.email'       => 'Email không hợp lệ.',
+            'password.required' => 'Vui lòng nhập mật khẩu.',
+        ]);
 
-        /** @var \App\Models\User|null $user */
+        /** @var User|null $user */
         $user = User::where('email', $credentials['email'])->first();
 
         if (!$user || !$this->validateCredentials($user, $credentials['password'])) {
@@ -145,8 +140,8 @@ class UserController extends Controller
             return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công!');
         }
 
-        if (in_array($role, ['staff', 'teacher'], true) && Route::has('staff.dashboard')) {
-            return redirect()->route('staff.dashboard')->with('success', 'Đăng nhập thành công!');
+        if ($role === 'teacher' && Route::has('teacher.dashboard')) {
+            return redirect()->route('teacher.dashboard')->with('success', 'Đăng nhập thành công!');
         }
 
         return redirect()
@@ -177,38 +172,32 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $validated = $request->validate(
-            [
-                'name' => ['required', 'string', 'min:2', 'max:255'],
-                'email' => ['required', 'email:rfc,dns', 'max:255', 'unique:nguoidung,email,' . $user->getKey() . ',maND'],
-                'phone' => ['nullable', 'regex:/^0\d{9}$/'],
-            ],
-            [
-                'name.required' => 'Vui lòng nhập họ tên.',
-                'name.min' => 'Họ tên phải có ít nhất :min ký tự.',
-                'email.required' => 'Vui lòng nhập email.',
-                'email.email' => 'Email không hợp lệ.',
-                'email.unique' => 'Email đã được sử dụng.',
-                'phone.regex' => 'Số điện thoại phải gồm 10 số và bắt đầu bằng 0.',
-            ]
-        );
+        $validated = $request->validate([
+            'name'  => ['required', 'string', 'min:2', 'max:255'],
+            'email' => ['required', 'email:rfc,dns', 'max:255', 'unique:nguoidung,email,' . $user->getKey() . ',maND'],
+            'phone' => ['nullable', 'regex:/^0\d{9}$/'],
+        ], [
+            'name.required'  => 'Vui lòng nhập họ tên.',
+            'name.min'       => 'Họ tên phải có ít nhất :min ký tự.',
+            'email.required' => 'Vui lòng nhập email.',
+            'email.email'    => 'Email không hợp lệ.',
+            'email.unique'   => 'Email đã được sử dụng.',
+            'phone.regex'    => 'Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 0.',
+        ]);
 
         $data = [
             'hoTen' => $validated['name'],
             'email' => $validated['email'],
-            'sdt' => $validated['phone'],
+            'sdt'   => $validated['phone'],
         ];
 
         if ($request->filled('password')) {
-            $request->validate(
-                [
-                    'password' => ['confirmed', Password::min(6)],
-                ],
-                [
-                    'password.confirmed' => 'Xác nhận mật khẩu không đúng.',
-                    'password.min' => 'Mật khẩu phải có ít nhất :min ký tự.',
-                ]
-            );
+            $request->validate([
+                'password' => ['confirmed', Password::min(6)],
+            ], [
+                'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
+                'password.min'       => 'Mật khẩu phải có ít nhất :min ký tự.',
+            ]);
 
             $data['matKhau'] = Hash::make($request->password);
         }
@@ -230,7 +219,7 @@ class UserController extends Controller
 
         return redirect()
             ->route('users.index')
-            ->with('success', 'Đã xóa người dùng!');
+            ->with('success', 'Đã xoá người dùng!');
     }
 
     private function sanitizeRedirect(?string $target): ?string
@@ -246,8 +235,8 @@ class UserController extends Controller
         }
 
         if (Str::startsWith($target, ['http://', 'https://'])) {
-            $targetHost = parse_url($target, PHP_URL_HOST);
-            $appHost = parse_url(config('app.url'), PHP_URL_HOST);
+            $targetHost  = parse_url($target, PHP_URL_HOST);
+            $appHost     = parse_url(config('app.url'), PHP_URL_HOST);
             $currentHost = request()->getHost();
             $allowedHosts = array_filter([$appHost, $currentHost]);
 
@@ -267,7 +256,6 @@ class UserController extends Controller
 
     private function validateCredentials(User $user, string $plainPassword): bool
     {
-        // Ưu tiên cột matKhau; fallback password nếu Model có accessor tùy chỉnh
         $stored = (string) ($user->matKhau ?? $user->password ?? '');
 
         if ($stored === '') {
@@ -279,8 +267,8 @@ class UserController extends Controller
         try {
             if (Hash::check($plainPassword, $stored)) {
                 $verified = true;
+
                 if (Hash::needsRehash($stored)) {
-                    // Lưu lại vào đúng cột matKhau
                     $user->matKhau = Hash::make($plainPassword);
                     $user->save();
                 }
@@ -290,7 +278,6 @@ class UserController extends Controller
         }
 
         if (!$verified) {
-            // Hỗ trợ legacy: plain/md5 -> nâng cấp lên bcrypt
             $legacyMatches = $plainPassword === $stored || hash('md5', $plainPassword) === $stored;
 
             if ($legacyMatches) {
@@ -303,3 +290,4 @@ class UserController extends Controller
         return $verified;
     }
 }
+

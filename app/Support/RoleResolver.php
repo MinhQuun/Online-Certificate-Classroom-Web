@@ -97,8 +97,7 @@ class RoleResolver
         $slug = Str::slug($name);
 
         return match ($slug) {
-            'admin', 'quan-tri-vien' => 'admin',
-            'giao-vu', 'nhan-vien', 'staff' => 'staff',
+            'admin', 'quan-tri-vien', 'giao-vu', 'nhan-vien', 'staff' => 'admin',
             'giang-vien', 'teacher' => 'teacher',
             'hoc-vien', 'hocvien', 'hoc-sinh', 'student', 'khach-hang', 'khachhang' => 'student',
             default => null,

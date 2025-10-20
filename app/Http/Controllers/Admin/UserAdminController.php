@@ -19,6 +19,28 @@ class UserAdminController extends Controller
         return RoleResolver::findRoleId([$slug]);
     }
 
+    private function normalizeRoleSlug(?string $value): ?string
+    {
+        $value = trim((string) $value);
+
+        if ($value === '') {
+            return null;
+        }
+
+        if ($mapped = RoleResolver::map(Str::upper($value), null)) {
+            return $mapped;
+        }
+
+        $slug = Str::slug($value);
+
+        return match ($slug) {
+            'admin', 'quan-tri-vien' => 'admin',
+            'giang-vien', 'giangvien', 'giao-vien', 'teacher' => 'teacher',
+            'hoc-vien', 'hocvien', 'hoc-sinh', 'student' => 'student',
+            default => $slug,
+        };
+    }
+
     private function adminCount(): int
     {
         $adminId = $this->roleId('admin');
@@ -34,8 +56,10 @@ class UserAdminController extends Controller
 
     public function index(Request $request)
     {
-        $q          = trim((string) $request->query('q', ''));
-        $roleFilter = Str::lower((string) $request->query('role', ''));
+        $q               = trim((string) $request->query('q', ''));
+        $roleFilterInput = (string) $request->query('role', '');
+        $roleFilter      = $this->normalizeRoleSlug($roleFilterInput);
+        $roleFilterCode  = $roleFilter ? $this->roleId($roleFilter) : null;
 
         $roles = DB::table('QUYEN')
             ->selectRaw('maQuyen as MAQUYEN, tenQuyen as TENQUYEN')
@@ -50,25 +74,24 @@ class UserAdminController extends Controller
                         ->orWhere('sdt', 'like', "%$q%");
                 });
             })
-            ->when($roleFilter !== '', function ($builder) use ($roleFilter) {
-                $builder->whereHas('roles', function ($roleQuery) use ($roleFilter) {
-                    $roleQuery->whereRaw('LOWER(QUYEN.tenQuyen) = ?', [$roleFilter])
-                        ->orWhereRaw('LOWER(QUYEN.maQuyen) = ?', [$roleFilter]);
+            ->when($roleFilterCode, function ($builder) use ($roleFilterCode) {
+                $builder->whereHas('roles', function ($roleQuery) use ($roleFilterCode) {
+                    $roleQuery->where('QUYEN.maQuyen', $roleFilterCode);
                 });
             })
             ->with('roles')
             ->paginate(10)
             ->withQueryString();
 
-        $adminId     = $this->roleId('admin');
-        $nhanvienId  = $this->roleId('nhanvien');
-        $khachhangId = $this->roleId('khachhang');
+        $adminId   = $this->roleId('admin');
+        $teacherId = $this->roleId('teacher');
+        $studentId = $this->roleId('student');
 
         $counts = [
-            'admin'     => $adminId ? (int) DB::table('QUYEN_NGUOIDUNG')->where('maQuyen', $adminId)->count() : 0,
-            'nhanvien'  => $nhanvienId ? (int) DB::table('QUYEN_NGUOIDUNG')->where('maQuyen', $nhanvienId)->count() : 0,
-            'khachhang' => $khachhangId ? (int) DB::table('QUYEN_NGUOIDUNG')->where('maQuyen', $khachhangId)->count() : 0,
-            'total'     => (int) User::count(),
+            'total'   => (int) User::count(),
+            'admin'   => $adminId ? (int) DB::table('QUYEN_NGUOIDUNG')->where('maQuyen', $adminId)->count() : 0,
+            'teacher' => $teacherId ? (int) DB::table('QUYEN_NGUOIDUNG')->where('maQuyen', $teacherId)->count() : 0,
+            'student' => $studentId ? (int) DB::table('QUYEN_NGUOIDUNG')->where('maQuyen', $studentId)->count() : 0,
         ];
 
         return view('admin.index', compact(
@@ -76,9 +99,10 @@ class UserAdminController extends Controller
             'roles',
             'q',
             'roleFilter',
+            'roleFilterCode',
             'adminId',
-            'nhanvienId',
-            'khachhangId',
+            'teacherId',
+            'studentId',
             'counts'
         ));
     }
@@ -98,9 +122,9 @@ class UserAdminController extends Controller
             'email.email'        => 'Email không hợp lệ.',
             'email.unique'       => 'Email đã được sử dụng.',
             'password.required'  => 'Vui lòng nhập mật khẩu.',
-            'password.confirmed' => 'Xác nhận mật khẩu không đúng.',
+            'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
             'password.min'       => 'Mật khẩu phải có ít nhất :min ký tự.',
-            'phone.regex'        => 'Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 0.',
+            'phone.regex'        => 'Số điện thoại gồm 10 chữ số và bắt đầu bằng 0.',
             'MAQUYEN.required'   => 'Vui lòng chọn quyền.',
             'MAQUYEN.exists'     => 'Quyền không hợp lệ.',
         ]);
@@ -120,7 +144,7 @@ class UserAdminController extends Controller
             ->where('maQuyen', $request->MAQUYEN)
             ->value('tenQuyen');
 
-        if (Str::slug((string) $roleName) === 'khachhang') {
+        if ($this->normalizeRoleSlug($roleName) === 'student') {
             app(EnsureCustomerProfile::class)->handle($user);
         }
 
@@ -140,8 +164,8 @@ class UserAdminController extends Controller
             'email.required'     => 'Vui lòng nhập email.',
             'email.email'        => 'Email không hợp lệ.',
             'email.unique'       => 'Email đã được sử dụng.',
-            'phone.regex'        => 'Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 0.',
-            'password.confirmed' => 'Xác nhận mật khẩu không đúng.',
+            'phone.regex'        => 'Số điện thoại gồm 10 chữ số và bắt đầu bằng 0.',
+            'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
             'password.min'       => 'Mật khẩu phải có ít nhất :min ký tự.',
         ]);
 
@@ -169,59 +193,41 @@ class UserAdminController extends Controller
             'MAQUYEN.exists'   => 'Quyền không hợp lệ.',
         ]);
 
-        $newRole     = $request->MAQUYEN;
-        $adminId     = $this->roleId('admin');
-        $staffId     = $this->roleId('nhanvien');
-        $customerId  = $this->roleId('khachhang');
+        $newRole   = $request->MAQUYEN;
+        $adminId   = $this->roleId('admin');
+        $studentId = $this->roleId('student');
 
         $currentRoleId = optional($user->roles()->first())->maQuyen;
 
-        if ($currentRoleId === $customerId && $newRole !== $customerId) {
-            return back()->with('error', 'Khách hàng không thể đổi sang quyền khác.');
-        }
-
-        if ($currentRoleId === $adminId && $newRole !== $adminId) {
-            return back()->with('error', 'Tài khoản admin không thể đổi sang quyền khác.');
-        }
-
-        if ($currentRoleId === $staffId && $newRole === $customerId) {
-            return back()->with('error', 'Nhân viên không thể đổi xuống khách hàng.');
-        }
-
-        if ($currentRoleId === $adminId && $this->adminCount() <= 1) {
+        if ($currentRoleId === $adminId && $newRole !== $adminId && $this->adminCount() <= 1) {
             return back()->with('error', 'Đây là admin cuối cùng, không thể thay đổi.');
         }
 
         $user->roles()->sync([$newRole]);
         $user->update(['vaiTro' => $newRole]);
 
+        if ($studentId && $newRole === $studentId) {
+            app(EnsureCustomerProfile::class)->handle($user);
+        }
+
         return back()->with('success', 'Cập nhật quyền thành công.');
     }
 
     public function destroy(User $user)
     {
-        $adminId    = $this->roleId('admin');
-        $customerId = $this->roleId('khachhang');
+        $adminId = $this->roleId('admin');
 
         $isAdmin = $adminId
             ? $user->roles()->where('QUYEN.maQuyen', $adminId)->exists()
             : false;
 
         if ($isAdmin) {
-            return back()->with('error', 'Không thể xoá tài khoản có quyền admin.');
-        }
-
-        $isCustomer = $customerId
-            ? $user->roles()->where('QUYEN.maQuyen', $customerId)->exists()
-            : false;
-
-        if ($isCustomer && $user->khachHang && $user->khachHang->donHangs()->exists()) {
-            return back()->with('error', 'Khách hàng đã có đơn hàng, không thể xoá.');
+            return back()->with('error', 'Không thể xóa tài khoản có quyền admin.');
         }
 
         $user->roles()->detach();
         $user->delete();
 
-        return back()->with('success', 'Đã xoá người dùng.');
+        return back()->with('success', 'Đã xóa người dùng.');
     }
 }
