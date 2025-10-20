@@ -29,22 +29,43 @@ document.addEventListener("DOMContentLoaded", () => {
     if (modalEdit) {
         modalEdit.addEventListener("show.bs.modal", (evt) => {
             const btn = evt.relatedTarget;
-            const id = btn?.getAttribute("data-id");
-            
-            // Fill form data
-            modalEdit.querySelector("#e_name").value = btn?.getAttribute("data-name") || "";
-            modalEdit.querySelector("#e_category").value = btn?.getAttribute("data-category") || "";
-            modalEdit.querySelector("#e_teacher").value = btn?.getAttribute("data-teacher") || "";
-            modalEdit.querySelector("#e_fee").value = btn?.getAttribute("data-fee") || "";
-            modalEdit.querySelector("#e_duration").value = btn?.getAttribute("data-duration") || "";
-            modalEdit.querySelector("#e_start").value = btn?.getAttribute("data-start") || "";
-            modalEdit.querySelector("#e_end").value = btn?.getAttribute("data-end") || "";
-            modalEdit.querySelector("#e_desc").value = btn?.getAttribute("data-desc") || "";
-            modalEdit.querySelector("#e_status").value = btn?.getAttribute("data-status") || "DRAFT";
-
-            // Set form action
             const form = modalEdit.querySelector("#formEdit");
-            form.action = `/admin/courses/${id}`;
+            const id = btn?.getAttribute("data-id");
+
+            // Đặt action cho form
+            if (id) {
+                form.action = `/admin/courses/${id}`;
+            } else {
+                form.action = ""; // Đặt mặc định nếu không có id
+            }
+
+            // Điền dữ liệu vào form
+            const fields = {
+                "e_name": "data-name",
+                "e_category": "data-category",
+                "e_teacher": "data-teacher",
+                "e_fee": "data-fee",
+                "e_duration": "data-duration",
+                "e_start": "data-start",
+                "e_end": "data-end",
+                "e_desc": "data-desc",
+                "e_status": "data-status"
+            };
+
+            Object.keys(fields).forEach(id => {
+                const value = btn?.getAttribute(fields[id]) || "";
+                const element = modalEdit.querySelector(`#${id}`);
+                if (element) {
+                    if (element.tagName === "SELECT") {
+                        element.value = value || "DRAFT"; // Đặt mặc định là DRAFT nếu không có giá trị
+                    } else {
+                        element.value = value;
+                    }
+                }
+            });
+
+            // Xóa thông báo lỗi cũ (nếu có)
+            modalEdit.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
         });
     }
 
@@ -62,10 +83,17 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
+        // Kiểm tra trạng thái hợp lệ
+        const statusField = form.querySelector('#e_status');
+        if (statusField && !["DRAFT", "PUBLISHED", "ARCHIVED"].includes(statusField.value)) {
+            isValid = false;
+            statusField.classList.add('is-invalid');
+        }
+
         return isValid;
     }
 
-    // Apply to both modals
+    // Áp dụng cho cả hai modal
     [document.getElementById("modalCreate"), document.getElementById("modalEdit")].forEach(modal => {
         if (modal) {
             const form = modal.querySelector('form');
@@ -77,6 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             Swal.fire({
                                 icon: "error",
                                 title: "Vui lòng điền đầy đủ thông tin!",
+                                text: "Kiểm tra các trường bắt buộc và trạng thái hợp lệ.",
                                 timer: 2000,
                                 showConfirmButton: false
                             });
@@ -130,12 +159,41 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // --- 4) Auto-format currency ---
+    // --- 4) Format hocPhi ---
     document.querySelectorAll('input[name="hocPhi"]').forEach(input => {
-        input.addEventListener('input', function() {
+        // Lưu giá trị gốc (không định dạng)
+        input.dataset.rawValue = input.value || '';
+
+        // Xử lý khi người dùng nhập
+        input.addEventListener('input', function(e) {
             let value = this.value.replace(/\D/g, '');
             if (value) {
+                this.dataset.rawValue = value;
                 this.value = parseInt(value).toLocaleString('vi-VN');
+            } else {
+                this.dataset.rawValue = '';
+                this.value = '';
+            }
+        });
+
+        // Định dạng lại khi mất focus
+        input.addEventListener('blur', function() {
+            let value = this.dataset.rawValue;
+            if (value) {
+                this.value = parseInt(value).toLocaleString('vi-VN');
+            } else {
+                this.value = '';
+            }
+        });
+
+        // Đảm bảo gửi giá trị gốc khi submit
+        input.closest('form').addEventListener('submit', function(e) {
+            let inputField = input;
+            let rawValue = inputField.dataset.rawValue || '';
+            if (rawValue) {
+                inputField.value = rawValue; // Gửi giá trị gốc (không dấu phẩy)
+            } else {
+                inputField.value = ''; // Nếu không có giá trị, để trống
             }
         });
     });

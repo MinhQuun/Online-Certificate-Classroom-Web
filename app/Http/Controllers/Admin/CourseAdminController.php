@@ -1,11 +1,9 @@
 <?php
-// app/Http/Controllers/Admin/CourseAdminController.php
-
 
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Course; 
+use App\Models\Course;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -37,7 +35,7 @@ class CourseAdminController extends Controller
         $request->validate([
             'tenKH' => 'required|string|max:150',
             'maDanhMuc' => 'required|exists:danhmuc,maDanhMuc',
-            'maND' => 'required|exists:nguoidung,maND',
+            'maND' => 'required|exists:nguoidung,maND|in:' . implode(',', User::where('vaiTro', 'GIANG_VIEN')->pluck('maND')->toArray()),
             'hocPhi' => 'required|numeric|min:0',
             'moTa' => 'nullable|string|max:2000',
             'ngayBatDau' => 'nullable|date',
@@ -50,13 +48,24 @@ class CourseAdminController extends Controller
         $data['slug'] = Str::slug($request->tenKH);
         $data['trangThai'] = 'DRAFT';
 
-        // Upload hình ảnh
+        // Upload hình ảnh vào thư mục public/assets
         if ($request->hasFile('hinhanh')) {
-            $path = $request->file('hinhanh')->store('courses/images', 'public');
-            $data['hinhanh'] = $path;
+            $file = $request->file('hinhanh');
+            $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+            $path = $file->move(public_path('assets'), $fileName); // Lưu vào public/assets
+            $data['hinhanh'] = 'assets/' . $fileName; // Lưu đường dẫn tương đối
         }
 
         $course = Course::create($data);
+
+        try {
+            // Tạo directory trên Cloudflare R2 với tên là tenKH
+            $directoryName = Str::slug($course->tenKH);
+            Storage::disk('r2')->makeDirectory($directoryName);
+        } catch (\Exception $e) {
+            // Ghi log lỗi nhưng không dừng quá trình
+            \Log::error('Lỗi tạo thư mục trên R2: ' . $e->getMessage());
+        }
 
         return redirect()
             ->route('admin.courses.index')
@@ -85,11 +94,17 @@ class CourseAdminController extends Controller
         if ($request->hasFile('hinhanh')) {
             // Xóa ảnh cũ
             if ($course->hinhanh) {
-                Storage::disk('public')->delete($course->hinhanh);
+                $oldImagePath = public_path($course->hinhanh);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath); // Xóa ảnh cũ khỏi public/assets
+                }
             }
             
-            $path = $request->file('hinhanh')->store('courses/images', 'public');
-            $data['hinhanh'] = $path;
+            // Upload ảnh mới vào public/assets
+            $file = $request->file('hinhanh');
+            $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+            $path = $file->move(public_path('assets'), $fileName); // Lưu vào public/assets
+            $data['hinhanh'] = 'assets/' . $fileName; // Cập nhật đường dẫn tương đối
         }
 
         $course->update($data);
@@ -105,7 +120,19 @@ class CourseAdminController extends Controller
 
         // Xóa hình ảnh
         if ($course->hinhanh) {
-            Storage::disk('public')->delete($course->hinhanh);
+            $imagePath = public_path($course->hinhanh);
+            if (file_exists($imagePath)) {
+                unlink($imagePath); // Xóa ảnh khỏi public/assets
+            }
+        }
+
+        // Xóa directory trên Cloudflare R2
+        try {
+            $directoryName = Str::slug($course->tenKH);
+            Storage::disk('r2')->deleteDirectory($directoryName);
+        } catch (\Exception $e) {
+            // Ghi log lỗi nếu xóa thư mục thất bại, nhưng không dừng quá trình
+            \Log::error('Lỗi xóa thư mục trên R2: ' . $e->getMessage());
         }
 
         $course->delete();

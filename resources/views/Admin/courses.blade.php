@@ -205,7 +205,7 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Học phí <span class="text-danger">*</span></label>
-                    <input type="number" name="hocPhi" class="form-control" value="{{ old('hocPhi') }}" required min="0">
+                    <input type="text" name="hocPhi" class="form-control" value="{{ old('hocPhi') }}" required min="0">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Thời hạn (ngày) <span class="text-danger">*</span></label>
@@ -280,7 +280,7 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Học phí <span class="text-danger">*</span></label>
-                    <input id="e_fee" type="number" name="hocPhi" class="form-control" required min="0">
+                    <input id="e_fee" type="text" name="hocPhi" class="form-control" required min="0">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Thời hạn (ngày) <span class="text-danger">*</span></label>
