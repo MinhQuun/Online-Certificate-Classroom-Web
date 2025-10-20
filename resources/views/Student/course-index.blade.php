@@ -68,14 +68,13 @@
 
                 @foreach ($courses as $course)
                     @php
-                        $courseImage = $course->hinhanh ? asset('Assets/' . $course->hinhanh) : asset('Assets/logo.png');
                         $startDate = $course->ngayBatDau
                             ? \Carbon\Carbon::parse($course->ngayBatDau)->format('d/m/Y')
                             : 'Đang cập nhật';
                     @endphp
                     <article class="course-card">
                         <a href="{{ route('student.courses.show', $course->slug) }}" class="course-card__thumb">
-                            <img src="{{ $courseImage }}" alt="{{ $course->tenKH }}">
+                            <img src="{{ $course->cover_image_url }}" alt="{{ $course->tenKH }}">
                             <span class="course-card__price">{{ number_format((float) $course->hocPhi, 0, ',', '.') }}&#8363;</span>
                         </a>
                         <div class="course-card__body">

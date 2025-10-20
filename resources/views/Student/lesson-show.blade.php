@@ -21,7 +21,7 @@
     </nav>
 
     @php
-        $courseCover = $course->hinhanh ? asset('Assets/' . $course->hinhanh) : asset('Assets/logo.png');
+        $courseCover = $course->cover_image_url;
         $videos = $lesson->materials->filter(fn($m) => strtolower($m->loai) === 'video');
         $audios = $lesson->materials->filter(fn($m) => strtolower($m->loai) === 'audio');
         $pdfs   = $lesson->materials->filter(fn($m) => strtolower($m->loai) === 'pdf');

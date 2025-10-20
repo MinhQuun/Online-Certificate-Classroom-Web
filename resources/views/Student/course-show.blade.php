@@ -11,7 +11,7 @@
 
 @section('content')
     @php
-        $courseCover = $course->hinhanh ? asset('Assets/' . $course->hinhanh) : asset('Assets/logo.png');
+        $courseCover = $course->cover_image_url;
         $startDate = $course->ngayBatDau ? \Carbon\Carbon::parse($course->ngayBatDau)->format('d/m/Y') : 'Đang cập nhật';
         $endDate = $course->ngayKetThuc ? \Carbon\Carbon::parse($course->ngayKetThuc)->format('d/m/Y') : 'Đang cập nhật';
     @endphp
