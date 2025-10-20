@@ -3,17 +3,15 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// =====================
-// Controllers
-// =====================
 use App\Http\Controllers\Admin\CategoryAdminController;
+use App\Http\Controllers\Admin\CourseAdminController as CourseAdminController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\Student\CourseController as StudentCourseController;
 use App\Http\Controllers\Student\ForgotPasswordController;
 use App\Http\Controllers\Student\LessonController as StudentLessonController;
+use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\Admin\CourseAdminController as CourseAdminController;
 
 // =====================
 // Public (Student-facing)
@@ -89,4 +87,48 @@ Route::middleware(['auth', 'admin'])
         Route::post('/courses', [CourseAdminController::class, 'store'])->name('courses.store');
         Route::put('/courses/{course}', [CourseAdminController::class, 'update'])->name('courses.update');
         Route::delete('/courses/{course}', [CourseAdminController::class, 'destroy'])->name('courses.destroy');
+    });
+
+Route::middleware(['auth', 'teacher'])
+    ->prefix('teacher')
+    ->name('teacher.')
+    ->group(function () {
+        Route::get('/', [TeacherDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', fn () => redirect()->route('teacher.dashboard'));
+
+        Route::get('/lectures', [TeacherDashboardController::class, 'placeholder'])
+            ->name('lectures.index')
+            ->defaults('section', 'lectures');
+
+        Route::get('/videos', [TeacherDashboardController::class, 'placeholder'])
+            ->name('videos.index')
+            ->defaults('section', 'videos');
+
+        Route::get('/documents', [TeacherDashboardController::class, 'placeholder'])
+            ->name('documents.index')
+            ->defaults('section', 'documents');
+
+        Route::get('/assignments', [TeacherDashboardController::class, 'placeholder'])
+            ->name('assignments.index')
+            ->defaults('section', 'assignments');
+
+        Route::get('/students', [TeacherDashboardController::class, 'placeholder'])
+            ->name('students.index')
+            ->defaults('section', 'students');
+
+        Route::get('/progress', [TeacherDashboardController::class, 'placeholder'])
+            ->name('progress.index')
+            ->defaults('section', 'progress');
+
+        Route::get('/exams', [TeacherDashboardController::class, 'placeholder'])
+            ->name('exams.index')
+            ->defaults('section', 'exams');
+
+        Route::get('/reports/progress', [TeacherDashboardController::class, 'placeholder'])
+            ->name('reports.progress')
+            ->defaults('section', 'reports-progress');
+
+        Route::get('/reports/exams', [TeacherDashboardController::class, 'placeholder'])
+            ->name('reports.exams')
+            ->defaults('section', 'reports-exams');
     });
