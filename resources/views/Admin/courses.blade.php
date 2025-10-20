@@ -135,27 +135,10 @@
         </div>
 
         <!-- Pagination -->
-        @if ($courses->lastPage() > 1)
-            <nav aria-label="Điều hướng trang" class="mt-4">
-                <ul class="pagination justify-content-center">
-                    @if ($courses->currentPage() > 1)
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $courses->url($courses->currentPage() - 1) }}">Trước</a>
-                        </li>
-                    @endif
-                    @for ($i = 1; $i <= $courses->lastPage(); $i++)
-                        <li class="page-item {{ $i === $courses->currentPage() ? 'active' : '' }}">
-                            <a class="page-link" href="{{ $courses->url($i) }}">{{ $i }}</a>
-                        </li>
-                    @endfor
-                    @if ($courses->currentPage() < $courses->lastPage())
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $courses->url($courses->currentPage() + 1) }}">Sau</a>
-                        </li>
-                    @endif
-                </ul>
-            </nav>
-        @endif
+        @include('components.pagination', [
+            'paginator' => $courses,
+            'ariaLabel' => 'Điều hướng trang khóa học',
+        ])
     </div>
 
     {{-- Modal: Thêm khóa học --}}

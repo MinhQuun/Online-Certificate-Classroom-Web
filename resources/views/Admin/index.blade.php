@@ -164,32 +164,10 @@
         </div>
 
         {{-- Phân trang --}}
-        @php
-            $sp = $users;
-        @endphp
-        @if ($sp->lastPage() > 1)
-            <nav aria-label="Điều hướng trang" class="mt-4">
-                <ul class="pagination justify-content-center">
-                    @if ($sp->currentPage() > 1)
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $sp->url($sp->currentPage() - 1) }}">Trước</a>
-                        </li>
-                    @endif
-
-                    @for ($i = 1; $i <= $sp->lastPage(); $i++)
-                        <li class="page-item {{ $i === $sp->currentPage() ? 'active' : '' }}">
-                            <a class="page-link" href="{{ $sp->url($i) }}">{{ $i }}</a>
-                        </li>
-                    @endfor
-
-                    @if ($sp->currentPage() < $sp->lastPage())
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $sp->url($sp->currentPage() + 1) }}">Sau</a>
-                        </li>
-                    @endif
-                </ul>
-            </nav>
-        @endif
+        @include('components.pagination', [
+            'paginator' => $users,
+            'ariaLabel' => 'Điều hướng trang người dùng',
+        ])
     </div>
 
     {{-- Modal: Thêm người dùng --}}

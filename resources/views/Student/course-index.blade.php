@@ -88,7 +88,11 @@
             </div>
 
             <div class="pagination">
-                {{ $courses->withQueryString()->links() }}
+                @include('components.pagination', [
+                    'paginator' => $courses->withQueryString(),
+                    'ariaLabel' => 'Điều hướng danh sách khóa học',
+                    'containerClass' => '',
+                ])
             </div>
         </div>
     </section>

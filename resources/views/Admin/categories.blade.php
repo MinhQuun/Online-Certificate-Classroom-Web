@@ -171,7 +171,11 @@
 
         @if ($categories->hasPages())
             <div class="card-footer">
-                {{ $categories->links() }}
+                @include('components.pagination', [
+                    'paginator' => $categories,
+                    'ariaLabel' => 'Điều hướng trang danh mục',
+                    'containerClass' => '',
+                ])
             </div>
         @endif
     </div>

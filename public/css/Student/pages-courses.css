@@ -96,7 +96,41 @@
     gap: 6px;
 }
 
-.course-card__meta span::before {
+
+/* Pagination: match admin style */
+.pagination {
+    margin-top: 32px;
+}
+.pagination nav {
+    display: flex;
+    justify-content: center;
+}
+.pagination nav ul.pagination {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.pagination nav .page-link {
+    border-radius: 10px;
+    border: 1px solid var(--color-border, #d7e6ee);
+    background: #f7fbff;
+    color: var(--color-muted, #23323a);
+    transition: all 0.2s ease;
+}
+.pagination nav .page-link:hover,
+.pagination nav .page-link:focus {
+    background: linear-gradient(135deg, #3a86ff, #1aa3a3);
+    color: #fff;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+.pagination nav .page-item.active .page-link {
+    background: linear-gradient(135deg, #3a86ff, #1aa3a3);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 6px 14px rgba(26, 163, 163, 0.22);
+}\r\ncourse-card__meta span::before {
     content: "";
     width: 6px;
     height: 6px;
@@ -105,25 +139,6 @@
     opacity: 0.35;
 }
 
-.pagination nav {
-    display: flex;
-    gap: 8px;
-}
-
-.pagination nav a,
-.pagination nav span {
-    padding: 10px 14px;
-    border-radius: 10px;
-    border: 1px solid var(--color-border);
-    color: var(--color-muted);
-}
-
-.pagination nav span[aria-current="page"],
-.pagination nav a:hover {
-    border-color: var(--color-accent);
-    color: var(--color-accent);
-    font-weight: 600;
-}
 
 @media (max-width: 860px) {
     .hero-banner {
@@ -134,3 +149,6 @@
         bottom: 12px;
     }
 }
+
+
+
