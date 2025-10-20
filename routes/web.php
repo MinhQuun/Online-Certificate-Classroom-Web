@@ -71,20 +71,20 @@ Route::middleware(['auth', 'admin'])
         // Dashboard
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-        // Users
+        // Quản lý người dùng
         Route::get('/users',                 [UserAdminController::class, 'index'])->name('users.index');
         Route::post('/users',                [UserAdminController::class, 'store'])->name('users.store');
         Route::put('/users/{user}',          [UserAdminController::class, 'update'])->name('users.update'); // Đảm bảo route PUT
         Route::post('/users/{user}/role',    [UserAdminController::class, 'updateRole'])->name('users.updateRole');
         Route::delete('/users/{user}',       [UserAdminController::class, 'destroy'])->name('users.destroy');
 
-        // Categories
+        // Quản lý danh mục
         Route::get('/categories',                [CategoryAdminController::class, 'index'])->name('categories.index');
         Route::post('/categories',               [CategoryAdminController::class, 'store'])->name('categories.store');
         Route::put('/categories/{category}',     [CategoryAdminController::class, 'update'])->name('categories.update');
         Route::delete('/categories/{category}',  [CategoryAdminController::class, 'destroy'])->name('categories.destroy');
 
-            // Routes quản lý khóa học
+        // Quản lý khóa học
         Route::get('/courses', [CourseAdminController::class, 'index'])->name('courses.index');
         Route::post('/courses', [CourseAdminController::class, 'store'])->name('courses.store');
         Route::put('/courses/{course}', [CourseAdminController::class, 'update'])->name('courses.update');

@@ -15,8 +15,19 @@ class Course extends Model
     protected $keyType = 'int';
 
     protected $fillable = [
-        'maDanhMuc','maND', 'tenKH', 'slug', 'hocPhi', 'moTa', 'ngayBatDau', 'ngayKetThuc', 'hinhanh', 'thoiHanNgay', 'trangThai',
+        'maDanhMuc','maND','tenKH','slug','hocPhi','moTa',
+        'ngayBatDau','ngayKetThuc','hinhanh','thoiHanNgay','trangThai',
     ];
+
+    // (tuỳ chọn) giúp format ngày/thời gian & tránh lỗi so sánh
+    protected $casts = [
+        'ngayBatDau' => 'date',
+        'ngayKetThuc'=> 'date',
+        'hocPhi'     => 'integer',
+        'thoiHanNgay'=> 'integer',
+    ];
+
+    /* ---------------- Relations ---------------- */
 
     public function chapters(): HasMany
     {
@@ -30,13 +41,26 @@ class Course extends Model
 
     public function category(): BelongsTo
     {
-        return $this->belongsTo(Category::class, 'maDanhMuc', 'maDanhMuc');
+        // withDefault để tránh null khi hiển thị blade
+        return $this->belongsTo(Category::class, 'maDanhMuc', 'maDanhMuc')
+                    ->withDefault(['tenDanhMuc' => '(Không rõ)']);
     }
+
+    public function teacher(): BelongsTo
+    {
+        // withDefault để tránh null khi hiển thị blade
+        return $this->belongsTo(User::class, 'maND', 'maND')
+                    ->withDefault(['hoTen' => '(Chưa gán)']);
+    }
+
+    /* ---------------- Scopes ---------------- */
 
     public function scopePublished($query)
     {
         return $query->where('trangThai', 'PUBLISHED');
     }
+
+    /* ---------------- Accessors ---------------- */
 
     public function getCoverImageUrlAttribute(): string
     {
@@ -51,22 +75,19 @@ class Course extends Model
         $normalized = ltrim($this->hinhanh, '/');
 
         $aliases = [
-            'toeic_speaking.png' => 'Assets/Images/toeic-noi.png',
-            'toeic_writing.png'  => 'Assets/Images/toeic-viet.png',
+            'toeic_speaking.png'  => 'Assets/Images/toeic-noi.png',
+            'toeic_writing.png'   => 'Assets/Images/toeic-viet.png',
             'toeic_listening.png' => 'Assets/Images/toeic-nghe.png',
-            'toeic_reading.png'  => 'Assets/Images/toeic-doc.png',
+            'toeic_reading.png'   => 'Assets/Images/toeic-doc.png',
         ];
 
         $candidatePaths = [];
-
         if (isset($aliases[$normalized])) {
             $candidatePaths[] = $aliases[$normalized];
         }
-
         $candidatePaths[] = 'Assets/Images/' . $normalized;
         $candidatePaths[] = 'Assets/' . $normalized;
         $candidatePaths[] = $normalized;
-
         $candidatePaths = array_unique($candidatePaths);
 
         foreach ($candidatePaths as $relativePath) {
@@ -77,9 +98,4 @@ class Course extends Model
 
         return asset('Assets/' . $normalized);
     }
-    public function teacher()
-    {
-        return $this->belongsTo(User::class, 'maND', 'maND');
-    }
-
 }

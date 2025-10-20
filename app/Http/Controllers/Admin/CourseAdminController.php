@@ -3,44 +3,75 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Course;
 use App\Models\Category;
+use App\Models\Course;
 use App\Models\User;
+use App\Support\RoleResolver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use App\Support\RoleResolver;
 
 class CourseAdminController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::with(['category', 'teacher'])
-                    ->orderBy('created_at', 'desc')
-                    ->paginate(10);
-                    
-        // Lấy danh sách giảng viên từ NGUOIDUNG có role giảng viên
-        $teacherId = RoleResolver::findRoleId(['giang-vien', 'teacher']);
-        $teachers = User::whereHas('roles', function($query) use ($teacherId) {
-            $query->where('QUYEN.maQuyen', $teacherId);
-        })->get();
+        $query = Course::query()->with(['category','teacher']);
 
-        $categories = Category::orderBy('tenDanhMuc')->get();
+        // Search theo tên/mã
+        if ($request->filled('q')) {
+            $q = $request->q;
+            $query->where(function ($x) use ($q) {
+                $x->where('tenKH', 'like', "%$q%")
+                    ->orWhere('maKH', 'like', "%$q%");
+            });
+        }
 
-        return view('admin.courses', compact('courses', 'teachers', 'categories'));
+        // Lọc danh mục
+        if ($request->filled('category_id')) {
+            $query->where('maDanhMuc', $request->category_id);
+        }
+
+        // Lọc trạng thái
+        if ($request->filled('status')) {
+            $query->where('trangThai', $request->status);
+        }
+
+        $courses = $query->orderByDesc('created_at')
+                            ->paginate(10)
+                            ->withQueryString();
+
+        // Danh sách giảng viên theo roles
+        $teacherRoleId = RoleResolver::findRoleId(['giang-vien','teacher']);
+        $teachers = User::whereHas('roles', function ($q) use ($teacherRoleId) {
+                $q->where('QUYEN.maQuyen', $teacherRoleId);
+            })
+            ->orderBy('hoTen')
+            ->get(['maND','hoTen']);
+
+        $categories = Category::orderBy('tenDanhMuc')->get(['maDanhMuc','tenDanhMuc']);
+
+        return view('admin.courses', compact('courses','teachers','categories'));
     }
 
     public function store(Request $request)
     {
+        // Lấy danh sách giảng viên hợp lệ theo roles
+        $teacherRoleId = RoleResolver::findRoleId(['giang-vien','teacher']);
+        $teacherIds = User::whereHas('roles', function ($q) use ($teacherRoleId) {
+                $q->where('QUYEN.maQuyen', $teacherRoleId);
+            })
+            ->pluck('maND')
+            ->toArray();
+
         $request->validate([
-            'tenKH' => 'required|string|max:150',
-            'maDanhMuc' => 'required|exists:danhmuc,maDanhMuc',
-            'maND' => 'required|exists:nguoidung,maND|in:' . implode(',', User::where('vaiTro', 'GIANG_VIEN')->pluck('maND')->toArray()),
-            'hocPhi' => 'required|numeric|min:0',
-            'moTa' => 'nullable|string|max:2000',
-            'ngayBatDau' => 'nullable|date',
+            'tenKH'       => 'required|string|max:150',
+            'maDanhMuc'   => 'required|exists:danhmuc,maDanhMuc',
+            'maND'        => ['required','exists:nguoidung,maND','in:'.implode(',', $teacherIds)],
+            'hocPhi'      => 'required|numeric|min:0',
+            'moTa'        => 'nullable|string|max:2000',
+            'ngayBatDau'  => 'nullable|date',
             'ngayKetThuc' => 'nullable|date|after:ngayBatDau',
-            'hinhanh' => 'nullable|image|max:2048',
+            'hinhanh'     => 'nullable|image|max:2048',
             'thoiHanNgay' => 'required|integer|min:1',
         ]);
 
@@ -48,27 +79,26 @@ class CourseAdminController extends Controller
         $data['slug'] = Str::slug($request->tenKH);
         $data['trangThai'] = 'DRAFT';
 
-        // Upload hình ảnh vào thư mục public/assets
+        // Upload ảnh -> public/Assets (viết hoa A để khớp accessor)
         if ($request->hasFile('hinhanh')) {
             $file = $request->file('hinhanh');
-            $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-            $path = $file->move(public_path('assets'), $fileName); // Lưu vào public/assets
-            $data['hinhanh'] = 'assets/' . $fileName; // Lưu đường dẫn tương đối
+            $fileName = time().'_'.Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME))
+                        .'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('Assets'), $fileName);
+            $data['hinhanh'] = 'Assets/'.$fileName; // lưu đường dẫn tương đối
         }
 
         $course = Course::create($data);
 
+        // Tạo thư mục trên R2 theo slug tên khoá (không bắt buộc)
         try {
-            // Tạo directory trên Cloudflare R2 với tên là tenKH
             $directoryName = Str::slug($course->tenKH);
             Storage::disk('r2')->makeDirectory($directoryName);
         } catch (\Exception $e) {
-            // Ghi log lỗi nhưng không dừng quá trình
-            \Log::error('Lỗi tạo thư mục trên R2: ' . $e->getMessage());
+            \Log::error('Lỗi tạo thư mục trên R2: '.$e->getMessage());
         }
 
-        return redirect()
-            ->route('admin.courses.index')
+        return redirect()->route('admin.courses.index')
             ->with('success', 'Thêm khóa học thành công');
     }
 
@@ -76,69 +106,74 @@ class CourseAdminController extends Controller
     {
         $course = Course::findOrFail($id);
 
+        // Lấy danh sách giảng viên hợp lệ theo roles
+        $teacherRoleId = RoleResolver::findRoleId(['giang-vien','teacher']);
+        $teacherIds = User::whereHas('roles', function ($q) use ($teacherRoleId) {
+                $q->where('QUYEN.maQuyen', $teacherRoleId);
+            })
+            ->pluck('maND')
+            ->toArray();
+
         $request->validate([
-            'tenKH' => 'required|string|max:150',
-            'maDanhMuc' => 'required|exists:danhmuc,maDanhMuc',
-            'maND' => 'required|exists:nguoidung,maND',
-            'hocPhi' => 'required|numeric|min:0',
-            'moTa' => 'nullable|string|max:2000',
-            'ngayBatDau' => 'nullable|date',
+            'tenKH'       => 'required|string|max:150',
+            'maDanhMuc'   => 'required|exists:danhmuc,maDanhMuc',
+            'maND'        => ['required','exists:nguoidung,maND','in:'.implode(',', $teacherIds)],
+            'hocPhi'      => 'required|numeric|min:0',
+            'moTa'        => 'nullable|string|max:2000',
+            'ngayBatDau'  => 'nullable|date',
             'ngayKetThuc' => 'nullable|date|after:ngayBatDau',
-            'hinhanh' => 'nullable|image|max:2048',
+            'hinhanh'     => 'nullable|image|max:2048',
             'thoiHanNgay' => 'required|integer|min:1',
-            'trangThai' => 'required|in:DRAFT,PUBLISHED,ARCHIVED'
+            'trangThai'   => 'required|in:DRAFT,PUBLISHED,ARCHIVED',
         ]);
 
         $data = $request->except('hinhanh');
 
+        // Thay ảnh (nếu có)
         if ($request->hasFile('hinhanh')) {
-            // Xóa ảnh cũ
-            if ($course->hinhanh) {
-                $oldImagePath = public_path($course->hinhanh);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath); // Xóa ảnh cũ khỏi public/assets
-                }
-            }
-            
-            // Upload ảnh mới vào public/assets
-            $file = $request->file('hinhanh');
-            $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-            $path = $file->move(public_path('assets'), $fileName); // Lưu vào public/assets
-            $data['hinhanh'] = 'assets/' . $fileName; // Cập nhật đường dẫn tương đối
+        if ($course->hinhanh) {
+            $old = public_path($course->hinhanh);
+            if (file_exists($old)) @unlink($old);
         }
+        $file = $request->file('hinhanh');
+        $fileName = time().'_'.Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)).'.'.$file->getClientOriginalExtension();
+        $file->move(public_path('Assets'), $fileName);
+        $data['hinhanh'] = 'Assets/'.$fileName;
+    }
 
-        $course->update($data);
+        // Cập nhật phần còn lại
+        $course->fill($data);
 
-        return redirect()
-            ->route('admin.courses.index')
-            ->with('success', 'Cập nhật khóa học thành công');
+        // Gán rõ ràng trạng thái (đề phòng bị lọc mất ở $fillable sau này)
+        $course->trangThai = $request->input('trangThai', $course->trangThai);
+
+        $course->save();
+
+        return redirect()->route('admin.courses.index')
+                        ->with('success', 'Cập nhật khóa học thành công');
     }
 
     public function destroy($id)
     {
         $course = Course::findOrFail($id);
 
-        // Xóa hình ảnh
+        // Xóa ảnh local
         if ($course->hinhanh) {
             $imagePath = public_path($course->hinhanh);
-            if (file_exists($imagePath)) {
-                unlink($imagePath); // Xóa ảnh khỏi public/assets
-            }
+            if (file_exists($imagePath)) @unlink($imagePath);
         }
 
-        // Xóa directory trên Cloudflare R2
+        // Xóa thư mục R2 (nếu có)
         try {
             $directoryName = Str::slug($course->tenKH);
             Storage::disk('r2')->deleteDirectory($directoryName);
         } catch (\Exception $e) {
-            // Ghi log lỗi nếu xóa thư mục thất bại, nhưng không dừng quá trình
-            \Log::error('Lỗi xóa thư mục trên R2: ' . $e->getMessage());
+            \Log::error('Lỗi xóa thư mục trên R2: '.$e->getMessage());
         }
 
         $course->delete();
 
-        return redirect()
-            ->route('admin.courses.index')
+        return redirect()->route('admin.courses.index')
             ->with('success', 'Xóa khóa học thành công');
     }
 }
