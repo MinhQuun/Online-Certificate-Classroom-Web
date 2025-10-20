@@ -73,7 +73,7 @@ Route::middleware(['auth', 'admin'])
         // Users
         Route::get('/users',                 [UserAdminController::class, 'index'])->name('users.index');
         Route::post('/users',                [UserAdminController::class, 'store'])->name('users.store');
-        Route::put('/users/{user}',          [UserAdminController::class, 'update'])->name('users.update');
+        Route::put('/users/{user}',          [UserAdminController::class, 'update'])->name('users.update'); // Đảm bảo route PUT
         Route::post('/users/{user}/role',    [UserAdminController::class, 'updateRole'])->name('users.updateRole');
         Route::delete('/users/{user}',       [UserAdminController::class, 'destroy'])->name('users.destroy');
 

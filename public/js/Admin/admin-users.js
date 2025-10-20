@@ -25,25 +25,63 @@ document.addEventListener("DOMContentLoaded", () => {
     })();
 
     // --- 1) Modal sửa: đổ dữ liệu vào form ---
-    const modal = document.getElementById("modalEdit");
-    if (modal) {
-        modal.addEventListener("show.bs.modal", (evt) => {
+    const modalEdit = document.getElementById("modalEdit");
+    if (modalEdit) {
+        modalEdit.addEventListener("show.bs.modal", (evt) => {
             const btn = evt.relatedTarget;
             const id = btn?.getAttribute("data-id");
             const name = btn?.getAttribute("data-name");
             const email = btn?.getAttribute("data-email");
             const phone = btn?.getAttribute("data-phone");
+            const roleId = btn?.getAttribute("data-role-id");
+            const chuyenMon = btn?.getAttribute("data-chuyen-mon");
 
-            modal.querySelector("#e_name").value = name || "";
-            modal.querySelector("#e_email").value = email || "";
-            modal.querySelector("#e_phone").value = phone || "";
+            modalEdit.querySelector("#e_name").value = name || "";
+            modalEdit.querySelector("#e_email").value = email || "";
+            modalEdit.querySelector("#e_phone").value = phone || "";
+            modalEdit.querySelector("#e_role").value = roleId || "";
+            modalEdit.querySelector('input[name="chuyenMon"]').value = chuyenMon || "";
 
-            const form = modal.querySelector("#formEdit");
+            const form = modalEdit.querySelector("#formEdit");
             form.action = `/admin/users/${id}`;
+            toggleChuyenMonField(modalEdit); // Gọi hàm để hiển thị/ẩn cột chuyên môn
         });
     }
 
-    // --- 2) Đổi quyền với SweetAlert2 (khóa admin) ---
+    // --- 2) Modal thêm và sửa: Hiển thị/ẩn cột chuyên môn dựa trên quyền ---
+    function toggleChuyenMonField(modal) {
+        const roleSelect = modal.querySelector(".form-select[name='MAQUYEN']");
+        const chuyenMonField = modal.querySelector(".chuyenMonField");
+
+        if (roleSelect && chuyenMonField) {
+            roleSelect.addEventListener("change", () => {
+                const selectedRole = roleSelect.value;
+                const teacherRole = roleSelect.dataset.teacherRole || 'Q002';
+                console.log("Selected Role:", selectedRole, "Teacher Role:", teacherRole);
+
+                if (selectedRole === teacherRole) {
+                    chuyenMonField.style.display = 'block';
+                } else {
+                    chuyenMonField.style.display = 'none';
+                    modal.querySelector('input[name="chuyenMon"]').value = '';
+                }
+            });
+
+            // Kích hoạt lần đầu để kiểm tra giá trị mặc định
+            roleSelect.dispatchEvent(new Event('change'));
+        } else {
+            console.warn("Không tìm thấy roleSelect hoặc chuyenMonField.", { roleSelect, chuyenMonField });
+        }
+    }
+
+    // Áp dụng cho cả modalCreate và modalEdit
+    [document.getElementById("modalCreate"), document.getElementById("modalEdit")].forEach(modal => {
+        if (modal) {
+            modal.addEventListener("show.bs.modal", () => toggleChuyenMonField(modal));
+        }
+    });
+
+    // --- 3) Đổi quyền với SweetAlert2 (khóa admin) ---
     document.querySelectorAll(".role-cell form").forEach((form) => {
         const wrap = form.querySelector(".role-wrap");
         const select = form.querySelector(".role-select");
@@ -84,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // --- 3) Xác nhận xoá bằng SweetAlert2 ---
+    // --- 4) Xác nhận xoá bằng SweetAlert2 ---
     const isDeleteForm = (form) => {
         const hiddenMethod = form.querySelector("input[name='_method']");
         return hiddenMethod && String(hiddenMethod.value).toLowerCase() === "delete";
@@ -126,4 +164,3 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
-

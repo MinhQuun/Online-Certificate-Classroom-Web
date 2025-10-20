@@ -140,7 +140,8 @@
                                     data-email="{{ $u->email }}"
                                     data-phone="{{ $u->phone }}"
                                     data-role-id="{{ $roleId }}"
-                                    data-role-name="{{ $roleName }}">
+                                    data-role-name="{{ $roleName }}"
+                                    data-chuyen-mon="{{ $u->chuyenMon ?? '' }}"> <!-- Thêm thuộc tính này -->
                                 <i class="bi bi-pencil me-1"></i>
                             </button>
 
@@ -233,7 +234,7 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Quyền</label>
-                        <select name="MAQUYEN" class="form-select" required>
+                        <select name="MAQUYEN" class="form-select" id="roleSelect" required data-teacher-role="{{ $roles->firstWhere('tenQuyen', 'Giảng viên')?->maQuyen ?? 'Q002' }}">
                             @foreach($roles as $r)
                                 @php
                                     $code = $r->MAQUYEN ?? $r->maQuyen ?? '';
@@ -245,6 +246,11 @@
                             @endforeach
                         </select>
                     </div>
+                        <!-- Thêm cột chuyên môn, chỉ hiển thị khi chọn giảng viên -->
+                    <div class="col-md-6 chuyenMonField" style="display: none;">
+                        <label class="form-label">Chuyên môn</label>
+                        <input name="chuyenMon" class="form-control" value="{{ old('chuyenMon') }}">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
@@ -254,11 +260,13 @@
         </div>
     </div>
 
-    {{-- Modal: Sửa người dùng --}}
+
+    <!-- Modal: Sửa người dùng -->
     <div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
-            <form id="formEdit" class="modal-content" method="post">
-                @csrf @method('put')
+            <form id="formEdit" class="modal-content" action="{{ route('admin.users.update', $u) }}" method="post">
+                @csrf
+                @method('put')
                 <div class="modal-header">
                     <h5 class="modal-title">Sửa người dùng</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -296,7 +304,7 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Quyền</label>
-                        <select id="e_role" name="MAQUYEN" class="form-select" required>
+                        <select id="e_role" name="MAQUYEN" class="form-select" required data-teacher-role="{{ $roles->firstWhere('tenQuyen', 'Giảng viên')?->maQuyen ?? 'Q002' }}">
                             @foreach($roles as $r)
                                 @php
                                     $code = $r->MAQUYEN ?? $r->maQuyen ?? '';
@@ -307,6 +315,11 @@
                                 </option>
                             @endforeach
                         </select>
+                    </div>
+                    <!-- Thêm cột chuyên môn, chỉ hiển thị khi chọn giảng viên -->
+                    <div class="col-md-6 chuyenMonField" style="display: none;">
+                        <label class="form-label">Chuyên môn</label>
+                        <input name="chuyenMon" class="form-control" value="">
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -115,6 +115,7 @@ class UserAdminController extends Controller
             'password' => ['required', 'confirmed', Password::min(6)],
             'phone'    => ['nullable', 'regex:/^0\d{9}$/'],
             'MAQUYEN'  => ['required', 'exists:QUYEN,maQuyen'],
+            'chuyenMon' => ['nullable', 'string', 'max:255'], // Validation cho chuyên môn
         ], [
             'name.required'      => 'Vui lòng nhập họ tên.',
             'name.min'           => 'Họ tên phải có ít nhất :min ký tự.',
@@ -127,22 +128,39 @@ class UserAdminController extends Controller
             'phone.regex'        => 'Số điện thoại gồm 10 chữ số và bắt đầu bằng 0.',
             'MAQUYEN.required'   => 'Vui lòng chọn quyền.',
             'MAQUYEN.exists'     => 'Quyền không hợp lệ.',
+            'chuyenMon.max'      => 'Chuyên môn không được vượt quá :max ký tự.',
         ]);
 
-        $user = User::create([
+        // Lấy tên quyền từ MAQUYEN để ánh xạ thành vaiTro
+        $roleName = DB::table('QUYEN')
+            ->where('maQuyen', $request->MAQUYEN)
+            ->value('tenQuyen');
+
+        // Ánh xạ tenQuyen thành vaiTro hợp lệ
+        $vaiTro = match (Str::slug($roleName)) {
+            'admin', 'quan-tri-vien' => 'ADMIN',
+            'giang-vien', 'giao-vien', 'teacher' => 'GIANG_VIEN',
+            'hoc-vien', 'hoc-sinh', 'student' => 'HOC_VIEN',
+            default => 'HOC_VIEN', // Mặc định là HOC_VIEN nếu không khớp
+        };
+
+        $userData = [
             'hoTen'     => $request->name,
             'email'     => $request->email,
             'sdt'       => $request->phone,
             'matKhau'   => Hash::make($request->password),
-            'vaiTro'    => $request->MAQUYEN,
+            'vaiTro'    => $vaiTro,
             'trangThai' => 'ACTIVE',
-        ]);
+        ];
+
+        // Thêm chuyenMon nếu vaiTro là GIANG_VIEN
+        if ($vaiTro === 'GIANG_VIEN' && $request->filled('chuyenMon')) {
+            $userData['chuyenMon'] = $request->chuyenMon;
+        }
+
+        $user = User::create($userData);
 
         $user->roles()->sync([$request->MAQUYEN]);
-
-        $roleName = DB::table('QUYEN')
-            ->where('maQuyen', $request->MAQUYEN)
-            ->value('tenQuyen');
 
         if ($this->normalizeRoleSlug($roleName) === 'student') {
             app(EnsureCustomerProfile::class)->handle($user);
@@ -150,7 +168,6 @@ class UserAdminController extends Controller
 
         return back()->with('success', 'Tạo người dùng thành công.');
     }
-
     public function update(Request $request, User $user)
     {
         $request->validate([
@@ -158,6 +175,8 @@ class UserAdminController extends Controller
             'email'    => ['required', 'email:rfc,dns', 'max:255', 'unique:nguoidung,email,' . $user->getKey() . ',maND'],
             'phone'    => ['nullable', 'regex:/^0\d{9}$/'],
             'password' => ['nullable', 'confirmed', Password::min(6)],
+            'MAQUYEN'  => ['required', 'exists:QUYEN,maQuyen'], // Thêm validation cho MAQUYEN
+            'chuyenMon' => ['nullable', 'string', 'max:255'],   // Thêm validation cho chuyenMon
         ], [
             'name.required'      => 'Vui lòng nhập họ tên.',
             'name.min'           => 'Họ tên phải có ít nhất :min ký tự.',
@@ -167,19 +186,45 @@ class UserAdminController extends Controller
             'phone.regex'        => 'Số điện thoại gồm 10 chữ số và bắt đầu bằng 0.',
             'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
             'password.min'       => 'Mật khẩu phải có ít nhất :min ký tự.',
+            'MAQUYEN.required'   => 'Vui lòng chọn quyền.',
+            'MAQUYEN.exists'     => 'Quyền không hợp lệ.',
+            'chuyenMon.max'      => 'Chuyên môn không được vượt quá :max ký tự.',
         ]);
 
+        // Lấy tên quyền từ MAQUYEN để ánh xạ thành vaiTro
+        $roleName = DB::table('QUYEN')
+            ->where('maQuyen', $request->MAQUYEN)
+            ->value('tenQuyen');
+
+        // Ánh xạ tenQuyen thành vaiTro hợp lệ
+        $vaiTro = match (Str::slug($roleName)) {
+            'admin', 'quan-tri-vien' => 'ADMIN',
+            'giang-vien', 'giao-vien', 'teacher' => 'GIANG_VIEN',
+            'hoc-vien', 'hoc-sinh', 'student' => 'HOC_VIEN',
+            default => $user->vaiTro, // Giữ nguyên vaiTro cũ nếu không khớp
+        };
+
         $data = [
-            'hoTen' => $request->name,
-            'email' => $request->email,
-            'sdt'   => $request->phone,
+            'hoTen'     => $request->name,
+            'email'     => $request->email,
+            'sdt'       => $request->phone,
+            'vaiTro'    => $vaiTro, // Cập nhật vaiTro dựa trên quyền mới
         ];
 
+        // Cập nhật mật khẩu nếu có
         if ($request->filled('password')) {
             $data['matKhau'] = Hash::make($request->password);
         }
 
+        // Thêm chuyenMon nếu vaiTro là GIANG_VIEN
+        if ($vaiTro === 'GIANG_VIEN' && $request->filled('chuyenMon')) {
+            $data['chuyenMon'] = $request->chuyenMon;
+        } elseif ($vaiTro !== 'GIANG_VIEN') {
+            $data['chuyenMon'] = null; // Xóa chuyenMon nếu không phải GIANG_VIEN
+        }
+
         $user->update($data);
+        $user->roles()->sync([$request->MAQUYEN]);
 
         return back()->with('success', 'Cập nhật người dùng thành công.');
     }
