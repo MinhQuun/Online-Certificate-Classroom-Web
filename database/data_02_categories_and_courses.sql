@@ -16,9 +16,9 @@ SELECT maDanhMuc INTO @dm_toeic FROM DANHMUC WHERE slug='chung-chi-toeic';
 -- =========================================================
 -- 6.1 SPEAKING
 INSERT INTO KHOAHOC
-(maDanhMuc, tenKH, slug, hocPhi, moTa, ngayBatDau, ngayKetThuc, hinhanh, thoiHanNgay, trangThai)
+(maDanhMuc, maND, tenKH, slug, hocPhi, moTa, ngayBatDau, ngayKetThuc, hinhanh, thoiHanNgay, trangThai)
 VALUES
-(@dm_toeic,
+(@dm_toeic,3,
     'Luyện thi TOEIC Speaking',
     'luyen-thi-toeic-speaking',
     950000,
@@ -28,9 +28,9 @@ SET @kh_speaking := LAST_INSERT_ID();
 
 -- 6.2 WRITING
 INSERT INTO KHOAHOC
-(maDanhMuc, tenKH, slug, hocPhi, moTa, ngayBatDau, ngayKetThuc, hinhanh, thoiHanNgay, trangThai)
+(maDanhMuc,maND, tenKH, slug, hocPhi, moTa, ngayBatDau, ngayKetThuc, hinhanh, thoiHanNgay, trangThai)
 VALUES
-(@dm_toeic,
+(@dm_toeic,2,
     'Luyện thi TOEIC Writing',
     'luyen-thi-toeic-writing',
     900000,
@@ -40,9 +40,9 @@ SET @kh_writing := LAST_INSERT_ID();
 
 -- 6.3 LISTENING
 INSERT INTO KHOAHOC
-(maDanhMuc, tenKH, slug, hocPhi, moTa, ngayBatDau, ngayKetThuc, hinhanh, thoiHanNgay, trangThai)
+(maDanhMuc,maND, tenKH, slug, hocPhi, moTa, ngayBatDau, ngayKetThuc, hinhanh, thoiHanNgay, trangThai)
 VALUES
-(@dm_toeic,
+(@dm_toeic,3,
     'Luyện thi TOEIC Listening cấp tốc mục tiêu 700-850+',
     'luyen-thi-toeic-listening-cap-toc-700-850',
     1200000,
@@ -52,9 +52,9 @@ SET @kh_listening := LAST_INSERT_ID();
 
 -- 6.4 READING
 INSERT INTO KHOAHOC
-(maDanhMuc, tenKH, slug, hocPhi, moTa, ngayBatDau, ngayKetThuc, hinhanh, thoiHanNgay, trangThai)
+(maDanhMuc,maND, tenKH, slug, hocPhi, moTa, ngayBatDau, ngayKetThuc, hinhanh, thoiHanNgay, trangThai)
 VALUES
-(@dm_toeic,
+(@dm_toeic,2,
     'Luyện thi TOEIC Reading cấp tốc mục tiêu 700-850+',
     'luyen-thi-toeic-reading-cap-toc-700-850',
     1150000,

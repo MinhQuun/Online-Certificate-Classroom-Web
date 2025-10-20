@@ -15,7 +15,7 @@ class Course extends Model
     protected $keyType = 'int';
 
     protected $fillable = [
-        'maDanhMuc', 'tenKH', 'slug', 'hocPhi', 'moTa', 'ngayBatDau', 'ngayKetThuc', 'hinhanh', 'thoiHanNgay', 'trangThai',
+        'maDanhMuc','maND', 'tenKH', 'slug', 'hocPhi', 'moTa', 'ngayBatDau', 'ngayKetThuc', 'hinhanh', 'thoiHanNgay', 'trangThai',
     ];
 
     public function chapters(): HasMany
@@ -77,4 +77,9 @@ class Course extends Model
 
         return asset('Assets/' . $normalized);
     }
+    public function teacher()
+    {
+        return $this->belongsTo(User::class, 'maND', 'maND');
+    }
+
 }

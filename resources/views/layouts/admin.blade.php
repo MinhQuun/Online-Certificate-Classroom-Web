@@ -88,8 +88,8 @@
           </li>
           <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.courses.*') ? 'active' : '' }}"
-                href="#"
-                title="Quản lý khóa học">
+              href="{{ route('admin.courses.index') }}"
+              title="Quản lý khóa học">
               <i class="bi bi-journal-text me-2"></i> Khóa học
             </a>
           </li>

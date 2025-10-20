@@ -13,6 +13,7 @@ use App\Http\Controllers\Student\CourseController as StudentCourseController;
 use App\Http\Controllers\Student\ForgotPasswordController;
 use App\Http\Controllers\Student\LessonController as StudentLessonController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\CourseAdminController as CourseAdminController;
 
 // =====================
 // Public (Student-facing)
@@ -82,4 +83,10 @@ Route::middleware(['auth', 'admin'])
         Route::post('/categories',               [CategoryAdminController::class, 'store'])->name('categories.store');
         Route::put('/categories/{category}',     [CategoryAdminController::class, 'update'])->name('categories.update');
         Route::delete('/categories/{category}',  [CategoryAdminController::class, 'destroy'])->name('categories.destroy');
+
+            // Routes quản lý khóa học
+        Route::get('/courses', [CourseAdminController::class, 'index'])->name('courses.index');
+        Route::post('/courses', [CourseAdminController::class, 'store'])->name('courses.store');
+        Route::put('/courses/{course}', [CourseAdminController::class, 'update'])->name('courses.update');
+        Route::delete('/courses/{course}', [CourseAdminController::class, 'destroy'])->name('courses.destroy');
     });
