@@ -79,8 +79,9 @@
                             <div class="course-card__actions">
                                 <a href="{{ route('student.courses.show', $course->slug) }}" class="btn-action btn-action--primary">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z" stroke="currentColor" stroke-width="1.5"/>
-                                        <path d="M8 5V8L10 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                        <path d="M2 2H3.5L4.5 4H14L12 10H5L3 2H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <circle cx="6" cy="13" r="1" fill="currentColor"/>
+                                        <circle cx="11" cy="13" r="1" fill="currentColor"/>
                                     </svg>
                                     Mua Ngay
                                 </a>
@@ -95,11 +96,6 @@
                         </div>
                         <div class="course-card__body">
                             <h3><a href="{{ route('student.courses.show', $course->slug) }}">{{ $course->tenKH }}</a></h3>
-                            <p>{{ $course->moTa }}</p>
-                            <div class="course-card__meta">
-                                <span>Thời hạn: {{ $course->thoiHanNgay }} ngày</span>
-                                <span>Khai giảng: {{ $startDate }}</span>
-                            </div>
                             <span class="course-card__price">{{ number_format((float) $course->hocPhi, 0, ',', '.') }} VNĐ</span>
                         </div>
                     </article>
