@@ -70,6 +70,15 @@
                 {{-- NỘI DUNG & LỚP HỌC --}}
                 <li class="nav-item mt-2 text-muted small">Nội dung &amp; lớp học</li>
                 <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('teacher.chapters.*') ? 'active' : '' }}"
+                    href="{{ route('teacher.chapters.index') }}">
+                    <i class="bi bi-book me-2"></i> Quản lý chương
+                    @if(($badges['assignments_pending'] ?? 0) > 0)
+                    <span class="badge text-bg-warning ms-2">{{ $badges['assignments_pending'] }}</span>
+                    @endif
+                </a>
+                </li>
+                <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('teacher.lectures.*') ? 'active' : '' }}"
                     href="{{ route('teacher.lectures.index') }}">
                     <i class="bi bi-book me-2"></i> Quản lý bài giảng

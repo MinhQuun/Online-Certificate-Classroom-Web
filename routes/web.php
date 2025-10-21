@@ -29,6 +29,7 @@ use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardControll
 use App\Http\Controllers\Teacher\LectureController;
 use App\Http\Controllers\Teacher\ExamController;
 use App\Http\Controllers\Teacher\ProgressController;
+use App\Http\Controllers\Teacher\ChapterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -130,6 +131,11 @@ Route::middleware(['auth', 'teacher'])
     ->group(function () {
         Route::get('/', [TeacherDashboardController::class, 'index'])->name('dashboard');
         Route::get('/dashboard', fn () => redirect()->route('teacher.dashboard'));
+
+        Route::get('/chapters', [ChapterController::class, 'index'])->name('chapters.index');
+        Route::post('/chapters', [ChapterController::class, 'store'])->name('chapters.store');
+        Route::put('/chapters/{chapter}', [ChapterController::class, 'update'])->name('chapters.update');
+        Route::delete('/chapters/{chapter}', [ChapterController::class, 'destroy'])->name('chapters.destroy');
 
         Route::get('/lectures', [LectureController::class, 'index'])->name('lectures.index');
         Route::post('/lectures', [LectureController::class, 'store'])->name('lectures.store');

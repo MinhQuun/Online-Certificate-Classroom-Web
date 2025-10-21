@@ -386,6 +386,47 @@ CREATE TABLE CTHD (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================
+-- BẢNG TIẾN ĐỘ HỌC TẬP CHI TIẾT
+-- =========================================================
+CREATE TABLE TIENDO_HOCTAP (
+    id INT NOT NULL AUTO_INCREMENT,
+    maHV INT NOT NULL,
+    maKH INT NOT NULL,
+    maBH INT NOT NULL,
+    
+    -- Trạng thái học tập
+    trangThai ENUM('NOT_STARTED', 'IN_PROGRESS', 'COMPLETED') DEFAULT 'NOT_STARTED',
+    
+    -- Thời gian học
+    thoiGianHoc INT DEFAULT 0 COMMENT 'Tổng thời gian học (giây)',
+    lanXemCuoi DATETIME COMMENT 'Lần xem gần nhất',
+    soLanXem INT DEFAULT 0 COMMENT 'Số lần truy cập bài học',
+    
+    -- Tiến độ video (nếu bài học là video)
+    video_progress_seconds INT DEFAULT 0 COMMENT 'Vị trí dừng video (giây)',
+    video_duration_seconds INT COMMENT 'Tổng thời lượng video (giây)',
+    
+    -- Đánh dấu hoàn thành
+    completed_at DATETIME COMMENT 'Thời điểm hoàn thành bài học',
+    
+    -- Ghi chú
+    ghiChu VARCHAR(500),
+    
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_progress (maHV, maKH, maBH),
+    KEY IX_TD_ENROLL (maHV, maKH),
+    KEY IX_TD_BAIHOC (maBH),
+    KEY IX_TD_STATUS (trangThai),
+    
+    CONSTRAINT FK_TD_ENROLL FOREIGN KEY (maHV, maKH) 
+        REFERENCES HOCVIEN_KHOAHOC(maHV, maKH) ON DELETE CASCADE,
+    CONSTRAINT FK_TD_BAIHOC FOREIGN KEY (maBH) 
+        REFERENCES BAIHOC(maBH) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- =========================================================
 -- 9) BẢNG HỆ THỐNG LARAVEL
 -- =========================================================
 CREATE TABLE cache (
