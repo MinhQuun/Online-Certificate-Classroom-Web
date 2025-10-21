@@ -1,86 +1,235 @@
-.lesson-card {
+/* ================== Theme tokens (đồng bộ admin-users) ================== */
+:root {
+    --bg-sky-1: #f1f7fb;
+    --bg-sky-2: #eef6f7;
+    --card: #fff;
+    --card-brd: #d7e6ee;
+    --text: #23323a;
+    --muted: #617481;
+    --teal: #1aa3a3;
+    --blue: #3a86ff;
+    --indigo: #5e60ce;
+    --shadow: 0 16px 32px rgba(37, 103, 131, 0.14);
+}
+
+/* ================== Header (đồng bộ) ================== */
+.page-header .kicker {
+    display: inline-block;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(26, 163, 163, 0.12);
     border: 1px solid var(--card-brd);
-    border-radius: 14px;
-    padding: 18px;
+    color: var(--muted);
+}
+.page-header .title {
+    margin: 10px 0 4px;
+    font-weight: 800;
+    line-height: 1.1;
+    font-size: clamp(26px, 4.2vw, 34px);
+    background: linear-gradient(90deg, var(--indigo), var(--blue), var(--teal));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.page-header .muted {
+    color: var(--muted);
+}
+
+/* ================== Card & Accordion ================== */
+.card {
+    border-radius: 16px;
+    border: 1px solid var(--card-brd);
     background: var(--card);
-    box-shadow: 0 12px 24px rgba(26, 163, 163, 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+.card-header {
+    background: linear-gradient(180deg, #f9feff, #f4fbfd);
+    border-bottom: 1px solid var(--card-brd);
+}
+.accordion-button {
+    background: var(--card);
+    border: none;
+    font-weight: 600;
+    color: var(--text);
+}
+.accordion-button:not(.collapsed) {
+    background: linear-gradient(180deg, #f7fbff, #f2f8fd);
+    color: var(--text);
+}
+.accordion-button:focus {
+    box-shadow: none;
+    border: none;
+}
+.accordion-item {
+    border-radius: 16px;
+    overflow: hidden;
+}
+.accordion-body {
+    padding: 1.5rem;
 }
 
-.lesson-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 18px 36px rgba(26, 163, 163, 0.12);
-}
-
-.lesson-card .lesson-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
+/* ================== Metrics ================== */
+.metric-pill {
     display: flex;
     align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, rgba(58, 134, 255, 0.14), rgba(26, 163, 163, 0.18));
-    color: var(--blue);
-    font-size: 1.25rem;
-    flex-shrink: 0;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-sky-1);
+    border-radius: 12px;
+    border: 1px solid var(--card-brd);
+}
+.metric-pill .icon {
+    font-size: 1.5rem;
+    color: var(--teal);
+}
+.metric-pill .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+}
+.metric-pill .label {
+    font-size: 0.9rem;
+    color: var(--muted);
 }
 
+/* ================== Lesson Card ================== */
+.lesson-card {
+    padding: 1rem;
+    background: var(--bg-sky-2);
+    border-radius: 12px;
+    border: 1px solid var(--card-brd);
+    transition: background 0.2s;
+}
+.lesson-card:hover {
+    background: #f9feff;
+}
+.lesson-icon {
+    font-size: 1.5rem;
+    color: var(--teal);
+    width: 40px;
+    text-align: center;
+}
 .lesson-chip {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 10px;
+    gap: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    background: rgba(26, 163, 163, 0.08);
     border-radius: 999px;
-    font-size: 0.75rem;
-    border: 1px solid rgba(58, 134, 255, 0.25);
-    color: var(--blue);
-    background: rgba(58, 134, 255, 0.08);
-}
-
-.material-item {
-    border: 1px dashed rgba(35, 50, 58, 0.12);
-    border-radius: 12px;
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    transition: background 0.2s ease;
-}
-
-.material-item:hover {
-    background: rgba(58, 134, 255, 0.06);
-}
-
-.metric-pill {
-    background: linear-gradient(135deg, rgba(58, 134, 255, 0.12), rgba(26, 163, 163, 0.14));
-    border: 1px solid rgba(58, 134, 255, 0.2);
-    border-radius: 14px;
-    padding: 16px 18px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.metric-pill .icon {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    background: rgba(58, 134, 255, 0.18);
-    color: var(--blue);
-    font-size: 1.2rem;
-}
-
-.metric-pill .value {
-    font-size: 1.35rem;
-    font-weight: 700;
-}
-
-.metric-pill .label {
     font-size: 0.85rem;
+    color: var(--teal);
+}
+.material-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: var(--bg-sky-1);
+    border-radius: 8px;
+}
+
+/* ================== Action Buttons ================== */
+.td-actions, .lesson-card .d-flex.flex-wrap.gap-2 {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    white-space: nowrap;
+    align-items: center;
+}
+.action-btn {
+    padding: 0.25rem 0.5rem;
+    line-height: 1.1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+}
+
+/* ================== Buttons ================== */
+.btn-outline-primary {
+    border-radius: 999px;
+    border-color: #b9d2ff;
+    color: var(--blue);
+    background: #f0f6ff;
+    transition: all 0.25s;
+}
+.btn-outline-primary:hover {
+    background: linear-gradient(135deg, var(--blue), var(--teal));
+    color: #fff;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+.btn-outline-secondary {
+    border-radius: 999px;
+    border-color: var(--card-brd);
+    background: #f7fbfd;
+    color: var(--text);
+    transition: all 0.25s;
+}
+.btn-outline-secondary:hover {
+    background: #eef6fb;
+    transform: translateY(-2px);
+}
+.btn-primary {
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--indigo), var(--blue));
+    border: none;
+    box-shadow: 0 10px 18px rgba(58, 134, 255, 0.22);
+    transition: transform 0.25s, box-shadow 0.25s, filter 0.25s;
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.02);
+}
+.btn-secondary {
+    border-radius: 999px;
+    background: #f2f8fd;
+    border: 1px solid var(--card-brd);
+    color: var(--text);
+}
+
+/* ================== Modal ================== */
+.modal-content {
+    border-radius: 18px;
+    border: 1px solid var(--card-brd);
+    box-shadow: var(--shadow);
+}
+.modal-header {
+    border-bottom: 1px solid var(--card-brd);
+    background: linear-gradient(180deg, #f9feff, #f4fbfd);
+}
+.modal-title {
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--indigo), var(--blue));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.modal-body .form-label {
+    font-weight: 600;
     color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+}
+.modal-body .form-control,
+.modal-body .form-select,
+.modal-body textarea {
+    border-radius: 12px;
+    border-color: var(--card-brd);
+}
+.modal-footer .btn {
+    border-radius: 999px;
+}
+
+/* ================== Responsive ================== */
+@media (max-width: 768px) {
+    .table-responsive {
+        overflow-x: auto;
+    }
+    .modal-open .card {
+        visibility: hidden;
+    }
 }
