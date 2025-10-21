@@ -90,7 +90,7 @@
                                         <path d="M8 3C4.5 3 2 8 2 8C2 8 4.5 13 8 13C11.5 13 14 8 14 8C14 8 11.5 3 8 3Z" stroke="currentColor" stroke-width="1.5"/>
                                         <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/>
                                     </svg>
-                                    Xem nhanh
+                                    Chi tiết
                                 </a>
                             </div>
                         </div>
