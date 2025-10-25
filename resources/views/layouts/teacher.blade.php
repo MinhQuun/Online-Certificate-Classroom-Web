@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title>@yield('title','Teacher')</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         {{-- SweetAlert2 + Bootstrap --}}
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

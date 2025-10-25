@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Support\RoleResolver;
 use Closure;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -16,13 +17,13 @@ class EnsureTeacherRole
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response|RedirectResponse
+    public function handle(Request $request, Closure $next): Response|RedirectResponse|JsonResponse
     {
         $user = Auth::user();
 
         if (!$user) {
             if ($request->expectsJson()) {
-                abort(401, 'Ban can dang nhap.');
+                return response()->json(['error' => 'Ban can dang nhap.'], 401);
             }
 
             return redirect()
@@ -34,7 +35,7 @@ class EnsureTeacherRole
 
         if (!in_array($role, ['teacher', 'admin'], true)) {
             if ($request->expectsJson()) {
-                abort(403, 'Ban khong co quyen truy cap khu vuc nay.');
+                return response()->json(['error' => 'Ban khong co quyen truy cap khu vuc nay.'], 403);
             }
 
             return redirect()
@@ -45,4 +46,3 @@ class EnsureTeacherRole
         return $next($request);
     }
 }
-
