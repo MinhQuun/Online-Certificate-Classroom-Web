@@ -22,14 +22,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_sp_405_600_1_1 := LAST_INSERT_ID(); SET @mt_sp_405_600_1_2 := @mt_sp_405_600_1_1 + 1; SET @mt_sp_405_600_1_3 := @mt_sp_405_600_1_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_sp_405_600_1_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/MiniTest/MiniTest1_N1.%20Read%20a%20Text%20Aloud.pdf')),
+(@mt_sp_405_600_1_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_405_600_1_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/MiniTest/MiniTest2_N1.%20Read%20a%20Text%20Aloud.pdf')),
+(@mt_sp_405_600_1_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_405_600_1_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/MiniTest/MiniTest3_N1.%20Read%20a%20Text%20Aloud.pdf'));
+(@mt_sp_405_600_1_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 2: Describe a Picture (@ch_sp_405_600_2)
 INSERT INTO CHUONG_MINITEST
@@ -40,14 +40,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_sp_405_600_2_1 := LAST_INSERT_ID(); SET @mt_sp_405_600_2_2 := @mt_sp_405_600_2_1 + 1; SET @mt_sp_405_600_2_3 := @mt_sp_405_600_2_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_sp_405_600_2_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N2.%20Describe%20a%20Picture/MiniTest/MiniTest1_N2.%20Describe%20a%20Picture.pdf')),
+(@mt_sp_405_600_2_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_405_600_2_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N2.%20Describe%20a%20Picture/MiniTest/MiniTest2_N2.%20Describe%20a%20Picture.pdf')),
+(@mt_sp_405_600_2_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_405_600_2_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N2.%20Describe%20a%20Picture/MiniTest/MiniTest3_N2.%20Describe%20a%20Picture.pdf'));
+(@mt_sp_405_600_2_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 3: Respond to Questions (@ch_sp_405_600_3)
 INSERT INTO CHUONG_MINITEST
@@ -58,14 +58,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_sp_405_600_3_1 := LAST_INSERT_ID(); SET @mt_sp_405_600_3_2 := @mt_sp_405_600_3_1 + 1; SET @mt_sp_405_600_3_3 := @mt_sp_405_600_3_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_sp_405_600_3_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N3.%20Respond%20to%20Questions/MiniTest/MiniTest1_N3.%20Respond%20to%20Questions.pdf')),
+(@mt_sp_405_600_3_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_405_600_3_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N3.%20Respond%20to%20Questions/MiniTest/MiniTest2_N3.%20Respond%20to%20Questions.pdf')),
+(@mt_sp_405_600_3_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_405_600_3_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N3.%20Respond%20to%20Questions/MiniTest/MiniTest3_N3.%20Respond%20to%20Questions.pdf'));
+(@mt_sp_405_600_3_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 4: Respond to Questions Using Information Provided (@ch_sp_405_600_4)
 INSERT INTO CHUONG_MINITEST
@@ -76,14 +76,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_sp_405_600_4_1 := LAST_INSERT_ID(); SET @mt_sp_405_600_4_2 := @mt_sp_405_600_4_1 + 1; SET @mt_sp_405_600_4_3 := @mt_sp_405_600_4_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_sp_405_600_4_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/MiniTest/MiniTest1_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf')),
+(@mt_sp_405_600_4_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_405_600_4_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/MiniTest/MiniTest2_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf')),
+(@mt_sp_405_600_4_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_405_600_4_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/MiniTest/MiniTest3_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf'));
+(@mt_sp_405_600_4_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- =========================
 -- 2) KHÓA WRITING (@kh_writing_405_600)
@@ -97,14 +97,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_wr_405_600_1_1 := LAST_INSERT_ID(); SET @mt_wr_405_600_1_2 := @mt_wr_405_600_1_1 + 1; SET @mt_wr_405_600_1_3 := @mt_wr_405_600_1_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_wr_405_600_1_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V1.%20Express%20an%20Opinion/MiniTest/MiniTest1_V1.%20Express%20an%20Opinion.pdf')),
+(@mt_wr_405_600_1_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_405_600_1_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V1.%20Express%20an%20Opinion/MiniTest/MiniTest2_V1.%20Express%20an%20Opinion.pdf')),
+(@mt_wr_405_600_1_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_405_600_1_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V1.%20Express%20an%20Opinion/MiniTest/MiniTest3_V1.%20Express%20an%20Opinion.pdf'));
+(@mt_wr_405_600_1_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 2: Write a Sentence Based on a Picture (@ch_wr_405_600_2)
 INSERT INTO CHUONG_MINITEST
@@ -115,14 +115,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_wr_405_600_2_1 := LAST_INSERT_ID(); SET @mt_wr_405_600_2_2 := @mt_wr_405_600_2_1 + 1; SET @mt_wr_405_600_2_3 := @mt_wr_405_600_2_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_wr_405_600_2_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V2.%20Write%20a%20Sentence%20Based%20on%20a%20Picture/MiniTest/MiniTest1_V2.%20Write%20a%20Sentence%20Based%20on%20a%20Picture.pdf')),
+(@mt_wr_405_600_2_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_405_600_2_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V2.%20Write%20a%20Sentence%20Based%20on%20a%20Picture/MiniTest/MiniTest2_V2.%20Write%20a%20Sentence%20Based%20on%20a%20Picture.pdf')),
+(@mt_wr_405_600_2_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_405_600_2_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V2.%20Write%20a%20Sentence%20Based%20on%20a%20Picture/MiniTest/MiniTest3_V2.%20Write%20a%20Sentence%20Based%20on%20a%20Picture.pdf'));
+(@mt_wr_405_600_2_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 3: Respond to a Written Request (@ch_wr_405_600_3)
 INSERT INTO CHUONG_MINITEST
@@ -133,14 +133,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_wr_405_600_3_1 := LAST_INSERT_ID(); SET @mt_wr_405_600_3_2 := @mt_wr_405_600_3_1 + 1; SET @mt_wr_405_600_3_3 := @mt_wr_405_600_3_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_wr_405_600_3_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V3.%20Respond%20to%20a%20Written%20Request/MiniTest/MiniTest1_V3.%20Respond%20to%20a%20Written%20Request.pdf')),
+(@mt_wr_405_600_3_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_405_600_3_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V3.%20Respond%20to%20a%20Written%20Request/MiniTest/MiniTest2_V3.%20Respond%20to%20a%20Written%20Request.pdf')),
+(@mt_wr_405_600_3_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_405_600_3_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V3.%20Respond%20to%20a%20Written%20Request/MiniTest/MiniTest3_V3.%20Respond%20to%20a%20Written%20Request.pdf'));
+(@mt_wr_405_600_3_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 4: Write an Opinion Essay (@ch_wr_405_600_4)
 INSERT INTO CHUONG_MINITEST
@@ -151,14 +151,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_wr_405_600_4_1 := LAST_INSERT_ID(); SET @mt_wr_405_600_4_2 := @mt_wr_405_600_4_1 + 1; SET @mt_wr_405_600_4_3 := @mt_wr_405_600_4_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_wr_405_600_4_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V4.%20Write%20an%20Opinion%20Essay/MiniTest/MiniTest1_V4.%20Write%20an%20Opinion%20Essay.pdf')),
+(@mt_wr_405_600_4_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_405_600_4_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V4.%20Write%20an%20Opinion%20Essay/MiniTest/MiniTest2_V4.%20Write%20an%20Opinion%20Essay.pdf')),
+(@mt_wr_405_600_4_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_405_600_4_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V4.%20Write%20an%20Opinion%20Essay/MiniTest/MiniTest3_V4.%20Write%20an%20Opinion%20Essay.pdf'));
+(@mt_wr_405_600_4_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- =========================
 -- 3) KHÓA LISTENING (@kh_listening_405_600)
@@ -173,52 +173,52 @@ SET @mt_li_405_600_1_1 := LAST_INSERT_ID(); SET @mt_li_405_600_1_2 := @mt_li_405
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
-(@mt_li_405_600_1_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_1_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/mp3.1%20P1%20MT1.mp3')),
 
-(@mt_li_405_600_1_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_1_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/mp3.2%20P1%20MT1.mp3')),
 
-(@mt_li_405_600_1_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_1_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/mp3.3%20P1%20MT1.mp3')),
 
-(@mt_li_405_600_1_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Part%201%20Photos%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_405_600_1_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_405_600_1_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%201%20Photos%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_405_600_1_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 2
-(@mt_li_405_600_1_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_1_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test2/mp3.1%20P1%20MT2.mp3')),
 
-(@mt_li_405_600_1_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_1_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test2/mp3.2%20P1%20MT2.mp3')),
 
-(@mt_li_405_600_1_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_1_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test2/mp3.3%20P1%20MT2.mp3')),
 
-(@mt_li_405_600_1_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test2/%C4%90%E1%BB%81/Thi%20Online_%20Part%201%20Photos%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_405_600_1_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_405_600_1_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test2/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%201%20Photos%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_405_600_1_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 3
-(@mt_li_405_600_1_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_1_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test3/mp3.1%20P1%20MT3.mp3')),
 
-(@mt_li_405_600_1_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_1_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test3/mp3.2%20P1%20MT3.mp3')),
 
-(@mt_li_405_600_1_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_1_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test3/mp3.3%20P1%20MT3.mp3')),
 
-(@mt_li_405_600_1_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test3/%C4%90%E1%BB%81/Thi%20Online_%20Part%201%20Photos%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_li_405_600_1_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_405_600_1_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test3/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%201%20Photos%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf'));
+(@mt_li_405_600_1_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 2: PART 2: Question–Response (@ch_li_405_600_2)
 INSERT INTO CHUONG_MINITEST
@@ -230,52 +230,52 @@ SET @mt_li_405_600_2_1 := LAST_INSERT_ID(); SET @mt_li_405_600_2_2 := @mt_li_405
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
-(@mt_li_405_600_2_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_2_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test1/mp3.1%20P2%20MT1.mp3')),
 
-(@mt_li_405_600_2_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_2_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test1/mp3.2%20P2%20MT1.mp3')),
 
-(@mt_li_405_600_2_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_2_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test1/mp3.3%20P2%20MT1.mp3')),
 
-(@mt_li_405_600_2_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Part%202%20Question-Response%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_405_600_2_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_405_600_2_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test1/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%202%20Question-Response%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_405_600_2_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 2
-(@mt_li_405_600_2_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_2_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test2/mp3.1%20P2%20MT2.mp3')),
 
-(@mt_li_405_600_2_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_2_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test2/mp3.2%20P2%20MT2.mp3')),
 
-(@mt_li_405_600_2_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_2_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test2/mp3.3%20P2%20MT2.mp3')),
 
-(@mt_li_405_600_2_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test2/%C4%90%E1%BB%81/Thi%20Online_%20Part%202%20Question-Response%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_405_600_2_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_405_600_2_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test2/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%202%20Question-Response%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_405_600_2_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 3
-(@mt_li_405_600_2_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_2_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test3/mp3.1%20P2%20MT3.mp3')),
 
-(@mt_li_405_600_2_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_2_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test3/mp3.2%20P2%20MT3.mp3')),
 
-(@mt_li_405_600_2_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_2_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test3/mp3.3%20P2%20MT3.mp3')),
 
-(@mt_li_405_600_2_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test3/%C4%90%E1%BB%81/Thi%20Online_%20Part%202%20Question-Response%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_li_405_600_2_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_405_600_2_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test3/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%202%20Question-Response%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf'));
+(@mt_li_405_600_2_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 3: PART 3: Short Conversations (@ch_li_405_600_3)
 INSERT INTO CHUONG_MINITEST
@@ -287,52 +287,52 @@ SET @mt_li_405_600_3_1 := LAST_INSERT_ID(); SET @mt_li_405_600_3_2 := @mt_li_405
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
-(@mt_li_405_600_3_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_3_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test1/mp3.1%20P3%20MT1.mp3')),
 
-(@mt_li_405_600_3_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_3_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test1/mp3.2%20P3%20MT1.mp3')),
 
-(@mt_li_405_600_3_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_3_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test1/mp3.3%20P3%20MT1.mp3')),
 
-(@mt_li_405_600_3_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Part%203%20Short%20Conversations%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_405_600_3_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_405_600_3_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test1/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%203%20Short%20Conversations%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_405_600_3_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 2
-(@mt_li_405_600_3_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_3_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test2/mp3.1%20P3%20MT2.mp3')),
 
-(@mt_li_405_600_3_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_3_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test2/mp3.2%20P3%20MT2.mp3')),
 
-(@mt_li_405_600_3_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_3_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test2/mp3.3%20P3%20MT2.mp3')),
 
-(@mt_li_405_600_3_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test2/%C4%90%E1%BB%81/Thi%20Online_%20Part%203%20Short%20Conversations%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_405_600_3_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_405_600_3_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test2/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%203%20Short%20Conversations%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_405_600_3_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 3
-(@mt_li_405_600_3_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_3_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test3/mp3.1%20P3%20MT3.mp3')),
 
-(@mt_li_405_600_3_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_3_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test3/mp3.2%20P3%20MT3.mp3')),
 
-(@mt_li_405_600_3_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_3_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test3/mp3.3%20P3%20MT3.mp3')),
 
-(@mt_li_405_600_3_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test3/%C4%90%E1%BB%81/Thi%20Online_%20Part%203%20Short%20Conversations%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_li_405_600_3_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_405_600_3_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test3/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%203%20Short%20Conversations%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf'));
+(@mt_li_405_600_3_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 4: PART 4: Short Talks (@ch_li_405_600_4)
 INSERT INTO CHUONG_MINITEST
@@ -344,52 +344,52 @@ SET @mt_li_405_600_4_1 := LAST_INSERT_ID(); SET @mt_li_405_600_4_2 := @mt_li_405
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
-(@mt_li_405_600_4_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_4_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test1/mp3.1%20P4%20MT1.mp3')),
 
-(@mt_li_405_600_4_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_4_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test1/mp3.2%20P4%20MT1.mp3')),
 
-(@mt_li_405_600_4_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_4_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test1/mp3.3%20P4%20MT1.mp3')),
 
-(@mt_li_405_600_4_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Part%204%20Short%20Talks%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_405_600_4_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_405_600_4_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test1/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%204%20Short%20Talks%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_405_600_4_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 2
-(@mt_li_405_600_4_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_4_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test2/mp3.1%20P4%20MT2.mp3')),
 
-(@mt_li_405_600_4_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_4_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test2/mp3.2%20P4%20MT2.mp3')),
 
-(@mt_li_405_600_4_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_4_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test2/mp3.3%20P4%20MT2.mp3')),
 
-(@mt_li_405_600_4_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test2/%C4%90%E1%BB%81/Thi%20Online_%20Part%204%20Short%20Talks%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_405_600_4_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_405_600_4_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test2/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%204%20Short%20Talks%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_405_600_4_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 3
-(@mt_li_405_600_4_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_4_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test3/mp3.1%20P4%20MT3.mp3')),
 
-(@mt_li_405_600_4_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_4_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test3/mp3.2%20P4%20MT3.mp3')),
 
-(@mt_li_405_600_4_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_405_600_4_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test3/mp3.3%20P4%20MT3.mp3')),
 
-(@mt_li_405_600_4_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test3/%C4%90%E1%BB%81/Thi%20Online_%20Part%204%20Short%20Talks%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_li_405_600_4_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_405_600_4_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test3/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%204%20Short%20Talks%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf'));
+(@mt_li_405_600_4_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- =========================
 -- 4) KHÓA READING (@kh_reading_405_600)
@@ -404,25 +404,25 @@ SET @mt_re_405_600_1_1 := LAST_INSERT_ID(); SET @mt_re_405_600_1_2 := @mt_re_405
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
-(@mt_re_405_600_1_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20danh%2C%20%C4%91%E1%BB%99ng%20t%E1%BB%AB%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_re_405_600_1_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_re_405_600_1_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/MiniTest/Test1/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20danh%2C%20%C4%91%E1%BB%99ng%20t%E1%BB%AB%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_re_405_600_1_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 2
-(@mt_re_405_600_1_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/MiniTest/Test2/%C4%90%E1%BB%81/Thi%20Online_%20Ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20danh%2C%20%C4%91%E1%BB%99ng%20t%E1%BB%AB%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_re_405_600_1_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_re_405_600_1_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/MiniTest/Test2/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20danh%2C%20%C4%91%E1%BB%99ng%20t%E1%BB%AB%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_re_405_600_1_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 3
-(@mt_re_405_600_1_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/MiniTest/Test3/%C4%90%E1%BB%81/Thi%20Online_%20Ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20danh%2C%20%C4%91%E1%BB%99ng%20t%E1%BB%AB%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_re_405_600_1_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_re_405_600_1_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/MiniTest/Test3/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20danh%2C%20%C4%91%E1%BB%99ng%20t%E1%BB%AB%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf'));
+(@mt_re_405_600_1_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 2: PART 7: Vocabulary & Reading Comprehension (@ch_re_405_600_2)
 INSERT INTO CHUONG_MINITEST
@@ -434,25 +434,25 @@ SET @mt_re_405_600_2_1 := LAST_INSERT_ID(); SET @mt_re_405_600_2_2 := @mt_re_405
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
-(@mt_re_405_600_2_1, 'Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20E-%20mail_Letter_Fax%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_re_405_600_2_1, 'Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_re_405_600_2_1, 'Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/MiniTest/Test1/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20E-%20mail_Letter_Fax%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_re_405_600_2_1, 'Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 2
-(@mt_re_405_600_2_2, 'Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/MiniTest/Test2/%C4%90%E1%BB%81/Thi%20Online_%20Ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20Memo%20_Notice%20_Announcement%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_re_405_600_2_2, 'Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_re_405_600_2_2, 'Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/MiniTest/Test2/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20Memo%20_Notice%20_Announcement%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_re_405_600_2_2, 'Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 3
-(@mt_re_405_600_2_3, 'Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/MiniTest/Test3/%C4%90%E1%BB%81/Thi%20Online_%20Ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20Article%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_re_405_600_2_3, 'Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_re_405_600_2_3, 'Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/MiniTest/Test3/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20Article%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf'));
+(@mt_re_405_600_2_3, 'Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- =========================
 -- Band 605-780
@@ -469,14 +469,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_sp_605_780_1_1 := LAST_INSERT_ID(); SET @mt_sp_605_780_1_2 := @mt_sp_605_780_1_1 + 1; SET @mt_sp_605_780_1_3 := @mt_sp_605_780_1_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_sp_605_780_1_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/MiniTest/MiniTest1_N1.%20Read%20a%20Text%20Aloud.pdf')),
+(@mt_sp_605_780_1_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_605_780_1_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/MiniTest/MiniTest2_N1.%20Read%20a%20Text%20Aloud.pdf')),
+(@mt_sp_605_780_1_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_605_780_1_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/MiniTest/MiniTest3_N1.%20Read%20a%20Text%20Aloud.pdf'));
+(@mt_sp_605_780_1_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 2: Describe a Picture (@ch_sp_605_780_2)
 INSERT INTO CHUONG_MINITEST
@@ -487,14 +487,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_sp_605_780_2_1 := LAST_INSERT_ID(); SET @mt_sp_605_780_2_2 := @mt_sp_605_780_2_1 + 1; SET @mt_sp_605_780_2_3 := @mt_sp_605_780_2_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_sp_605_780_2_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N2.%20Describe%20a%20Picture/MiniTest/MiniTest1_N2.%20Describe%20a%20Picture.pdf')),
+(@mt_sp_605_780_2_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_605_780_2_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N2.%20Describe%20a%20Picture/MiniTest/MiniTest2_N2.%20Describe%20a%20Picture.pdf')),
+(@mt_sp_605_780_2_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_605_780_2_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N2.%20Describe%20a%20Picture/MiniTest/MiniTest3_N2.%20Describe%20a%20Picture.pdf'));
+(@mt_sp_605_780_2_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 3: Respond to Questions (@ch_sp_605_780_3)
 INSERT INTO CHUONG_MINITEST
@@ -505,14 +505,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_sp_605_780_3_1 := LAST_INSERT_ID(); SET @mt_sp_605_780_3_2 := @mt_sp_605_780_3_1 + 1; SET @mt_sp_605_780_3_3 := @mt_sp_605_780_3_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_sp_605_780_3_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N3.%20Respond%20to%20Questions/MiniTest/MiniTest1_N3.%20Respond%20to%20Questions.pdf')),
+(@mt_sp_605_780_3_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/N3.%20Respond%20to%20Questions/MiniTest/MiniTest1_N3.%20Respond%20to%20Questions.pdf')),
 
-(@mt_sp_605_780_3_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N3.%20Respond%20to%20Questions/MiniTest/MiniTest2_N3.%20Respond%20to%20Questions.pdf')),
+(@mt_sp_605_780_3_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/N3.%20Respond%20to%20Questions/MiniTest/MiniTest2_N3.%20Respond%20to%20Questions.pdf')),
 
-(@mt_sp_605_780_3_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N3.%20Respond%20to%20Questions/MiniTest/MiniTest3_N3.%20Respond%20to%20Questions.pdf'));
+(@mt_sp_605_780_3_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/N3.%20Respond%20to%20Questions/MiniTest/MiniTest3_N3.%20Respond%20to%20Questions.pdf'));
 
 -- Chương 4: Respond to Questions Using Information Provided (@ch_sp_605_780_4)
 INSERT INTO CHUONG_MINITEST
@@ -523,14 +523,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_sp_605_780_4_1 := LAST_INSERT_ID(); SET @mt_sp_605_780_4_2 := @mt_sp_605_780_4_1 + 1; SET @mt_sp_605_780_4_3 := @mt_sp_605_780_4_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_sp_605_780_4_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/MiniTest/MiniTest1_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf')),
+(@mt_sp_605_780_4_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_605_780_4_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/MiniTest/MiniTest2_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf')),
+(@mt_sp_605_780_4_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_605_780_4_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/MiniTest/MiniTest3_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf'));
+(@mt_sp_605_780_4_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- =========================
 -- 2) KHÓA WRITING (@kh_writing_605_780)
@@ -544,14 +544,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_wr_605_780_1_1 := LAST_INSERT_ID(); SET @mt_wr_605_780_1_2 := @mt_wr_605_780_1_1 + 1; SET @mt_wr_605_780_1_3 := @mt_wr_605_780_1_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_wr_605_780_1_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V1.%20Express%20an%20Opinion/MiniTest/MiniTest1_V1.%20Express%20an%20Opinion.pdf')),
+(@mt_wr_605_780_1_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_605_780_1_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V1.%20Express%20an%20Opinion/MiniTest/MiniTest2_V1.%20Express%20an%20Opinion.pdf')),
+(@mt_wr_605_780_1_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_605_780_1_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V1.%20Express%20an%20Opinion/MiniTest/MiniTest3_V1.%20Express%20an%20Opinion.pdf'));
+(@mt_wr_605_780_1_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 2: Write a Sentence Based on a Picture (@ch_wr_605_780_2)
 INSERT INTO CHUONG_MINITEST
@@ -562,14 +562,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_wr_605_780_2_1 := LAST_INSERT_ID(); SET @mt_wr_605_780_2_2 := @mt_wr_605_780_2_1 + 1; SET @mt_wr_605_780_2_3 := @mt_wr_605_780_2_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_wr_605_780_2_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V2.%20Write%20a%20Sentence%20Based%20on%20a%20Picture/MiniTest/MiniTest1_V2.%20Write%20a%20Sentence%20Based%20on%20a%20Picture.pdf')),
+(@mt_wr_605_780_2_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_605_780_2_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V2.%20Write%20a%20Sentence%20Based%20on%20a%20Picture/MiniTest/MiniTest2_V2.%20Write%20a%20Sentence%20Based%20on%20a%20Picture.pdf')),
+(@mt_wr_605_780_2_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_605_780_2_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V2.%20Write%20a%20Sentence%20Based%20on%20a%20Picture/MiniTest/MiniTest3_V2.%20Write%20a%20Sentence%20Based%20on%20a%20Picture.pdf'));
+(@mt_wr_605_780_2_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 3: Respond to a Written Request (@ch_wr_605_780_3)
 INSERT INTO CHUONG_MINITEST
@@ -580,14 +580,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_wr_605_780_3_1 := LAST_INSERT_ID(); SET @mt_wr_605_780_3_2 := @mt_wr_605_780_3_1 + 1; SET @mt_wr_605_780_3_3 := @mt_wr_605_780_3_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_wr_605_780_3_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V3.%20Respond%20to%20a%20Written%20Request/MiniTest/MiniTest1_V3.%20Respond%20to%20a%20Written%20Request.pdf')),
+(@mt_wr_605_780_3_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_605_780_3_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V3.%20Respond%20to%20a%20Written%20Request/MiniTest/MiniTest2_V3.%20Respond%20to%20a%20Written%20Request.pdf')),
+(@mt_wr_605_780_3_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_605_780_3_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V3.%20Respond%20to%20a%20Written%20Request/MiniTest/MiniTest3_V3.%20Respond%20to%20a%20Written%20Request.pdf'));
+(@mt_wr_605_780_3_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 4: Write an Opinion Essay (@ch_wr_605_780_4)
 INSERT INTO CHUONG_MINITEST
@@ -598,14 +598,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_wr_605_780_4_1 := LAST_INSERT_ID(); SET @mt_wr_605_780_4_2 := @mt_wr_605_780_4_1 + 1; SET @mt_wr_605_780_4_3 := @mt_wr_605_780_4_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_wr_605_780_4_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V4.%20Write%20an%20Opinion%20Essay/MiniTest/MiniTest1_V4.%20Write%20an%20Opinion%20Essay.pdf')),
+(@mt_wr_605_780_4_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_605_780_4_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V4.%20Write%20an%20Opinion%20Essay/MiniTest/MiniTest2_V4.%20Write%20an%20Opinion%20Essay.pdf')),
+(@mt_wr_605_780_4_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_605_780_4_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V4.%20Write%20an%20Opinion%20Essay/MiniTest/MiniTest3_V4.%20Write%20an%20Opinion%20Essay.pdf'));
+(@mt_wr_605_780_4_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- =========================
 -- 3) KHÓA LISTENING (@kh_listening_605_780)
@@ -620,52 +620,52 @@ SET @mt_li_605_780_1_1 := LAST_INSERT_ID(); SET @mt_li_605_780_1_2 := @mt_li_605
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
-(@mt_li_605_780_1_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_1_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/mp3.1%20P1%20MT1.mp3')),
 
-(@mt_li_605_780_1_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_1_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/mp3.2%20P1%20MT1.mp3')),
 
-(@mt_li_605_780_1_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_1_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/mp3.3%20P1%20MT1.mp3')),
 
-(@mt_li_605_780_1_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Part%201%20Photos%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_605_780_1_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_605_780_1_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%201%20Photos%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_605_780_1_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 2
-(@mt_li_605_780_1_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_1_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test2/mp3.1%20P1%20MT2.mp3')),
 
-(@mt_li_605_780_1_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_1_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test2/mp3.2%20P1%20MT2.mp3')),
 
-(@mt_li_605_780_1_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_1_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test2/mp3.3%20P1%20MT2.mp3')),
 
-(@mt_li_605_780_1_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test2/%C4%90%E1%BB%81/Thi%20Online_%20Part%201%20Photos%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_605_780_1_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_605_780_1_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test2/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%201%20Photos%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_605_780_1_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 3
-(@mt_li_605_780_1_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_1_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test3/mp3.1%20P1%20MT3.mp3')),
 
-(@mt_li_605_780_1_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_1_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test3/mp3.2%20P1%20MT3.mp3')),
 
-(@mt_li_605_780_1_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_1_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test3/mp3.3%20P1%20MT3.mp3')),
 
-(@mt_li_605_780_1_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test3/%C4%90%E1%BB%81/Thi%20Online_%20Part%201%20Photos%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_li_605_780_1_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_605_780_1_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test3/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%201%20Photos%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf'));
+(@mt_li_605_780_1_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 2: PART 2: Question–Response (@ch_li_605_780_2)
 INSERT INTO CHUONG_MINITEST
@@ -677,52 +677,52 @@ SET @mt_li_605_780_2_1 := LAST_INSERT_ID(); SET @mt_li_605_780_2_2 := @mt_li_605
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
-(@mt_li_605_780_2_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_2_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test1/mp3.1%20P2%20MT1.mp3')),
 
-(@mt_li_605_780_2_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_2_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test1/mp3.2%20P2%20MT1.mp3')),
 
-(@mt_li_605_780_2_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_2_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test1/mp3.3%20P2%20MT1.mp3')),
 
-(@mt_li_605_780_2_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Part%202%20Question-Response%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_605_780_2_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_605_780_2_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test1/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%202%20Question-Response%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_605_780_2_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 2
-(@mt_li_605_780_2_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_2_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test2/mp3.1%20P2%20MT2.mp3')),
 
-(@mt_li_605_780_2_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_2_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test2/mp3.2%20P2%20MT2.mp3')),
 
-(@mt_li_605_780_2_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_2_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test2/mp3.3%20P2%20MT2.mp3')),
 
-(@mt_li_605_780_2_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test2/%C4%90%E1%BB%81/Thi%20Online_%20Part%202%20Question-Response%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_605_780_2_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_605_780_2_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test2/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%202%20Question-Response%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_605_780_2_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 3
-(@mt_li_605_780_2_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_2_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test3/mp3.1%20P2%20MT3.mp3')),
 
-(@mt_li_605_780_2_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_2_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test3/mp3.2%20P2%20MT3.mp3')),
 
-(@mt_li_605_780_2_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_2_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test3/mp3.3%20P2%20MT3.mp3')),
 
-(@mt_li_605_780_2_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test3/%C4%90%E1%BB%81/Thi%20Online_%20Part%202%20Question-Response%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_li_605_780_2_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_605_780_2_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test3/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%202%20Question-Response%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf'));
+(@mt_li_605_780_2_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 3: PART 3: Short Conversations (@ch_li_605_780_3)
 INSERT INTO CHUONG_MINITEST
@@ -734,52 +734,52 @@ SET @mt_li_605_780_3_1 := LAST_INSERT_ID(); SET @mt_li_605_780_3_2 := @mt_li_605
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
-(@mt_li_605_780_3_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_3_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test1/mp3.1%20P3%20MT1.mp3')),
 
-(@mt_li_605_780_3_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_3_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test1/mp3.2%20P3%20MT1.mp3')),
 
-(@mt_li_605_780_3_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_3_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test1/mp3.3%20P3%20MT1.mp3')),
 
-(@mt_li_605_780_3_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Part%203%20Short%20Conversations%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_605_780_3_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_605_780_3_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test1/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%203%20Short%20Conversations%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_605_780_3_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 2
-(@mt_li_605_780_3_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_3_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test2/mp3.1%20P3%20MT2.mp3')),
 
-(@mt_li_605_780_3_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_3_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test2/mp3.2%20P3%20MT2.mp3')),
 
-(@mt_li_605_780_3_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_3_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test2/mp3.3%20P3%20MT2.mp3')),
 
-(@mt_li_605_780_3_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test2/%C4%90%E1%BB%81/Thi%20Online_%20Part%203%20Short%20Conversations%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_605_780_3_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_605_780_3_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test2/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%203%20Short%20Conversations%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_605_780_3_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 3
-(@mt_li_605_780_3_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_3_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test3/mp3.1%20P3%20MT3.mp3')),
 
-(@mt_li_605_780_3_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_3_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test3/mp3.2%20P3%20MT3.mp3')),
 
-(@mt_li_605_780_3_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_3_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test3/mp3.3%20P3%20MT3.mp3')),
 
-(@mt_li_605_780_3_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test3/%C4%90%E1%BB%81/Thi%20Online_%20Part%203%20Short%20Conversations%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_li_605_780_3_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_605_780_3_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test3/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%203%20Short%20Conversations%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf'));
+(@mt_li_605_780_3_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 4: PART 4: Short Talks (@ch_li_605_780_4)
 INSERT INTO CHUONG_MINITEST
@@ -791,52 +791,52 @@ SET @mt_li_605_780_4_1 := LAST_INSERT_ID(); SET @mt_li_605_780_4_2 := @mt_li_605
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
-(@mt_li_605_780_4_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_4_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test1/mp3.1%20P4%20MT1.mp3')),
 
-(@mt_li_605_780_4_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_4_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test1/mp3.2%20P4%20MT1.mp3')),
 
-(@mt_li_605_780_4_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_4_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test1/mp3.3%20P4%20MT1.mp3')),
 
-(@mt_li_605_780_4_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Part%204%20Short%20Talks%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_605_780_4_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_605_780_4_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test1/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%204%20Short%20Talks%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_605_780_4_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 2
-(@mt_li_605_780_4_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_4_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test2/mp3.1%20P4%20MT2.mp3')),
 
-(@mt_li_605_780_4_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_4_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test2/mp3.2%20P4%20MT2.mp3')),
 
-(@mt_li_605_780_4_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_4_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test2/mp3.3%20P4%20MT2.mp3')),
 
-(@mt_li_605_780_4_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test2/%C4%90%E1%BB%81/Thi%20Online_%20Part%204%20Short%20Talks%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_605_780_4_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_605_780_4_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test2/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%204%20Short%20Talks%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_605_780_4_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 3
-(@mt_li_605_780_4_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_4_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test3/mp3.1%20P4%20MT3.mp3')),
 
-(@mt_li_605_780_4_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_4_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test3/mp3.2%20P4%20MT3.mp3')),
 
-(@mt_li_605_780_4_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_605_780_4_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test3/mp3.3%20P4%20MT3.mp3')),
 
-(@mt_li_605_780_4_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test3/%C4%90%E1%BB%81/Thi%20Online_%20Part%204%20Short%20Talks%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_li_605_780_4_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_605_780_4_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test3/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%204%20Short%20Talks%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf'));
+(@mt_li_605_780_4_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- =========================
 -- 4) KHÓA READING (@kh_reading_605_780)
@@ -851,25 +851,25 @@ SET @mt_re_605_780_1_1 := LAST_INSERT_ID(); SET @mt_re_605_780_1_2 := @mt_re_605
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
-(@mt_re_605_780_1_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20danh%2C%20%C4%91%E1%BB%99ng%20t%E1%BB%AB%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_re_605_780_1_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_re_605_780_1_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/MiniTest/Test1/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20danh%2C%20%C4%91%E1%BB%99ng%20t%E1%BB%AB%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_re_605_780_1_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 2
-(@mt_re_605_780_1_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/MiniTest/Test2/%C4%90%E1%BB%81/Thi%20Online_%20Ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20danh%2C%20%C4%91%E1%BB%99ng%20t%E1%BB%AB%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_re_605_780_1_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_re_605_780_1_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/MiniTest/Test2/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20danh%2C%20%C4%91%E1%BB%99ng%20t%E1%BB%AB%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_re_605_780_1_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 3
-(@mt_re_605_780_1_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/MiniTest/Test3/%C4%90%E1%BB%81/Thi%20Online_%20Ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20danh%2C%20%C4%91%E1%BB%99ng%20t%E1%BB%AB%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_re_605_780_1_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_re_605_780_1_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/MiniTest/Test3/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20danh%2C%20%C4%91%E1%BB%99ng%20t%E1%BB%AB%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf'));
+(@mt_re_605_780_1_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 2: PART 7: Vocabulary & Reading Comprehension (@ch_re_605_780_2)
 INSERT INTO CHUONG_MINITEST
@@ -881,25 +881,25 @@ SET @mt_re_605_780_2_1 := LAST_INSERT_ID(); SET @mt_re_605_780_2_2 := @mt_re_605
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
-(@mt_re_605_780_2_1, 'Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20E-%20mail_Letter_Fax%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_re_605_780_2_1, 'Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_re_605_780_2_1, 'Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/MiniTest/Test1/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20E-%20mail_Letter_Fax%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_re_605_780_2_1, 'Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 2
-(@mt_re_605_780_2_2, 'Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/MiniTest/Test2/%C4%90%E1%BB%81/Thi%20Online_%20Ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20Memo%20_Notice%20_Announcement%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_re_605_780_2_2, 'Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_re_605_780_2_2, 'Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/MiniTest/Test2/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20Memo%20_Notice%20_Announcement%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_re_605_780_2_2, 'Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 3
-(@mt_re_605_780_2_3, 'Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/MiniTest/Test3/%C4%90%E1%BB%81/Thi%20Online_%20Ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20Article%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_re_605_780_2_3, 'Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_re_605_780_2_3, 'Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/MiniTest/Test3/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20Article%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf'));
+(@mt_re_605_780_2_3, 'Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- =========================
 -- Band 785-990
@@ -916,14 +916,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_sp_785_990_1_1 := LAST_INSERT_ID(); SET @mt_sp_785_990_1_2 := @mt_sp_785_990_1_1 + 1; SET @mt_sp_785_990_1_3 := @mt_sp_785_990_1_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_sp_785_990_1_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/MiniTest/MiniTest1_N1.%20Read%20a%20Text%20Aloud.pdf')),
+(@mt_sp_785_990_1_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_785_990_1_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/MiniTest/MiniTest2_N1.%20Read%20a%20Text%20Aloud.pdf')),
+(@mt_sp_785_990_1_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_785_990_1_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/MiniTest/MiniTest3_N1.%20Read%20a%20Text%20Aloud.pdf'));
+(@mt_sp_785_990_1_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 2: Describe a Picture (@ch_sp_785_990_2)
 INSERT INTO CHUONG_MINITEST
@@ -934,14 +934,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_sp_785_990_2_1 := LAST_INSERT_ID(); SET @mt_sp_785_990_2_2 := @mt_sp_785_990_2_1 + 1; SET @mt_sp_785_990_2_3 := @mt_sp_785_990_2_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_sp_785_990_2_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N2.%20Describe%20a%20Picture/MiniTest/MiniTest1_N2.%20Describe%20a%20Picture.pdf')),
+(@mt_sp_785_990_2_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_785_990_2_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N2.%20Describe%20a%20Picture/MiniTest/MiniTest2_N2.%20Describe%20a%20Picture.pdf')),
+(@mt_sp_785_990_2_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_785_990_2_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N2.%20Describe%20a%20Picture/MiniTest/MiniTest3_N2.%20Describe%20a%20Picture.pdf'));
+(@mt_sp_785_990_2_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 3: Respond to Questions (@ch_sp_785_990_3)
 INSERT INTO CHUONG_MINITEST
@@ -952,14 +952,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_sp_785_990_3_1 := LAST_INSERT_ID(); SET @mt_sp_785_990_3_2 := @mt_sp_785_990_3_1 + 1; SET @mt_sp_785_990_3_3 := @mt_sp_785_990_3_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_sp_785_990_3_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N3.%20Respond%20to%20Questions/MiniTest/MiniTest1_N3.%20Respond%20to%20Questions.pdf')),
+(@mt_sp_785_990_3_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_785_990_3_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N3.%20Respond%20to%20Questions/MiniTest/MiniTest2_N3.%20Respond%20to%20Questions.pdf')),
+(@mt_sp_785_990_3_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_785_990_3_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N3.%20Respond%20to%20Questions/MiniTest/MiniTest3_N3.%20Respond%20to%20Questions.pdf'));
+(@mt_sp_785_990_3_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 4: Respond to Questions Using Information Provided (@ch_sp_785_990_4)
 INSERT INTO CHUONG_MINITEST
@@ -970,14 +970,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_sp_785_990_4_1 := LAST_INSERT_ID(); SET @mt_sp_785_990_4_2 := @mt_sp_785_990_4_1 + 1; SET @mt_sp_785_990_4_3 := @mt_sp_785_990_4_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_sp_785_990_4_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/MiniTest/MiniTest1_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf')),
+(@mt_sp_785_990_4_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_785_990_4_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/MiniTest/MiniTest2_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf')),
+(@mt_sp_785_990_4_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_sp_785_990_4_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/MiniTest/MiniTest3_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf'));
+(@mt_sp_785_990_4_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- =========================
 -- 2) KHÓA WRITING (@kh_writing_785_990)
@@ -991,14 +991,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_wr_785_990_1_1 := LAST_INSERT_ID(); SET @mt_wr_785_990_1_2 := @mt_wr_785_990_1_1 + 1; SET @mt_wr_785_990_1_3 := @mt_wr_785_990_1_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_wr_785_990_1_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V1.%20Express%20an%20Opinion/MiniTest/MiniTest1_V1.%20Express%20an%20Opinion.pdf')),
+(@mt_wr_785_990_1_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_785_990_1_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V1.%20Express%20an%20Opinion/MiniTest/MiniTest2_V1.%20Express%20an%20Opinion.pdf')),
+(@mt_wr_785_990_1_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_785_990_1_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V1.%20Express%20an%20Opinion/MiniTest/MiniTest3_V1.%20Express%20an%20Opinion.pdf'));
+(@mt_wr_785_990_1_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 2: Write a Sentence Based on a Picture (@ch_wr_785_990_2)
 INSERT INTO CHUONG_MINITEST
@@ -1009,14 +1009,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_wr_785_990_2_1 := LAST_INSERT_ID(); SET @mt_wr_785_990_2_2 := @mt_wr_785_990_2_1 + 1; SET @mt_wr_785_990_2_3 := @mt_wr_785_990_2_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_wr_785_990_2_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V2.%20Write%20a%20Sentence%20Based%20on%20a%20Picture/MiniTest/MiniTest1_V2.%20Write%20a%20Sentence%20Based%20on%20a%20Picture.pdf')),
+(@mt_wr_785_990_2_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_785_990_2_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V2.%20Write%20a%20Sentence%20Based%20on%20a%20Picture/MiniTest/MiniTest2_V2.%20Write%20a%20Sentence%20Based%20on%20a%20Picture.pdf')),
+(@mt_wr_785_990_2_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_785_990_2_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V2.%20Write%20a%20Sentence%20Based%20on%20a%20Picture/MiniTest/MiniTest3_V2.%20Write%20a%20Sentence%20Based%20on%20a%20Picture.pdf'));
+(@mt_wr_785_990_2_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 3: Respond to a Written Request (@ch_wr_785_990_3)
 INSERT INTO CHUONG_MINITEST
@@ -1027,14 +1027,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_wr_785_990_3_1 := LAST_INSERT_ID(); SET @mt_wr_785_990_3_2 := @mt_wr_785_990_3_1 + 1; SET @mt_wr_785_990_3_3 := @mt_wr_785_990_3_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_wr_785_990_3_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V3.%20Respond%20to%20a%20Written%20Request/MiniTest/MiniTest1_V3.%20Respond%20to%20a%20Written%20Request.pdf')),
+(@mt_wr_785_990_3_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_785_990_3_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V3.%20Respond%20to%20a%20Written%20Request/MiniTest/MiniTest2_V3.%20Respond%20to%20a%20Written%20Request.pdf')),
+(@mt_wr_785_990_3_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_785_990_3_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V3.%20Respond%20to%20a%20Written%20Request/MiniTest/MiniTest3_V3.%20Respond%20to%20a%20Written%20Request.pdf'));
+(@mt_wr_785_990_3_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 4: Write an Opinion Essay (@ch_wr_785_990_4)
 INSERT INTO CHUONG_MINITEST
@@ -1045,14 +1045,14 @@ INSERT INTO CHUONG_MINITEST
 SET @mt_wr_785_990_4_1 := LAST_INSERT_ID(); SET @mt_wr_785_990_4_2 := @mt_wr_785_990_4_1 + 1; SET @mt_wr_785_990_4_3 := @mt_wr_785_990_4_1 + 2;
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@mt_wr_785_990_4_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V4.%20Write%20an%20Opinion%20Essay/MiniTest/MiniTest1_V4.%20Write%20an%20Opinion%20Essay.pdf')),
+(@mt_wr_785_990_4_1, 'MiniTest 1 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_785_990_4_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V4.%20Write%20an%20Opinion%20Essay/MiniTest/MiniTest2_V4.%20Write%20an%20Opinion%20Essay.pdf')),
+(@mt_wr_785_990_4_2, 'MiniTest 2 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_wr_785_990_4_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/V4.%20Write%20an%20Opinion%20Essay/MiniTest/MiniTest3_V4.%20Write%20an%20Opinion%20Essay.pdf'));
+(@mt_wr_785_990_4_3, 'MiniTest 3 - PDF', 'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- =========================
 -- 3) KHÓA LISTENING (@kh_listening_785_990)
@@ -1067,52 +1067,52 @@ SET @mt_li_785_990_1_1 := LAST_INSERT_ID(); SET @mt_li_785_990_1_2 := @mt_li_785
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
-(@mt_li_785_990_1_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_1_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/mp3.1%20P1%20MT1.mp3')),
 
-(@mt_li_785_990_1_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_1_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/mp3.2%20P1%20MT1.mp3')),
 
-(@mt_li_785_990_1_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_1_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/mp3.3%20P1%20MT1.mp3')),
 
-(@mt_li_785_990_1_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Part%201%20Photos%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_785_990_1_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_785_990_1_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%201%20Photos%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_785_990_1_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 2
-(@mt_li_785_990_1_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_1_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test2/mp3.1%20P1%20MT2.mp3')),
 
-(@mt_li_785_990_1_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_1_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test2/mp3.2%20P1%20MT2.mp3')),
 
-(@mt_li_785_990_1_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_1_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test2/mp3.3%20P1%20MT2.mp3')),
 
-(@mt_li_785_990_1_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test2/%C4%90%E1%BB%81/Thi%20Online_%20Part%201%20Photos%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_785_990_1_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_785_990_1_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test2/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%201%20Photos%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_785_990_1_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 3
-(@mt_li_785_990_1_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_1_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test3/mp3.1%20P1%20MT3.mp3')),
 
-(@mt_li_785_990_1_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_1_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test3/mp3.2%20P1%20MT3.mp3')),
 
-(@mt_li_785_990_1_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_1_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test3/mp3.3%20P1%20MT3.mp3')),
 
-(@mt_li_785_990_1_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test3/%C4%90%E1%BB%81/Thi%20Online_%20Part%201%20Photos%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_li_785_990_1_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_785_990_1_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test3/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%201%20Photos%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf'));
+(@mt_li_785_990_1_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 2: PART 2: Question–Response (@ch_li_785_990_2)
 INSERT INTO CHUONG_MINITEST
@@ -1124,52 +1124,52 @@ SET @mt_li_785_990_2_1 := LAST_INSERT_ID(); SET @mt_li_785_990_2_2 := @mt_li_785
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
-(@mt_li_785_990_2_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_2_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test1/mp3.1%20P2%20MT1.mp3')),
 
-(@mt_li_785_990_2_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_2_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test1/mp3.2%20P2%20MT1.mp3')),
 
-(@mt_li_785_990_2_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_2_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test1/mp3.3%20P2%20MT1.mp3')),
 
-(@mt_li_785_990_2_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Part%202%20Question-Response%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_785_990_2_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_785_990_2_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test1/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%202%20Question-Response%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_785_990_2_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 2
-(@mt_li_785_990_2_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_2_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test2/mp3.1%20P2%20MT2.mp3')),
 
-(@mt_li_785_990_2_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_2_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test2/mp3.2%20P2%20MT2.mp3')),
 
-(@mt_li_785_990_2_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_2_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test2/mp3.3%20P2%20MT2.mp3')),
 
-(@mt_li_785_990_2_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test2/%C4%90%E1%BB%81/Thi%20Online_%20Part%202%20Question-Response%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_785_990_2_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_785_990_2_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test2/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%202%20Question-Response%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_785_990_2_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 3
-(@mt_li_785_990_2_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_2_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test3/mp3.1%20P2%20MT3.mp3')),
 
-(@mt_li_785_990_2_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_2_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test3/mp3.2%20P2%20MT3.mp3')),
 
-(@mt_li_785_990_2_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_2_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test3/mp3.3%20P2%20MT3.mp3')),
 
-(@mt_li_785_990_2_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test3/%C4%90%E1%BB%81/Thi%20Online_%20Part%202%20Question-Response%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_li_785_990_2_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_785_990_2_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%202.%20Question–Response/MiniTest/Test3/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%202%20Question-Response%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf'));
+(@mt_li_785_990_2_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 3: PART 3: Short Conversations (@ch_li_785_990_3)
 INSERT INTO CHUONG_MINITEST
@@ -1181,52 +1181,52 @@ SET @mt_li_785_990_3_1 := LAST_INSERT_ID(); SET @mt_li_785_990_3_2 := @mt_li_785
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
-(@mt_li_785_990_3_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_3_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test1/mp3.1%20P3%20MT1.mp3')),
 
-(@mt_li_785_990_3_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_3_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test1/mp3.2%20P3%20MT1.mp3')),
 
-(@mt_li_785_990_3_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_3_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test1/mp3.3%20P3%20MT1.mp3')),
 
-(@mt_li_785_990_3_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Part%203%20Short%20Conversations%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_785_990_3_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_785_990_3_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test1/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%203%20Short%20Conversations%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_785_990_3_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 2
-(@mt_li_785_990_3_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_3_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test2/mp3.1%20P3%20MT2.mp3')),
 
-(@mt_li_785_990_3_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_3_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test2/mp3.2%20P3%20MT2.mp3')),
 
-(@mt_li_785_990_3_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_3_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test2/mp3.3%20P3%20MT2.mp3')),
 
-(@mt_li_785_990_3_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test2/%C4%90%E1%BB%81/Thi%20Online_%20Part%203%20Short%20Conversations%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_785_990_3_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_785_990_3_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test2/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%203%20Short%20Conversations%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_785_990_3_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 3
-(@mt_li_785_990_3_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_3_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test3/mp3.1%20P3%20MT3.mp3')),
 
-(@mt_li_785_990_3_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_3_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test3/mp3.2%20P3%20MT3.mp3')),
 
-(@mt_li_785_990_3_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_3_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test3/mp3.3%20P3%20MT3.mp3')),
 
-(@mt_li_785_990_3_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test3/%C4%90%E1%BB%81/Thi%20Online_%20Part%203%20Short%20Conversations%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_li_785_990_3_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_785_990_3_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%203.%20Short%20Conversations/MiniTest/Test3/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%203%20Short%20Conversations%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf'));
+(@mt_li_785_990_3_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 4: PART 4: Short Talks (@ch_li_785_990_4)
 INSERT INTO CHUONG_MINITEST
@@ -1238,52 +1238,52 @@ SET @mt_li_785_990_4_1 := LAST_INSERT_ID(); SET @mt_li_785_990_4_2 := @mt_li_785
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
-(@mt_li_785_990_4_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_4_1, 'MiniTest 1 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test1/mp3.1%20P4%20MT1.mp3')),
 
-(@mt_li_785_990_4_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_4_1, 'MiniTest 1 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test1/mp3.2%20P4%20MT1.mp3')),
 
-(@mt_li_785_990_4_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_4_1, 'MiniTest 1 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test1/mp3.3%20P4%20MT1.mp3')),
 
-(@mt_li_785_990_4_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Part%204%20Short%20Talks%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_785_990_4_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_785_990_4_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test1/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%204%20Short%20Talks%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_li_785_990_4_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 2
-(@mt_li_785_990_4_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_4_2, 'MiniTest 2 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test2/mp3.1%20P4%20MT2.mp3')),
 
-(@mt_li_785_990_4_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_4_2, 'MiniTest 2 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test2/mp3.2%20P4%20MT2.mp3')),
 
-(@mt_li_785_990_4_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_4_2, 'MiniTest 2 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test2/mp3.3%20P4%20MT2.mp3')),
 
-(@mt_li_785_990_4_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test2/%C4%90%E1%BB%81/Thi%20Online_%20Part%204%20Short%20Talks%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_785_990_4_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_785_990_4_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test2/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%204%20Short%20Talks%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_li_785_990_4_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 3
-(@mt_li_785_990_4_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_4_3, 'MiniTest 3 - Audio 1', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test3/mp3.1%20P4%20MT3.mp3')),
 
-(@mt_li_785_990_4_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_4_3, 'MiniTest 3 - Audio 2', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test3/mp3.2%20P4%20MT3.mp3')),
 
-(@mt_li_785_990_4_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public', 
+(@mt_li_785_990_4_3, 'MiniTest 3 - Audio 3', 'MP3', 'audio/mpeg', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test3/mp3.3%20P4%20MT3.mp3')),
 
-(@mt_li_785_990_4_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test3/%C4%90%E1%BB%81/Thi%20Online_%20Part%204%20Short%20Talks%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_li_785_990_4_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_li_785_990_4_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%204.%20Short%20Talks/MiniTest/Test3/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Part%204%20Short%20Talks%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf'));
+(@mt_li_785_990_4_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- =========================
 -- 4) KHÓA READING (@kh_reading_785_990)
@@ -1298,25 +1298,25 @@ SET @mt_re_785_990_1_1 := LAST_INSERT_ID(); SET @mt_re_785_990_1_2 := @mt_re_785
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
-(@mt_re_785_990_1_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20danh%2C%20%C4%91%E1%BB%99ng%20t%E1%BB%AB%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_re_785_990_1_1, 'MiniTest 1 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_re_785_990_1_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/MiniTest/Test1/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20danh%2C%20%C4%91%E1%BB%99ng%20t%E1%BB%AB%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
+(@mt_re_785_990_1_1, 'MiniTest 1 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 2
-(@mt_re_785_990_1_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/MiniTest/Test2/%C4%90%E1%BB%81/Thi%20Online_%20Ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20danh%2C%20%C4%91%E1%BB%99ng%20t%E1%BB%AB%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_re_785_990_1_2, 'MiniTest 2 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_re_785_990_1_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/MiniTest/Test2/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20danh%2C%20%C4%91%E1%BB%99ng%20t%E1%BB%AB%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_re_785_990_1_2, 'MiniTest 2 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 3
-(@mt_re_785_990_1_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/MiniTest/Test3/%C4%90%E1%BB%81/Thi%20Online_%20Ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20danh%2C%20%C4%91%E1%BB%99ng%20t%E1%BB%AB%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_re_785_990_1_3, 'MiniTest 3 - Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_re_785_990_1_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%205%E2%80%936.%20Incomplete%20Sentences/MiniTest/Test3/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20danh%2C%20%C4%91%E1%BB%99ng%20t%E1%BB%AB%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf'));
+(@mt_re_785_990_1_3, 'MiniTest 3 - Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- Chương 2: PART 7: Vocabulary & Reading Comprehension (@ch_re_785_990_2)
 INSERT INTO CHUONG_MINITEST
@@ -1328,28 +1328,28 @@ SET @mt_re_785_990_2_1 := LAST_INSERT_ID(); SET @mt_re_785_990_2_2 := @mt_re_785
 
 INSERT INTO MINITEST_TAILIEU (maMT, tenTL, loai, mime_type, visibility, public_url) VALUES
 -- MiniTest 1
-(@mt_re_785_990_2_1, 'Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20E-%20mail_Letter_Fax%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_re_785_990_2_1, 'Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_re_785_990_2_1, 'Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/MiniTest/Test1/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20E-%20mail_Letter_Fax%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_re_785_990_2_1, 'Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 2
-(@mt_re_785_990_2_2, 'Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/MiniTest/Test2/%C4%90%E1%BB%81/Thi%20Online_%20Ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20Memo%20_Notice%20_Announcement%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_re_785_990_2_2, 'Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_re_785_990_2_2, 'Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/MiniTest/Test2/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20Memo%20_Notice%20_Announcement%20(%C4%90%E1%BB%81%20s%E1%BB%91%2003).pdf')),
+(@mt_re_785_990_2_2, 'Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
 -- MiniTest 3
-(@mt_re_785_990_2_3, 'Đề',    'PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/MiniTest/Test3/%C4%90%E1%BB%81/Thi%20Online_%20Ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20Article%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf')),
+(@mt_re_785_990_2_3, 'Đề',    'PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf')),
 
-(@mt_re_785_990_2_3, 'Đáp án','PDF', 'application/pdf', 'public', 
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%207.%20Vocabulary%20%26%20Reading%20Comprehension%20Practice/MiniTest/Test3/%C4%90%C3%A1p%20%C3%A1n/%C4%90A%20Thi%20Online_%20Ch%E1%BB%A7%20%C4%91i%E1%BB%83m%20Article%20(%C4%90%E1%BB%81%20s%E1%BB%91%2002).pdf'));
+(@mt_re_785_990_2_3, 'Đáp án','PDF', 'application/pdf', 'public',
+CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/PART%201.%20Photographs/MiniTest/Test1/%C4%90%E1%BB%81/Thi%20Online_%20Luy%E1%BB%87n%20t%E1%BA%ADp%20b%E1%BB%99%20c%C3%A2u%20h%E1%BB%8Fi%20tr%E1%BB%8Dng%20%C4%91i%E1%BB%83m%20Part%201%20(%C4%90%E1%BB%81%20s%E1%BB%91%2001).pdf'));
 
 -- =========================================================
--- 11) FINAL TEST — KHÓA NÓI - VIẾT 
+-- 11) FINAL TEST — KHÓA NÓI - VIẾT
 -- =========================================================
 -- =========================
 -- Band 405-600
@@ -1361,10 +1361,10 @@ VALUES (@kh_speaking_405_600, 'Final', 'Final Test - Speaking', 45, NULL);
 SET @test_sp_405_600 := LAST_INSERT_ID();
 
 INSERT INTO TEST_TAILIEU (maTest, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@test_sp_405_600, 'Final - Speaking - Đề 1', 'PDF', 'application/pdf', 'public', 
+(@test_sp_405_600, 'Final - Speaking - Đề 1', 'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/FinalTest/DeSpeaking1.pdf')),
 
-(@test_sp_405_600, 'Final - Speaking - Đề 2', 'PDF', 'application/pdf', 'public', 
+(@test_sp_405_600, 'Final - Speaking - Đề 2', 'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/FinalTest/DeSpeaking2.pdf'));
 
 -- 2) KHÓA WRITING (@kh_writing_405_600)
@@ -1374,10 +1374,10 @@ VALUES (@kh_writing_405_600, 'Final', 'Final Test - Writing', 45, NULL);
 SET @test_wr_405_600 := LAST_INSERT_ID();
 
 INSERT INTO TEST_TAILIEU (maTest, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@test_wr_405_600, 'Final - Writing  - Đề 1', 'PDF', 'application/pdf', 'public', 
+(@test_wr_405_600, 'Final - Writing  - Đề 1', 'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/FinalTest/DeWritting1.pdf')),
 
-(@test_wr_405_600, 'Final - Writing  - Đề 2', 'PDF', 'application/pdf', 'public', 
+(@test_wr_405_600, 'Final - Writing  - Đề 2', 'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/FinalTest/DeWritting2.pdf'));
 
 -- 3) KHÓA LISTENING (@kh_listening_405_600)
@@ -1387,19 +1387,19 @@ VALUES (@kh_listening_405_600, 'Final', 'Final Test - Listening', 45, NULL);
 SET @test_li_405_600 := LAST_INSERT_ID();
 
 INSERT INTO TEST_TAILIEU (maTest, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@test_li_405_600, 'Final - Audio 1',  'MP3', 'audio/mpeg',      'public', 
+(@test_li_405_600, 'Final - Audio 1',  'MP3', 'audio/mpeg',      'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/Audio/Part%201.mp3')),
 
-(@test_li_405_600, 'Final - Audio 2',  'MP3', 'audio/mpeg',      'public', 
+(@test_li_405_600, 'Final - Audio 2',  'MP3', 'audio/mpeg',      'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/Audio/Part%202.mp3')),
 
-(@test_li_405_600, 'Final - Audio 3',  'MP3', 'audio/mpeg',      'public', 
+(@test_li_405_600, 'Final - Audio 3',  'MP3', 'audio/mpeg',      'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/Audio/Part%203.mp3')),
 
-(@test_li_405_600, 'Final - Đề',     'PDF', 'application/pdf', 'public', 
+(@test_li_405_600, 'Final - Đề',     'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/De/DE19.pdf')),
 
-(@test_li_405_600, 'Final - Đáp án', 'PDF', 'application/pdf', 'public', 
+(@test_li_405_600, 'Final - Đáp án', 'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/DapAn/DA19.pdf'));
 
 -- 4) KHÓA READING (@kh_reading_405_600)
@@ -1409,10 +1409,10 @@ VALUES (@kh_reading_405_600, 'Final', 'Final Test - Reading', 75, NULL);
 SET @test_re_405_600 := LAST_INSERT_ID();
 
 INSERT INTO TEST_TAILIEU (maTest, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@test_re_405_600, 'Final - Đề',     'PDF', 'application/pdf', 'public', 
+(@test_re_405_600, 'Final - Đề',     'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/De/DE19.pdf')),
 
-(@test_re_405_600, 'Final - Đáp án', 'PDF', 'application/pdf', 'public', 
+(@test_re_405_600, 'Final - Đáp án', 'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/DapAn/DA19.pdf'));
 
 -- =========================
@@ -1425,10 +1425,10 @@ VALUES (@kh_speaking_605_780, 'Final', 'Final Test - Speaking', 45, NULL);
 SET @test_sp_605_780 := LAST_INSERT_ID();
 
 INSERT INTO TEST_TAILIEU (maTest, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@test_sp_605_780, 'Final - Speaking - Đề 1', 'PDF', 'application/pdf', 'public', 
+(@test_sp_605_780, 'Final - Speaking - Đề 1', 'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/FinalTest/DeSpeaking1.pdf')),
 
-(@test_sp_605_780, 'Final - Speaking - Đề 2', 'PDF', 'application/pdf', 'public', 
+(@test_sp_605_780, 'Final - Speaking - Đề 2', 'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/FinalTest/DeSpeaking2.pdf'));
 
 -- 2) KHÓA WRITING (@kh_writing_605_780)
@@ -1438,10 +1438,10 @@ VALUES (@kh_writing_605_780, 'Final', 'Final Test - Writing', 45, NULL);
 SET @test_wr_605_780 := LAST_INSERT_ID();
 
 INSERT INTO TEST_TAILIEU (maTest, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@test_wr_605_780, 'Final - Writing  - Đề 1', 'PDF', 'application/pdf', 'public', 
+(@test_wr_605_780, 'Final - Writing  - Đề 1', 'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/FinalTest/DeWritting1.pdf')),
 
-(@test_wr_605_780, 'Final - Writing  - Đề 2', 'PDF', 'application/pdf', 'public', 
+(@test_wr_605_780, 'Final - Writing  - Đề 2', 'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/FinalTest/DeWritting2.pdf'));
 
 -- 3) KHÓA LISTENING (@kh_listening_605_780)
@@ -1451,19 +1451,19 @@ VALUES (@kh_listening_605_780, 'Final', 'Final Test - Listening', 45, NULL);
 SET @test_li_605_780 := LAST_INSERT_ID();
 
 INSERT INTO TEST_TAILIEU (maTest, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@test_li_605_780, 'Final - Audio 1',  'MP3', 'audio/mpeg',      'public', 
+(@test_li_605_780, 'Final - Audio 1',  'MP3', 'audio/mpeg',      'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/Audio/Part%201.mp3')),
 
-(@test_li_605_780, 'Final - Audio 2',  'MP3', 'audio/mpeg',      'public', 
+(@test_li_605_780, 'Final - Audio 2',  'MP3', 'audio/mpeg',      'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/Audio/Part%202.mp3')),
 
-(@test_li_605_780, 'Final - Audio 3',  'MP3', 'audio/mpeg',      'public', 
+(@test_li_605_780, 'Final - Audio 3',  'MP3', 'audio/mpeg',      'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/Audio/Part%203.mp3')),
 
-(@test_li_605_780, 'Final - Đề',     'PDF', 'application/pdf', 'public', 
+(@test_li_605_780, 'Final - Đề',     'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/De/DE19.pdf')),
 
-(@test_li_605_780, 'Final - Đáp án', 'PDF', 'application/pdf', 'public', 
+(@test_li_605_780, 'Final - Đáp án', 'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/DapAn/DA19.pdf'));
 
 -- 4) KHÓA READING (@kh_reading_605_780)
@@ -1473,10 +1473,10 @@ VALUES (@kh_reading_605_780, 'Final', 'Final Test - Reading', 75, NULL);
 SET @test_re_605_780 := LAST_INSERT_ID();
 
 INSERT INTO TEST_TAILIEU (maTest, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@test_re_605_780, 'Final - Đề',     'PDF', 'application/pdf', 'public', 
+(@test_re_605_780, 'Final - Đề',     'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/De/DE19.pdf')),
 
-(@test_re_605_780, 'Final - Đáp án', 'PDF', 'application/pdf', 'public', 
+(@test_re_605_780, 'Final - Đáp án', 'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/DapAn/DA19.pdf'));
 
 -- =========================
@@ -1489,10 +1489,10 @@ VALUES (@kh_speaking_785_990, 'Final', 'Final Test - Speaking', 45, NULL);
 SET @test_sp_785_990 := LAST_INSERT_ID();
 
 INSERT INTO TEST_TAILIEU (maTest, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@test_sp_785_990, 'Final - Speaking - Đề 1', 'PDF', 'application/pdf', 'public', 
+(@test_sp_785_990, 'Final - Speaking - Đề 1', 'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/FinalTest/DeSpeaking1.pdf')),
 
-(@test_sp_785_990, 'Final - Speaking - Đề 2', 'PDF', 'application/pdf', 'public', 
+(@test_sp_785_990, 'Final - Speaking - Đề 2', 'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/FinalTest/DeSpeaking2.pdf'));
 
 -- 2) KHÓA WRITING (@kh_writing_785_990)
@@ -1502,10 +1502,10 @@ VALUES (@kh_writing_785_990, 'Final', 'Final Test - Writing', 45, NULL);
 SET @test_wr_785_990 := LAST_INSERT_ID();
 
 INSERT INTO TEST_TAILIEU (maTest, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@test_wr_785_990, 'Final - Writing  - Đề 1', 'PDF', 'application/pdf', 'public', 
+(@test_wr_785_990, 'Final - Writing  - Đề 1', 'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/FinalTest/DeWritting1.pdf')),
 
-(@test_wr_785_990, 'Final - Writing  - Đề 2', 'PDF', 'application/pdf', 'public', 
+(@test_wr_785_990, 'Final - Writing  - Đề 2', 'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/FinalTest/DeWritting2.pdf'));
 
 -- 3) KHÓA LISTENING (@kh_listening_785_990)
@@ -1515,19 +1515,19 @@ VALUES (@kh_listening_785_990, 'Final', 'Final Test - Listening', 45, NULL);
 SET @test_li_785_990 := LAST_INSERT_ID();
 
 INSERT INTO TEST_TAILIEU (maTest, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@test_li_785_990, 'Final - Audio 1',  'MP3', 'audio/mpeg',      'public', 
+(@test_li_785_990, 'Final - Audio 1',  'MP3', 'audio/mpeg',      'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/Audio/Part%201.mp3')),
 
-(@test_li_785_990, 'Final - Audio 2',  'MP3', 'audio/mpeg',      'public', 
+(@test_li_785_990, 'Final - Audio 2',  'MP3', 'audio/mpeg',      'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/Audio/Part%202.mp3')),
 
-(@test_li_785_990, 'Final - Audio 3',  'MP3', 'audio/mpeg',      'public', 
+(@test_li_785_990, 'Final - Audio 3',  'MP3', 'audio/mpeg',      'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/Audio/Part%203.mp3')),
 
-(@test_li_785_990, 'Final - Đề',     'PDF', 'application/pdf', 'public', 
+(@test_li_785_990, 'Final - Đề',     'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/De/DE19.pdf')),
 
-(@test_li_785_990, 'Final - Đáp án', 'PDF', 'application/pdf', 'public', 
+(@test_li_785_990, 'Final - Đáp án', 'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/DapAn/DA19.pdf'));
 
 -- 4) KHÓA READING (@kh_reading_785_990)
@@ -1537,10 +1537,10 @@ VALUES (@kh_reading_785_990, 'Final', 'Final Test - Reading', 75, NULL);
 SET @test_re_785_990 := LAST_INSERT_ID();
 
 INSERT INTO TEST_TAILIEU (maTest, tenTL, loai, mime_type, visibility, public_url) VALUES
-(@test_re_785_990, 'Final - Đề',     'PDF', 'application/pdf', 'public', 
+(@test_re_785_990, 'Final - Đề',     'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/De/DE19.pdf')),
 
-(@test_re_785_990, 'Final - Đáp án', 'PDF', 'application/pdf', 'public', 
+(@test_re_785_990, 'Final - Đáp án', 'PDF', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%8Dc)/FINAL%20TEST/DapAn/DA19.pdf'));
 
 COMMIT;
