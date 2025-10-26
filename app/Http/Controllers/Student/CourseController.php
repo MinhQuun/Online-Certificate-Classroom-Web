@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Support\Cart\StudentCart;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -12,11 +13,14 @@ class CourseController extends Controller
     {
         $q = trim((string)$request->get('q'));
         $courses = Course::published()
+            ->with('category')
             ->when($q, fn($query) => $query->where('tenKH', 'like', "%$q%"))
             ->orderByDesc('created_at')
             ->paginate(12);
 
-        return view('Student.course-index', compact('courses', 'q'));
+        $cartIds = StudentCart::ids();
+
+        return view('Student.course-index', compact('courses', 'q', 'cartIds'));
     }
 
     public function show(string $slug)
@@ -39,6 +43,8 @@ class CourseController extends Controller
             ])
             ->firstOrFail();
 
-        return view('Student.course-show', compact('course'));
+        $isInCart = StudentCart::has($course->maKH);
+
+        return view('Student.course-show', compact('course', 'isInCart'));
     }
 }

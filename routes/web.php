@@ -39,6 +39,8 @@ use App\Http\Controllers\Teacher\ChapterController;
 use App\Http\Controllers\Student\CourseController as StudentCourseController;
 use App\Http\Controllers\Student\ForgotPasswordController;
 use App\Http\Controllers\Student\LessonController as StudentLessonController;
+use App\Http\Controllers\Student\CartController as StudentCartController;
+use App\Http\Controllers\Student\CheckoutController;
 
 // =====================
 // Public (Student-facing)
@@ -56,6 +58,23 @@ Route::get('/lessons/{maBH}',   [StudentLessonController::class,  'show'])->name
 Route::redirect('/student/courses', '/');
 Route::get('/student/courses/{slug}', fn ($slug)   => redirect()->route('student.courses.show', $slug));
 Route::get('/student/lessons/{maBH}', fn ($maBH)   => redirect()->route('student.lessons.show', $maBH));
+
+// Giỏ hàng & thanh toán
+Route::prefix('cart')
+    ->name('student.cart.')
+    ->group(function () {
+        Route::get('/', [StudentCartController::class, 'index'])->name('index');
+        Route::post('/', [StudentCartController::class, 'store'])->name('store');
+        Route::delete('/{course}', [StudentCartController::class, 'destroy'])->name('destroy');
+    });
+
+Route::post('/cart/checkout', [CheckoutController::class, 'start'])->name('student.checkout.start');
+Route::get('/checkout', [CheckoutController::class, 'index'])
+    ->middleware('auth')
+    ->name('student.checkout.index');
+Route::post('/checkout/complete', [CheckoutController::class, 'complete'])
+    ->middleware('auth')
+    ->name('student.checkout.complete');
 
 
 /*

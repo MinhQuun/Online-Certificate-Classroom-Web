@@ -95,56 +95,69 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    border-radius: 24px;
-    border: 1px solid rgba(226, 232, 240, 0.9);
-    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 90%);
-    box-shadow: var(--shadow-md, 0 18px 36px rgba(15, 23, 42, 0.07));
+    border-radius: 26px;
+    border: 1px solid rgba(226, 232, 240, 0.65);
+    background: radial-gradient(circle at top, #f9fbff 0%, #ffffff 55%, #f7f9ff 100%);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+    padding: 20px;
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .course-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
     border-color: rgba(37, 99, 235, 0.35);
-    box-shadow: var(--shadow-lg, 0 24px 48px rgba(15, 23, 42, 0.12));
+    box-shadow: 0 30px 60px rgba(37, 99, 235, 0.16);
 }
 
 .course-card__thumb {
     display: block;
-    margin: 16px 16px 0;
     border-radius: 22px;
     overflow: hidden;
-    height: 200px;
+    height: 230px;
     position: relative;
     background: #eef2ff;
+    margin-bottom: 18px;
 }
 
 .course-card__thumb img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
-    transition: transform 0.35s ease, filter 0.35s ease;
+    object-position: center;
+    transition: transform 0.35s ease;
 }
 
 .course-card:hover .course-card__thumb img {
-    transform: scale(1.05);
-    filter: saturate(1.05);
+    transform: scale(1.04);
+}
+
+.course-card__badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.86);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
 }
 
 .course-card__body {
-    padding: 20px 22px 26px;
     display: flex;
     flex-direction: column;
     gap: 14px;
     flex: 1;
 }
 
-.course-card__eyebrow {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
+.course-card__tagline {
+    margin: 0;
+    font-size: 13px;
+    letter-spacing: 0.02em;
     color: var(--color-muted);
-    font-weight: 700;
+    text-transform: uppercase;
+    font-weight: 600;
 }
 
 .course-card__body h3 {
@@ -165,25 +178,18 @@
     min-height: 2.6em;
 }
 
-.course-card__meta-row {
-    display: flex;
+.course-card__chips {
+    display: inline-flex;
+    gap: 8px;
     flex-wrap: wrap;
-    gap: 10px;
-    font-size: 13px;
-    color: var(--color-muted);
 }
 
-.course-card__meta-row span {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+.course-card__chips span {
     padding: 6px 12px;
     border-radius: 999px;
-    background: rgba(37, 99, 235, 0.08);
-    font-weight: 500;
-}
-
-.course-card__meta-row i {
+    font-size: 13px;
+    font-weight: 600;
+    background: rgba(37, 99, 235, 0.12);
     color: var(--color-accent);
 }
 
@@ -192,18 +198,30 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 14px;
+    gap: 16px;
     flex-wrap: wrap;
 }
 
-.course-card__price {
-    font-weight: 700;
+.course-card__price-block {
+    background: rgba(15, 23, 42, 0.04);
+    border-radius: 18px;
+    padding: 10px 18px;
+    display: flex;
+    flex-direction: column;
+    min-width: 170px;
+}
+
+.course-card__price-block small {
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+    margin-bottom: 4px;
+}
+
+.course-card__price-block strong {
     font-size: 20px;
     color: var(--color-accent);
-    background: rgba(37, 99, 235, 0.12);
-    padding: 8px 16px;
-    border-radius: 16px;
-    border: 1px solid rgba(37, 99, 235, 0.2);
 }
 
 .course-card__cta {
@@ -232,18 +250,12 @@
 }
 /* Responsive */
 @media (max-width: 640px) {
+    .course-card {
+        padding: 16px;
+    }
+
     .course-card__thumb {
-        margin: 12px 12px 0;
-        height: 180px;
-    }
-
-    .course-card__body {
-        padding: 18px;
-        gap: 12px;
-    }
-
-    .course-card__excerpt {
-        min-height: auto;
+        height: 190px;
     }
 
     .course-card__footer {
@@ -251,7 +263,7 @@
         align-items: stretch;
     }
 
-    .course-card__price,
+    .course-card__price-block,
     .course-card__cta {
         width: 100%;
         text-align: center;
@@ -260,11 +272,7 @@
 
 @media (min-width: 641px) and (max-width: 1024px) {
     .course-card__thumb {
-        height: 190px;
-    }
-
-    .course-card__body {
-        gap: 12px;
+        height: 210px;
     }
 
     .course-card__excerpt {

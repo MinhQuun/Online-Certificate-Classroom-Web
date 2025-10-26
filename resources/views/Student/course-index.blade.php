@@ -1,4 +1,4 @@
-@extends('layouts.student')
+﻿@extends('layouts.student')
 
 @section('title', 'Trang chủ')
 
@@ -7,7 +7,7 @@
         $pageStyle = 'css/Student/pages-courses.css';
         $heroBanners = [
             ['file' => 'Assets/Banner/banner1.png', 'alt' => 'Không gian học chứng chỉ trực tuyến hiện đại'],
-            ['file' => 'Assets/Banner/banner2.png', 'alt' => 'Lộ trình học tập cá nhân hoá'],
+            ['file' => 'Assets/Banner/banner2.png', 'alt' => 'Lộ trình học tập cá nhân hóa'],
             ['file' => 'Assets/Banner/banner3.png', 'alt' => 'Cộng đồng mentor đồng hành'],
         ];
     @endphp
@@ -68,35 +68,32 @@
 
                 @foreach ($courses as $course)
                     @php
-                        $startDate = $course->start_date_label;
+                        $categoryName = optional($course->category)->tenDanhMuc ?? 'Chương trình nổi bật';
+                        $inCart = in_array($course->maKH, $cartIds ?? [], true);
                     @endphp
                     <article class="course-card">
-                        <div class="course-card__media">
-                            <a href="{{ route('student.courses.show', $course->slug) }}" class="course-card__thumb">
-                                <img src="{{ $course->cover_image_url }}" alt="{{ $course->tenKH }}">
-                            </a>
-
-                            <div class="course-card__actions">
-                                <a href="{{ route('student.courses.show', $course->slug) }}" class="btn-action btn-action--primary">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M2 2H3.5L4.5 4H14L12 10H5L3 2H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <circle cx="6" cy="13" r="1" fill="currentColor"/>
-                                        <circle cx="11" cy="13" r="1" fill="currentColor"/>
-                                    </svg>
-                                    Mua Ngay
-                                </a>
-                                <a href="{{ route('student.courses.show', $course->slug) }}" class="btn-action btn-action--secondary">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M8 3C4.5 3 2 8 2 8C2 8 4.5 13 8 13C11.5 13 14 8 14 8C14 8 11.5 3 8 3Z" stroke="currentColor" stroke-width="1.5"/>
-                                        <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/>
-                                    </svg>
-                                    Chi tiết
-                                </a>
-                            </div>
-                        </div>
+                        <a href="{{ route('student.courses.show', $course->slug) }}" class="course-card__thumb">
+                            <img src="{{ $course->cover_image_url }}" alt="{{ $course->tenKH }}" loading="lazy">
+                            <span class="course-card__badge">{{ $categoryName }}</span>
+                        </a>
                         <div class="course-card__body">
                             <h3><a href="{{ route('student.courses.show', $course->slug) }}">{{ $course->tenKH }}</a></h3>
-                            <span class="course-card__price">{{ number_format((float) $course->hocPhi, 0, ',', '.') }} VNĐ</span>
+                            <div class="course-card__footer">
+                                <div class="course-card__price-block">
+                                    <strong>{{ number_format((float) $course->hocPhi, 0, ',', '.') }} VNĐ</strong>
+                                </div>
+                                <form method="post" action="{{ route('student.cart.store') }}">
+                                    @csrf
+                                    <input type="hidden" name="course_id" value="{{ $course->maKH }}">
+                                    <button
+                                        type="submit"
+                                        class="course-card__cta"
+                                        @if($inCart) disabled aria-disabled="true" @endif
+                                    >
+                                        {{ $inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng' }}
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </article>
                 @endforeach
@@ -116,4 +113,3 @@
 @push('scripts')
     <script src="{{ asset('js/Student/hero-banner.js') }}" defer></script>
 @endpush
-

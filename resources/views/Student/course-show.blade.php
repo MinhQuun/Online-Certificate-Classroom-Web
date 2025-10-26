@@ -193,9 +193,21 @@
                 <!-- Pricing Card -->
                 <div class="course-sidebar__card">
                     <div class="course-sidebar__price">{{ number_format((float) $course->hocPhi, 0, ',', '.') }}₫</div>
-                    <a class="btn btn--primary" href="#" style="text-align: center; padding: 16px 24px; font-weight: 700; font-size: 16px; border-radius: 12px;">
-                        🚀 Đăng ký ngay
-                    </a>
+                    <form method="post" action="{{ route('student.cart.store') }}" class="course-sidebar__cta">
+                        @csrf
+                        <input type="hidden" name="course_id" value="{{ $course->maKH }}">
+                        <button
+                            type="submit"
+                            class="btn btn--primary"
+                            style="text-align: center; padding: 16px 24px; font-weight: 700; font-size: 16px; border-radius: 12px;"
+                            @if($isInCart) disabled aria-disabled="true" @endif
+                        >
+                            {{ $isInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng' }}
+                        </button>
+                    </form>
+                    @if($isInCart)
+                        <a class="course-sidebar__link" href="{{ route('student.cart.index') }}">Đến giỏ hàng</a>
+                    @endif
                     <ul class="course-sidebar__list">
                         <li>Tài liệu định dạng sẵn</li>
                         <li>Mini test từng chương</li>

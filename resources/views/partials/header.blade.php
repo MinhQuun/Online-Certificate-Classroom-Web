@@ -101,8 +101,11 @@
                 </div>
             @endauth
 
-            <a href="#cart" class="header-icon" aria-label="Giỏ hàng">
+            <a href="{{ route('student.cart.index') }}" class="header-icon header-icon--cart" aria-label="Giỏ hàng">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4a1 1 0 0 0-1 1v1H3.5a1 1 0 1 0 0 2H4l1.4 8.4A2.5 2.5 0 0 0 7.86 19H18.5a1 1 0 0 0 0-2H7.86a.5.5 0 0 1-.49-.41L7.24 16h9.63a2 2 0 0 0 1.97-1.64l1-5A2 2 0 0 0 17.89 7H6V5a1 1 0 0 0-1-1Zm3 16a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm8 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z"/></svg>
+                @if(($studentCartCount ?? 0) > 0)
+                    <span class="header-icon__badge">{{ $studentCartCount }}</span>
+                @endif
             </a>
 
             <button class="header-toggle" type="button" data-header-toggle aria-expanded="false" aria-label="Mở menu">

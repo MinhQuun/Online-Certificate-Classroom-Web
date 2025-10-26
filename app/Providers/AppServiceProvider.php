@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Category;
+use App\Support\Cart\StudentCart;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -33,7 +34,10 @@ class AppServiceProvider extends ServiceProvider
                 $categories = collect();
             }
 
-            $view->with('studentNavCategories', $categories);
+            $view->with([
+                'studentNavCategories' => $categories,
+                'studentCartCount' => StudentCart::count(),
+            ]);
         });
     }
 }
