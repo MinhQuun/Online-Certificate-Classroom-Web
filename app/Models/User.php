@@ -91,18 +91,32 @@ class User extends Authenticatable
 
     public function assignRole(string $roleId): void
     {
-        if (!$this->exists) {
-            return;
-        }
+        if (!$this->exists) return;
 
+        // 1) Ghi vào bảng pivot
         DB::table('QUYEN_NGUOIDUNG')->updateOrInsert(
-            [
-                'maND' => $this->getKey(),
-                'maQuyen' => $roleId,
-            ],
+            ['maND' => $this->getKey(), 'maQuyen' => $roleId],
             []
         );
 
-        $this->forceFill(['vaiTro' => $roleId])->save();
+        // 2) Map mã quyền -> ENUM của cột vaiTro
+        $roleEnum = $this->mapRoleIdToEnum($roleId); // "0003" -> "GIANG_VIEN"
+
+        if ($roleEnum !== null) {
+            $this->forceFill(['vaiTro' => $roleEnum])->save();
+        }
+    }
+
+    /** Map mã quyền (ID) sang giá trị ENUM của cột vaiTro */
+    protected function mapRoleIdToEnum(string $roleId): ?string
+    {
+        // CẬP NHẬT map này theo dữ liệu bảng Role của bạn
+        $map = [
+            '0001' => 'ADMIN',
+            '0002' => 'GIAO_VU',
+            '0003' => 'GIANG_VIEN',
+            '0004' => 'HOC_VIEN',
+        ];
+        return $map[$roleId] ?? null;
     }
 }
