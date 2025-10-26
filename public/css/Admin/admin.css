@@ -61,7 +61,7 @@
 
 .admin-sidebar {
     position: sticky;
-    top: 0; 
+    top: 0;
     height: calc(100vh - 56px);
     background: linear-gradient(180deg, #fffdf9, #fffaf5);
     border-right: 1px solid var(--card-brd);
@@ -280,7 +280,6 @@
     border-radius: 16px;
 }
 
-
 /* ===================== Pagination ===================== */
 .pagination {
     gap: 6px;
@@ -339,4 +338,3 @@
         display: block;
     }
 }
-

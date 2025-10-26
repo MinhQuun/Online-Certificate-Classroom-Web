@@ -1,49 +1,59 @@
+/* ================== Theme tokens (đồng bộ với trang Khóa học) ================== */
 :root {
     --bg-sky-1: #f1f7fb;
     --bg-sky-2: #eef6f7;
-    --card: #ffffff;
+    --card: #fff;
     --card-brd: #d7e6ee;
     --text: #23323a;
     --muted: #617481;
     --teal: #1aa3a3;
     --blue: #3a86ff;
     --indigo: #5e60ce;
-    --shadow: 0 16px 32px rgba(37, 103, 131, 0.12);
+    /* thêm để dùng border hover giống dashboard */
+    --wheat: #5e60ce;
+    --shadow: 0 16px 32px rgba(37, 103, 131, 0.14);
 }
 
+/* ================== Header section ================== */
 .page-header .kicker {
     display: inline-block;
     font-size: 0.72rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    padding: 6px 12px;
+    padding: 6px 10px;
     border-radius: 999px;
     background: rgba(26, 163, 163, 0.12);
     border: 1px solid var(--card-brd);
     color: var(--muted);
 }
-
 .page-header .title {
-    margin: 10px 0 5px;
+    margin: 10px 0 4px;
     font-weight: 800;
     line-height: 1.1;
-    font-size: clamp(26px, 4vw, 34px);
+    font-size: clamp(26px, 4.2vw, 34px);
     background: linear-gradient(90deg, var(--indigo), var(--blue), var(--teal));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
 }
-
 .page-header .muted {
     color: var(--muted);
 }
 
+/* ================== Validation block ================== */
 .validation-errors {
     border-radius: 14px;
     border: 1px solid rgba(237, 66, 69, 0.25);
     box-shadow: 0 12px 28px rgba(237, 66, 69, 0.18);
 }
 
+/* ================== Stats cards (Dashboard-style) ==================
+   Các card thống kê ở trang Danh mục sẽ ăn style giống stat-card trong dashboard:
+   - bo góc 18px
+   - shadow, viền mảnh
+   - hover nhấc card + nền ivory
+   - số lớn tô gradient
+*/
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -51,70 +61,91 @@
 }
 
 .stats-card {
-    background: linear-gradient(180deg, #f9feff, #f4fbfd);
+    width: 100%;
+    min-height: 140px;
+    padding: 20px;
+    border-radius: 18px;
+    background: var(--card);
     border: 1px solid var(--card-brd);
-    border-radius: 16px;
-    padding: 18px 20px;
     box-shadow: var(--shadow);
+
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 8px;
+
+    transition: transform 0.25s, box-shadow 0.25s, background 0.25s,
+        border-color 0.25s;
 }
 
+.stats-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(180deg, #fff, #fffaf5);
+    border-color: var(--wheat);
+}
+
+/* Nhãn (giống phần .t trong dashboard) */
 .stats-label {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    line-height: 1.3;
     color: var(--muted);
     letter-spacing: 0.02em;
     text-transform: uppercase;
+    white-space: nowrap;
 }
 
+/* Giá trị số (giống phần .n trong dashboard: to, đậm, gradient chữ) */
 .stats-value {
-    font-size: clamp(24px, 3.2vw, 32px);
-    font-weight: 800;
-    color: var(--text);
+    font-weight: 900;
+    line-height: 1.2;
+    font-size: clamp(2rem, 3.5vw, 2.6rem);
+    background: linear-gradient(90deg, var(--blue), var(--teal));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
+/* ================== Filter card ================== */
 .categories-filter {
     border: 1px solid var(--card-brd);
     background: var(--card);
     border-radius: 16px;
     box-shadow: var(--shadow);
 }
-
-.categories-filter .form-control {
-    border-radius: 12px;
+.categories-filter .form-control,
+.categories-filter .form-select {
+    border-radius: 10px;
     border-color: var(--card-brd);
 }
-
 .categories-filter .btn-outline-primary {
     border-radius: 999px;
     border-color: #b9d2ff;
     color: var(--blue);
     background: #f0f6ff;
-    transition: all 0.25s ease;
+    transition: all 0.25s;
 }
-
 .categories-filter .btn-outline-primary:hover {
     background: linear-gradient(135deg, var(--blue), var(--teal));
-    color: #ffffff;
+    color: #fff;
     border-color: transparent;
     transform: translateY(-2px);
-    box-shadow: 0 8px 18px rgba(58, 134, 255, 0.18);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
-
 .categories-filter .btn-outline-secondary {
     border-radius: 999px;
     border-color: var(--card-brd);
-    color: var(--text);
     background: #f7fbfd;
-    transition: all 0.25s ease;
+    color: var(--text);
+    transition: all 0.25s;
 }
-
 .categories-filter .btn-outline-secondary:hover {
     background: #eef6fb;
     transform: translateY(-2px);
 }
 
+/* ================== Card & table wrapper ================== */
 .card {
     border-radius: 16px;
     border: 1px solid var(--card-brd);
@@ -122,30 +153,37 @@
     box-shadow: var(--shadow);
     overflow: hidden;
 }
-
 .card-header {
     background: linear-gradient(180deg, #f9feff, #f4fbfd);
     border-bottom: 1px solid var(--card-brd);
 }
 
+/* Nút "Thêm mới" giống trang Khóa học */
 .card .btn.btn-primary {
     border-radius: 999px;
     background: linear-gradient(135deg, var(--indigo), var(--blue));
     border: none;
-    box-shadow: 0 12px 20px rgba(58, 134, 255, 0.22);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    box-shadow: 0 10px 18px rgba(58, 134, 255, 0.22);
+    transition: transform 0.25s, box-shadow 0.25s, filter 0.25s;
 }
-
 .card .btn.btn-primary:hover {
     transform: translateY(-2px);
-    filter: brightness(1.03);
+    filter: brightness(1.02);
 }
 
+/* ================== Bảng danh mục (đồng bộ với bảng Khóa học) ================== */
 .table-fixed {
     table-layout: fixed;
     width: 100%;
 }
+.table-fixed th,
+.table-fixed td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
+/* header bảng */
 .categories-table thead th {
     background: linear-gradient(180deg, #f7fbff, #f2f8fd);
     border-bottom: 1px solid var(--card-brd);
@@ -156,31 +194,33 @@
     letter-spacing: 0.06em;
 }
 
+/* viền ô */
 .categories-table td,
 .categories-table th {
     vertical-align: middle;
     border-color: #e6eff5;
 }
 
+/* hover hàng */
 .categories-table tbody tr {
-    transition: background 0.2s ease;
+    transition: background 0.2s;
 }
-
 .categories-table tbody tr:hover {
     background: #f9feff;
 }
 
+/* ================== Ô "Tên danh mục" ==================
+   KHÔNG display:flex trực tiếp trên <td> để tránh bể border/table-row.
+*/
 .category-cell {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
 }
-
 .category-name strong {
     font-weight: 700;
     color: var(--text);
 }
-
 .category-icon {
     display: inline-flex;
     align-items: center;
@@ -188,7 +228,6 @@
     font-size: 0.85rem;
     color: var(--muted);
 }
-
 .category-icon i {
     width: 24px;
     height: 24px;
@@ -199,6 +238,7 @@
     color: var(--blue);
 }
 
+/* ================== Badges ================== */
 .badge {
     border-radius: 999px;
     font-weight: 600;
@@ -206,68 +246,81 @@
     font-size: 0.82rem;
     letter-spacing: 0.02em;
 }
-
-.bg-soft-primary {
-    background: rgba(58, 134, 255, 0.12);
-    color: #2057c8;
-    border: 1px solid rgba(58, 134, 255, 0.24);
+.badge.text-bg-primary {
+    background: linear-gradient(135deg, var(--blue), var(--indigo)) !important;
+    color: #fff !important;
+}
+.badge.text-bg-success {
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+    color: #fff !important;
 }
 
-.bg-soft-success {
-    background: rgba(46, 204, 113, 0.12);
-    color: #1a7f4c;
-    border: 1px solid rgba(46, 204, 113, 0.24);
-}
-
+/* ================== Cột thao tác: nút Sửa / Xóa ================== */
 .td-actions {
-    display: inline-flex;
-    gap: 8px;
+    display: flex;
     justify-content: flex-end;
-    flex-wrap: wrap;
+    gap: 6px;
+    white-space: nowrap;
+    align-items: center;
+}
+.td-actions .action-btn {
+    padding: 0.25rem 0.5rem;
+    line-height: 1.1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 32px;
 }
 
-.action-btn {
+/* Nút mềm xanh (Sửa) */
+.btn-primary-soft {
+    background: rgba(58, 134, 255, 0.09);
+    border: 1px solid rgba(58, 134, 255, 0.2);
+    color: var(--blue);
     border-radius: 10px;
-    padding: 6px 12px;
-    transition: all 0.2s ease;
+    padding: 6px 10px;
+    transition: all 0.2s;
 }
-
-.action-btn:hover {
+.btn-primary-soft:hover {
+    background: linear-gradient(135deg, var(--blue), var(--teal));
+    color: #fff;
+    border-color: transparent;
     transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(58, 134, 255, 0.18);
+    box-shadow: 0 6px 14px rgba(58, 134, 255, 0.22);
 }
 
+/* Nút mềm đỏ (Xóa) */
 .btn-danger-soft {
     background: rgba(237, 66, 69, 0.08);
     border: 1px solid rgba(237, 66, 69, 0.22);
     color: #d64545;
     border-radius: 10px;
-    padding: 6px 12px;
-    transition: all 0.2s ease;
+    padding: 6px 10px;
+    transition: all 0.2s;
 }
-
 .btn-danger-soft:hover {
     background: #ffeded;
     border-color: rgba(237, 66, 69, 0.35);
     transform: translateY(-2px);
 }
 
+/* ================== Pagination footer ================== */
 .card-footer {
     background: #f7fbff;
     border-top: 1px solid var(--card-brd);
 }
 
+/* ================== Modal (Thêm / Chỉnh sửa danh mục) ================== */
 .modal-content {
     border-radius: 18px;
     border: 1px solid var(--card-brd);
     box-shadow: var(--shadow);
 }
-
 .modal-header {
     border-bottom: 1px solid var(--card-brd);
     background: linear-gradient(180deg, #f9feff, #f4fbfd);
 }
-
 .modal-title {
     font-weight: 800;
     background: linear-gradient(90deg, var(--indigo), var(--blue));
@@ -275,43 +328,46 @@
     background-clip: text;
     color: transparent;
 }
-
 .modal-body .form-label {
     font-weight: 600;
     color: var(--muted);
 }
-
-.modal-body .form-control {
+.modal-body .form-control,
+.modal-body .form-select,
+.modal-body textarea {
     border-radius: 12px;
     border-color: var(--card-brd);
 }
-
 .modal-body .form-text {
     font-size: 0.8rem;
     color: var(--muted);
 }
-
 .modal-footer .btn-secondary {
     border-radius: 999px;
     background: #f2f8fd;
     border: 1px solid var(--card-brd);
     color: var(--text);
 }
-
 .modal-footer .btn-primary {
     border-radius: 999px;
     background: linear-gradient(135deg, var(--indigo), var(--blue));
     border: none;
 }
 
-@media (max-width: 992px) {
+/* ================== Responsive ================== */
+@media (max-width: 1200px) {
     .td-actions {
-        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 4px;
     }
 }
-
 @media (max-width: 768px) {
     .table-responsive {
         overflow-x: auto;
+    }
+
+    /* Khi mở modal trên mobile, ẩn filter cho đỡ chật */
+    .modal-open .categories-filter {
+        visibility: hidden;
     }
 }

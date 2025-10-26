@@ -120,18 +120,18 @@
                             <code>{{ $category->slug }}</code>
                         </td>
                         <td>
-                            <span class="badge bg-soft-primary">
+                            <span class="badge text-bg-primary">
                                 {{ number_format($category->courses_count) }}
                             </span>
                         </td>
                         <td>
-                            <span class="badge bg-soft-success">
+                            <span class="badge text-bg-success">
                                 {{ number_format($category->published_courses_count) }}
                             </span>
                         </td>
                         <td class="text-end td-actions">
                             <button
-                                class="btn btn-light btn-sm action-btn"
+                                class="btn btn-primary-soft btn-sm action-btn"
                                 data-bs-toggle="modal"
                                 data-bs-target="#modalEdit"
                                 data-id="{{ $category->maDanhMuc }}"
@@ -140,7 +140,7 @@
                                 data-icon="{{ $category->icon }}"
                                 data-action="{{ route('admin.categories.update', $category) }}"
                             >
-                                <i class="bi bi-pencil-square"></i> Sửa
+                                <i class="bi bi-pencil me-1"></i>
                             </button>
                             <form
                                 action="{{ route('admin.categories.destroy', $category) }}"
@@ -153,7 +153,7 @@
                                 @csrf
                                 @method('delete')
                                 <button type="submit" class="btn btn-danger-soft btn-sm action-btn">
-                                    <i class="bi bi-trash"></i> Xóa
+                                    <i class="bi bi-trash me-1"></i>
                                 </button>
                             </form>
                         </td>
