@@ -97,10 +97,16 @@
     height: 100%;
     border-radius: 26px;
     border: 1px solid rgba(226, 232, 240, 0.65);
-    background: radial-gradient(circle at top, #f9fbff 0%, #ffffff 55%, #f7f9ff 100%);
+    background: radial-gradient(
+        circle at top,
+        #f9fbff 0%,
+        #ffffff 55%,
+        #f7f9ff 100%
+    );
     box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
     padding: 20px;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease,
+        border-color 0.25s ease;
 }
 
 .course-card:hover {
@@ -113,7 +119,7 @@
     display: block;
     border-radius: 22px;
     overflow: hidden;
-    height: 230px;
+    aspect-ratio: 16 / 9;
     position: relative;
     background: #eef2ff;
     margin-bottom: 18px;
@@ -131,17 +137,40 @@
     transform: scale(1.04);
 }
 
-.course-card__badge {
-    position: absolute;
-    top: 16px;
-    left: 16px;
+/* === CHIP DANH MỤC  === */
+.course-card__category {
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Màu xám mặc định */
+.chip--category {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     padding: 6px 14px;
     border-radius: 999px;
-    background: rgba(15, 23, 42, 0.86);
-    color: #fff;
-    font-size: 13px;
-    font-weight: 600;
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    /* XÁM NHẠT */
+    background: rgba(100, 116, 139, 0.12); /* slate-500/12 */
+    color: #475569; /* slate-600 */
+    border: 1px solid rgba(100, 116, 139, 0.25);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+    transition: all 0.25s ease;
+}
+
+/* HOVER – XÁM ĐẬM + nổi lên */
+.course-card:hover .chip--category {
+    background: #475569; /* slate-600 */
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(71, 86, 105, 0.28);
 }
 
 .course-card__body {
@@ -162,13 +191,16 @@
 
 .course-card__body h3 {
     margin: 0;
-    font-size: 20px;
+    font-size: 19px;
     line-height: 1.4;
     color: var(--color-text);
+    min-height: 2.8em;
 }
 
 .course-card__body h3 a {
     color: inherit;
+    display: block;
+    text-align: center;
 }
 
 .course-card__excerpt {
@@ -197,7 +229,7 @@
     margin-top: auto;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: 16px;
     flex-wrap: wrap;
 }
@@ -209,6 +241,7 @@
     display: flex;
     flex-direction: column;
     min-width: 170px;
+    text-align: center;
 }
 
 .course-card__price-block small {
@@ -277,5 +310,13 @@
 
     .course-card__excerpt {
         min-height: 2.2em;
+    }
+}
+
+/* === CHIP DANH MỤC  === */
+@media (max-width: 640px) {
+    .chip--category {
+        font-size: 11px;
+        padding: 5px 12px;
     }
 }

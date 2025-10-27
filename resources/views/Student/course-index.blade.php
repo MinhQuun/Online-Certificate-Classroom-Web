@@ -57,8 +57,13 @@
     <section class="section">
         <div class="oc-container">
             <div class="section__header">
-                <h2>Khóa học đang mở</h2>
-                <p>Lộ trình rõ ràng, tài nguyên phong phú và bài kiểm tra cuối kỳ giúp bạn tự tin đạt mục tiêu chứng chỉ.</p>
+                @if (isset($currentCategory) && $currentCategory)
+                    <h2>{{ $currentCategory->tenDanhMuc }}</h2>
+                    <p>Khám phá các khóa học nổi bật thuộc chuyên đề {{ $currentCategory->tenDanhMuc }}.</p>
+                @else
+                    <h2>Tất cả khóa học</h2>
+                    <p>Lộ trình rõ ràng, tài nguyên phong phú và bài kiểm tra cuối kỳ giúp bạn tự tin đạt mục tiêu chứng chỉ.</p>
+                @endif
             </div>
 
             <div class="card-grid">
@@ -72,9 +77,11 @@
                         $inCart = in_array($course->maKH, $cartIds ?? [], true);
                     @endphp
                     <article class="course-card">
+                        <div class="course-card__category">
+                            <span class="chip chip--category">{{ $categoryName }}</span>
+                        </div>
                         <a href="{{ route('student.courses.show', $course->slug) }}" class="course-card__thumb">
                             <img src="{{ $course->cover_image_url }}" alt="{{ $course->tenKH }}" loading="lazy">
-                            <span class="course-card__badge">{{ $categoryName }}</span>
                         </a>
                         <div class="course-card__body">
                             <h3><a href="{{ route('student.courses.show', $course->slug) }}">{{ $course->tenKH }}</a></h3>

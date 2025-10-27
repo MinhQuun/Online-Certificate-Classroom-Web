@@ -154,24 +154,8 @@
     height: calc(100% + 16px);
 }
 
-.dropdown-category-trigger {
-    width: 100%;
-    text-align: left;
-    border: 1px solid transparent;
-    border-radius: 10px;
-    background: transparent;
-    padding: 10px 14px;
-    font-size: 14px;
-    color: var(--color-muted);
-    cursor: pointer;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    position: relative;
-    z-index: 10; /* Đảm bảo trigger nằm trên subdropdown */
-}
+/* ===== KHỐI DROPDOWN-CATEGORY-TRIGGER ĐẦU TIÊN ĐÃ BỊ XÓA BỎ ===== */
+/* (Nó bị trùng lặp với khối bên dưới) */
 
 .dropdown-category-trigger:hover,
 .dropdown-category-trigger:focus {
@@ -204,8 +188,10 @@
     border-radius: 10px;
     background: transparent;
     padding: 10px 14px;
-    font-size: 14px;
+
+    font-size: 15px;
     line-height: 1.4;
+
     color: var(--color-muted);
     cursor: pointer;
     transition: var(--transition);
@@ -221,7 +207,7 @@
     overflow: hidden; /* cắt phần dư */
     text-overflow: ellipsis; /* thêm "..." nếu quá dài */
 
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 500;
     color: var(--color-text);
     line-height: 1.4;
@@ -276,7 +262,7 @@
     gap: 8px;
     padding: 8px 0;
     color: var(--color-muted);
-    font-size: 14px;
+    font-size: 15px;
 }
 
 .subdropdown-panel a::before {

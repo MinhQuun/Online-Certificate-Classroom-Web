@@ -24,12 +24,23 @@
 
                     <div id="menu-categories" class="dropdown-panel" data-dropdown-panel role="menu" aria-label="Danh mục">
                         <ul class="dropdown-categories">
+                            <li class="dropdown-category-item">
+                                <a href="{{ route('student.courses.index') }}" class="dropdown-category-trigger">
+                                    <span>Tất cả khóa học</span>
+                                </a>
+                            </li>
                             @foreach($categories as $cat)
                                 <li class="dropdown-category-item" data-subdropdown>
-                                    <button class="dropdown-category-trigger" data-subdropdown-trigger aria-expanded="false" aria-haspopup="true">
+                                    <a href="{{ route('student.courses.index', ['category' => $cat->slug]) }}"
+                                        class="dropdown-category-trigger"
+                                        data-subdropdown-trigger
+                                        aria-expanded="false"
+                                        aria-haspopup="true"
+                                        role="button"
+                                    >
                                         <span>{{ $cat->tenDanhMuc }}</span>
                                         <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
-                                    </button>
+                                    </a>
 
                                     <div class="subdropdown-panel" data-subdropdown-panel role="menu" aria-label="Khóa học {{ $cat->tenDanhMuc }}">
                                         <h4 class="subdropdown-title">{{ $cat->tenDanhMuc }}</h4>
