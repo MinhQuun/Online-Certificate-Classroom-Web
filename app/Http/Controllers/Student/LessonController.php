@@ -59,11 +59,11 @@ class LessonController extends Controller
             $isFreePreview = $firstLesson && ($lesson->maBH === $firstLesson->maBH);
 
             if (!$isFreePreview) {
-                // Redirect back to course page and trigger proper modal
-                $prompt = $isAuthenticated ? 'enroll' : 'auth';
                 return redirect()->route('student.courses.show', [
-                    'slug' => $course->slug,
-                    'prompt' => $prompt,
+                    'slug'        => $course->slug,
+                    'prompt'      => 'locked',
+                    'locked'      => 'lesson',
+                    'lesson_id'   => $lesson->maBH,
                 ]);
             }
         }

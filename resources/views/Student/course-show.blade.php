@@ -21,6 +21,12 @@
         $firstChapter = $course->chapters->sortBy('thuTu')->first();
         $firstLesson = optional($firstChapter)->lessons->sortBy('thuTu')->first();
         $firstMiniTest = optional($firstChapter)->miniTests->sortBy('thuTu')->first();
+
+        $lockedPrompt = request()->query('prompt');
+        $lockedTarget = request()->query('locked');
+        $lockedLessonId = (int) request()->query('lesson_id');
+        $freeLessonId = $firstLesson?->maBH;
+        $freeMiniTestId = $firstMiniTest?->maMT;
     @endphp
 
     <!-- Hero Section -->
@@ -52,11 +58,32 @@
     </section>
 
     <!-- Access Flags for client gating -->
-    <div id="courseAccessFlags" data-authenticated="{{ $isAuthenticated ? '1' : '0' }}" data-enrolled="{{ $isEnrolled ? '1' : '0' }}" hidden></div>
+    <div
+        id="courseAccessFlags"
+        data-authenticated="{{ $isAuthenticated ? '1' : '0' }}"
+        data-enrolled="{{ $isEnrolled ? '1' : '0' }}"
+        data-free-lesson="{{ $freeLessonId ?? '' }}"
+        data-free-minitest="{{ $freeMiniTestId ?? '' }}"
+        data-locked-prompt="{{ $lockedPrompt ?? '' }}"
+        data-locked-target="{{ $lockedTarget ?? '' }}"
+        data-locked-lesson="{{ $lockedLessonId ?: '' }}"
+        hidden>
+    </div>
 
     <!-- Main Content -->
     <section class="section">
         <div class="oc-container course-layout">
+            @if (!$isEnrolled)
+                <div id="lockedNotice" class="course-locked-notice" role="alert" hidden>
+                    <div class="course-locked-notice__content">
+                        <strong>Khóa học chưa được kích hoạt.</strong>
+                        <span>Bạn cần mua khóa học để mở khóa toàn bộ tài nguyên.</span>
+                    </div>
+                    <button type="button" class="course-locked-notice__close" aria-label="Đóng thông báo">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
             <!-- Course Content -->
             <div class="course-layout__main">
                 <div class="section__header">
@@ -88,12 +115,18 @@
                                             @php
                                                 $lessonTypeKey = preg_replace('/[^a-z0-9]+/', '-', strtolower($lesson->loai)) ?: 'default';
                                                 $isFreeLesson = $firstLesson && $lesson->maBH === $firstLesson->maBH;
-                                                $labelClass = $isFreeLesson ? 'label--free' : 'label--paid';
-                                                $labelText = $isFreeLesson ? 'Free' : 'Paid';
+
+                                                if ($isEnrolled) {
+                                                    $labelClass = 'label--unlocked';
+                                                    $labelText = 'Unlocked';
+                                                } else {
+                                                    $labelClass = $isFreeLesson ? 'label--free' : 'label--paid';
+                                                    $labelText = $isFreeLesson ? 'Free' : 'Paid';
+                                                }
                                             @endphp
                                             <li class="lesson-item">
                                                 <span class="label {{ $labelClass }}">{{ $labelText }}</span>
-                                                <a href="{{ route('student.lessons.show', $lesson->maBH) }}">
+                                                <a href="{{ route('student.lessons.show', $lesson->maBH) }}" data-lesson-id="{{ $lesson->maBH }}">
                                                     <div class="lesson-list__meta">
                                                         <span class="lesson-list__eyebrow">Bài {{ $lesson->thuTu }}</span>
                                                         <span class="lesson-list__title">{{ $lesson->tieuDe }}</span>
@@ -116,14 +149,20 @@
                                             @foreach ($chapterMiniTests as $miniTest)
                                                 @php
                                                     // Kiểm tra xem có phải là mini test đầu tiên của chương 1 không
-                                                    $isFreeMiniTest = $firstMiniTest && 
-                                                                     $miniTest->id === $firstMiniTest->id && 
-                                                                     $chapter->thuTu === 1 &&
-                                                                     $miniTest->thuTu === 1;
-                                                    $labelClass = $isFreeMiniTest ? 'label--free' : 'label--paid';
-                                                    $labelText = $isFreeMiniTest ? 'Free' : 'Paid';
+                                                    $isFreeMiniTest = $firstMiniTest &&
+                                                                        $miniTest->maMT === $firstMiniTest->maMT &&
+                                                                        $chapter->thuTu === 1 &&
+                                                                        $miniTest->thuTu === 1;
+
+                                                    if ($isEnrolled) {
+                                                        $labelClass = 'label--unlocked';
+                                                        $labelText = 'Unlocked';
+                                                    } else {
+                                                        $labelClass = $isFreeMiniTest ? 'label--free' : 'label--paid';
+                                                        $labelText = $isFreeMiniTest ? 'Free' : 'Paid';
+                                                    }
                                                 @endphp
-                                                <article class="mini-test-card">
+                                                <article class="mini-test-card" data-mini-test-id="{{ $miniTest->maMT }}">
                                                     <span class="label {{ $labelClass }}">{{ $labelText }}</span>
                                                     <header>
                                                         <span class="chip">Mini test</span>
@@ -179,8 +218,13 @@
                                 <div class="final-tests__grid">
                                     @foreach ($course->finalTests as $test)
                                         @php
-                                            $labelClass = 'label--paid';
-                                            $labelText = 'Paid';
+                                            if ($isEnrolled) {
+                                                $labelClass = 'label--unlocked';
+                                                $labelText = 'Unlocked';
+                                            } else {
+                                                $labelClass = 'label--paid';
+                                                $labelText = 'Paid';
+                                            }
                                         @endphp
                                         <article class="final-test-card">
                                             <span class="label {{ $labelClass }}">{{ $labelText }}</span>
@@ -227,14 +271,16 @@
                         <input type="hidden" name="course_id" value="{{ $course->maKH }}">
                         <button
                             type="submit"
-                            class="btn btn--primary"
+                            class="btn btn--primary {{ $isEnrolled ? 'btn--owned' : '' }}"
                             style="text-align: center; padding: 16px 24px; font-weight: 700; font-size: 16px; border-radius: 12px;"
-                            @if($isInCart) disabled aria-disabled="true" @endif
+                            @if($isEnrolled || $isInCart) disabled aria-disabled="true" @endif
                         >
-                            {{ $isInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng' }}
+                            {{ $isEnrolled ? 'Đã mua' : ($isInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng') }}
                         </button>
                     </form>
-                    @if($isInCart)
+                    @if($isEnrolled)
+                        <p class="course-sidebar__note course-sidebar__note--owned">Bạn đã sở hữu khóa học này. Tất cả tài nguyên đã được mở khóa.</p>
+                    @elseif($isInCart)
                         <a class="course-sidebar__link" href="{{ route('student.cart.index') }}">Đến giỏ hàng</a>
                     @endif
                     <ul class="course-sidebar__list">
@@ -273,6 +319,10 @@
                         @php
                             $categoryName = optional($related->category)->tenDanhMuc ?? 'Chương trình nổi bật';
                             $inCart = in_array($related->maKH, $cartIds ?? [], true);
+                            $isOwned = in_array($related->maKH, $enrolledCourseIds ?? [], true);
+                            if ($isOwned) {
+                                $inCart = false;
+                            }
                         @endphp
                         <article class="course-card">
                             <div class="course-card__category">
@@ -292,10 +342,10 @@
                                         <input type="hidden" name="course_id" value="{{ $related->maKH }}">
                                         <button
                                             type="submit"
-                                            class="course-card__cta"
-                                            @if($inCart) disabled aria-disabled="true" @endif
+                                            class="course-card__cta {{ $isOwned ? 'course-card__cta--owned' : '' }}"
+                                            @if($isOwned || $inCart) disabled aria-disabled="true" @endif
                                         >
-                                            {{ $inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng' }}
+                                            {{ $isOwned ? 'Đã mua' : ($inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng') }}
                                         </button>
                                     </form>
                                 </div>
@@ -323,13 +373,13 @@
             <div class="modal-body">
                 <!-- Course Image & Basic Info -->
                 <div class="d-flex gap-4 mb-4">
-                    <div class="course-image-wrapper" style="min-width: 320px; padding: 0;">  
+                    <div class="course-image-wrapper" style="min-width: 320px; padding: 0;">
                         <!-- Thêm background color và border-radius cho wrapper -->
-                        <img 
-                            src="{{ $course->cover_image_url }}" 
-                            alt="{{ $course->tenKH }}" 
+                        <img
+                            src="{{ $course->cover_image_url }}"
+                            alt="{{ $course->tenKH }}"
                             style="width: 100%; height: 200px; border-radius: 20px; object-fit: contain;"
-                            
+
                         >
                     </div>
                     <div class="flex-grow-1">
@@ -337,7 +387,7 @@
                         <p class="text-muted mb-4" style="font-size: 0.95rem; line-height: 1.6;">
                             {{ Str::limit($course->moTa, 200) }}  <!-- Tăng limit của mô tả -->
                         </p>
-                        
+
                         <div class="d-flex gap-3 mb-4">
                             <div class="px-3 py-2 bg-light rounded-3">
                                 <small class="text-muted d-block mb-1">Thời hạn</small>
@@ -380,6 +430,12 @@
             </div>
             <div class="modal-footer border-top-0">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                @if($isEnrolled)
+                <button type="button" class="btn btn-secondary px-4" disabled aria-disabled="true">
+                    <i class="fas fa-shopping-cart me-2"></i>
+                    Đã mua
+                </button>
+            @else
                 <form method="post" action="{{ route('student.cart.store') }}">
                     @csrf
                     <input type="hidden" name="course_id" value="{{ $course->maKH }}">
@@ -388,6 +444,7 @@
                         Thêm vào giỏ hàng
                     </button>
                 </form>
+            @endif
             </div>
         </div>
     </div>

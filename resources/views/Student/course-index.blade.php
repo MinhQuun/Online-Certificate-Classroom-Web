@@ -1,4 +1,4 @@
-﻿@extends('layouts.student')
+@extends('layouts.student')
 
 @section('title', 'Trang chủ')
 
@@ -75,6 +75,10 @@
                     @php
                         $categoryName = optional($course->category)->tenDanhMuc ?? 'Chương trình nổi bật';
                         $inCart = in_array($course->maKH, $cartIds ?? [], true);
+                        $isEnrolled = in_array($course->maKH, $enrolledCourseIds ?? [], true);
+                        if ($isEnrolled) {
+                            $inCart = false;
+                        }
                     @endphp
                     <article class="course-card">
                         <div class="course-card__category">
@@ -94,10 +98,10 @@
                                     <input type="hidden" name="course_id" value="{{ $course->maKH }}">
                                     <button
                                         type="submit"
-                                        class="course-card__cta"
-                                        @if($inCart) disabled aria-disabled="true" @endif
+                                        class="course-card__cta {{ $isEnrolled ? 'course-card__cta--owned' : '' }}"
+                                        @if($isEnrolled || $inCart) disabled aria-disabled="true" @endif
                                     >
-                                        {{ $inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng' }}
+                                        {{ $isEnrolled ? 'Đã mua' : ($inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng') }}
                                     </button>
                                 </form>
                             </div>

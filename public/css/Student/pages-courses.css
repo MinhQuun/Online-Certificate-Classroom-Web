@@ -274,6 +274,19 @@
     box-shadow: 0 16px 30px rgba(37, 99, 235, 0.4);
 }
 
+.course-card__cta--owned {
+    background: #f8fafc;
+    color: #1f2937;
+    border: 1px solid rgba(148, 163, 184, 0.45);
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+.course-card__cta--owned:hover {
+    transform: none;
+    box-shadow: none;
+}
+
 .course-card__cta[disabled],
 .course-card__cta[aria-disabled="true"] {
     background: rgba(148, 163, 184, 0.4);

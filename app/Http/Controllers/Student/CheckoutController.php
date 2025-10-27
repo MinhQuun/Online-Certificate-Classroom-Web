@@ -9,6 +9,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 
 class CheckoutController extends Controller
@@ -117,6 +119,8 @@ class CheckoutController extends Controller
         $remaining    = array_values(array_diff(StudentCart::ids(), $purchasedIds));
         StudentCart::sync($remaining);
 
+        $this->activateEnrollments($courses);
+
         session()->put(self::SESSION_SUCCESS, [
             'courses' => $courses->map(fn ($course) => [
                 'maKH'           => $course->maKH,
@@ -133,6 +137,63 @@ class CheckoutController extends Controller
         return redirect()
             ->route('student.checkout.index', ['stage' => 3])
             ->with('success', 'Đơn hàng của bạn đã được ghi nhận. Vui lòng hoàn tất bước cuối.');
+    }
+
+    private function activateEnrollments(Collection $courses): void
+    {
+        $userId = Auth::id();
+
+        if (!$userId || $courses->isEmpty()) {
+            return;
+        }
+
+        $student = DB::table('HOCVIEN')->where('maND', $userId)->first();
+
+        if (!$student) {
+            return;
+        }
+
+        $now = Carbon::now();
+
+        DB::transaction(function () use ($courses, $student, $now) {
+            foreach ($courses as $course) {
+                if (!$course) {
+                    continue;
+                }
+
+                $expiresAt = null;
+
+                if (!empty($course->thoiHanNgay)) {
+                    $expiresAt = $now->copy()->addDays((int) $course->thoiHanNgay);
+                }
+
+                $exists = DB::table('HOCVIEN_KHOAHOC')
+                    ->where('maHV', $student->maHV)
+                    ->where('maKH', $course->maKH)
+                    ->exists();
+
+                $payload = [
+                    'trangThai'    => 'ACTIVE',
+                    'activated_at' => $now,
+                    'expires_at'   => $expiresAt,
+                    'updated_at'   => $now,
+                ];
+
+                if ($exists) {
+                    DB::table('HOCVIEN_KHOAHOC')
+                        ->where('maHV', $student->maHV)
+                        ->where('maKH', $course->maKH)
+                        ->update($payload);
+                } else {
+                    DB::table('HOCVIEN_KHOAHOC')->insert(array_merge($payload, [
+                        'maHV'        => $student->maHV,
+                        'maKH'        => $course->maKH,
+                        'ngayNhapHoc' => $now->toDateString(),
+                        'created_at'  => $now,
+                    ]));
+                }
+            }
+        });
     }
 
     private function sanitizeSelection(array $ids): array

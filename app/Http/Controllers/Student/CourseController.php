@@ -35,13 +35,15 @@ class CourseController extends Controller
 
         $courses = $query->orderByDesc('created_at')->paginate(12);
         $cartIds = StudentCart::ids();
+        $enrollment = $this->resolveStudentEnrollment();
 
-        return view('Student.course-index', compact(
-            'courses',
-            'q',
-            'cartIds',
-            'currentCategory'
-        ));
+        return view('Student.course-index', [
+            'courses'            => $courses,
+            'q'                  => $q,
+            'cartIds'            => $cartIds,
+            'currentCategory'    => $currentCategory,
+            'enrolledCourseIds'  => $enrollment['enrolledCourseIds'],
+        ]);
     }
 
     public function show(string $slug)
@@ -66,21 +68,10 @@ class CourseController extends Controller
 
         $isInCart = StudentCart::has($course->maKH);
         $cartIds = StudentCart::ids();
-
-        // Determine auth + enrollment
-        $userId = Auth::id();
-        $isAuthenticated = !empty($userId);
-        $isEnrolled = false;
-
-        if ($isAuthenticated) {
-            $student = DB::table('HOCVIEN')->where('maND', $userId)->first();
-            if ($student) {
-                $isEnrolled = DB::table('HOCVIEN_KHOAHOC')
-                    ->where('maHV', $student->maHV)
-                    ->where('maKH', $course->maKH)
-                    ->exists();
-            }
-        }
+        $enrollment = $this->resolveStudentEnrollment();
+        $enrolledCourseIds = $enrollment['enrolledCourseIds'];
+        $isAuthenticated = $enrollment['isAuthenticated'];
+        $isEnrolled = in_array($course->maKH, $enrolledCourseIds, true);
 
         $relatedCourses = Course::published()
             ->where('maDanhMuc', $course->maDanhMuc)
@@ -97,6 +88,41 @@ class CourseController extends Controller
             'relatedCourses'  => $relatedCourses,
             'isAuthenticated' => $isAuthenticated,
             'isEnrolled'      => $isEnrolled,
+            'enrolledCourseIds' => $enrolledCourseIds,
         ]);
+    }
+
+    private function resolveStudentEnrollment(): array
+    {
+        $result = [
+            'isAuthenticated'   => false,
+            'student'           => null,
+            'enrolledCourseIds' => [],
+        ];
+
+        $userId = Auth::id();
+
+        if (!$userId) {
+            return $result;
+        }
+
+        $result['isAuthenticated'] = true;
+
+        $student = DB::table('HOCVIEN')->where('maND', $userId)->first();
+
+        if (!$student) {
+            return $result;
+        }
+
+        $result['student'] = $student;
+        $ids = DB::table('HOCVIEN_KHOAHOC')
+            ->where('maHV', $student->maHV)
+            ->whereIn('trangThai', ['ACTIVE', 'PENDING'])
+            ->pluck('maKH')
+            ->all();
+
+        $result['enrolledCourseIds'] = array_map('intval', $ids);
+
+        return $result;
     }
 }
