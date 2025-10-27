@@ -299,32 +299,36 @@
     height: 14px;
     border-right: 2.5px solid #3b82f6;
     border-bottom: 2.5px solid #3b82f6;
-    transform: rotate(45deg);
+    transform: rotate(-45deg);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.module.is-open .module__chevron {
-    transform: rotate(-135deg);
+.module.is-open > .module__header .module__chevron {
+    transform: rotate(45deg);
 }
 
 .module__panel {
     display: none;
-    border-top: 1px solid #e2e8f0;
+    overflow: hidden;
 }
 
-.module.is-open .module__panel {
+.module.is-open > .module__panel {
     display: block;
-    animation: slideDown 0.3s ease-out;
+    animation: slideDown 0.4s ease-out forwards;
 }
 
 @keyframes slideDown {
     from {
         opacity: 0;
         max-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
     }
     to {
         opacity: 1;
-        max-height: 2000px;
+        max-height: 2000px; /* Giới hạn cao để tránh overflow */
+        padding-top: initial;
+        padding-bottom: initial;
     }
 }
 
@@ -1431,4 +1435,137 @@
     .locked-resource::after {
         display: none;
     }
+}
+
+/* Styles cho danh sách MiniTest dọc */
+.mini-test-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.mini-test-item {
+    background: #f8faff;
+    border: 1px solid #dbeafe;
+    border-radius: 14px;
+    padding: 16px 20px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.mini-test-item:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.mini-test-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    margin-bottom: 8px;
+}
+
+.mini-test-link .lesson-list__title {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.badge--minitest {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.meta-list--inline {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.meta-list--inline li {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.meta-list--inline li::before {
+    content: "•";
+    color: #94a3b8;
+    font-size: 0.7rem;
+}
+
+.meta-list--inline li:first-child::before {
+    display: none;
+}
+
+/* Kế thừa và điều chỉnh resource list */
+.resource-list--compact {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.resource-list--compact a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #475569;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.resource-list--compact a:hover {
+    background: #f1f5f9;
+    border-color: #bfdbfe;
+}
+
+/* Style cho module nested (MiniTest con) */
+.module--nested {
+    margin-top: 24px;
+    border: none;
+    background: transparent;
+}
+
+.module--nested .module__header {
+    background: #f1f5f9;
+    border-radius: 12px;
+}
+
+.module--nested .module__toggle {
+    padding: 12px 20px;
+}
+
+.module--nested .module__panel {
+    background: #f8fafc;
+    border-radius: 0 0 12px 12px;
+    border: 1px solid #e2e8f0;
+    border-top: none;
+}
+
+.module--nested .module__body {
+    padding: 16px 20px;
+}
+
+.module--nested .module__title {
+    font-size: 18px;
 }

@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     if (!isEnrolled) {
+        // Xử lý lock cho lessons
         document.querySelectorAll("a[data-lesson-id]").forEach((anchor) => {
             const lessonId = anchor.dataset.lessonId || "";
             const isFree = freeLessonId && lessonId === freeLessonId;
@@ -59,13 +60,23 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
-        document.querySelectorAll(".mini-test-card").forEach((card) => {
-            const miniId = card.dataset.miniTestId || "";
+        // Xử lý lock cho MiniTests
+        document.querySelectorAll(".mini-test-item").forEach((item) => {
+            const miniId = item.dataset.miniTestId || "";
             const isFreeMini = freeMiniTestId && miniId === freeMiniTestId;
+            if (isEnrolled || isFreeMini) return;
 
-            card.querySelectorAll(".resource-list a").forEach((link) => {
-                if (isFreeMini) return;
+            // Lock link chính
+            const mainLink = item.querySelector(".mini-test-link");
+            if (mainLink) {
+                mainLink.classList.add("lesson-link--locked");
+                mainLink.addEventListener("click", handleLockedClick, {
+                    passive: false,
+                });
+            }
 
+            // Lock resources
+            item.querySelectorAll(".resource-list a").forEach((link) => {
                 link.classList.add("locked-resource");
                 link.addEventListener("click", handleLockedClick, {
                     passive: false,
@@ -73,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
+        // Lock final test resources
         document
             .querySelectorAll(".final-tests__grid .resource-list a")
             .forEach((link) => {
@@ -82,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             });
 
+        // Highlight locked lesson nếu có
         if (lockedLessonId) {
             const target = document.querySelector(
                 `a[data-lesson-id="${lockedLessonId}"]`
@@ -97,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Xử lý prompt từ URL
     const resolvePrompt = () => {
         if (lockedPrompt) return lockedPrompt;
 

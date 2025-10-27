@@ -96,9 +96,9 @@
                     @php
                         $chapterMiniTests = $chapter->miniTests;
                     @endphp
-                    <article class="module" data-accordion>
+                    <article class="module is-open" data-accordion>
                         <header class="module__header">
-                            <button class="module__toggle" type="button" aria-expanded="false">
+                            <button class="module__toggle" type="button" aria-expanded="true">
                                 <div class="module__info">
                                     <span class="module__eyebrow">Chương {{ $chapter->thuTu }}</span>
                                     <span class="module__title">{{ $chapter->tenChuong }}</span>
@@ -140,60 +140,74 @@
 
                                 <!-- Mini Tests -->
                                 @if ($chapterMiniTests->count())
-                                    <div class="mini-tests">
-                                        <div class="mini-tests__head">
-                                            <h3>📝 Bài kiểm tra nhỏ</h3>
-                                            <span>{{ $chapterMiniTests->count() }} bài</span>
-                                        </div>
-                                        <div class="mini-tests__grid">
-                                            @foreach ($chapterMiniTests as $miniTest)
-                                                @php
-                                                    // Kiểm tra xem có phải là mini test đầu tiên của chương 1 không
-                                                    $isFreeMiniTest = $firstMiniTest &&
-                                                                        $miniTest->maMT === $firstMiniTest->maMT &&
-                                                                        $chapter->thuTu === 1 &&
-                                                                        $miniTest->thuTu === 1;
+                                    <article class="module module--nested" data-accordion style="margin-top: 24px;">
+                                        <header class="module__header">
+                                            <button class="module__toggle" type="button" aria-expanded="false">
+                                                <div class="module__info">
+                                                    <span class="module__title" style="font-size: 18px; font-weight: 700;">📝 MiniTest</span>
+                                                </div>
+                                                <span style="margin-left: auto; margin-right: 16px; background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;">
+                                                    {{ $chapterMiniTests->count() }} bài
+                                                </span>
+                                                <span class="module__chevron" aria-hidden="true"></span>
+                                            </button>
+                                        </header>
+                                        <div class="module__panel">
+                                            <div class="module__body" style="padding: 24px; background: white; border-top: 1px solid #e2e8f0;">
+                                                <!-- Danh sách MiniTests dọc, giống lessons -->
+                                                <ul class="mini-test-list lesson-list--module">
+                                                    @foreach ($chapterMiniTests->sortBy('thuTu') as $miniTest)
+                                                        @php
+                                                            // Kiểm tra xem có phải là mini test đầu tiên của chương 1 không
+                                                            $isFreeMiniTest = $firstMiniTest &&
+                                                                            $miniTest->maMT === $firstMiniTest->maMT &&
+                                                                            $chapter->thuTu === 1 &&
+                                                                            $miniTest->thuTu === 1;
 
-                                                    if ($isEnrolled) {
-                                                        $labelClass = 'label--unlocked';
-                                                        $labelText = 'Unlocked';
-                                                    } else {
-                                                        $labelClass = $isFreeMiniTest ? 'label--free' : 'label--paid';
-                                                        $labelText = $isFreeMiniTest ? 'Free' : 'Paid';
-                                                    }
-                                                @endphp
-                                                <article class="mini-test-card" data-mini-test-id="{{ $miniTest->maMT }}">
-                                                    <span class="label {{ $labelClass }}">{{ $labelText }}</span>
-                                                    <header>
-                                                        <span class="chip">Mini test</span>
-                                                        <h4>{{ $miniTest->title }}</h4>
-                                                    </header>
-                                                    <ul class="meta-list meta-list--inline">
-                                                        <li>Thứ tự {{ $miniTest->thuTu }}</li>
-                                                        <li>{{ $miniTest->time_limit_min }} phút</li>
-                                                        <li>{{ $miniTest->attempts_allowed }} lần làm</li>
-                                                    </ul>
-                                                    <footer>
-                                                        <span>Điểm: {{ $miniTest->max_score }}</span>
-                                                        <span>Trọng số: {{ $miniTest->trongSo }}</span>
-                                                    </footer>
-                                                    @if ($miniTest->materials->count())
-                                                        <div class="resource-list resource-list--compact">
-                                                            @foreach ($miniTest->materials as $resource)
-                                                                @php
-                                                                    $resTypeKey = preg_replace('/[^a-z0-9]+/', '-', strtolower($resource->loai)) ?: 'default';
-                                                                @endphp
-                                                                <a href="{{ $resource->public_url }}" target="_blank" rel="noopener noreferrer">
-                                                                    <span>{{ $resource->tenTL }}</span>
-                                                                    <span class="badge badge--{{ $resTypeKey }}">{{ strtoupper($resource->loai) }}</span>
-                                                                </a>
-                                                            @endforeach
-                                                        </div>
-                                                    @endif
-                                                </article>
-                                            @endforeach
+                                                            if ($isEnrolled) {
+                                                                $labelClass = 'label--unlocked';
+                                                                $labelText = 'Unlocked';
+                                                            } else {
+                                                                $labelClass = $isFreeMiniTest ? 'label--free' : 'label--paid';
+                                                                $labelText = $isFreeMiniTest ? 'Free' : 'Paid';
+                                                            }
+                                                        @endphp
+                                                        <li class="mini-test-item" data-mini-test-id="{{ $miniTest->maMT }}">
+                                                            <span class="label {{ $labelClass }}">{{ $labelText }}</span>
+                                                            <!-- Link chính vào bài test (thay href nếu có route) -->
+                                                            <a href="#" class="mini-test-link">
+                                                                <div class="lesson-list__meta">
+                                                                    <span class="lesson-list__eyebrow">MiniTest {{ $miniTest->thuTu }}</span>
+                                                                    <span class="lesson-list__title">{{ $miniTest->title }}</span>
+                                                                </div>
+                                                                <span class="badge badge--minitest">MINI TEST</span>
+                                                            </a>
+                                                            <!-- Meta details -->
+                                                            <ul class="meta-list meta-list--inline mt-1">
+                                                                <li>{{ $miniTest->time_limit_min }} phút</li>
+                                                                <li>{{ $miniTest->attempts_allowed }} lần làm</li>
+                                                                <li>Điểm: {{ $miniTest->max_score }} (Trọng số: {{ $miniTest->trongSo }})</li>
+                                                            </ul>
+                                                            <!-- Resource list -->
+                                                            @if ($miniTest->materials->count())
+                                                                <div class="resource-list resource-list--compact mt-2">
+                                                                    @foreach ($miniTest->materials as $resource)
+                                                                        @php
+                                                                            $resTypeKey = preg_replace('/[^a-z0-9]+/', '-', strtolower($resource->loai)) ?: 'default';
+                                                                        @endphp
+                                                                        <a href="{{ $resource->public_url }}" target="_blank" rel="noopener noreferrer">
+                                                                            <span>{{ $resource->tenTL }}</span>
+                                                                            <span class="badge badge--{{ $resTypeKey }}">{{ strtoupper($resource->loai) }}</span>
+                                                                        </a>
+                                                                    @endforeach
+                                                                </div>
+                                                            @endif
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </article>
                                 @endif
                             </div>
                         </div>
