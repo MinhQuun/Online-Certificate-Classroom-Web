@@ -120,5 +120,5 @@
 @endpush
 
 @push('scripts')
-    <script src="{{ asset('js/dropdown.js') }}" defer></script>
+    <script src="{{ asset('js/Student/dropdown.js') }}" defer></script>
 @endpush

@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
                     ->with(['courses' => function ($courseQuery) {
                         $courseQuery->published()->orderBy('tenKH');
                     }])
-                    ->orderBy('tenDanhMuc')
+                    ->orderBy('maDanhMuc')
                     ->get();
             } catch (\Throwable $exception) {
                 $categories = collect();

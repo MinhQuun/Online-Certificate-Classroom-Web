@@ -114,8 +114,11 @@
     position: absolute;
     top: calc(100% + 12px);
     left: 0;
-    width: 240px;
-    max-width: min(240px, 94vw);
+
+    min-width: 300px;
+    width: auto;
+    max-width: min(320px, 94vw);
+
     background: var(--color-surface);
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-border);
@@ -186,6 +189,50 @@
 
 .dropdown-category-trigger[aria-expanded="true"] svg {
     transform: rotate(90deg);
+}
+
+/* Chỉnh hàng trong từng item của dropdown cấp 1 */
+.dropdown-category-trigger {
+    display: flex;
+    align-items: flex-start; /* để text và icon thẳng hàng trên cùng */
+    justify-content: space-between;
+    gap: 0.75rem;
+
+    width: 100%;
+    text-align: left;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: transparent;
+    padding: 10px 14px;
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--color-muted);
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    z-index: 10;
+}
+
+/* Phần text bên trái */
+.dropdown-category-trigger > span {
+    flex: 1 1 auto;
+    min-width: 0; /* rất quan trọng cho ellipsis trong flex */
+    white-space: nowrap; /* 1 dòng thôi */
+    overflow: hidden; /* cắt phần dư */
+    text-overflow: ellipsis; /* thêm "..." nếu quá dài */
+
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text);
+    line-height: 1.4;
+}
+
+/* Icon mũi tên ">" bên phải */
+.dropdown-category-trigger > i {
+    flex-shrink: 0;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--color-muted);
 }
 
 .subdropdown-panel {
