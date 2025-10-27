@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Lesson;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LessonController extends Controller
 {
@@ -34,6 +36,37 @@ class LessonController extends Controller
         ])->findOrFail($maBH);
 
         $course = $lesson->chapter->course;
+
+        // Gate: only enrolled users can access lessons except for Lesson 1 of Chapter 1
+        $userId = Auth::id();
+        $isAuthenticated = !empty($userId);
+        $isEnrolled = false;
+
+        if ($isAuthenticated) {
+            $student = DB::table('HOCVIEN')->where('maND', $userId)->first();
+            if ($student) {
+                $isEnrolled = DB::table('HOCVIEN_KHOAHOC')
+                    ->where('maHV', $student->maHV)
+                    ->where('maKH', $course->maKH)
+                    ->exists();
+            }
+        }
+
+        if (!$isEnrolled) {
+            // Find the first lesson of the first chapter as the free preview
+            $firstChapter = $course->chapters->sortBy('thuTu')->first();
+            $firstLesson = $firstChapter?->lessons?->sortBy('thuTu')->first();
+            $isFreePreview = $firstLesson && ($lesson->maBH === $firstLesson->maBH);
+
+            if (!$isFreePreview) {
+                // Redirect back to course page and trigger proper modal
+                $prompt = $isAuthenticated ? 'enroll' : 'auth';
+                return redirect()->route('student.courses.show', [
+                    'slug' => $course->slug,
+                    'prompt' => $prompt,
+                ]);
+            }
+        }
 
         return view('Student.lesson-show', compact('lesson', 'course'));
     }

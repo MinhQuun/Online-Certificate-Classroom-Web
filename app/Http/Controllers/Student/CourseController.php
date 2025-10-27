@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Category;
 use App\Support\Cart\StudentCart;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -63,7 +65,38 @@ class CourseController extends Controller
             ->firstOrFail();
 
         $isInCart = StudentCart::has($course->maKH);
+        $cartIds = StudentCart::ids();
 
-        return view('Student.course-show', compact('course', 'isInCart'));
+        // Determine auth + enrollment
+        $userId = Auth::id();
+        $isAuthenticated = !empty($userId);
+        $isEnrolled = false;
+
+        if ($isAuthenticated) {
+            $student = DB::table('HOCVIEN')->where('maND', $userId)->first();
+            if ($student) {
+                $isEnrolled = DB::table('HOCVIEN_KHOAHOC')
+                    ->where('maHV', $student->maHV)
+                    ->where('maKH', $course->maKH)
+                    ->exists();
+            }
+        }
+
+        $relatedCourses = Course::published()
+            ->where('maDanhMuc', $course->maDanhMuc)
+            ->where('maKH', '!=', $course->maKH)
+            ->with('category')
+            ->orderByDesc('created_at')
+            ->limit(4)
+            ->get();
+
+        return view('Student.course-show', [
+            'course'          => $course,
+            'isInCart'        => $isInCart,
+            'cartIds'         => $cartIds,
+            'relatedCourses'  => $relatedCourses,
+            'isAuthenticated' => $isAuthenticated,
+            'isEnrolled'      => $isEnrolled,
+        ]);
     }
 }

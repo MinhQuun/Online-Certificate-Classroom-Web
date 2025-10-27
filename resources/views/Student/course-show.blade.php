@@ -14,6 +14,8 @@
         $courseCover = $course->cover_image_url;
         $startDate = $course->start_date_label;
         $endDate = $course->end_date_label;
+        $isAuthenticated = isset($isAuthenticated) ? (bool)$isAuthenticated : (bool)Auth::check();
+        $isEnrolled = isset($isEnrolled) ? (bool)$isEnrolled : false;
     @endphp
 
     <!-- Hero Section -->
@@ -43,6 +45,9 @@
             </div>
         </div>
     </section>
+
+    <!-- Access Flags for client gating -->
+    <div id="courseAccessFlags" data-authenticated="{{ $isAuthenticated ? '1' : '0' }}" data-enrolled="{{ $isEnrolled ? '1' : '0' }}" hidden></div>
 
     <!-- Main Content -->
     <section class="section">
@@ -229,5 +234,87 @@
             </aside>
         </div>
     </section>
+
+    <!-- Related Courses Section -->
+    @if ($relatedCourses->count())
+        <section class="section">
+            <div class="oc-container">
+                <div class="section__header">
+                    <h2>Khóa học gợi ý</h2>
+                    <p>Các khóa học khác cùng band "{{ optional($course->category)->tenDanhMuc ?? 'Chưa có danh mục' }}" có thể phù hợp với bạn.</p>
+                </div>
+
+                <div class="card-grid">
+                    @foreach ($relatedCourses as $related)
+                        @php
+                            $categoryName = optional($related->category)->tenDanhMuc ?? 'Chương trình nổi bật';
+                            $inCart = in_array($related->maKH, $cartIds ?? [], true);
+                        @endphp
+                        <article class="course-card">
+                            <div class="course-card__category">
+                                <span class="chip chip--category">{{ $categoryName }}</span>
+                            </div>
+                            <a href="{{ route('student.courses.show', $related->slug) }}" class="course-card__thumb">
+                                <img src="{{ $related->cover_image_url }}" alt="{{ $related->tenKH }}" loading="lazy">
+                            </a>
+                            <div class="course-card__body">
+                                <h3><a href="{{ route('student.courses.show', $related->slug) }}">{{ $related->tenKH }}</a></h3>
+                                <div class="course-card__footer">
+                                    <div class="course-card__price-block">
+                                        <strong>{{ number_format((float) $related->hocPhi, 0, ',', '.') }} VNĐ</strong>
+                                    </div>
+                                    <form method="post" action="{{ route('student.cart.store') }}">
+                                        @csrf
+                                        <input type="hidden" name="course_id" value="{{ $related->maKH }}">
+                                        <button
+                                            type="submit"
+                                            class="course-card__cta"
+                                            @if($inCart) disabled aria-disabled="true" @endif
+                                        >
+                                            {{ $inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng' }}
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
 @endsection
 
+@push('scripts')
+    <script src="{{ asset('js/Student/course-show.js') }}" defer></script>
+
+
+<!-- Enroll Prompt Modal -->
+<div class="modal fade" id="enrollPromptModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Đăng ký để mở khóa nội dung</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex gap-3 align-items-start">
+                    <img src="{{ $course->cover_image_url }}" alt="{{ $course->tenKH }}" style="width: 72px; height: 72px; object-fit: cover; border-radius: 8px;">
+                    <div>
+                        <h6 class="mb-1">{{ $course->tenKH }}</h6>
+                        <p class="mb-2 text-muted" style="font-size: 0.95rem;">Hãy đăng ký khóa học để xem toàn bộ bài học, mini test và tài liệu.</p>
+                        <div><strong>{{ number_format((float) $course->hocPhi, 0, ',', '.') }} VNĐ</strong></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form method="post" action="{{ route('student.cart.store') }}" class="me-auto">
+                    @csrf
+                    <input type="hidden" name="course_id" value="{{ $course->maKH }}">
+                    <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+@endpush
