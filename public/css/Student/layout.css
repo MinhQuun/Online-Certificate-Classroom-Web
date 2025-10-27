@@ -311,10 +311,13 @@
     border-radius: 50%;
     border: none;
     background: rgba(37, 99, 235, 0.12);
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     transition: var(--transition);
+    padding: 0;
+    overflow: hidden;
 }
 
 .header-profile__trigger svg {
@@ -339,10 +342,10 @@
 }
 
 .header-profile__avatar {
-    width: 32px;
-    height: 32px;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 600;
@@ -394,21 +397,63 @@
     word-break: break-word;
 }
 
+.header-profile__nav {
+    display: grid;
+    gap: 6px;
+}
+
 .header-profile__menu a {
-    display: block;
-    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
     border-radius: 10px;
     color: var(--color-text);
     font-weight: 500;
     transition: var(--transition);
 }
 
-.header-profile__menu a + a {
-    margin-top: 6px;
-}
-
 .header-profile__menu a:hover {
     background: rgba(37, 99, 235, 0.08);
+    color: var(--color-accent);
+}
+
+/* Định dạng chung cho icon */
+.header-profile__menu a i,
+.header-profile__logout button i {
+    width: 1.25em; /* Đảm bảo icon chiếm không gian cố định */
+    text-align: center;
+    font-size: 16px;
+    background: linear-gradient(
+        120deg,
+        var(--color-accent),
+        var(--color-accent-soft)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    transition: opacity var(--transition);
+    opacity: 0.9;
+}
+
+.header-profile__menu a:hover i,
+.header-profile__logout button:hover i {
+    opacity: 1;
+}
+
+.header-profile__logout button:hover i {
+    background: linear-gradient(
+        120deg,
+        #ef4444,
+        #f87171
+    ); /* Gradient đỏ khi hover */
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+/* Đổi màu icon (trừ icon logout) khi hover */
+.header-profile__menu a:hover i {
     color: var(--color-accent);
 }
 
@@ -418,20 +463,26 @@
     border: none;
     border-radius: 10px;
     padding: 10px 12px;
-    font-weight: 600;
-    background: linear-gradient(
-        120deg,
-        var(--color-accent),
-        var(--color-accent-soft)
-    );
-    color: #fff;
+    font-weight: 500;
+    background: transparent;
+    color: var(--color-text);
+
     cursor: pointer;
     transition: var(--transition);
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
 }
 
 .header-profile__logout button:hover {
-    filter: brightness(1.05);
-    transform: translateY(-1px);
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--color-accent);
+}
+
+.header-profile__logout button i {
+    color: transparent;
 }
 
 .header-profile.is-open .header-profile__menu {

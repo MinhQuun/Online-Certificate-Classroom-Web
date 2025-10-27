@@ -82,18 +82,61 @@
             </form>
 
             @auth
+                @php
+                    $fullName = Auth::user()->name ?? 'User';
+                    $nameParts = explode(' ', trim($fullName));
+                    $lastName = end($nameParts);
+                    $initial = !empty($lastName) ? mb_substr($lastName, 0, 1) : mb_substr($fullName, 0, 1);
+
+                    if (empty($initial)) { $initial = 'U'; }
+                @endphp
+
                 <div class="header-profile" data-profile>
                     <button type="button" class="header-profile__trigger" data-profile-trigger aria-expanded="false" aria-label="Tài khoản">
-                        <span class="header-profile__avatar">{{ mb_substr(Auth::user()->name ?? 'U', 0, 1) }}</span>
+                        <span class="header-profile__avatar">{{ $initial }}</span>
                     </button>
                     <div class="header-profile__menu" data-profile-menu>
+                        @php
+                            $email = Auth::user()->email;
+                            $emailParts = explode('@', $email);
+                            $localPart = $emailParts[0] ?? '';
+                            $domainPart = '@' . ($emailParts[1] ?? '');
+                        @endphp
                         <div class="header-profile__meta">
                             <strong>{{ Auth::user()->name }}</strong>
-                            <span>{{ Auth::user()->email }}</span>
+                            <div class="header-profile__email">
+                                <span class="email-local">{{ $localPart }}</span>
+                                @if(!empty($domainPart))
+                                    <span class="email-domain">{{ $domainPart }}</span>
+                                @endif
+                            </div>
                         </div>
+
+                        <nav class="header-profile__nav">
+                            <a href="#">
+                                <i class="fa-solid fa-user"></i>
+                                <span> Trang cá nhân</span>
+                            </a>
+                            <a href="#">
+                                <i class="fa-solid fa-book-tanakh"></i>
+                                <span> Khóa học của tôi</span>
+                            </a>
+                            <a href="#">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                <span> Lịch sử đơn hàng</span>
+                            </a>
+                            <a href="#">
+                                <i class="fa-solid fa-download"></i>
+                                <span> Bảo lưu</span>
+                            </a>
+                        </nav>
+
                         <form action="{{ route('logout') }}" method="post" class="header-profile__logout">
                             @csrf
-                            <button type="submit">Đăng xuất</button>
+                            <button type="submit">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                <span>Đăng xuất</span>
+                            </button>
                         </form>
                     </div>
                 </div>
