@@ -16,6 +16,11 @@
         $endDate = $course->end_date_label;
         $isAuthenticated = isset($isAuthenticated) ? (bool)$isAuthenticated : (bool)Auth::check();
         $isEnrolled = isset($isEnrolled) ? (bool)$isEnrolled : false;
+
+        // Identify the first chapter, first lesson, and first mini test for free preview
+        $firstChapter = $course->chapters->sortBy('thuTu')->first();
+        $firstLesson = optional($firstChapter)->lessons->sortBy('thuTu')->first();
+        $firstMiniTest = optional($firstChapter)->miniTests->sortBy('thuTu')->first();
     @endphp
 
     <!-- Hero Section -->
@@ -82,8 +87,12 @@
                                         @foreach ($chapter->lessons as $lesson)
                                             @php
                                                 $lessonTypeKey = preg_replace('/[^a-z0-9]+/', '-', strtolower($lesson->loai)) ?: 'default';
+                                                $isFreeLesson = $firstLesson && $lesson->maBH === $firstLesson->maBH;
+                                                $labelClass = $isFreeLesson ? 'label--free' : 'label--paid';
+                                                $labelText = $isFreeLesson ? 'Free' : 'Paid';
                                             @endphp
-                                            <li>
+                                            <li class="lesson-item">
+                                                <span class="label {{ $labelClass }}">{{ $labelText }}</span>
                                                 <a href="{{ route('student.lessons.show', $lesson->maBH) }}">
                                                     <div class="lesson-list__meta">
                                                         <span class="lesson-list__eyebrow">Bài {{ $lesson->thuTu }}</span>
@@ -105,7 +114,17 @@
                                         </div>
                                         <div class="mini-tests__grid">
                                             @foreach ($chapterMiniTests as $miniTest)
+                                                @php
+                                                    // Kiểm tra xem có phải là mini test đầu tiên của chương 1 không
+                                                    $isFreeMiniTest = $firstMiniTest && 
+                                                                     $miniTest->id === $firstMiniTest->id && 
+                                                                     $chapter->thuTu === 1 &&
+                                                                     $miniTest->thuTu === 1;
+                                                    $labelClass = $isFreeMiniTest ? 'label--free' : 'label--paid';
+                                                    $labelText = $isFreeMiniTest ? 'Free' : 'Paid';
+                                                @endphp
                                                 <article class="mini-test-card">
+                                                    <span class="label {{ $labelClass }}">{{ $labelText }}</span>
                                                     <header>
                                                         <span class="chip">Mini test</span>
                                                         <h4>{{ $miniTest->title }}</h4>
@@ -159,7 +178,12 @@
                                 <p class="muted">Bộ đề tổng hợp giúp đánh giá toàn diện trước khi bước vào kỳ thi chứng chỉ chính thức.</p>
                                 <div class="final-tests__grid">
                                     @foreach ($course->finalTests as $test)
+                                        @php
+                                            $labelClass = 'label--paid';
+                                            $labelText = 'Paid';
+                                        @endphp
                                         <article class="final-test-card">
+                                            <span class="label {{ $labelClass }}">{{ $labelText }}</span>
                                             <header>
                                                 <span class="chip chip--accent">Final test</span>
                                                 <h3>{{ $test->title }}</h3>
@@ -286,35 +310,85 @@
 
 @push('scripts')
     <script src="{{ asset('js/Student/course-show.js') }}" defer></script>
-
+@endpush
 
 <!-- Enroll Prompt Modal -->
 <div class="modal fade" id="enrollPromptModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 800px;">  <!-- Tăng max-width lên 800px -->
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Đăng ký để mở khóa nội dung</h5>
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold">Đăng ký để mở khóa nội dung</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="d-flex gap-3 align-items-start">
-                    <img src="{{ $course->cover_image_url }}" alt="{{ $course->tenKH }}" style="width: 72px; height: 72px; object-fit: cover; border-radius: 8px;">
-                    <div>
-                        <h6 class="mb-1">{{ $course->tenKH }}</h6>
-                        <p class="mb-2 text-muted" style="font-size: 0.95rem;">Hãy đăng ký khóa học để xem toàn bộ bài học, mini test và tài liệu.</p>
-                        <div><strong>{{ number_format((float) $course->hocPhi, 0, ',', '.') }} VNĐ</strong></div>
+                <!-- Course Image & Basic Info -->
+                <div class="d-flex gap-4 mb-4">
+                    <div class="course-image-wrapper" style="min-width: 320px; padding: 0;">  
+                        <!-- Thêm background color và border-radius cho wrapper -->
+                        <img 
+                            src="{{ $course->cover_image_url }}" 
+                            alt="{{ $course->tenKH }}" 
+                            style="width: 100%; height: 200px; border-radius: 20px; object-fit: contain;"
+                            
+                        >
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="fs-5 fw-bold mb-3">{{ $course->tenKH }}</h6>
+                        <p class="text-muted mb-4" style="font-size: 0.95rem; line-height: 1.6;">
+                            {{ Str::limit($course->moTa, 200) }}  <!-- Tăng limit của mô tả -->
+                        </p>
+                        
+                        <div class="d-flex gap-3 mb-4">
+                            <div class="px-3 py-2 bg-light rounded-3">
+                                <small class="text-muted d-block mb-1">Thời hạn</small>
+                                <strong>{{ $course->thoiHanNgay }} ngày</strong>
+                            </div>
+                            <div class="px-3 py-2 bg-light rounded-3">
+                                <small class="text-muted d-block mb-1">Chương học</small>
+                                <strong>{{ $course->chapters->count() }} chương</strong>
+                            </div>
+                        </div>
+
+                        <div class="mb-2">
+                            <strong class="fs-3 text-primary">{{ number_format((float) $course->hocPhi, 0, ',', '.') }} VNĐ</strong>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Course Benefits - Styled better -->
+                <div class="border rounded-4 p-4 bg-light">
+                    <h6 class="fw-bold mb-3">Quyền lợi khi đăng ký khóa học:</h6>
+                    <ul class="list-unstyled mb-0 row row-cols-2">  <!-- Chia 2 cột -->
+                        <li class="d-flex align-items-center gap-2 mb-3 col">
+                            <i class="fas fa-check-circle text-success"></i>
+                            <span>Tài liệu định dạng sẵn</span>
+                        </li>
+                        <li class="d-flex align-items-center gap-2 mb-3 col">
+                            <i class="fas fa-check-circle text-success"></i>
+                            <span>Mini test từng chương</span>
+                        </li>
+                        <li class="d-flex align-items-center gap-2 mb-3 col">
+                            <i class="fas fa-check-circle text-success"></i>
+                            <span>Final test tổng hợp</span>
+                        </li>
+                        <li class="d-flex align-items-center gap-2 col">
+                            <i class="fas fa-check-circle text-success"></i>
+                            <span>Chứng chỉ hoàn thành</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="modal-footer">
-                <form method="post" action="{{ route('student.cart.store') }}" class="me-auto">
+            <div class="modal-footer border-top-0">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                <form method="post" action="{{ route('student.cart.store') }}">
                     @csrf
                     <input type="hidden" name="course_id" value="{{ $course->maKH }}">
-                    <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fas fa-shopping-cart me-2"></i>
+                        Thêm vào giỏ hàng
+                    </button>
                 </form>
-                
             </div>
         </div>
     </div>
 </div>
-@endpush
