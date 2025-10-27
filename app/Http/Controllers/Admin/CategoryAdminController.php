@@ -21,7 +21,7 @@ class CategoryAdminController extends Controller
                     $query->published();
                 },
             ])
-            ->orderBy('tenDanhMuc');
+            ->orderBy('maDanhMuc');
 
         if ($q !== '') {
             $categoriesQuery->where(function ($builder) use ($q) {

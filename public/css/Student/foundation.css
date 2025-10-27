@@ -63,12 +63,56 @@ textarea {
 
 .section__header {
     max-width: 680px;
-    margin-bottom: 32px;
+    margin: 0 auto 32px;
+    text-align: center;
 }
 
 .section__header h2 {
-    margin: 0 0 10px;
+    position: relative;
+    display: inline-block;
+    margin: 0 auto 10px;
+    padding: 0 32px;
     font-size: clamp(26px, 2.7vw, 34px);
+    font-weight: 800;
+    color: var(--color-text);
+    line-height: 1.2;
+    text-align: center;
+    width: fit-content;
+    transition: color 0.3s ease;
+}
+
+.section__header h2::before,
+.section__header h2::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        var(--color-accent),
+        var(--color-accent-soft)
+    );
+    transition: width 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border-radius: 2px;
+    box-shadow: 0 1px 2px rgba(37, 99, 235, 0.2);
+}
+
+.section__header h2::before {
+    left: 0;
+}
+
+.section__header h2::after {
+    right: 0;
+}
+
+.section__header h2:hover::before,
+.section__header h2:hover::after {
+    width: 50px;
+}
+
+.section__header h2:hover {
+    color: var(--color-accent-strong);
 }
 
 .section__header p {
@@ -196,5 +240,18 @@ textarea {
 @media (max-width: 992px) {
     .section {
         padding: 44px 0;
+    }
+}
+
+/* === RESPONSIVE CHO HEADER === */
+@media (max-width: 640px) {
+    .section__header h2 {
+        padding: 0 24px;
+        font-size: clamp(24px, 5vw, 28px);
+    }
+
+    .section__header h2:hover::before,
+    .section__header h2:hover::after {
+        width: 36px;
     }
 }

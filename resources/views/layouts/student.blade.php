@@ -26,6 +26,7 @@
     @endforeach
 
     <link rel="stylesheet" href="{{ asset('css/Student/auth.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/common/toast.css') }}">
 
     @stack('styles')
 </head>

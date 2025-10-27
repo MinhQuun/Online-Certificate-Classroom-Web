@@ -7,13 +7,6 @@
 @endpush
 
 @section('content')
-    <div id="flash-data"
-        data-success="{{ session('success') }}"
-        data-error="{{ session('error') }}"
-        data-info="{{ session('info') }}"
-        data-warning="{{ session('warning') }}">
-    </div>
-
     @if ($errors->any())
         <div class="alert alert-danger validation-errors" role="alert" id="validation-errors">
             <h6 class="mb-2">Vui lòng kiểm tra lại:</h6>

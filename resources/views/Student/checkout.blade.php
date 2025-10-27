@@ -92,13 +92,6 @@
                                 @endforelse
                             </ul>
 
-                            <div class="checkout-coupon">
-                                <label for="coupon-code">Mã khuyến mãi của bạn</label>
-                                <div class="checkout-coupon__input">
-                                    <input type="text" id="coupon-code" placeholder="Nhập mã khuyến mãi" disabled>
-                                    <button type="button" disabled>Áp dụng</button>
-                                </div>
-                            </div>
 
                             <div class="checkout-total">
                                 <span>Tổng thanh toán</span>

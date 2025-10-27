@@ -88,7 +88,8 @@
                                                         @csrf
                                                         @method('delete')
                                                         <button type="submit" class="cart-item__remove">Xóa</button>
-                                                                            </div>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </li>

@@ -7,13 +7,6 @@
 @endpush
 
 @section('content')
-    <div id="flash-data"
-         data-success="{{ session('success') }}"
-         data-error="{{ session('error') }}"
-         data-info="{{ session('info') }}"
-         data-warning="{{ session('warning') }}">
-    </div>
-
     <!-- Header -->
     <section class="page-header">
         <span class="kicker">Giảng viên</span>

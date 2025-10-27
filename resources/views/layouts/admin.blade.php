@@ -11,12 +11,15 @@
     {{-- Bootstrap --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <script src="https://kit.fontawesome.com/cdbcf8b89b.js" crossorigin="anonymous"></script>
 
     {{-- CSS riêng --}}
     <link rel="stylesheet" href="{{ asset('css/Admin/admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/common/toast.css') }}">
     @stack('styles')
 </head>
 <body class="admin-body">
+    @include('partials.flash')
 
     {{-- TOPBAR --}}
     <nav class="admin-topbar navbar navbar-expand-lg">
@@ -166,6 +169,7 @@
         });
     </script>
 
+    <script src="{{ asset('js/Student/flash.js') }}" defer></script>
     @stack('scripts')
 </body>
 </html>

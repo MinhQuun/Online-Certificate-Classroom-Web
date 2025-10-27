@@ -71,7 +71,10 @@ class UserController extends Controller
 
             return redirect()
                 ->to($target)
-                ->with('success', 'Đăng ký thành công!');
+                ->with([
+                    'success_title' => 'Đăng ký thành công!',
+                    'success'       => 'Tài khoản của bạn đã được tạo và phiên đăng nhập được kích hoạt.',
+                ]);
         });
     }
 
@@ -133,20 +136,32 @@ class UserController extends Controller
         );
 
         if ($role === 'student' && $redirect) {
-            return redirect()->to($redirect)->with('success', 'Đăng nhập thành công!');
+            return redirect()->to($redirect)->with([
+                'success_title' => 'Đăng nhập thành công!',
+                'success'       => 'Bạn đã đăng nhập thành công.',
+            ]);
         }
 
         if ($role === 'admin' && Route::has('admin.dashboard')) {
-            return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công!');
+            return redirect()->route('admin.dashboard')->with([
+                'success_title' => 'Đăng nhập thành công!',
+                'success'       => 'Bạn đã đăng nhập thành công.',
+            ]);
         }
 
         if ($role === 'teacher' && Route::has('teacher.dashboard')) {
-            return redirect()->route('teacher.dashboard')->with('success', 'Đăng nhập thành công!');
+            return redirect()->route('teacher.dashboard')->with([
+                'success_title' => 'Đăng nhập thành công!',
+                'success'       => 'Bạn đã đăng nhập thành công.',
+            ]);
         }
 
         return redirect()
             ->intended(route('student.courses.index'))
-            ->with('success', 'Đăng nhập thành công!');
+            ->with([
+                'success_title' => 'Đăng nhập thành công!',
+                'success'       => 'Bạn đã đăng nhập thành công.',
+            ]);
     }
 
     public function logout(Request $request)
@@ -290,4 +305,3 @@ class UserController extends Controller
         return $verified;
     }
 }
-

@@ -3,7 +3,12 @@ const qs = (s, r) => (r || document).querySelector(s);
 const qsa = (s, r) => Array.from((r || document).querySelectorAll(s));
 
 function showToast(message, type = "success", duration = 4200, title) {
-    // Tạo stack nếu chưa có
+    const normalizedType = type === "warn" ? "warning" : type;
+    if (window.flashToast?.push) {
+        window.flashToast.push(message, normalizedType, title, duration);
+        return;
+    }
+
     let stack = document.querySelector(".toast-stack");
     if (!stack) {
         stack = document.createElement("div");
@@ -11,40 +16,38 @@ function showToast(message, type = "success", duration = 4200, title) {
         document.body.appendChild(stack);
     }
 
-    // Tạo thẻ toast-card theo markup của flash.js
     const card = document.createElement("div");
-    card.className = `toast-card ${type}`;
+    card.className = `toast-card is-${normalizedType}`;
     card.dataset.autohide = String(duration);
 
-    // Icon theo type
     const iconMap = {
-        success: '<i class="fas fa-check-circle" aria-hidden="true"></i>',
-        error: '<i class="fas fa-times-circle" aria-hidden="true"></i>',
-        info: '<i class="fas fa-info-circle" aria-hidden="true"></i>',
-        warn: '<i class="fas fa-exclamation-triangle" aria-hidden="true"></i>',
+        success: '<i class="fa-solid fa-circle-check"></i>',
+        error: '<i class="fa-solid fa-circle-exclamation"></i>',
+        warning: '<i class="fa-solid fa-triangle-exclamation"></i>',
+        info: '<i class="fa-solid fa-circle-info"></i>',
     };
+
     const heading =
         title ||
-        (type === "success"
+        (normalizedType === "success"
             ? "Thành công"
-            : type === "error"
+            : normalizedType === "error"
             ? "Lỗi"
-            : type === "warn"
+            : normalizedType === "warning"
             ? "Chú ý"
             : "Thông báo");
 
     card.innerHTML = `
-      <div class="toast-icon">${iconMap[type] || iconMap.info}</div>
-      <div class="toast-content">
-        <strong class="toast-title">${heading}</strong>
-        <div class="toast-message">${message}</div>
-      </div>
-      <button class="toast-close" aria-label="Đóng">&times;</button>
+        <div class="toast-icon">${iconMap[normalizedType] || iconMap.info}</div>
+        <div class="toast-content">
+            <strong>${heading}</strong>
+            <div class="toast-text">${message}</div>
+        </div>
+        <button class="toast-close" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></button>
     `;
 
     stack.appendChild(card);
 
-    // Tự ẩn (fallback nếu flash.js không bắt event cho toast mới)
     const remove = () => {
         card.style.animation = "toast-fade-out .22s ease-in both";
         setTimeout(() => card.remove(), 220);
@@ -52,16 +55,13 @@ function showToast(message, type = "success", duration = 4200, title) {
     const ms = Number(duration || card.dataset.autohide || 4200);
     const timer = setTimeout(remove, ms);
 
-    // Đóng thủ công
-    card.querySelector(".toast-close")?.addEventListener("click", () => {
+    card.querySelector('.toast-close')?.addEventListener('click', () => {
         clearTimeout(timer);
         remove();
     });
 
-    // Hiệu ứng xuất hiện
     card.style.animation = "toast-fade-in .22s ease-out both";
 }
-
 // ===================== Toggle đăng nhập / đăng ký =====================
 (() => {
     const signUpButton = qs("#signUp");

@@ -15,9 +15,11 @@
 
         {{-- CSS riêng cho giảng viên --}}
         <link rel="stylesheet" href="{{ asset('css/Teacher/teacher.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/common/toast.css') }}">
         @stack('styles')
     </head>
     <body class="teacher-body">
+        @include('partials.flash')
         {{-- THANH TRÊN (TOPBAR) --}}
         <nav class="teacher-topbar navbar navbar-expand-lg">
         <div class="container-fluid">
@@ -115,11 +117,6 @@
 
         {{-- KHU VỰC CHÍNH --}}
         <main class="teacher-main">
-            {{-- Flash cho SweetAlert2 --}}
-            <div id="flash-data"
-                data-success="{{ session('success') }}"
-                data-error="{{ session('error') }}"></div>
-
             @yield('content')
         </main>
         </div>
@@ -133,6 +130,7 @@
         });
         </script>
         <script src="{{ asset('js/Teacher/teacher.js') }}"></script>
+        <script src="{{ asset('js/Student/flash.js') }}" defer></script>
         @stack('scripts')
     </body>
 </html>
