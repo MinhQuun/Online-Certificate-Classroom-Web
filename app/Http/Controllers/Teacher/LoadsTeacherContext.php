@@ -34,16 +34,6 @@ trait LoadsTeacherContext
             ->where('lessons.loai', 'assignment')
             ->count();
 
-        $examsTotal = (int) DB::table('TEST')
-            ->whereIn('maKH', $courseIds)
-            ->count();
-
-        $examsWithMaterials = (int) DB::table('TEST')
-            ->join('TEST_TAILIEU', 'TEST.maTest', '=', 'TEST_TAILIEU.maTest')
-            ->whereIn('TEST.maKH', $courseIds)
-            ->distinct('TEST.maTest')
-            ->count('TEST.maTest');
-
         $lowProgress = (int) DB::table('HOCVIEN_KHOAHOC')
             ->whereIn('maKH', $courseIds)
             ->where('progress_percent', '<', 40)
@@ -56,7 +46,6 @@ trait LoadsTeacherContext
 
         return [
             'assignments_pending' => $assignments,
-            'exams_pending'       => max(0, $examsTotal - $examsWithMaterials),
             'low_progress'        => $lowProgress,
             'minitests_active'    => $minitestsActive,
         ];

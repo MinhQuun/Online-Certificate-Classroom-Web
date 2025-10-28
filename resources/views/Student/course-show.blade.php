@@ -213,66 +213,6 @@
                         </div>
                     </article>
                 @endforeach
-
-                <!-- Final Tests -->
-                @if ($course->finalTests->count())
-                    <article class="module" data-accordion>
-                        <header class="module__header">
-                            <button class="module__toggle" type="button" aria-expanded="false">
-                                <div class="module__info">
-                                    <span class="module__eyebrow">Tổng kết</span>
-                                    <span class="module__title">🎯 Bài kiểm tra cuối khóa</span>
-                                </div>
-                                <span class="module__chevron" aria-hidden="true"></span>
-                            </button>
-                        </header>
-                        <div class="module__panel">
-                            <div class="module__body">
-                                <p class="muted">Bộ đề tổng hợp giúp đánh giá toàn diện trước khi bước vào kỳ thi chứng chỉ chính thức.</p>
-                                <div class="final-tests__grid">
-                                    @foreach ($course->finalTests as $test)
-                                        @php
-                                            if ($isEnrolled) {
-                                                $labelClass = 'label--unlocked';
-                                                $labelText = 'Unlocked';
-                                            } else {
-                                                $labelClass = 'label--paid';
-                                                $labelText = 'Paid';
-                                            }
-                                        @endphp
-                                        <article class="final-test-card">
-                                            <span class="label {{ $labelClass }}">{{ $labelText }}</span>
-                                            <header>
-                                                <span class="chip chip--accent">Final test</span>
-                                                <h3>{{ $test->title }}</h3>
-                                            </header>
-                                            <ul class="meta-list meta-list--inline">
-                                                @if ($test->dotTest)
-                                                    <li>Đợt {{ $test->dotTest }}</li>
-                                                @endif
-                                                <li>{{ $test->time_limit_min }} phút</li>
-                                                <li>{{ $test->total_questions }} câu hỏi</li>
-                                            </ul>
-                                            @if ($test->materials->count())
-                                                <div class="resource-list">
-                                                    @foreach ($test->materials as $resource)
-                                                        @php
-                                                            $resTypeKey = preg_replace('/[^a-z0-9]+/', '-', strtolower($resource->loai)) ?: 'default';
-                                                        @endphp
-                                                        <a href="{{ $resource->public_url }}" target="_blank" rel="noopener noreferrer">
-                                                            <span>{{ $resource->tenTL }}</span>
-                                                            <span class="badge badge--{{ $resTypeKey }}">{{ strtoupper($resource->loai) }}</span>
-                                                        </a>
-                                                    @endforeach
-                                                </div>
-                                            @endif
-                                        </article>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                @endif
             </div>
 
             <!-- Sidebar -->

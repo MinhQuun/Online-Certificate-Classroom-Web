@@ -60,9 +60,6 @@ class CourseController extends Controller
                             ->with('materials'),
                     ]);
                 },
-                'finalTests' => fn($testQuery) => $testQuery
-                    ->orderBy('maTest')
-                    ->with('materials'),
             ])
             ->firstOrFail();
 

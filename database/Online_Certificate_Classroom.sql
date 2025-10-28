@@ -68,7 +68,7 @@ CREATE TABLE DANHMUC (
 CREATE TABLE KHOAHOC (
     maKH INT NOT NULL AUTO_INCREMENT,
     maDanhMuc INT NOT NULL,
-    maND INT NOT NULL,               
+    maND INT NOT NULL,
     tenKH VARCHAR(150) NOT NULL,
     slug VARCHAR(150) NOT NULL UNIQUE,
     hocPhi DECIMAL(12,2) NOT NULL,
@@ -140,22 +140,28 @@ CREATE TABLE TAILIEUHOCTAP (
     CONSTRAINT FK_TL_BH FOREIGN KEY (maBH) REFERENCES BAIHOC(maBH) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
-
 -- =========================================================
 -- 4) ENROLL, MINI-TEST (THEO CHƯƠNG) & KẾT QUẢ
 -- =========================================================
 CREATE TABLE HOCVIEN_KHOAHOC (
     maHV INT NOT NULL,
     maKH INT NOT NULL,
+
     ngayNhapHoc DATE,
     trangThai ENUM('PENDING','ACTIVE','EXPIRED') DEFAULT 'ACTIVE',
     activated_at DATETIME,
     expires_at DATETIME,
-    progress_percent TINYINT DEFAULT 0,
-    last_lesson_id INT NULL,
+
+    -- Tiến độ tổng quát của học viên trong khoá
+    progress_percent TINYINT DEFAULT 0,   -- % tiến độ tổng (dashboard)
+    video_progress_percent TINYINT DEFAULT 0 COMMENT '% số bài video đã hoàn tất',
+    avg_minitest_score DECIMAL(5,2) DEFAULT NULL COMMENT 'Điểm TB mini-test các chương',
+
+    last_lesson_id INT NULL,              -- bài học gần nhất mà HV đã học
+
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
     PRIMARY KEY (maHV, maKH),
     KEY IX_HVK_MAHV (maHV),
     KEY IX_HVK_MAKH (maKH),
@@ -171,8 +177,8 @@ CREATE TABLE CHUONG_MINITEST (
     maChuong INT NOT NULL,
     title VARCHAR(150) NOT NULL,
     thuTu INT NOT NULL DEFAULT 1,
-    max_score DECIMAL(5,2) DEFAULT 10.00,
-    trongSo  DECIMAL(5,2) DEFAULT 0.00,
+    max_score DECIMAL(5,2) DEFAULT 10.00,  -- thang điểm
+    trongSo  DECIMAL(5,2) DEFAULT 0.00,    -- trọng số nếu muốn tính tổng kết
     time_limit_min INT,
     attempts_allowed TINYINT DEFAULT 1,
     is_active TINYINT(1) DEFAULT 1,
@@ -202,7 +208,45 @@ CREATE TABLE MINITEST_TAILIEU (
     CONSTRAINT FK_MTTL_MT FOREIGN KEY (maMT) REFERENCES CHUONG_MINITEST(maMT) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE MINITEST_QUESTIONS (
+    maCauHoi INT NOT NULL AUTO_INCREMENT,
+    maMT INT NOT NULL,                         -- tham chiếu tới CHUONG_MINITEST.maMT
+    thuTu INT NOT NULL DEFAULT 1,              -- thứ tự câu hỏi trong mini-test
 
+    loai ENUM(
+        'single_choice',       -- chọn 1 đáp án đúng (MCQ thường gặp)
+        'multiple_choice',     -- chọn nhiều đáp án
+        'true_false',          -- đúng / sai
+        'short_answer'         -- tự luận / gõ câu trả lời ngắn
+    ) DEFAULT 'single_choice',
+
+    noiDungCauHoi TEXT NOT NULL,               -- nội dung câu hỏi
+
+    phuongAnA TEXT NULL,
+    phuongAnB TEXT NULL,
+    phuongAnC TEXT NULL,
+    phuongAnD TEXT NULL,
+
+    dapAnDung VARCHAR(50) NULL,                -- ví dụ: 'A', 'B', 'C', 'D', 'A;C', 'TRUE', '2025-10-28 ...'
+    giaiThich TEXT NULL,                       -- lời giải / lý do đáp án đúng (hiển thị review cho HV)
+
+    diem DECIMAL(5,2) DEFAULT 1.00,            -- trọng số / điểm câu hỏi
+
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (maCauHoi),
+
+    -- đảm bảo trong 1 mini-test, mỗi thứ tự câu hỏi chỉ xuất hiện 1 lần
+    CONSTRAINT uq_mtq_order UNIQUE (maMT, thuTu),
+
+    KEY IX_MTQ_MT (maMT),
+
+    CONSTRAINT FK_MTQ_MT
+        FOREIGN KEY (maMT)
+        REFERENCES CHUONG_MINITEST(maMT)
+        ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Kết quả mini-test (ràng buộc vào lần ghi danh)
 CREATE TABLE KETQUA_MINITEST (
@@ -222,61 +266,6 @@ CREATE TABLE KETQUA_MINITEST (
     KEY IX_KQDG_ENROLL (maHV, maKH),
     CONSTRAINT FK_KQDG_MT     FOREIGN KEY (maMT)        REFERENCES CHUONG_MINITEST(maMT) ON DELETE CASCADE,
     CONSTRAINT FK_KQDG_ENROLL FOREIGN KEY (maHV, maKH)  REFERENCES HOCVIEN_KHOAHOC(maHV, maKH) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- =========================================================
--- 5) THI CUỐI KHÓA & KẾT QUẢ CUỐI KHÓA
--- =========================================================
-CREATE TABLE TEST (
-    maTest INT NOT NULL AUTO_INCREMENT,
-    maKH INT NOT NULL,
-    dotTest VARCHAR(50),
-    title VARCHAR(150),
-    time_limit_min INT,
-    total_questions INT,
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (maTest),
-    KEY IX_TEST_MAKH (maKH),
-    CONSTRAINT FK_TEST_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Tài liệu/đề đính kèm cho FINAL TEST (R2 public)
-CREATE TABLE TEST_TAILIEU (
-    id INT NOT NULL AUTO_INCREMENT,
-    maTest INT NOT NULL,
-    tenTL VARCHAR(255) NOT NULL,
-    loai VARCHAR(50) NOT NULL,             -- PDF/ZIP/Video...
-    mime_type VARCHAR(100) NOT NULL,
-    visibility ENUM('public','private') DEFAULT 'public',
-    public_url VARCHAR(700) COLLATE utf8mb4_bin NOT NULL,
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
-    KEY IX_TESTTL_TEST (maTest),
-    CONSTRAINT FK_TESTTL_TEST FOREIGN KEY (maTest) REFERENCES TEST(maTest) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
-
-CREATE TABLE KETQUAHOCTAP (
-    maKQ INT NOT NULL AUTO_INCREMENT,
-    maTest INT NOT NULL,
-    maHV INT NOT NULL,
-    maKH INT NOT NULL,
-    attempt_no TINYINT DEFAULT 1,
-    diemsoKQThi DECIMAL(5,2),
-    nhanxet VARCHAR(1000),
-    ngayNop DATETIME,
-    ngayTest DATETIME,
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (maKQ),
-    UNIQUE KEY uq_kq (maTest, maHV, maKH, attempt_no),
-    KEY IX_KQ_TEST (maTest),
-    KEY IX_KQ_ENROLL (maHV, maKH),
-    CONSTRAINT FK_KQ_TEST   FOREIGN KEY (maTest)     REFERENCES TEST(maTest) ON DELETE CASCADE,
-    CONSTRAINT FK_KQ_ENROLL FOREIGN KEY (maHV, maKH) REFERENCES HOCVIEN_KHOAHOC(maHV, maKH) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================
@@ -383,48 +372,63 @@ CREATE TABLE CTHD (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================
--- BẢNG TIẾN ĐỘ HỌC TẬP CHI TIẾT
+-- 9) TIẾN ĐỘ HỌC TẬP CHI TIẾT (theo từng bài học)
+--    -> Có cờ is_video_completed để biết HV đã coi xong video chưa
 -- =========================================================
 CREATE TABLE TIENDO_HOCTAP (
     id INT NOT NULL AUTO_INCREMENT,
+
     maHV INT NOT NULL,
     maKH INT NOT NULL,
     maBH INT NOT NULL,
-    
-    -- Trạng thái học tập
+
+    -- Trạng thái học tập của bài này
     trangThai ENUM('NOT_STARTED', 'IN_PROGRESS', 'COMPLETED') DEFAULT 'NOT_STARTED',
-    
+
     -- Thời gian học
     thoiGianHoc INT DEFAULT 0 COMMENT 'Tổng thời gian học (giây)',
     lanXemCuoi DATETIME COMMENT 'Lần xem gần nhất',
     soLanXem INT DEFAULT 0 COMMENT 'Số lần truy cập bài học',
-    
+
     -- Tiến độ video (nếu bài học là video)
     video_progress_seconds INT DEFAULT 0 COMMENT 'Vị trí dừng video (giây)',
     video_duration_seconds INT COMMENT 'Tổng thời lượng video (giây)',
-    
-    -- Đánh dấu hoàn thành
+
+    -- Cờ hoàn tất video: >=90% độ dài hoặc trạng thái COMPLETED
+    is_video_completed TINYINT(1) AS (
+        CASE 
+            WHEN video_duration_seconds IS NOT NULL
+             AND video_duration_seconds > 0
+             AND video_progress_seconds >= video_duration_seconds * 0.9
+            THEN 1
+            WHEN trangThai = 'COMPLETED' THEN 1
+            ELSE 0
+        END
+    ) STORED COMMENT '1 nếu học viên đã coi gần hết (>=90%) hoặc đánh dấu COMPLETED',
+
+    -- Đánh dấu hoàn thành bài học
     completed_at DATETIME COMMENT 'Thời điểm hoàn thành bài học',
-    
+
     -- Ghi chú
     ghiChu VARCHAR(500),
-    
+
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
+
     PRIMARY KEY (id),
     UNIQUE KEY uq_progress (maHV, maKH, maBH),
     KEY IX_TD_ENROLL (maHV, maKH),
     KEY IX_TD_BAIHOC (maBH),
     KEY IX_TD_STATUS (trangThai),
-    
-    CONSTRAINT FK_TD_ENROLL FOREIGN KEY (maHV, maKH) 
+
+    CONSTRAINT FK_TD_ENROLL FOREIGN KEY (maHV, maKH)
         REFERENCES HOCVIEN_KHOAHOC(maHV, maKH) ON DELETE CASCADE,
-    CONSTRAINT FK_TD_BAIHOC FOREIGN KEY (maBH) 
+    CONSTRAINT FK_TD_BAIHOC FOREIGN KEY (maBH)
         REFERENCES BAIHOC(maBH) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- =========================================================
--- 9) BẢNG HỆ THỐNG LARAVEL
+-- 10) BẢNG HỆ THỐNG LARAVEL
 -- =========================================================
 CREATE TABLE cache (
     `key` varchar(255) NOT NULL,

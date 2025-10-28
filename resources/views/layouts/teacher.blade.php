@@ -111,15 +111,6 @@
                     @endif
                 </a>
                 </li>
-                <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('teacher.exams.*') ? 'active' : '' }}"
-                    href="{{ route('teacher.exams.index') }}">
-                    <i class="bi bi-clipboard-check me-2"></i> Kỳ thi cuối khóa
-                    @if(($badges['exams_pending'] ?? 0) > 0)
-                    <span class="badge text-bg-secondary ms-2">{{ $badges['exams_pending'] }}</span>
-                    @endif
-                </a>
-                </li>
             </ul>
             </div>
         </aside>
