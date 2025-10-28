@@ -40,6 +40,7 @@ use App\Http\Controllers\Teacher\MiniTestController;
 use App\Http\Controllers\Student\CourseController as StudentCourseController;
 use App\Http\Controllers\Student\ForgotPasswordController;
 use App\Http\Controllers\Student\LessonController as StudentLessonController;
+use App\Http\Controllers\Student\LessonProgressController as StudentLessonProgressController;
 use App\Http\Controllers\Student\CartController as StudentCartController;
 use App\Http\Controllers\Student\CheckoutController;
 use App\Http\Controllers\Student\ProgressController as StudentProgressController;
@@ -83,6 +84,8 @@ Route::middleware('auth')
     ->name('student.')
     ->group(function () {
         Route::get('/progress', [StudentProgressController::class, 'index'])->name('progress.index');
+        Route::post('/lessons/{lesson}/progress', [StudentLessonProgressController::class, 'store'])
+            ->name('lessons.progress.store');
     });
 
 
@@ -174,13 +177,6 @@ Route::middleware(['auth', 'teacher'])
 
         Route::get('/progress', [ProgressController::class, 'index'])->name('progress.index');
         Route::patch('/progress/{course}/{student}', [ProgressController::class, 'update'])->name('progress.update');
-
-        Route::get('/exams', [ExamController::class, 'index'])->name('exams.index');
-        Route::post('/exams', [ExamController::class, 'store'])->name('exams.store');
-        Route::patch('/exams/{exam}', [ExamController::class, 'update'])->name('exams.update');
-        Route::delete('/exams/{exam}', [ExamController::class, 'destroy'])->name('exams.destroy');
-        Route::post('/exams/{exam}/materials', [ExamController::class, 'storeMaterial'])->name('exams.materials.store');
-        Route::delete('/exams/materials/{material}', [ExamController::class, 'destroyMaterial'])->name('exams.materials.destroy');
 
         Route::get('/minitests', [MiniTestController::class, 'index'])->name('minitests.index');
         Route::post('/minitests', [MiniTestController::class, 'store'])->name('minitests.store');

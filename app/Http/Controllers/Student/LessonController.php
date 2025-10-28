@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Enrollment;
 use App\Models\Lesson;
+use App\Models\LessonProgress;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -27,9 +29,9 @@ class LessonController extends Controller
                                 ->orderBy('thuTu')
                                 ->with('materials'),
                         ])->orderBy('thuTu'),
-                        'finalTests' => fn($testQuery) => $testQuery
-                            ->orderBy('maTest')
-                            ->with('materials'),
+                        // 'finalTests' => fn($testQuery) => $testQuery
+                        //     ->orderBy('maTest')
+                        //     ->with('materials'),
                     ]),
                 ]);
             },
@@ -68,6 +70,26 @@ class LessonController extends Controller
             }
         }
 
-        return view('Student.lesson-show', compact('lesson', 'course'));
+        $lessonProgress = null;
+        $enrollment = null;
+
+        if (!empty($student) && $isEnrolled) {
+            $enrollment = Enrollment::where('maHV', $student->maHV)
+                ->where('maKH', $course->maKH)
+                ->first();
+
+            $lessonProgress = LessonProgress::where('maHV', $student->maHV)
+                ->where('maKH', $course->maKH)
+                ->where('maBH', $lesson->maBH)
+                ->first();
+        }
+
+        return view('Student.lesson-show', [
+            'lesson' => $lesson,
+            'course' => $course,
+            'isEnrolled' => $isEnrolled,
+            'enrollment' => $enrollment,
+            'lessonProgress' => $lessonProgress,
+        ]);
     }
 }

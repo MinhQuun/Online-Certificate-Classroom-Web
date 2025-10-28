@@ -27,12 +27,26 @@
         $pdfs = $lesson->materials->filter(fn ($m) => strtolower($m->loai) === 'pdf');
         $docs = $lesson->materials->filter(fn ($m) => in_array(strtolower($m->loai), ['doc', 'document', 'file', 'ppt', 'pptx']));
         $chapterMiniTests = $lesson->chapter->miniTests;
-        $finalTests = $course->finalTests;
         $lessonTypeLabel = $lesson->loai ? strtoupper($lesson->loai) : 'LESSON';
         $materialsCount = $lesson->materials->count();
         $downloadableCount = $pdfs->count() + $docs->count();
         $primaryVideo = $videos->first();
         $chapterOrder = optional($lesson->chapter)->thuTu;
+        $canTrackProgress = auth()->check() && ($isEnrolled ?? false) && $primaryVideo;
+        $resumeSeconds = $canTrackProgress ? (int) ($lessonProgress->video_progress_seconds ?? 0) : 0;
+        $watchedSeconds = $canTrackProgress ? (int) ($lessonProgress->thoiGianHoc ?? 0) : 0;
+        $progressStatus = $canTrackProgress ? ($lessonProgress->trangThai ?? 'NOT_STARTED') : 'NOT_STARTED';
+        $progressConfig = $canTrackProgress ? [
+            'lessonId' => $lesson->maBH,
+            'courseId' => $course->maKH,
+            'progressUrl' => route('student.lessons.progress.store', ['lesson' => $lesson->maBH]),
+            'csrfToken' => csrf_token(),
+            'resumeSeconds' => $resumeSeconds,
+            'watchedSeconds' => $watchedSeconds,
+            'status' => $progressStatus,
+            'maxSeekAheadSeconds' => 12,
+            'durationSeconds' => $lessonProgress->video_duration_seconds ?? null,
+        ] : null;
     @endphp
 
     <section class="lesson-hero">
@@ -71,12 +85,6 @@
                             <span>Mini test chương</span>
                         </li>
                     @endif
-                    @if ($finalTests->count())
-                        <li>
-                            <strong>{{ $finalTests->count() }}</strong>
-                            <span>Final test</span>
-                        </li>
-                    @endif
                 </ul>
                 <div class="lesson-hero__actions">
                     <a class="btn btn--ghost" href="{{ route('student.courses.show', $course->slug) }}">Về khóa học</a>
@@ -101,11 +109,12 @@
                             <span class="badge badge--video">{{ $videos->count() }} video</span>
                         </header>
                         <div class="lesson-media__frame">
-                            <video controls preload="metadata" poster="{{ $courseCover }}">
+                            <video controls preload="metadata" poster="{{ $courseCover }}" data-lesson-video data-progress-enabled="{{ $canTrackProgress ? '1' : '0' }}">
                                 <source src="{{ $primaryVideo->public_url }}" type="{{ $primaryVideo->mime_type }}">
                                 Trình duyệt hiện tại không hỗ trợ video.
                             </video>
                         </div>
+                        <div class="lesson-media__warning" data-progress-warning hidden></div>
                         @if ($primaryVideo->tenTL)
                             <p class="lesson-media__caption muted">{{ $primaryVideo->tenTL }}</p>
                         @endif
@@ -215,46 +224,6 @@
                         </div>
                     </div>
                 @endif
-
-                {{-- THÊM ID VÀO ĐÂY --}}
-                @if ($finalTests->count())
-                    <div class="lesson-card final-tests" id="final-tests">
-                        <header class="lesson-card__header">
-                            <h2>Bài kiểm tra cuối khóa</h2>
-                            <span class="badge badge--accent">{{ $finalTests->count() }} bài</span>
-                        </header>
-                        <div class="final-tests__grid">
-                            @foreach ($finalTests as $test)
-                                <article class="final-test-card">
-                                    <header>
-                                        <span class="chip chip--accent">Final test</span>
-                                        <h3>{{ $test->title }}</h3>
-                                    </header>
-                                    <ul class="meta-list meta-list--inline">
-                                        @if ($test->dotTest)
-                                            <li>Đợt tổ chức: {{ $test->dotTest }}</li>
-                                        @endif
-                                        <li>Thời gian: {{ $test->time_limit_min }} phút</li>
-                                        <li>Tổng số câu hỏi: {{ $test->total_questions }}</li>
-                                    </ul>
-                                    @if ($test->materials->count())
-                                        <div class="resource-list">
-                                            @foreach ($test->materials as $resource)
-                                                @php
-                                                    $resTypeKey = preg_replace('/[^a-z0-9]+/', '-', strtolower($resource->loai)) ?: 'default';
-                                                @endphp
-                                                <a href="{{ $resource->public_url }}" target="_blank" rel="noopener">
-                                                    <span>{{ $resource->tenTL }}</span>
-                                                    <span class="badge badge--{{ $resTypeKey }}">{{ strtoupper($resource->loai) }}</span>
-                                                </a>
-                                            @endforeach
-                                        </div>
-                                    @endif
-                                </article>
-                            @endforeach
-                        </div>
-                    </div>
-                @endif
             </div>
 
             <aside class="lesson-layout__aside">
@@ -302,23 +271,6 @@
                                 </div>
                             </div>
                         @endforeach
-
-                        {{-- CẬP NHẬT FINAL TEST THÀNH LINK --}}
-                        @if ($finalTests->count())
-                            <div class="aside-final">
-                                <h4>Final test</h4>
-                                <ul>
-                                    @foreach ($finalTests as $test)
-                                        <li>
-                                            <a href="#final-tests">
-                                                <span>🏆</span>
-                                                {{ $test->title }}
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
                     </div> {{-- KẾT THÚC WRAPPER CUỘN --}}
                 </div>
             </aside>
@@ -327,5 +279,10 @@
 @endsection
 
 @push('scripts')
+    @if ($progressConfig)
+        <script>
+            window.lessonProgressConfig = @json($progressConfig);
+        </script>
+    @endif
     <script src="{{ asset('js/Student/lesson-show.js') }}" defer></script>
 @endpush
