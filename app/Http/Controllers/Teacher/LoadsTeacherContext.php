@@ -24,6 +24,7 @@ trait LoadsTeacherContext
                 'assignments_pending' => 0,
                 'exams_pending'       => 0,
                 'low_progress'        => 0,
+                'minitests_active'    => 0,
             ];
         }
 
@@ -48,10 +49,16 @@ trait LoadsTeacherContext
             ->where('progress_percent', '<', 40)
             ->count();
 
+        $minitestsActive = (int) DB::table('CHUONG_MINITEST')
+            ->whereIn('maKH', $courseIds)
+            ->where('is_active', 1)
+            ->count();
+
         return [
             'assignments_pending' => $assignments,
             'exams_pending'       => max(0, $examsTotal - $examsWithMaterials),
             'low_progress'        => $lowProgress,
+            'minitests_active'    => $minitestsActive,
         ];
     }
 }

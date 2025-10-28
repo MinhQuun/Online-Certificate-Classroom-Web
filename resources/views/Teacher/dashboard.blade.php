@@ -30,11 +30,11 @@
         </div>
 
         <div class="col-md-6 col-lg-3">
-            <a href="{{ route('teacher.lectures.index') }}?filter=assignments" class="s-card text-decoration-none">
-                <div class="icon"><i class="bi bi-pencil-square"></i></div>
+            <a href="{{ route('teacher.minitests.index') }}" class="s-card text-decoration-none">
+                <div class="icon"><i class="bi bi-file-earmark-text"></i></div>
                 <div class="meta">
-                    <div class="n">{{ $stats['assignments_pending'] ?? 0 }}</div>
-                    <div class="t">Bài tập chờ chấm</div>
+                    <div class="n">{{ $stats['minitests_total'] ?? 0 }}</div>
+                    <div class="t">Mini-Test</div>
                 </div>
             </a>
         </div>
@@ -54,6 +54,7 @@
         $assignmentsPending   = $stats['assignments_pending'] ?? 0;
         $examsPending         = $stats['exams_pending'] ?? 0;
         $lowProgressStudents  = $badges['low_progress'] ?? 0;
+        $minitestsActive      = $stats['minitests_active'] ?? 0;
     @endphp
 
     <div class="card quick-links">
@@ -63,6 +64,9 @@
                 {{-- Tác vụ nhanh --}}
                 <a href="{{ route('teacher.lectures.index') }}?action=create" class="chip">
                     <i class="bi bi-book me-1"></i> Tạo bài giảng mới
+                </a>
+                <a href="{{ route('teacher.minitests.index') }}?action=create" class="chip">
+                    <i class="bi bi-file-earmark-text me-1"></i> Tạo Mini-Test
                 </a>
                 <a href="{{ route('teacher.progress.index') }}" class="chip">
                     <i class="bi bi-graph-up me-1"></i> Cập nhật tiến độ
@@ -77,6 +81,14 @@
                         <i class="bi bi-pencil-square me-1"></i>
                         Bài tập chờ chấm
                         <span class="badge text-bg-warning ms-1">{{ $assignmentsPending }}</span>
+                    </a>
+                @endif
+
+                @if($minitestsActive > 0)
+                    <a href="{{ route('teacher.minitests.index') }}" class="chip">
+                        <i class="bi bi-file-earmark-text me-1"></i>
+                        Mini-Test đang hoạt động
+                        <span class="badge text-bg-success ms-1">{{ $minitestsActive }}</span>
                     </a>
                 @endif
 

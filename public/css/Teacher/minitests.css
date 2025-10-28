@@ -1,0 +1,406 @@
+/* =================================================================
+   Teacher Mini-Test Management - Google Form Style
+   ================================================================= */
+
+/* Google Form inspired colors */
+:root {
+    --gform-purple: #673ab7;
+    --gform-purple-light: #8561c5;
+    --gform-purple-dark: #512da8;
+    --gform-bg: #f0ebf8;
+    --gform-card: #ffffff;
+    --gform-border: #dadce0;
+    --gform-text: #202124;
+    --gform-text-secondary: #5f6368;
+    --gform-focus: #1a73e8;
+}
+
+/* Page Header */
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.page-header .kicker {
+    color: var(--gform-purple);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.5px;
+}
+
+.page-header .title {
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--gform-text);
+    margin: 0.5rem 0;
+}
+
+.page-header .muted {
+    color: var(--gform-text-secondary);
+    font-size: 1rem;
+}
+
+/* Metric Pills */
+.metric-pill {
+    background: var(--gform-card);
+    border: 1px solid var(--gform-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.2s ease;
+}
+
+.metric-pill:hover {
+    box-shadow: 0 2px 8px rgba(103, 58, 183, 0.15);
+    transform: translateY(-2px);
+}
+
+.metric-pill .icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--gform-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gform-purple);
+    font-size: 1.5rem;
+}
+
+.metric-pill .value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gform-text);
+    line-height: 1;
+}
+
+.metric-pill .label {
+    color: var(--gform-text-secondary);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Mini-Test Card - Google Form Style */
+.minitest-card {
+    background: var(--gform-card);
+    border: 1px solid var(--gform-border);
+    border-left: 6px solid var(--gform-purple);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: all 0.2s ease;
+}
+
+.minitest-card:hover {
+    box-shadow: 0 2px 12px rgba(103, 58, 183, 0.15);
+}
+
+.minitest-header {
+    padding-bottom: 1rem;
+}
+
+.minitest-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--gform-text);
+    margin: 0.5rem 0;
+}
+
+.minitest-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    color: var(--gform-text-secondary);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+.minitest-meta span {
+    display: flex;
+    align-items: center;
+}
+
+/* Materials Grid */
+.minitest-materials {
+    border-top: 1px solid var(--gform-border);
+    padding-top: 1rem;
+}
+
+.materials-grid {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.material-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: var(--gform-bg);
+    border: 1px solid var(--gform-border);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.material-item:hover {
+    background: #e8e0f5;
+}
+
+.material-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--gform-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gform-purple);
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.material-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.material-name {
+    font-weight: 500;
+    color: var(--gform-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.material-type {
+    font-size: 0.875rem;
+    color: var(--gform-text-secondary);
+}
+
+.material-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Google Form Modal Styling */
+.google-form-style .modal-header {
+    background: var(--gform-purple);
+    color: white;
+    padding: 2rem;
+}
+
+.google-form-style .modal-title {
+    font-weight: 500;
+    font-size: 1.5rem;
+}
+
+.google-form-style .modal-body {
+    padding: 2rem;
+    background: var(--gform-bg);
+}
+
+.form-section {
+    background: var(--gform-card);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+/* Google Form Input Style */
+.form-group-gform {
+    margin-bottom: 1.5rem;
+}
+
+.form-label-gform {
+    display: block;
+    font-weight: 500;
+    color: var(--gform-text);
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.form-control-gform {
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    border-bottom: 1px solid var(--gform-border);
+    background: transparent;
+    font-size: 1rem;
+    color: var(--gform-text);
+    transition: all 0.2s ease;
+}
+
+.form-control-gform:focus {
+    outline: none;
+    border-bottom: 2px solid var(--gform-purple);
+    background: rgba(103, 58, 183, 0.05);
+}
+
+.form-control-gform::placeholder {
+    color: var(--gform-text-secondary);
+}
+
+select.form-control-gform {
+    border: 1px solid var(--gform-border);
+    border-radius: 4px;
+    padding: 0.75rem;
+    background: white;
+}
+
+/* Accordion Styling */
+.accordion-item {
+    border: 1px solid var(--gform-border);
+    margin-bottom: 1rem;
+    border-radius: 8px !important;
+    overflow: hidden;
+}
+
+.accordion-button {
+    background: var(--gform-card);
+    color: var(--gform-text);
+    font-weight: 500;
+    padding: 1.25rem 1.5rem;
+}
+
+.accordion-button:not(.collapsed) {
+    background: var(--gform-purple);
+    color: white;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: var(--gform-purple);
+}
+
+.accordion-body {
+    padding: 1.5rem;
+    background: #fafafa;
+}
+
+/* Buttons */
+.btn-primary {
+    background: var(--gform-purple);
+    border-color: var(--gform-purple);
+    padding: 0.625rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background: var(--gform-purple-dark);
+    border-color: var(--gform-purple-dark);
+    box-shadow: 0 2px 8px rgba(103, 58, 183, 0.3);
+}
+
+/* Course Selector Card */
+#courseSelector {
+    border: 2px solid var(--gform-border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+#courseSelector:focus {
+    border-color: var(--gform-purple);
+    box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.1);
+}
+
+/* Badges */
+.badge {
+    padding: 0.375rem 0.75rem;
+    font-weight: 500;
+    border-radius: 12px;
+}
+
+.badge.bg-primary {
+    background-color: var(--gform-purple) !important;
+}
+
+/* Form Switch */
+.form-check-input:checked {
+    background-color: var(--gform-purple);
+    border-color: var(--gform-purple);
+}
+
+/* Dropdown */
+.dropdown-item:hover {
+    background-color: var(--gform-bg);
+}
+
+/* Alert Styling */
+.alert-info {
+    background-color: var(--gform-bg);
+    border-left: 4px solid var(--gform-purple);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .minitest-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .material-item {
+        flex-wrap: wrap;
+    }
+    
+    .material-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+/* Loading Animation */
+.btn-primary.loading {
+    pointer-events: none;
+    position: relative;
+}
+
+.btn-primary.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* File upload styling */
+input[type="file"].form-control-gform {
+    border: 2px dashed var(--gform-border);
+    border-radius: 8px;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+input[type="file"].form-control-gform:hover {
+    border-color: var(--gform-purple);
+    background: var(--gform-bg);
+}
+
+/* Radio button group */
+.btn-group .btn-outline-primary {
+    border-color: var(--gform-border);
+    color: var(--gform-text);
+}
+
+.btn-group .btn-check:checked + .btn-outline-primary {
+    background-color: var(--gform-purple);
+    border-color: var(--gform-purple);
+    color: white;
+}

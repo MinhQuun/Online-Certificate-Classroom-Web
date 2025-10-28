@@ -30,6 +30,7 @@ use App\Http\Controllers\Teacher\LectureController;
 use App\Http\Controllers\Teacher\ExamController;
 use App\Http\Controllers\Teacher\ProgressController;
 use App\Http\Controllers\Teacher\ChapterController;
+use App\Http\Controllers\Teacher\MiniTestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -172,4 +173,13 @@ Route::middleware(['auth', 'teacher'])
         Route::delete('/exams/{exam}', [ExamController::class, 'destroy'])->name('exams.destroy');
         Route::post('/exams/{exam}/materials', [ExamController::class, 'storeMaterial'])->name('exams.materials.store');
         Route::delete('/exams/materials/{material}', [ExamController::class, 'destroyMaterial'])->name('exams.materials.destroy');
+
+        Route::get('/minitests', [MiniTestController::class, 'index'])->name('minitests.index');
+        Route::post('/minitests', [MiniTestController::class, 'store'])->name('minitests.store');
+        Route::patch('/minitests/{miniTest}', [MiniTestController::class, 'update'])->name('minitests.update');
+        Route::delete('/minitests/{miniTest}', [MiniTestController::class, 'destroy'])->name('minitests.destroy');
+        Route::get('/minitests/{miniTest}/questions', [MiniTestController::class, 'showQuestionForm'])->name('minitests.questions.form');
+        Route::post('/minitests/{miniTest}/questions', [MiniTestController::class, 'storeQuestions'])->name('minitests.questions.store');
+        Route::post('/minitests/{miniTest}/materials', [MiniTestController::class, 'storeMaterial'])->name('minitests.materials.store');
+        Route::delete('/minitests/materials/{material}', [MiniTestController::class, 'destroyMaterial'])->name('minitests.materials.destroy');
     });

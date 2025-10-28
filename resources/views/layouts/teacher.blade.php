@@ -100,8 +100,17 @@
                 </a>
                 </li>
 
-                {{-- ĐÁNH GIÁ CUỐI KHÓA --}}
-                <li class="nav-item mt-2 text-muted small">Đánh giá cuối khóa</li>
+                {{-- ĐÁNH GIÁ --}}
+                <li class="nav-item mt-2 text-muted small">Đánh giá</li>
+                <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('teacher.minitests.*') ? 'active' : '' }}"
+                    href="{{ route('teacher.minitests.index') }}">
+                    <i class="bi bi-file-earmark-text me-2"></i> Mini-Test theo chương
+                    @if(($badges['minitests_active'] ?? 0) > 0)
+                    <span class="badge text-bg-success ms-2">{{ $badges['minitests_active'] }}</span>
+                    @endif
+                </a>
+                </li>
                 <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('teacher.exams.*') ? 'active' : '' }}"
                     href="{{ route('teacher.exams.index') }}">

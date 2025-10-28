@@ -27,6 +27,8 @@ class DashboardController extends Controller
             'assignments_pending' => 0,
             'exams_total'         => 0,
             'exams_upcoming'      => 0,
+            'minitests_total'     => 0,
+            'minitests_active'    => 0,
         ];
 
         if ($courseIds->isNotEmpty()) {
@@ -54,6 +56,12 @@ class DashboardController extends Controller
             $stats['exams_total'] = (int) $examQuery->count();
             $stats['exams_upcoming'] = (int) $examQuery->where('is_active', 1)->count();
             $stats['exams_pending'] = max(0, $stats['exams_total'] - $stats['exams_upcoming']);
+
+            $miniTestQuery = DB::table('CHUONG_MINITEST')
+                ->whereIn('maKH', $courseIds);
+
+            $stats['minitests_total'] = (int) $miniTestQuery->count();
+            $stats['minitests_active'] = (int) $miniTestQuery->where('is_active', 1)->count();
 
             $stats['low_progress_students'] = (int) DB::table('HOCVIEN_KHOAHOC')
                 ->whereIn('maKH', $courseIds)
