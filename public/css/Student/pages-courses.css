@@ -274,25 +274,31 @@
     box-shadow: 0 16px 30px rgba(37, 99, 235, 0.4);
 }
 
-.course-card__cta--owned {
-    background: #f8fafc;
-    color: #1f2937;
-    border: 1px solid rgba(148, 163, 184, 0.45);
+/* Nút trạng thái: Đã kích hoạt (Màu xanh lá) */
+.course-card__cta--active {
+    background: rgba(16, 185, 129, 0.16);
+    color: #047857;
+    font-weight: 700;
     box-shadow: none;
     cursor: not-allowed;
+    border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
-.course-card__cta--owned:hover {
+/* Nút trạng thái: Chờ kích hoạt (Màu cam vàng) */
+.course-card__cta--pending {
+    background: rgba(250, 204, 21, 0.22);
+    color: #b45309;
+    font-weight: 700;
+    box-shadow: none;
+    cursor: not-allowed;
+    border: 1px solid rgba(250, 204, 21, 0.3);
+}
+
+/* Tắt hiệu ứng hover cho cả 2 nút trạng thái */
+.course-card__cta--active:hover,
+.course-card__cta--pending:hover {
     transform: none;
     box-shadow: none;
-}
-
-.course-card__cta[disabled],
-.course-card__cta[aria-disabled="true"] {
-    background: rgba(148, 163, 184, 0.4);
-    color: var(--color-muted);
-    box-shadow: none;
-    cursor: not-allowed;
 }
 
 /* === CARD GRID UX IMPROVEMENTS === */
@@ -315,12 +321,24 @@
     animation: slideUp 0.4s ease-out both;
 }
 
-.course-band .course-card:nth-child(1) { animation-delay: 0.05s; }
-.course-band .course-card:nth-child(2) { animation-delay: 0.1s; }
-.course-band .course-card:nth-child(3) { animation-delay: 0.15s; }
-.course-band .course-card:nth-child(4) { animation-delay: 0.2s; }
-.course-band .course-card:nth-child(5) { animation-delay: 0.25s; }
-.course-band .course-card:nth-child(6) { animation-delay: 0.3s; }
+.course-band .course-card:nth-child(1) {
+    animation-delay: 0.05s;
+}
+.course-band .course-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+.course-band .course-card:nth-child(3) {
+    animation-delay: 0.15s;
+}
+.course-band .course-card:nth-child(4) {
+    animation-delay: 0.2s;
+}
+.course-band .course-card:nth-child(5) {
+    animation-delay: 0.25s;
+}
+.course-band .course-card:nth-child(6) {
+    animation-delay: 0.3s;
+}
 
 @keyframes slideUp {
     from {
@@ -349,7 +367,8 @@
 }
 
 @keyframes float {
-    0%, 100% {
+    0%,
+    100% {
         transform: translateY(0);
     }
     50% {
@@ -743,36 +762,4 @@ html {
         font-size: 11px;
         padding: 5px 12px;
     }
-}
-.chip--status {
-    margin-left: 8px;
-    background: rgba(37, 99, 235, 0.12);
-    color: #1d4ed8;
-    border-radius: 999px;
-    padding: 4px 10px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-}
-
-.chip--status-active {
-    background: rgba(16, 185, 129, 0.16);
-    color: #047857;
-}
-
-.chip--status-pending {
-    background: rgba(250, 204, 21, 0.18);
-    color: #b45309;
-}
-
-.course-card__cta--pending {
-    background: rgba(250, 204, 21, 0.22);
-    color: #b45309;
-    cursor: not-allowed;
-}
-
-.course-card__cta--pending:hover {
-    box-shadow: none;
-    transform: none;
 }

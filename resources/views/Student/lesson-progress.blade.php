@@ -16,7 +16,7 @@
 @section('content')
     <div class="progress-page">
         <div class="oc-container">
-            <header class="progress-page__header">
+            <header class="progress-page__header section__header">
                 <h1>Tiến độ học tập</h1>
                 <p>Theo dõi quá trình học theo từng khóa học, tính cả bài video và mini test hoàn thành.</p>
             </header>

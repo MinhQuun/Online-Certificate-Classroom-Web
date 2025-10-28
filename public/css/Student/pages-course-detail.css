@@ -1279,14 +1279,6 @@
     }
 }
 
-/* Điều chỉnh course-hero */
-.course-hero {
-    position: relative;
-    padding: 40px 0 60px; /* Giảm padding-top xuống 40px */
-    overflow: hidden;
-    margin-top: 60px; /* Thêm margin-top để tạo khoảng cách với header */
-}
-
 /* Đảm bảo header luôn nổi trên cùng */
 .header {
     position: fixed;
@@ -1295,28 +1287,6 @@
     right: 0;
     z-index: 1000; /* Tăng z-index để header luôn ở trên cùng */
     background: white;
-}
-
-/* Điều chỉnh z-index cho course-hero elements */
-.course-hero::before {
-    z-index: 1;
-}
-
-.course-hero::after {
-    z-index: 1;
-}
-
-.course-hero__grid {
-    position: relative;
-    z-index: 2;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .course-hero {
-        padding: 30px 0 40px;
-        margin-top: 50px;
-    }
 }
 
 .lesson-link--locked {
@@ -1364,12 +1334,6 @@
     color: #64748b;
 }
 
-.btn--owned {
-    background: linear-gradient(135deg, #e2e8f0, #cbd5f5);
-    color: #1e293b;
-    border: 1px solid rgba(148, 163, 184, 0.5);
-}
-
 .course-sidebar__note {
     margin-top: 12px;
     background: rgba(37, 99, 235, 0.08);
@@ -1379,8 +1343,11 @@
     font-size: 14px;
 }
 
+/* Note cho owned (active) - điều chỉnh để khớp màu xanh */
 .course-sidebar__note--owned {
-    border: 1px solid rgba(37, 99, 235, 0.25);
+    background: rgba(16, 185, 129, 0.12);
+    color: #047857;
+    border: 1px solid rgba(16, 185, 129, 0.25);
 }
 
 .course-locked-notice {
@@ -1588,18 +1555,8 @@
 .module--nested .module__title {
     font-size: 18px;
 }
-.btn--pending {
-    background: rgba(250, 204, 21, 0.18);
-    color: #92400e;
-    border-color: transparent;
-    cursor: not-allowed;
-}
 
-.btn--pending:hover {
-    box-shadow: none;
-    transform: none;
-}
-
+/* Note cho pending - đã có, giữ nguyên hoặc điều chỉnh nhẹ */
 .course-sidebar__note--pending {
     background: rgba(250, 204, 21, 0.12);
     color: #b45309;
@@ -1611,4 +1568,36 @@
 .course-sidebar__note--pending a {
     color: #b45309;
     text-decoration: underline;
+}
+/* === CTA trạng thái khóa học trong sidebar === */
+
+/* ĐÃ KÍCH HOẠT (xanh lá) */
+.course-sidebar__cta .btn--primary.btn--owned,
+.course-sidebar__cta .btn--primary.btn--owned[disabled] {
+    background: rgba(16, 185, 129, 0.16);
+    color: #047857;
+    font-weight: 700;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* CHỜ KÍCH HOẠT (vàng) */
+.course-sidebar__cta .btn--primary.btn--pending,
+.course-sidebar__cta .btn--primary.btn--pending[disabled] {
+    background: rgba(250, 204, 21, 0.22);
+    color: #b45309;
+    font-weight: 700;
+    border: 1px solid rgba(250, 204, 21, 0.3);
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Tắt hover nhô lên cho 2 trạng thái này */
+.course-sidebar__cta .btn--primary.btn--owned:hover,
+.course-sidebar__cta .btn--primary.btn--pending:hover {
+    box-shadow: none;
+    transform: none;
 }

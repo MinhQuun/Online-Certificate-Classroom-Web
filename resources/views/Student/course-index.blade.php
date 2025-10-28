@@ -105,14 +105,14 @@
                                         $statusLabel = 'Chờ kích hoạt';
                                         $statusClass = 'pending';
                                     }
-                                    $ctaClass = $isActive ? 'course-card__cta--owned' : ($isPending ? 'course-card__cta--pending' : '');
+                                    $ctaClass = $isActive ? 'course-card__cta--active' : ($isPending ? 'course-card__cta--pending' : '');
                                 @endphp
                                 <article class="course-card">
                                     <div class="course-card__category">
                                         <span class="chip chip--category">{{ $categoryName }}</span>
-                                        @if($statusLabel)
+                                        {{-- @if($statusLabel)
                                             <span class="chip chip--status chip--status-{{ $statusClass }}">{{ $statusLabel }}</span>
-                                        @endif
+                                        @endif --}}
                                     </div>
                                     <a href="{{ route('student.courses.show', $course->slug) }}" class="course-card__thumb">
                                         <img src="{{ $course->cover_image_url }}" alt="{{ $course->tenKH }}" loading="lazy">
