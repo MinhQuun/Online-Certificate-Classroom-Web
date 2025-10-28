@@ -214,6 +214,33 @@ CREATE TABLE PHUONGTHUCTHANHTOAN (
     PRIMARY KEY (maTT)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE GIAODICH_VNPAY (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    maHV INT NOT NULL,              -- Học viên mua (FK tới HOCVIEN.maHV)
+    maKH INT NOT NULL,              -- Khóa học được mua (FK tới KHOAHOC.maKH)
+    soTien DECIMAL(12,2) NOT NULL,  -- Số tiền VND bạn dự định thu cho khóa học tại thời điểm bấm thanh toán
+
+    txn_ref VARCHAR(64) NOT NULL,   -- Mã đơn gửi sang VNPay (vnp_TxnRef)
+    vnp_response_code VARCHAR(10) NULL,     -- Mã phản hồi VNPay (vnp_ResponseCode)
+    vnp_transaction_no VARCHAR(50) NULL,    -- Mã giao dịch tại VNPay/ngân hàng (vnp_TransactionNo)
+
+    trangThai ENUM('PENDING','PAID','FAILED') DEFAULT 'PENDING',
+    paid_at DATETIME NULL,          -- Thời điểm bạn xác nhận thanh toán thành công (sau IPN)
+
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_txnref (txn_ref),
+    KEY IX_GDVNPAY_HVKH (maHV, maKH),
+
+    CONSTRAINT FK_GDVNPAY_HV FOREIGN KEY (maHV)
+        REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
+
+    CONSTRAINT FK_GDVNPAY_KH FOREIGN KEY (maKH)
+        REFERENCES KHOAHOC(maKH) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Bảng HOADON: Hóa đơn thanh toán.
 CREATE TABLE HOADON (
     maHD INT NOT NULL AUTO_INCREMENT,

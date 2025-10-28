@@ -8,7 +8,8 @@ START TRANSACTION;
 INSERT INTO PHUONGTHUCTHANHTOAN (maTT, tenPhuongThuc) VALUES
 ('TT01', 'Chuyển khoản ngân hàng'),
 ('TT02', 'Ví điện tử'),
-('TT03', 'Thẻ tín dụng')
+('TT03', 'Thẻ tín dụng'),
+('TT04', 'Thanh toán qua VNPAY')
 ON DUPLICATE KEY UPDATE tenPhuongThuc=VALUES(tenPhuongThuc);
 
 -- =========================================================
