@@ -3,7 +3,13 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+
 use App\Models\Course;
+use App\Models\Invoice;
+use App\Models\InvoiceItem;
+use App\Models\Enrollment;
+use App\Models\ActivationCode;
+
 use App\Support\Cart\StudentCart;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,6 +17,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ActivationCodeMail;
 use Illuminate\View\View;
 
 class CheckoutController extends Controller
