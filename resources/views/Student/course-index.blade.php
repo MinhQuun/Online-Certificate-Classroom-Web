@@ -66,49 +66,68 @@
                 @endif
             </div>
 
-            <div class="card-grid">
-                @if ($courses->isEmpty())
-                    <p>Chưa có khóa học.</p>
-                @endif
+            @if ($courses->isEmpty())
+                <div class="empty-state">
+                    <div class="empty-state__icon">📚</div>
+                    <h3 class="empty-state__title">Chưa có khóa học</h3>
+                    <p class="empty-state__description">Hiện tại chưa có khóa học nào trong danh mục này. Vui lòng quay lại sau.</p>
+                </div>
+            @else
+                @php
+                    // Nhóm các khóa học theo tên danh mục (thường chứa thông tin band)
+                    $grouped = $courses->getCollection()->groupBy(function ($c) {
+                        return optional($c->category)->tenDanhMuc ?? 'Chưa có danh mục';
+                    });
+                @endphp
 
-                @foreach ($courses as $course)
-                    @php
-                        $categoryName = optional($course->category)->tenDanhMuc ?? 'Chương trình nổi bật';
-                        $inCart = in_array($course->maKH, $cartIds ?? [], true);
-                        $isEnrolled = in_array($course->maKH, $enrolledCourseIds ?? [], true);
-                        if ($isEnrolled) {
-                            $inCart = false;
-                        }
-                    @endphp
-                    <article class="course-card">
-                        <div class="course-card__category">
-                            <span class="chip chip--category">{{ $categoryName }}</span>
+                @foreach ($grouped as $bandName => $groupCourses)
+                    <section class="course-band" data-band="{{ $bandName }}">
+                        <h3 class="course-band__title">
+                            <span class="course-band__title-text">{{ $bandName }}</span>
+                            <span class="course-band__count">({{ $groupCourses->count() }} khóa học)</span>
+                        </h3>
+                        <div class="card-grid">
+                            @foreach ($groupCourses as $course)
+                                @php
+                                    $categoryName = optional($course->category)->tenDanhMuc ?? 'Chương trình nổi bật';
+                                    $inCart = in_array($course->maKH, $cartIds ?? [], true);
+                                    $isEnrolled = in_array($course->maKH, $enrolledCourseIds ?? [], true);
+                                    if ($isEnrolled) {
+                                        $inCart = false;
+                                    }
+                                @endphp
+                                <article class="course-card">
+                                    <div class="course-card__category">
+                                        <span class="chip chip--category">{{ $categoryName }}</span>
+                                    </div>
+                                    <a href="{{ route('student.courses.show', $course->slug) }}" class="course-card__thumb">
+                                        <img src="{{ $course->cover_image_url }}" alt="{{ $course->tenKH }}" loading="lazy">
+                                    </a>
+                                    <div class="course-card__body">
+                                        <h3><a href="{{ route('student.courses.show', $course->slug) }}">{{ $course->tenKH }}</a></h3>
+                                        <div class="course-card__footer">
+                                            <div class="course-card__price-block">
+                                                <strong>{{ number_format((float) $course->hocPhi, 0, ',', '.') }} VNĐ</strong>
+                                            </div>
+                                            <form method="post" action="{{ route('student.cart.store') }}">
+                                                @csrf
+                                                <input type="hidden" name="course_id" value="{{ $course->maKH }}">
+                                                <button
+                                                    type="submit"
+                                                    class="course-card__cta {{ $isEnrolled ? 'course-card__cta--owned' : '' }}"
+                                                    @if($isEnrolled || $inCart) disabled aria-disabled="true" @endif
+                                                >
+                                                    {{ $isEnrolled ? 'Đã mua' : ($inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng') }}
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </article>
+                            @endforeach
                         </div>
-                        <a href="{{ route('student.courses.show', $course->slug) }}" class="course-card__thumb">
-                            <img src="{{ $course->cover_image_url }}" alt="{{ $course->tenKH }}" loading="lazy">
-                        </a>
-                        <div class="course-card__body">
-                            <h3><a href="{{ route('student.courses.show', $course->slug) }}">{{ $course->tenKH }}</a></h3>
-                            <div class="course-card__footer">
-                                <div class="course-card__price-block">
-                                    <strong>{{ number_format((float) $course->hocPhi, 0, ',', '.') }} VNĐ</strong>
-                                </div>
-                                <form method="post" action="{{ route('student.cart.store') }}">
-                                    @csrf
-                                    <input type="hidden" name="course_id" value="{{ $course->maKH }}">
-                                    <button
-                                        type="submit"
-                                        class="course-card__cta {{ $isEnrolled ? 'course-card__cta--owned' : '' }}"
-                                        @if($isEnrolled || $inCart) disabled aria-disabled="true" @endif
-                                    >
-                                        {{ $isEnrolled ? 'Đã mua' : ($inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng') }}
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </article>
+                    </section>
                 @endforeach
-            </div>
+            @endif
 
             <div class="pagination">
                 @include('components.pagination', [

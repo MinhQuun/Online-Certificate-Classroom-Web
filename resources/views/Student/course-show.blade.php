@@ -443,14 +443,14 @@
                 </div>
             </div>
             <div class="modal-footer border-top-0">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal" aria-label="Đóng">Đóng</button>
                 @if($isEnrolled)
                 <button type="button" class="btn btn-secondary px-4" disabled aria-disabled="true">
                     <i class="fas fa-shopping-cart me-2"></i>
                     Đã mua
                 </button>
             @else
-                <form method="post" action="{{ route('student.cart.store') }}">
+                <form method="post" action="{{ route('student.cart.store') }}" style="display: inline;">
                     @csrf
                     <input type="hidden" name="course_id" value="{{ $course->maKH }}">
                     <button type="submit" class="btn btn-primary px-4">
