@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Enrollment extends Model
 {
@@ -70,5 +71,17 @@ class Enrollment extends Model
     public function miniTestResults()
     {
         return $this->hasMany(MiniTestResult::class, 'maHV', 'maHV');
+    }
+
+    public function courseProgressEntries(): HasMany
+    {
+        return $this->hasMany(LessonProgress::class, 'maHV', 'maHV')
+            ->where('maKH', $this->maKH);
+    }
+
+    public function courseMiniTestResults(): HasMany
+    {
+        return $this->hasMany(MiniTestResult::class, 'maHV', 'maHV')
+            ->where('maKH', $this->maKH);
     }
 }

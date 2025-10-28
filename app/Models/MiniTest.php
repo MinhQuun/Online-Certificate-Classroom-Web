@@ -48,5 +48,9 @@ class MiniTest extends Model
     {
         return $this->hasMany(MiniTestQuestion::class, 'maMT', 'maMT')->orderBy('thuTu');
     }
-}
 
+    public function results(): HasMany
+    {
+        return $this->hasMany(MiniTestResult::class, 'maMT', 'maMT');
+    }
+}

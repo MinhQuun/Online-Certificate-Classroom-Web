@@ -1,4 +1,4 @@
-﻿@php
+@php
     $categories = $studentNavCategories ?? collect();
 @endphp
 
@@ -66,6 +66,9 @@
                 </li>
 
                 <!-- Các mục menu khác -->
+                {{-- @auth
+                    <li class="nav-item"><a class="nav-link" href="{{ route('student.progress.index') }}">Tiến độ học tập</a></li>
+                @endauth --}}
                 <li class="nav-item"><a class="nav-link" href="#services">Dịch vụ</a></li>
                 <li class="nav-item"><a class="nav-link" href="#about">Về chúng tôi</a></li>
                 <li class="nav-item"><a class="nav-link" href="#contact">Liên hệ</a></li>
@@ -117,9 +120,13 @@
                                 <i class="fa-solid fa-user"></i>
                                 <span> Trang cá nhân</span>
                             </a>
-                            <a href="#">
+                             <a href="#">
                                 <i class="fa-solid fa-book-tanakh"></i>
                                 <span> Khóa học của tôi</span>
+                            </a>
+                            <a href="{{ route('student.progress.index') }}">
+                                <i class="fa-solid fa-chart-line"></i>
+                                <span> Tiến độ học tập</span>
                             </a>
                             <a href="#">
                                 <i class="fa-solid fa-cart-shopping"></i>

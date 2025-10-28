@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Str;
 
 class Course extends Model
@@ -38,6 +39,23 @@ class Course extends Model
     public function finalTests(): HasMany
     {
         return $this->hasMany(CourseTest::class, 'maKH', 'maKH')->orderBy('maTest');
+    }
+
+    public function lessons(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Lesson::class,
+            Chapter::class,
+            'maKH',      // Chapter foreign key referencing Course
+            'maChuong',  // Lesson foreign key referencing Chapter
+            'maKH',      // Local key on Course
+            'maChuong'   // Local key on Chapter
+        )->orderBy('thuTu');
+    }
+
+    public function miniTests(): HasMany
+    {
+        return $this->hasMany(MiniTest::class, 'maKH', 'maKH')->orderBy('thuTu');
     }
 
     public function category(): BelongsTo

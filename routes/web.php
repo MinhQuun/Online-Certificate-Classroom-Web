@@ -42,6 +42,7 @@ use App\Http\Controllers\Student\ForgotPasswordController;
 use App\Http\Controllers\Student\LessonController as StudentLessonController;
 use App\Http\Controllers\Student\CartController as StudentCartController;
 use App\Http\Controllers\Student\CheckoutController;
+use App\Http\Controllers\Student\ProgressController as StudentProgressController;
 
 // =====================
 // Public (Student-facing)
@@ -76,6 +77,13 @@ Route::get('/checkout', [CheckoutController::class, 'index'])
 Route::post('/checkout/complete', [CheckoutController::class, 'complete'])
     ->middleware('auth')
     ->name('student.checkout.complete');
+
+Route::middleware('auth')
+    ->prefix('student')
+    ->name('student.')
+    ->group(function () {
+        Route::get('/progress', [StudentProgressController::class, 'index'])->name('progress.index');
+    });
 
 
 /*
