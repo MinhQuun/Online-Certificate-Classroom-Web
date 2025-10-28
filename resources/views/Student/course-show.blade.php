@@ -16,6 +16,7 @@
         $endDate = $course->end_date_label;
         $isAuthenticated = isset($isAuthenticated) ? (bool)$isAuthenticated : (bool)Auth::check();
         $isEnrolled = isset($isEnrolled) ? (bool)$isEnrolled : false;
+        $isPending = isset($isPending) ? (bool)$isPending : false;
 
         // Identify the first chapter, first lesson, and first mini test for free preview
         $firstChapter = $course->chapters->sortBy('thuTu')->first();
@@ -62,6 +63,7 @@
         id="courseAccessFlags"
         data-authenticated="{{ $isAuthenticated ? '1' : '0' }}"
         data-enrolled="{{ $isEnrolled ? '1' : '0' }}"
+        data-pending="{{ $isPending ? '1' : '0' }}"
         data-free-lesson="{{ $freeLessonId ?? '' }}"
         data-free-minitest="{{ $freeMiniTestId ?? '' }}"
         data-locked-prompt="{{ $lockedPrompt ?? '' }}"
@@ -76,8 +78,13 @@
             @if (!$isEnrolled)
                 <div id="lockedNotice" class="course-locked-notice" role="alert" hidden>
                     <div class="course-locked-notice__content">
-                        <strong>Khóa học chưa được kích hoạt.</strong>
-                        <span>Bạn cần mua khóa học để mở khóa toàn bộ tài nguyên.</span>
+                        @if($isPending)
+                            <strong>Khóa học đang chờ kích hoạt.</strong>
+                            <span>Kiểm tra email để lấy mã kích hoạt hoặc truy cập <a href="{{ route('student.activations.form') }}">Mã kích hoạt</a> để kích hoạt ngay.</span>
+                        @else
+                            <strong>Khóa học chưa được kích hoạt.</strong>
+                            <span>Bạn cần mua khóa học để mở khóa toàn bộ tài nguyên.</span>
+                        @endif
                     </div>
                     <button type="button" class="course-locked-notice__close" aria-label="Đóng thông báo">
                         <span aria-hidden="true">&times;</span>
@@ -225,15 +232,17 @@
                         <input type="hidden" name="course_id" value="{{ $course->maKH }}">
                         <button
                             type="submit"
-                            class="btn btn--primary {{ $isEnrolled ? 'btn--owned' : '' }}"
+                            class="btn btn--primary {{ $isEnrolled ? 'btn--owned' : ($isPending ? 'btn--pending' : '') }}"
                             style="text-align: center; padding: 16px 24px; font-weight: 700; font-size: 16px; border-radius: 12px;"
-                            @if($isEnrolled || $isInCart) disabled aria-disabled="true" @endif
+                            @if($isEnrolled || $isPending || $isInCart) disabled aria-disabled="true" @endif
                         >
-                            {{ $isEnrolled ? 'Đã mua' : ($isInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng') }}
+                            {{ $isEnrolled ? 'Đã kích hoạt' : ($isPending ? 'Chờ kích hoạt' : ($isInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng')) }}
                         </button>
                     </form>
                     @if($isEnrolled)
                         <p class="course-sidebar__note course-sidebar__note--owned">Bạn đã sở hữu khóa học này. Tất cả tài nguyên đã được mở khóa.</p>
+                    @elseif($isPending)
+                        <p class="course-sidebar__note course-sidebar__note--pending">Khóa học đang chờ kích hoạt. Hãy nhập mã tại <a href="{{ route('student.activations.form') }}">Mã kích hoạt</a> để bắt đầu học.</p>
                     @elseif($isInCart)
                         <a class="course-sidebar__link" href="{{ route('student.cart.index') }}">Đến giỏ hàng</a>
                     @endif
@@ -385,20 +394,25 @@
             <div class="modal-footer border-top-0">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal" aria-label="Đóng">Đóng</button>
                 @if($isEnrolled)
-                <button type="button" class="btn btn-secondary px-4" disabled aria-disabled="true">
-                    <i class="fas fa-shopping-cart me-2"></i>
-                    Đã mua
-                </button>
-            @else
-                <form method="post" action="{{ route('student.cart.store') }}" style="display: inline;">
-                    @csrf
-                    <input type="hidden" name="course_id" value="{{ $course->maKH }}">
-                    <button type="submit" class="btn btn-primary px-4">
+                    <button type="button" class="btn btn-secondary px-4" disabled aria-disabled="true">
                         <i class="fas fa-shopping-cart me-2"></i>
-                        Thêm vào giỏ hàng
+                        Đã kích hoạt
                     </button>
-                </form>
-            @endif
+                @elseif($isPending)
+                    <button type="button" class="btn btn-warning px-4 text-white" disabled aria-disabled="true">
+                        <i class="fas fa-hourglass-half me-2"></i>
+                        Chờ kích hoạt
+                    </button>
+                @else
+                    <form method="post" action="{{ route('student.cart.store') }}" style="display: inline;">
+                        @csrf
+                        <input type="hidden" name="course_id" value="{{ $course->maKH }}">
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="fas fa-shopping-cart me-2"></i>
+                            Thêm vào giỏ hàng
+                        </button>
+                    </form>
+                @endif
             </div>
         </div>
     </div>

@@ -50,6 +50,7 @@ class LessonController extends Controller
                 $isEnrolled = DB::table('HOCVIEN_KHOAHOC')
                     ->where('maHV', $student->maHV)
                     ->where('maKH', $course->maKH)
+                    ->where('trangThai', 'ACTIVE')
                     ->exists();
             }
         }
@@ -76,6 +77,7 @@ class LessonController extends Controller
         if (!empty($student) && $isEnrolled) {
             $enrollment = Enrollment::where('maHV', $student->maHV)
                 ->where('maKH', $course->maKH)
+                ->where('trangThai', 'ACTIVE')
                 ->first();
 
             $lessonProgress = LessonProgress::where('maHV', $student->maHV)

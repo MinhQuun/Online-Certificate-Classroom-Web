@@ -27,7 +27,6 @@ use App\Http\Controllers\Admin\UserAdminController;
 */
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
 use App\Http\Controllers\Teacher\LectureController;
-use App\Http\Controllers\Teacher\ExamController;
 use App\Http\Controllers\Teacher\ProgressController;
 use App\Http\Controllers\Teacher\ChapterController;
 use App\Http\Controllers\Teacher\MiniTestController;
@@ -43,6 +42,7 @@ use App\Http\Controllers\Student\LessonController as StudentLessonController;
 use App\Http\Controllers\Student\LessonProgressController as StudentLessonProgressController;
 use App\Http\Controllers\Student\CartController as StudentCartController;
 use App\Http\Controllers\Student\CheckoutController;
+use App\Http\Controllers\Student\ActivationController;
 use App\Http\Controllers\Student\ProgressController as StudentProgressController;
 
 // =====================
@@ -83,6 +83,9 @@ Route::middleware('auth')
     ->prefix('student')
     ->name('student.')
     ->group(function () {
+        Route::get('/activation-codes', [ActivationController::class, 'showForm'])->name('activations.form');
+        Route::post('/activation-codes', [ActivationController::class, 'redeem'])->name('activations.redeem');
+
         Route::get('/progress', [StudentProgressController::class, 'index'])->name('progress.index');
         Route::post('/lessons/{lesson}/progress', [StudentLessonProgressController::class, 'store'])
             ->name('lessons.progress.store');

@@ -18,8 +18,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use App\Mail\ActivationCodeMail;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
+use Throwable;
 
 class CheckoutController extends Controller
 {
@@ -127,7 +130,28 @@ class CheckoutController extends Controller
         $remaining    = array_values(array_diff(StudentCart::ids(), $purchasedIds));
         StudentCart::sync($remaining);
 
-        $this->activateEnrollments($courses);
+        try {
+            $finalized = $this->finalizeOrder($courses, $method, $total);
+        } catch (Throwable $exception) {
+            Log::error('Checkout finalizeOrder failed', [
+                'user_id'    => Auth::id(),
+                'course_ids' => $courses->pluck('maKH')->all(),
+                'message'    => $exception->getMessage(),
+            ]);
+            report($exception);
+
+            return redirect()
+                ->route('student.checkout.index')
+                ->with('error', 'Hệ thống đang bận, vui lòng thử lại sau vài phút.');
+        }
+
+        if (!empty($finalized['activation_packages'])) {
+            $this->dispatchActivationEmails(
+                $finalized['user'],
+                $finalized['student'],
+                $finalized['activation_packages']
+            );
+        }
 
         session()->put(self::SESSION_SUCCESS, [
             'courses' => $courses->map(fn ($course) => [
@@ -140,68 +164,195 @@ class CheckoutController extends Controller
             ])->all(),
             'total' => $total,
             'payment_method' => $method,
+            'invoice_id' => $finalized['invoice']->maHD ?? null,
+            'pending_activation_courses' => $finalized['pending_activation_courses'],
+            'already_active_courses' => $finalized['already_active_courses'],
         ]);
 
         return redirect()
             ->route('student.checkout.index', ['stage' => 3])
-            ->with('success', 'Đơn hàng của bạn đã được ghi nhận. Vui lòng hoàn tất bước cuối.');
+            ->with('success', 'Đơn hàng của bạn đã được ghi nhận. Vui lòng kiểm tra email để nhận mã kích hoạt cho từng khóa học.');
     }
 
-    private function activateEnrollments(Collection $courses): void
+    private function finalizeOrder(Collection $courses, string $method, int $total): array
     {
-        $userId = Auth::id();
+        $user = Auth::user();
 
-        if (!$userId || $courses->isEmpty()) {
-            return;
+        if (!$user) {
+            throw new \RuntimeException('User must be authenticated to finalize checkout.');
         }
 
-        $student = DB::table('HOCVIEN')->where('maND', $userId)->first();
+        $student = $user->student;
 
         if (!$student) {
-            return;
+            throw new \RuntimeException('Không tìm thấy hồ sơ học viên.');
         }
 
         $now = Carbon::now();
+        $invoice = null;
+        $activationPackages = [];
+        $pendingCourses = [];
+        $alreadyActiveCourses = [];
 
-        DB::transaction(function () use ($courses, $student, $now) {
+        DB::transaction(function () use ($courses, $method, $total, $student, $now, &$invoice, &$activationPackages, &$pendingCourses, &$alreadyActiveCourses) {
+            $invoice = Invoice::create([
+                'maHV'     => $student->maHV,
+                'maTT'     => $this->mapPaymentMethodToCode($method),
+                'maND'     => null,
+                'ngayLap'  => $now,
+                'tongTien' => $total,
+                'ghiChu'   => 'Thanh toan qua website - ' . strtoupper($method),
+            ]);
+
             foreach ($courses as $course) {
                 if (!$course) {
                     continue;
                 }
 
-                $expiresAt = null;
+                InvoiceItem::create([
+                    'maHD'    => $invoice->maHD,
+                    'maKH'    => $course->maKH,
+                    'soLuong' => 1,
+                    'donGia'  => (int) $course->hocPhi,
+                ]);
 
-                if (!empty($course->thoiHanNgay)) {
-                    $expiresAt = $now->copy()->addDays((int) $course->thoiHanNgay);
+                $enrollment = Enrollment::firstOrNew([
+                    'maHV' => $student->maHV,
+                    'maKH' => $course->maKH,
+                ]);
+
+                if ($enrollment->exists && $enrollment->trangThai === 'ACTIVE') {
+                    $alreadyActiveCourses[$course->maKH] = [
+                        'maKH' => $course->maKH,
+                        'tenKH' => $course->tenKH,
+                    ];
+                    continue;
                 }
 
-                $exists = DB::table('HOCVIEN_KHOAHOC')
-                    ->where('maHV', $student->maHV)
-                    ->where('maKH', $course->maKH)
-                    ->exists();
+                if (!$enrollment->exists || empty($enrollment->ngayNhapHoc)) {
+                    $enrollment->ngayNhapHoc = $now->toDateString();
+                }
 
-                $payload = [
-                    'trangThai'    => 'ACTIVE',
-                    'activated_at' => $now,
-                    'expires_at'   => $expiresAt,
-                    'updated_at'   => $now,
+                if (!$enrollment->exists) {
+                    $enrollment->progress_percent = 0;
+                    $enrollment->video_progress_percent = 0;
+                    $enrollment->avg_minitest_score = 0;
+                    $enrollment->last_lesson_id = null;
+                }
+
+                $enrollment->trangThai = 'PENDING';
+                $enrollment->activated_at = null;
+                $enrollment->expires_at = null;
+                $enrollment->updated_at = $now;
+                $enrollment->save();
+
+                ActivationCode::where('maHV', $student->maHV)
+                    ->where('maKH', $course->maKH)
+                    ->whereIn('trangThai', ['CREATED', 'SENT'])
+                    ->update([
+                        'trangThai' => 'EXPIRED',
+                        'expires_at' => $now,
+                        'updated_at' => $now,
+                    ]);
+
+                $codeValue = $this->generateActivationCode($student->maHV, $course->maKH);
+
+                $activation = ActivationCode::create([
+                    'maHV'        => $student->maHV,
+                    'maKH'        => $course->maKH,
+                    'maHD'        => $invoice->maHD,
+                    'code'        => $codeValue,
+                    'trangThai'   => 'CREATED',
+                    'generated_at'=> $now,
+                ]);
+
+                $activationPackages[] = [
+                    'model'  => $activation,
+                    'course' => $course,
+                    'code'   => $codeValue,
                 ];
 
-                if ($exists) {
-                    DB::table('HOCVIEN_KHOAHOC')
-                        ->where('maHV', $student->maHV)
-                        ->where('maKH', $course->maKH)
-                        ->update($payload);
-                } else {
-                    DB::table('HOCVIEN_KHOAHOC')->insert(array_merge($payload, [
-                        'maHV'        => $student->maHV,
-                        'maKH'        => $course->maKH,
-                        'ngayNhapHoc' => $now->toDateString(),
-                        'created_at'  => $now,
-                    ]));
-                }
+                $pendingCourses[$course->maKH] = [
+                    'maKH' => $course->maKH,
+                    'tenKH' => $course->tenKH,
+                ];
             }
         });
+
+        return [
+            'invoice' => $invoice,
+            'student' => $student,
+            'user' => $user,
+            'activation_packages' => $activationPackages,
+            'pending_activation_courses' => array_values($pendingCourses),
+            'already_active_courses' => array_values($alreadyActiveCourses),
+        ];
+    }
+
+    private function dispatchActivationEmails(\App\Models\User $user, \App\Models\Student $student, array $packages): void
+    {
+        if (empty($packages)) {
+            return;
+        }
+
+        $courseCodes = [];
+        foreach ($packages as $package) {
+            $course = $package['course'];
+            $courseCodes[] = [
+                'course_name' => $course->tenKH,
+                'code' => $package['code'],
+                'course_slug' => $course->slug,
+            ];
+        }
+
+        try {
+            if (!empty($user->email)) {
+                Mail::to($user->email)->send(
+                    new ActivationCodeMail($student->hoTen ?? $user->hoTen ?? $user->name, $courseCodes)
+                );
+            }
+        } catch (Throwable $mailException) {
+            Log::error('Activation email dispatch failed', [
+                'user_id' => $user->maND ?? null,
+                'message' => $mailException->getMessage(),
+            ]);
+        }
+
+        $ids = array_filter(array_map(fn ($package) => $package['model']->id ?? null, $packages));
+
+        if (!empty($ids)) {
+            $timestamp = Carbon::now();
+            ActivationCode::whereIn('id', $ids)->update([
+                'trangThai' => 'SENT',
+                'sent_at'   => $timestamp,
+                'updated_at'=> $timestamp,
+            ]);
+        }
+    }
+
+    private function generateActivationCode(int $studentId, int $courseId): string
+    {
+        do {
+            $code = sprintf(
+                'OCC-%04d-%04d-%s',
+                $courseId % 10000,
+                $studentId % 10000,
+                Str::upper(Str::random(4))
+            );
+        } while (ActivationCode::where('code', $code)->exists());
+
+        return $code;
+    }
+
+    private function mapPaymentMethodToCode(string $method): ?string
+    {
+        $map = [
+            'qr'   => 'TT02',
+            'bank' => 'TT01',
+            'visa' => 'TT03',
+        ];
+
+        return $map[$method] ?? 'TT01';
     }
 
     private function sanitizeSelection(array $ids): array

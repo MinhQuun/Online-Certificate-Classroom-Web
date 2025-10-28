@@ -126,9 +126,13 @@
                             </a>
                             <a href="{{ route('student.progress.index') }}">
                                 <i class="fa-solid fa-chart-line"></i>
-                                <span> Tiến độ học tập</span>
-                            </a>
-                            <a href="#">
+                        <span> Tiến độ học tập</span>
+                    </a>
+                    <a href="{{ route('student.activations.form') }}">
+                        <i class="fa-solid fa-key"></i>
+                        <span> Mã kích hoạt</span>
+                    </a>
+                    <a href="#">
                                 <i class="fa-solid fa-cart-shopping"></i>
                                 <span> Lịch sử đơn hàng</span>
                             </a>

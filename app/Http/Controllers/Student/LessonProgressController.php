@@ -35,10 +35,11 @@ class LessonProgressController extends Controller
 
         $enrollment = Enrollment::where('maHV', $student->maHV)
             ->where('maKH', $courseId)
+            ->where('trangThai', 'ACTIVE')
             ->first();
 
         if (!$enrollment) {
-            return response()->json(['message' => 'Ban chua dang ky khoa hoc nay.'], 403);
+            return response()->json(['message' => 'Khoa hoc chua duoc kich hoat.'], 403);
         }
 
         $validated = $this->validatePayload($request);

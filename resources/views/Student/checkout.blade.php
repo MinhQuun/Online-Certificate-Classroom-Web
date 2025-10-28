@@ -14,6 +14,8 @@
         $courseCount = $courses->count();
         $currentUser = auth()->user();
         $successMethod = $successPayload['payment_method'] ?? null;
+        $pendingActivations = $successPayload['pending_activation_courses'] ?? [];
+        $alreadyActiveCourses = $successPayload['already_active_courses'] ?? [];
 
         $methodLabels = [
             'qr' => 'Quét mã QR',
@@ -163,8 +165,23 @@
                                     <p class="checkout-success__eyebrow">Hoàn tất thanh toán</p>
                                     <h2>Thật tuyệt vời, {{ $currentUser->hoTen ?? $currentUser->name ?? 'bạn' }}!</h2>
                                     <p>Bạn đã hoàn tất đơn hàng {{ $courseCount }} khóa học với tổng giá trị <strong>{{ number_format($total, 0, ',', '.') }} VNĐ</strong>. @if($methodLabel)Phương thức: <strong>{{ $methodLabel }}</strong>.@endif</p>
-                                    <p>OCC sẽ gửi hướng dẫn kích hoạt vào email của bạn trong vòng vài phút. Đội ngũ mentor đã sẵn sàng đồng hành!</p>
+                                    @if(!empty($pendingActivations))
+                                        <p>OCC đã gửi {{ count($pendingActivations) }} mã kích hoạt đến email <strong>{{ $currentUser->email }}</strong>. Nhập mã để mở khóa các khóa học sau:</p>
+                                        <ul class="checkout-success__activation-list">
+                                            @foreach($pendingActivations as $item)
+                                                <li>{{ $item['tenKH'] ?? ('Khóa #' . $item['maKH']) }}</li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <p>Tất cả khóa học trong đơn hàng đã được kích hoạt ngay lập tức. Bạn có thể bắt đầu học ngay bây giờ.</p>
+                                    @endif
+
+                                    @if(!empty($alreadyActiveCourses))
+                                        <p class="checkout-success__note">Sẵn sàng truy cập: {{ collect($alreadyActiveCourses)->pluck('tenKH')->filter()->implode(', ') }}</p>
+                                    @endif
+
                                     <div class="checkout-success__actions">
+                                        <a href="{{ route('student.activations.form') }}" class="checkout-btn checkout-btn--primary">Nhập mã kích hoạt</a>
                                         <a href="{{ route('student.courses.index') }}" class="checkout-btn checkout-btn--ghost">Tiếp tục học tập</a>
                                         <a href="{{ route('student.cart.index') }}" class="checkout-btn checkout-btn--outline">Quản lý đơn hàng</a>
                                     </div>

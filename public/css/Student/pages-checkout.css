@@ -337,4 +337,19 @@
     .checkout-shell {
         padding: 20px;
     }
+}.checkout-success__activation-list {
+    margin: 16px 0 12px 0;
+    padding-left: 22px;
+    color: #1e293b;
+}
+
+.checkout-success__activation-list li {
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.checkout-success__note {
+    font-size: 14px;
+    color: #475569;
+    margin-top: 12px;
 }

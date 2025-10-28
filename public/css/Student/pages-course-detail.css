@@ -1588,3 +1588,27 @@
 .module--nested .module__title {
     font-size: 18px;
 }
+.btn--pending {
+    background: rgba(250, 204, 21, 0.18);
+    color: #92400e;
+    border-color: transparent;
+    cursor: not-allowed;
+}
+
+.btn--pending:hover {
+    box-shadow: none;
+    transform: none;
+}
+
+.course-sidebar__note--pending {
+    background: rgba(250, 204, 21, 0.12);
+    color: #b45309;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 14px;
+}
+
+.course-sidebar__note--pending a {
+    color: #b45309;
+    text-decoration: underline;
+}

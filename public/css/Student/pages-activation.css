@@ -1,0 +1,337 @@
+﻿.activation-hero {
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    color: #fff;
+    padding: 48px 0;
+}
+
+.activation-hero .activation-hero__content {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.activation-hero h1 {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.activation-hero p {
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 680px;
+    margin: 0;
+    opacity: 0.9;
+}
+
+.activation-grid {
+    max-width: 1200px;
+    margin: 32px auto 64px auto;
+    padding: 0 24px;
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 2fr 1fr;
+}
+
+.activation-column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.activation-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+    border: 1px solid #e2e8f0;
+}
+
+.activation-card header,
+.activation-card h2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 20px;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 16px;
+}
+
+.activation-card p.description {
+    color: #475569;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.activation-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.activation-form label {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 6px;
+}
+
+.activation-form input[name="code"] {
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.activation-form input[name="code"]:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+}
+
+.activation-form .input-note {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.activation-form .form-error {
+    color: #dc2626;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+.activation-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 14px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.activation-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.25);
+}
+
+.activation-submit i {
+    margin-left: 10px;
+}
+
+.activation-empty {
+    border: 1px dashed #cbd5f5;
+    padding: 20px;
+    border-radius: 12px;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 14px;
+}
+
+.pending-course-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.pending-course {
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    transition: border 0.2s ease;
+}
+
+.pending-course:hover {
+    border-color: #2563eb;
+}
+
+.pending-course__info h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0 0 6px 0;
+}
+
+.pending-course__info p {
+    margin: 0;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.pending-course__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(37, 99, 235, 0.08);
+    color: #1d4ed8;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.activation-card--history {
+    position: sticky;
+    top: 96px;
+}
+
+.activation-history {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.activation-history__item {
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 16px 18px;
+    background: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.history-headline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.history-course {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.history-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.history-status--created {
+    background: rgba(59, 130, 246, 0.12);
+    color: #1d4ed8;
+}
+.history-status--sent {
+    background: rgba(14, 165, 233, 0.12);
+    color: #0ea5e9;
+}
+.history-status--used {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+}
+.history-status--expired {
+    background: rgba(248, 113, 113, 0.12);
+    color: #dc2626;
+}
+
+.history-body {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.history-body code {
+    background: #0f172a;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-family: "Fira Code", "SFMono-Regular", Menlo, monospace;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+}
+
+.activation-copy {
+    border: none;
+    background: #e2e8f0;
+    color: #1e293b;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.activation-copy:hover {
+    background: #cbd5f5;
+    transform: translateY(-1px);
+}
+
+.activation-copy[data-state="copied"] {
+    background: rgba(16, 185, 129, 0.14);
+    color: #047857;
+}
+
+.history-meta {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.history-meta li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.history-meta i {
+    color: #2563eb;
+}
+
+@media (max-width: 1024px) {
+    .activation-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .activation-card--history {
+        position: static;
+    }
+}
+
+@media (max-width: 640px) {
+    .activation-hero {
+        padding: 36px 0;
+    }
+
+    .activation-card {
+        padding: 24px;
+    }
+
+    .history-body {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

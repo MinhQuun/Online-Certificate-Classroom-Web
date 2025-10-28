@@ -744,3 +744,35 @@ html {
         padding: 5px 12px;
     }
 }
+.chip--status {
+    margin-left: 8px;
+    background: rgba(37, 99, 235, 0.12);
+    color: #1d4ed8;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.chip--status-active {
+    background: rgba(16, 185, 129, 0.16);
+    color: #047857;
+}
+
+.chip--status-pending {
+    background: rgba(250, 204, 21, 0.18);
+    color: #b45309;
+}
+
+.course-card__cta--pending {
+    background: rgba(250, 204, 21, 0.22);
+    color: #b45309;
+    cursor: not-allowed;
+}
+
+.course-card__cta--pending:hover {
+    box-shadow: none;
+    transform: none;
+}

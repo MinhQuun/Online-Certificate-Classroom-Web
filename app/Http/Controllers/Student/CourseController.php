@@ -43,6 +43,8 @@ class CourseController extends Controller
             'cartIds'            => $cartIds,
             'currentCategory'    => $currentCategory,
             'enrolledCourseIds'  => $enrollment['enrolledCourseIds'],
+            'activeCourseIds'    => $enrollment['activeCourseIds'],
+            'pendingCourseIds'   => $enrollment['pendingCourseIds'],
         ]);
     }
 
@@ -66,9 +68,11 @@ class CourseController extends Controller
         $isInCart = StudentCart::has($course->maKH);
         $cartIds = StudentCart::ids();
         $enrollment = $this->resolveStudentEnrollment();
-        $enrolledCourseIds = $enrollment['enrolledCourseIds'];
+        $activeCourseIds = $enrollment['activeCourseIds'];
+        $pendingCourseIds = $enrollment['pendingCourseIds'];
         $isAuthenticated = $enrollment['isAuthenticated'];
-        $isEnrolled = in_array($course->maKH, $enrolledCourseIds, true);
+        $isEnrolled = in_array($course->maKH, $activeCourseIds, true);
+        $isPending = in_array($course->maKH, $pendingCourseIds, true);
 
         $relatedCourses = Course::published()
             ->where('maDanhMuc', $course->maDanhMuc)
@@ -85,7 +89,10 @@ class CourseController extends Controller
             'relatedCourses'  => $relatedCourses,
             'isAuthenticated' => $isAuthenticated,
             'isEnrolled'      => $isEnrolled,
-            'enrolledCourseIds' => $enrolledCourseIds,
+            'isPending'       => $isPending,
+            'enrolledCourseIds' => $activeCourseIds,
+            'activeCourseIds'   => $activeCourseIds,
+            'pendingCourseIds'  => $pendingCourseIds,
         ]);
     }
 
@@ -95,6 +102,8 @@ class CourseController extends Controller
             'isAuthenticated'   => false,
             'student'           => null,
             'enrolledCourseIds' => [],
+            'activeCourseIds'   => [],
+            'pendingCourseIds'  => [],
         ];
 
         $userId = Auth::id();
@@ -112,13 +121,27 @@ class CourseController extends Controller
         }
 
         $result['student'] = $student;
-        $ids = DB::table('HOCVIEN_KHOAHOC')
-            ->where('maHV', $student->maHV)
-            ->whereIn('trangThai', ['ACTIVE', 'PENDING'])
-            ->pluck('maKH')
-            ->all();
 
-        $result['enrolledCourseIds'] = array_map('intval', $ids);
+        $rows = DB::table('HOCVIEN_KHOAHOC')
+            ->select('maKH', 'trangThai')
+            ->where('maHV', $student->maHV)
+            ->get();
+
+        $active = [];
+        $pending = [];
+
+        foreach ($rows as $row) {
+            $courseId = (int) $row->maKH;
+            if ($row->trangThai === 'ACTIVE') {
+                $active[] = $courseId;
+            } elseif ($row->trangThai === 'PENDING') {
+                $pending[] = $courseId;
+            }
+        }
+
+        $result['enrolledCourseIds'] = $active;
+        $result['activeCourseIds'] = $active;
+        $result['pendingCourseIds'] = $pending;
 
         return $result;
     }

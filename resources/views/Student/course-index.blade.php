@@ -91,14 +91,28 @@
                                 @php
                                     $categoryName = optional($course->category)->tenDanhMuc ?? 'Chương trình nổi bật';
                                     $inCart = in_array($course->maKH, $cartIds ?? [], true);
-                                    $isEnrolled = in_array($course->maKH, $enrolledCourseIds ?? [], true);
-                                    if ($isEnrolled) {
+                                    $isActive = in_array($course->maKH, $activeCourseIds ?? [], true);
+                                    $isPending = in_array($course->maKH, $pendingCourseIds ?? [], true);
+                                    if ($isActive || $isPending) {
                                         $inCart = false;
                                     }
+                                    $statusLabel = null;
+                                    $statusClass = null;
+                                    if ($isActive) {
+                                        $statusLabel = 'Đã kích hoạt';
+                                        $statusClass = 'active';
+                                    } elseif ($isPending) {
+                                        $statusLabel = 'Chờ kích hoạt';
+                                        $statusClass = 'pending';
+                                    }
+                                    $ctaClass = $isActive ? 'course-card__cta--owned' : ($isPending ? 'course-card__cta--pending' : '');
                                 @endphp
                                 <article class="course-card">
                                     <div class="course-card__category">
                                         <span class="chip chip--category">{{ $categoryName }}</span>
+                                        @if($statusLabel)
+                                            <span class="chip chip--status chip--status-{{ $statusClass }}">{{ $statusLabel }}</span>
+                                        @endif
                                     </div>
                                     <a href="{{ route('student.courses.show', $course->slug) }}" class="course-card__thumb">
                                         <img src="{{ $course->cover_image_url }}" alt="{{ $course->tenKH }}" loading="lazy">
@@ -114,10 +128,10 @@
                                                 <input type="hidden" name="course_id" value="{{ $course->maKH }}">
                                                 <button
                                                     type="submit"
-                                                    class="course-card__cta {{ $isEnrolled ? 'course-card__cta--owned' : '' }}"
-                                                    @if($isEnrolled || $inCart) disabled aria-disabled="true" @endif
+                                                    class="course-card__cta {{ $ctaClass }}"
+                                                    @if($isActive || $isPending || $inCart) disabled aria-disabled="true" @endif
                                                 >
-                                                    {{ $isEnrolled ? 'Đã mua' : ($inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng') }}
+                                                    {{ $isActive ? 'Đã kích hoạt' : ($isPending ? 'Chờ kích hoạt' : ($inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng')) }}
                                                 </button>
                                             </form>
                                         </div>
