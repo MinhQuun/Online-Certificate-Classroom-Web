@@ -54,6 +54,22 @@
     align-items: center;
 }
 
+.site-header .header-search {
+    align-items: center;
+    padding: 4px 8px;
+}
+
+.site-header .header-search input {
+    height: 34px;
+    padding: 0 6px;
+    line-height: 1;
+}
+
+.site-header .header-search button {
+    height: 34px;
+    width: 34px;
+}
+
 @media (min-width: 1024px) {
     .course-hero__grid {
         grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);

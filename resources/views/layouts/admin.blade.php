@@ -120,7 +120,13 @@
                 <i class="bi bi-person-lines-fill me-2"></i> Học viên
                 </a>
             </li>
-
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.invoices.*') ? 'active' : '' }}"
+                    href="{{ route('admin.invoices.index') }}"
+                    title="Quan ly hoa don">
+                <i class="bi bi-receipt-cutoff me-2"></i> Hoa don
+                </a>
+            </li>
             {{-- Chứng chỉ --}}
             <li class="nav-item mt-3 text-muted small">Chứng chỉ</li>
             <li class="nav-item">

@@ -1,0 +1,143 @@
+.metric-card {
+    background: var(--card);
+    border: 1px solid var(--card-brd);
+    border-radius: 18px;
+    padding: 18px 22px;
+    box-shadow: var(--shadow);
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+}
+
+.metric-kicker {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+}
+
+.metric-value {
+    font-size: clamp(1.6rem, 2.4vw, 2.3rem);
+    font-weight: 700;
+    color: var(--text);
+}
+
+.metric-meta {
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.invoices-filter .form-label {
+    font-weight: 600;
+}
+
+.filter-summary {
+    border: 1px solid var(--card-brd);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+}
+
+.summary-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+}
+
+.summary-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.summary-value.text-primary {
+    color: var(--wood) !important;
+}
+
+.method-chip {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(58, 134, 255, 0.08), rgba(26, 163, 163, 0.08));
+    border: 1px solid rgba(58, 134, 255, 0.18);
+}
+
+.method-chip .txt {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.method-chip .amt {
+    font-size: 0.78rem;
+    color: var(--muted);
+}
+
+.invoice-table tbody tr.invoice-row {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.invoice-table tbody tr.invoice-row:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(26, 163, 163, 0.16);
+}
+
+.invoice-table tbody tr.invoice-row td {
+    vertical-align: middle;
+}
+
+.invoice-summary .summary-value {
+    font-size: 1.2rem;
+}
+
+.invoice-summary .divider {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.08);
+    width: 100%;
+}
+
+.student-card .student-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+}
+
+.student-card .student-meta li {
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+    display: flex;
+    gap: 8px;
+}
+
+.student-card .student-meta span {
+    min-width: 110px;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.total-box {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.total-box span {
+    font-size: 1.25rem;
+    color: var(--wood);
+    margin-left: 6px;
+}
+
+@media (max-width: 992px) {
+    .metric-card {
+        min-height: 100px;
+    }
+
+    .invoices-filter .col-lg-6.d-flex {
+        justify-content: flex-start;
+    }
+}

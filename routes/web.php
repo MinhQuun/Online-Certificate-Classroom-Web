@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\CategoryAdminController;
 use App\Http\Controllers\Admin\CourseAdminController as CourseAdminController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserAdminController;
+use App\Http\Controllers\Admin\InvoiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -152,6 +153,10 @@ Route::middleware(['auth', 'admin'])
         Route::post('/courses', [CourseAdminController::class, 'store'])->name('courses.store');
         Route::put('/courses/{course}', [CourseAdminController::class, 'update'])->name('courses.update');
         Route::delete('/courses/{course}', [CourseAdminController::class, 'destroy'])->name('courses.destroy');
+
+        // Quản lý hóa đơn
+        Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
+        Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
     });
 
 /*

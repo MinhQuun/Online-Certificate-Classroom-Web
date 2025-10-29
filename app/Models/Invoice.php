@@ -12,7 +12,7 @@ class Invoice extends Model
 
     protected $fillable = [
         'maHV', 'maTT', 'maND',
-        'ngayLap', 'tongTien', 'ghiChu'
+        'ngayLap', 'tongTien', 'ghiChu',
     ];
 
     public function student()
@@ -23,5 +23,10 @@ class Invoice extends Model
     public function items()
     {
         return $this->hasMany(InvoiceItem::class, 'maHD', 'maHD');
+    }
+
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class, 'maTT', 'maTT');
     }
 }
