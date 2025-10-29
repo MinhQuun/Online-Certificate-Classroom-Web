@@ -31,6 +31,7 @@ use App\Http\Controllers\Teacher\LectureController;
 use App\Http\Controllers\Teacher\ProgressController;
 use App\Http\Controllers\Teacher\ChapterController;
 use App\Http\Controllers\Teacher\MiniTestController;
+use App\Http\Controllers\Teacher\GradingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +46,7 @@ use App\Http\Controllers\Student\CartController as StudentCartController;
 use App\Http\Controllers\Student\CheckoutController;
 use App\Http\Controllers\Student\ActivationController;
 use App\Http\Controllers\Student\ProgressController as StudentProgressController;
+use App\Http\Controllers\Student\MiniTestController as StudentMiniTestController;
 
 // =====================
 // Public (Student-facing)
@@ -90,6 +92,12 @@ Route::middleware('auth')
         Route::get('/progress', [StudentProgressController::class, 'index'])->name('progress.index');
         Route::post('/lessons/{lesson}/progress', [StudentLessonProgressController::class, 'store'])
             ->name('lessons.progress.store');
+
+        // Mini-tests cho học viên
+        Route::get('/chapters/{chapter}/minitests', [StudentMiniTestController::class, 'index'])->name('minitests.index');
+        Route::get('/minitests/{miniTest}', [StudentMiniTestController::class, 'show'])->name('minitests.show');
+        Route::post('/minitests/{miniTest}/submit', [StudentMiniTestController::class, 'submit'])->name('minitests.submit');
+        Route::get('/minitests/{result}/result', [StudentMiniTestController::class, 'result'])->name('minitests.result');
     });
 
 
@@ -196,4 +204,12 @@ Route::middleware(['auth', 'teacher'])
         Route::post('/minitests/{miniTest}/questions', [MiniTestController::class, 'storeQuestions'])->name('minitests.questions.store');
         Route::post('/minitests/{miniTest}/materials', [MiniTestController::class, 'storeMaterial'])->name('minitests.materials.store');
         Route::delete('/minitests/materials/{material}', [MiniTestController::class, 'destroyMaterial'])->name('minitests.materials.destroy');
+        Route::post('/minitests/{miniTest}/publish', [MiniTestController::class, 'publish'])->name('minitests.publish');
+        Route::post('/minitests/{miniTest}/unpublish', [MiniTestController::class, 'unpublish'])->name('minitests.unpublish');
+
+        // Chấm điểm
+        Route::get('/grading', [GradingController::class, 'index'])->name('grading.index');
+        Route::get('/grading/{result}', [GradingController::class, 'show'])->name('grading.show');
+        Route::post('/grading/{result}', [GradingController::class, 'grade'])->name('grading.grade');
+        Route::post('/grading/bulk', [GradingController::class, 'bulkGrade'])->name('grading.bulk');
     });

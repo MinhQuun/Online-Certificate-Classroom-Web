@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const courseId = this.dataset.courseId;
             const chapterId = this.dataset.chapterId;
             const title = this.dataset.title;
+            const skillType = this.dataset.skillType;
             const order = this.dataset.order;
             const maxScore = this.dataset.maxScore;
             const weight = this.dataset.weight;
@@ -49,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('edit_course_id').value = courseId;
             document.getElementById('edit_chapter_id').value = chapterId;
             document.getElementById('edit_title').value = title;
+            document.getElementById('edit_skill_type').value = skillType || '';
             document.getElementById('edit_order').value = order;
             document.getElementById('edit_max_score').value = maxScore;
             document.getElementById('edit_weight').value = weight;

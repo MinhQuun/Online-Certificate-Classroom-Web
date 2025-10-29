@@ -74,6 +74,35 @@ class CourseController extends Controller
         $isEnrolled = in_array($course->maKH, $activeCourseIds, true);
         $isPending = in_array($course->maKH, $pendingCourseIds, true);
 
+        // Load student's best scores for each minitest
+        $miniTestScores = [];
+        if ($isAuthenticated && $enrollment['student']) {
+            $studentId = $enrollment['student']->maHV;
+            $miniTestIds = [];
+            
+            foreach ($course->chapters as $chapter) {
+                foreach ($chapter->miniTests as $miniTest) {
+                    $miniTestIds[] = $miniTest->maMT;
+                }
+            }
+
+            if (!empty($miniTestIds)) {
+                $scores = DB::table('KETQUA_MINITEST')
+                    ->select('maMT', DB::raw('MAX(diem) as best_score'), DB::raw('MAX(is_fully_graded) as is_fully_graded'))
+                    ->where('maHV', $studentId)
+                    ->whereIn('maMT', $miniTestIds)
+                    ->groupBy('maMT')
+                    ->get();
+
+                foreach ($scores as $score) {
+                    $miniTestScores[$score->maMT] = [
+                        'best_score' => $score->best_score,
+                        'is_fully_graded' => $score->is_fully_graded
+                    ];
+                }
+            }
+        }
+
         $relatedCourses = Course::published()
             ->where('maDanhMuc', $course->maDanhMuc)
             ->where('maKH', '!=', $course->maKH)
@@ -93,6 +122,7 @@ class CourseController extends Controller
             'enrolledCourseIds' => $activeCourseIds,
             'activeCourseIds'   => $activeCourseIds,
             'pendingCourseIds'  => $pendingCourseIds,
+            'miniTestScores'  => $miniTestScores,
         ]);
     }
 

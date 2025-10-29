@@ -181,34 +181,49 @@
                                                         @endphp
                                                         <li class="mini-test-item" data-mini-test-id="{{ $miniTest->maMT }}">
                                                             <span class="label {{ $labelClass }}">{{ $labelText }}</span>
-                                                            <!-- Link chính vào bài test (thay href nếu có route) -->
-                                                            <a href="#" class="mini-test-link">
-                                                                <div class="lesson-list__meta">
-                                                                    <span class="lesson-list__eyebrow">MiniTest {{ $miniTest->thuTu }}</span>
-                                                                    <span class="lesson-list__title">{{ $miniTest->title }}</span>
-                                                                </div>
-                                                                <span class="badge badge--minitest">MINI TEST</span>
-                                                            </a>
-                                                            <!-- Meta details -->
-                                                            <ul class="meta-list meta-list--inline mt-1">
-                                                                <li>{{ $miniTest->time_limit_min }} phút</li>
-                                                                <li>{{ $miniTest->attempts_allowed }} lần làm</li>
-                                                                <li>Điểm: {{ $miniTest->max_score }} (Trọng số: {{ $miniTest->trongSo }})</li>
-                                                            </ul>
-                                                            <!-- Resource list -->
-                                                            @if ($miniTest->materials->count())
-                                                                <div class="resource-list resource-list--compact mt-2">
-                                                                    @foreach ($miniTest->materials as $resource)
-                                                                        @php
-                                                                            $resTypeKey = preg_replace('/[^a-z0-9]+/', '-', strtolower($resource->loai)) ?: 'default';
-                                                                        @endphp
-                                                                        <a href="{{ $resource->public_url }}" target="_blank" rel="noopener noreferrer">
-                                                                            <span>{{ $resource->tenTL }}</span>
-                                                                            <span class="badge badge--{{ $resTypeKey }}">{{ strtoupper($resource->loai) }}</span>
-                                                                        </a>
-                                                                    @endforeach
-                                                                </div>
+                                                            <!-- Link vào trang làm bài -->
+                                                            @if($isEnrolled || $isFreeMiniTest)
+                                                                <a href="{{ route('student.minitests.show', $miniTest->maMT) }}" class="mini-test-link">
+                                                                    <div class="lesson-list__meta">
+                                                                        <span class="lesson-list__eyebrow">MiniTest {{ $miniTest->thuTu }}</span>
+                                                                        <span class="lesson-list__title">{{ $miniTest->title }}</span>
+                                                                    </div>
+                                                                    <span class="badge badge--minitest">MINI TEST</span>
+                                                                </a>
+                                                            @else
+                                                                <a href="#" class="mini-test-link" onclick="alert('Vui lòng mua khóa học để làm bài test này'); return false;">
+                                                                    <div class="lesson-list__meta">
+                                                                        <span class="lesson-list__eyebrow">MiniTest {{ $miniTest->thuTu }}</span>
+                                                                        <span class="lesson-list__title">{{ $miniTest->title }}</span>
+                                                                    </div>
+                                                                    <span class="badge badge--minitest">MINI TEST</span>
+                                                                </a>
                                                             @endif
+                                                            <!-- Meta details with score -->
+                                                            <ul class="meta-list meta-list--inline mt-1">
+                                                                <li><i class="bi bi-clock"></i> {{ $miniTest->time_limit_min }} phút</li>
+                                                                <li><i class="bi bi-question-circle"></i> {{ $miniTest->questions->count() }} câu</li>
+                                                                <li><i class="bi bi-trophy"></i> {{ $miniTest->max_score }} điểm</li>
+                                                                @if(isset($miniTestScores[$miniTest->maMT]))
+                                                                    @php
+                                                                        $scoreData = $miniTestScores[$miniTest->maMT];
+                                                                        $bestScore = $scoreData['best_score'];
+                                                                        $isGraded = $scoreData['is_fully_graded'];
+                                                                        $percentage = ($bestScore / $miniTest->max_score) * 100;
+                                                                    @endphp
+                                                                    <li>
+                                                                        @if($isGraded)
+                                                                            <span class="badge" style="background: linear-gradient(135deg, #34c759, #30b350); color: white; padding: 4px 12px; border-radius: 12px; font-weight: 600;">
+                                                                                <i class="bi bi-check-circle-fill me-1"></i>{{ number_format($bestScore, 1) }}/{{ $miniTest->max_score }}
+                                                                            </span>
+                                                                        @else
+                                                                            <span class="badge" style="background: linear-gradient(135deg, #ffc107, #ff9800); color: white; padding: 4px 12px; border-radius: 12px; font-weight: 600;">
+                                                                                <i class="bi bi-hourglass-split me-1"></i>Chờ chấm
+                                                                            </span>
+                                                                        @endif
+                                                                    </li>
+                                                                @endif
+                                                            </ul>
                                                         </li>
                                                     @endforeach
                                                 </ul>

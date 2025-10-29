@@ -17,16 +17,19 @@ class MiniTest extends Model
         'maKH',
         'maChuong',
         'title',
+        'skill_type',
         'thuTu',
         'max_score',
         'trongSo',
         'time_limit_min',
         'attempts_allowed',
         'is_active',
+        'is_published',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'is_published' => 'boolean',
     ];
 
     public function chapter(): BelongsTo

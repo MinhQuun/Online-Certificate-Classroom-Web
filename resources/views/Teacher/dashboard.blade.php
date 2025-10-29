@@ -40,7 +40,7 @@
         </div>
 
         <div class="col-md-6 col-lg-3">
-            <a href="{{ route('teacher.exams.index') }}" class="s-card text-decoration-none">
+            <a href="{{ route('teacher.dashboard') }}" class="s-card text-decoration-none">
                 <div class="icon"><i class="bi bi-clipboard-check"></i></div>
                 <div class="meta">
                     <div class="n">{{ $stats['exams_upcoming'] ?? 0 }}</div>
@@ -71,7 +71,7 @@
                 <a href="{{ route('teacher.progress.index') }}" class="chip">
                     <i class="bi bi-graph-up me-1"></i> Cập nhật tiến độ
                 </a>
-                <a href="{{ route('teacher.exams.index') }}?action=create" class="chip">
+                <a href="{{ route('teacher.dashboard') }}" class="chip">
                     <i class="bi bi-clipboard-check me-1"></i> Lập kế hoạch kỳ thi
                 </a>
 
@@ -93,7 +93,7 @@
                 @endif
 
                 @if($examsPending > 0)
-                    <a href="{{ route('teacher.exams.index') }}?status=pending" class="chip">
+                    <a href="{{ route('teacher.dashboard') }}" class="chip">
                         <i class="bi bi-clipboard-check me-1"></i>
                         Kỳ thi chưa sắp xếp
                         <span class="badge text-bg-secondary ms-1">{{ $examsPending }}</span>

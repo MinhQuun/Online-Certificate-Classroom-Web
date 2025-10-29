@@ -118,6 +118,33 @@
                                                     <div class="flex-grow-1">
                                                         <div class="d-flex align-items-center gap-2 mb-2">
                                                             <span class="badge bg-secondary">Test {{ $miniTest->thuTu }}</span>
+                                                            @php
+                                                                $skillIcons = [
+                                                                    'LISTENING' => '🎧',
+                                                                    'SPEAKING' => '🗣️',
+                                                                    'READING' => '📖',
+                                                                    'WRITING' => '✍️'
+                                                                ];
+                                                                $skillNames = [
+                                                                    'LISTENING' => 'Nghe',
+                                                                    'SPEAKING' => 'Nói',
+                                                                    'READING' => 'Đọc',
+                                                                    'WRITING' => 'Viết'
+                                                                ];
+                                                            @endphp
+                                                            <span class="badge bg-info">
+                                                                {{ $skillIcons[$miniTest->skill_type] ?? '' }} 
+                                                                {{ $skillNames[$miniTest->skill_type] ?? $miniTest->skill_type }}
+                                                            </span>
+                                                            @if($miniTest->is_published)
+                                                                <span class="badge bg-success">
+                                                                    <i class="bi bi-check-circle me-1"></i> Đã công bố
+                                                                </span>
+                                                            @else
+                                                                <span class="badge bg-warning text-dark">
+                                                                    <i class="bi bi-clock me-1"></i> Nháp
+                                                                </span>
+                                                            @endif
                                                             @if($miniTest->is_active)
                                                                 <span class="badge bg-success">Đang hoạt động</span>
                                                             @else
@@ -141,9 +168,29 @@
                                                             <li>
                                                                 <a class="dropdown-item"
                                                                    href="{{ route('teacher.minitests.questions.form', $miniTest->maMT) }}">
-                                                                    <i class="bi bi-list-check me-2"></i> Tạo câu hỏi
+                                                                    <i class="bi bi-list-check me-2"></i> Quản lý câu hỏi
                                                                 </a>
                                                             </li>
+                                                            @if($miniTest->is_published)
+                                                                <li>
+                                                                    <form action="{{ route('teacher.minitests.unpublish', $miniTest->maMT) }}" method="POST">
+                                                                        @csrf
+                                                                        <button type="submit" class="dropdown-item">
+                                                                            <i class="bi bi-x-circle me-2"></i> Hủy công bố
+                                                                        </button>
+                                                                    </form>
+                                                                </li>
+                                                            @else
+                                                                <li>
+                                                                    <form action="{{ route('teacher.minitests.publish', $miniTest->maMT) }}" method="POST"
+                                                                          onsubmit="return confirm('Công bố mini-test này? Học viên sẽ có thể xem và làm bài.')">
+                                                                        @csrf
+                                                                        <button type="submit" class="dropdown-item text-success">
+                                                                            <i class="bi bi-check-circle me-2"></i> Công bố mini-test
+                                                                        </button>
+                                                                    </form>
+                                                                </li>
+                                                            @endif
                                                             <li><hr class="dropdown-divider"></li>
                                                             <li>
                                                                 <a class="dropdown-item edit-minitest-btn"
@@ -152,6 +199,7 @@
                                                                    data-course-id="{{ $activeCourse->maKH }}"
                                                                    data-chapter-id="{{ $chapter->maChuong }}"
                                                                    data-title="{{ $miniTest->title }}"
+                                                                   data-skill-type="{{ $miniTest->skill_type }}"
                                                                    data-order="{{ $miniTest->thuTu }}"
                                                                    data-max-score="{{ $miniTest->max_score }}"
                                                                    data-weight="{{ $miniTest->trongSo }}"
@@ -272,6 +320,20 @@
                                    placeholder="VD: Mini-test 1 - Photographs" required>
                         </div>
 
+                        <div class="form-group-gform">
+                            <label for="create_skill_type" class="form-label-gform">Kỹ năng *</label>
+                            <select name="skill_type" id="create_skill_type" class="form-control-gform" required>
+                                <option value="">-- Chọn kỹ năng --</option>
+                                <option value="LISTENING">🎧 Nghe (Listening)</option>
+                                <option value="SPEAKING">🗣️ Nói (Speaking)</option>
+                                <option value="READING">📖 Đọc (Reading)</option>
+                                <option value="WRITING">✍️ Viết (Writing)</option>
+                            </select>
+                            <small class="text-muted">
+                                <strong>Lưu ý:</strong> Kỹ năng Viết sẽ cần giảng viên chấm điểm thủ công
+                            </small>
+                        </div>
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group-gform">
@@ -366,6 +428,17 @@
                         <div class="form-group-gform">
                             <label for="edit_title" class="form-label-gform">Tiêu đề mini-test *</label>
                             <input type="text" name="title" id="edit_title" class="form-control-gform" required>
+                        </div>
+
+                        <div class="form-group-gform">
+                            <label for="edit_skill_type" class="form-label-gform">Kỹ năng *</label>
+                            <select name="skill_type" id="edit_skill_type" class="form-control-gform" required>
+                                <option value="">-- Chọn kỹ năng --</option>
+                                <option value="LISTENING">🎧 Nghe (Listening)</option>
+                                <option value="SPEAKING">🗣️ Nói (Speaking)</option>
+                                <option value="READING">📖 Đọc (Reading)</option>
+                                <option value="WRITING">✍️ Viết (Writing)</option>
+                            </select>
                         </div>
 
                         <div class="row">

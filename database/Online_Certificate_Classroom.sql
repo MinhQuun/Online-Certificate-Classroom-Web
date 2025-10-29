@@ -306,17 +306,20 @@ CREATE TABLE CHUONG_MINITEST (
     maKH INT NOT NULL,                        -- Liên kết khóa học
     maChuong INT NOT NULL,                    -- Liên kết chương
     title VARCHAR(150) NOT NULL,              -- Tiêu đề mini-test
+    skill_type ENUM('LISTENING','SPEAKING','READING','WRITING') NOT NULL,  -- Loại kỹ năng
     thuTu INT NOT NULL DEFAULT 1,             -- Thứ tự
     max_score DECIMAL(5,2) DEFAULT 10.00,     -- Thang điểm tối đa
     trongSo  DECIMAL(5,2) DEFAULT 0.00,       -- Trọng số
     time_limit_min INT,                       -- Thời gian giới hạn (phút)
     attempts_allowed TINYINT DEFAULT 1,       -- Số lần thử
-    is_active TINYINT(1) DEFAULT 1,           -- Hoạt động hay không
+    is_active TINYINT(1) DEFAULT 1,           -- Hoạt động hay không (công bố hay chưa)
+    is_published TINYINT(1) DEFAULT 0,        -- Đã công bố hay chưa
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (maMT),
     KEY IX_MT_KH (maKH),
     KEY IX_MT_CHUONG (maChuong),
+    KEY IX_MT_SKILL (skill_type),
     CONSTRAINT uq_mt_order UNIQUE (maChuong, thuTu),
     CONSTRAINT FK_MT_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE,
     CONSTRAINT FK_MT_CH FOREIGN KEY (maChuong) REFERENCES CHUONG(maChuong) ON DELETE CASCADE
@@ -343,15 +346,18 @@ CREATE TABLE MINITEST_QUESTIONS (
     maCauHoi INT NOT NULL AUTO_INCREMENT,
     maMT INT NOT NULL,                        -- Liên kết mini-test
     thuTu INT NOT NULL DEFAULT 1,             -- Thứ tự câu hỏi
-    loai ENUM('single_choice', 'multiple_choice', 'true_false', 'short_answer') DEFAULT 'single_choice',  -- Loại câu hỏi
+    loai ENUM('single_choice', 'multiple_choice', 'true_false', 'essay') DEFAULT 'single_choice',  -- Loại câu hỏi
     noiDungCauHoi TEXT NOT NULL,              -- Nội dung câu hỏi
-    phuongAnA TEXT NULL,                      -- Phương án A
-    phuongAnB TEXT NULL,                      -- Phương án B
-    phuongAnC TEXT NULL,                      -- Phương án C
-    phuongAnD TEXT NULL,                      -- Phương án D
-    dapAnDung VARCHAR(50) NULL,               -- Đáp án đúng (ví dụ: 'A', 'A;C', 'TRUE')
+    phuongAnA TEXT NULL,                      -- Phương án A (cho trắc nghiệm)
+    phuongAnB TEXT NULL,                      -- Phương án B (cho trắc nghiệm)
+    phuongAnC TEXT NULL,                      -- Phương án C (cho trắc nghiệm)
+    phuongAnD TEXT NULL,                      -- Phương án D (cho trắc nghiệm)
+    dapAnDung VARCHAR(50) NULL,               -- Đáp án đúng (ví dụ: 'A', 'A;C', 'TRUE') - NULL cho essay
     giaiThich TEXT NULL,                      -- Giải thích
     diem DECIMAL(5,2) DEFAULT 1.00,           -- Điểm câu hỏi
+    audio_url VARCHAR(700) NULL,              -- URL file audio (cho kỹ năng nghe/nói)
+    image_url VARCHAR(700) NULL,              -- URL hình ảnh minh họa
+    pdf_url VARCHAR(700) NULL,                -- URL file PDF đính kèm
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (maCauHoi),
@@ -368,16 +374,50 @@ CREATE TABLE KETQUA_MINITEST (
     maKH INT NOT NULL,                        -- Liên kết ghi danh
     attempt_no TINYINT DEFAULT 1,             -- Lần thử
     diem DECIMAL(5,2),                        -- Điểm đạt được
+    auto_graded_score DECIMAL(5,2),           -- Điểm tự động (trắc nghiệm)
+    essay_score DECIMAL(5,2),                 -- Điểm tự luận (do giảng viên chấm)
+    is_fully_graded TINYINT(1) DEFAULT 0,     -- Đã chấm đầy đủ hay chưa
     nhanxet VARCHAR(1000),                    -- Nhận xét
     nop_luc DATETIME,                         -- Thời điểm nộp
+    completed_at DATETIME,                    -- Thời điểm hoàn thành
+    graded_at DATETIME,                       -- Thời điểm chấm xong
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (maKQDG),
     UNIQUE KEY uq_kqdg (maMT, maHV, maKH, attempt_no),
     KEY IX_KQDG_MT (maMT),
     KEY IX_KQDG_ENROLL (maHV, maKH),
+    KEY IX_KQDG_GRADED (is_fully_graded),
     CONSTRAINT FK_KQDG_MT     FOREIGN KEY (maMT)        REFERENCES CHUONG_MINITEST(maMT) ON DELETE CASCADE,
     CONSTRAINT FK_KQDG_ENROLL FOREIGN KEY (maHV, maKH)  REFERENCES HOCVIEN_KHOAHOC(maHV, maKH) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Bảng MINITEST_STUDENT_ANSWERS: Câu trả lời của học viên (đặc biệt quan trọng cho kỹ năng viết).
+-- TẠO SAU KETQUA_MINITEST vì có FK tham chiếu đến bảng đó.
+CREATE TABLE MINITEST_STUDENT_ANSWERS (
+    id INT NOT NULL AUTO_INCREMENT,
+    maKQDG INT NOT NULL,                      -- Liên kết kết quả mini-test
+    maCauHoi INT NOT NULL,                    -- Liên kết câu hỏi
+    maHV INT NOT NULL,                        -- Học viên
+    answer_choice VARCHAR(50) NULL,           -- Đáp án chọn (A, B, C, D) cho trắc nghiệm
+    answer_text TEXT NULL,                    -- Câu trả lời tự luận (cho essay/writing)
+    is_correct TINYINT(1) NULL,               -- Đúng/sai (NULL nếu chưa chấm)
+    diem DECIMAL(5,2) NULL,                   -- Điểm đạt được (NULL nếu chưa chấm)
+    teacher_feedback TEXT NULL,               -- Phản hồi của giảng viên (cho essay)
+    graded_at DATETIME NULL,                  -- Thời điểm chấm điểm
+    graded_by INT NULL,                       -- Giảng viên chấm điểm
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_student_answer (maKQDG, maCauHoi, maHV),
+    KEY IX_MSA_KQDG (maKQDG),
+    KEY IX_MSA_CAUHOI (maCauHoi),
+    KEY IX_MSA_HV (maHV),
+    KEY IX_MSA_GRADER (graded_by),
+    CONSTRAINT FK_MSA_KQDG FOREIGN KEY (maKQDG) REFERENCES KETQUA_MINITEST(maKQDG) ON DELETE CASCADE,
+    CONSTRAINT FK_MSA_CAUHOI FOREIGN KEY (maCauHoi) REFERENCES MINITEST_QUESTIONS(maCauHoi) ON DELETE CASCADE,
+    CONSTRAINT FK_MSA_HV FOREIGN KEY (maHV) REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
+    CONSTRAINT FK_MSA_GRADER FOREIGN KEY (graded_by) REFERENCES NGUOIDUNG(maND) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================

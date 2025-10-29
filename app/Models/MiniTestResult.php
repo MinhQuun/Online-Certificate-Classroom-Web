@@ -22,14 +22,24 @@ class MiniTestResult extends Model
         'maKH',
         'attempt_no',
         'diem',
+        'auto_graded_score',
+        'essay_score',
+        'is_fully_graded',
         'nhanxet',
         'nop_luc',
+        'completed_at',
+        'graded_at',
     ];
 
     protected $casts = [
         'attempt_no' => 'integer',
         'diem'       => 'decimal:2',
+        'auto_graded_score' => 'decimal:2',
+        'essay_score' => 'decimal:2',
+        'is_fully_graded' => 'boolean',
         'nop_luc'    => 'datetime',
+        'completed_at' => 'datetime',
+        'graded_at' => 'datetime',
     ];
 
     // Mini-test nào
@@ -54,5 +64,17 @@ class MiniTestResult extends Model
     public function enrollment()
     {
         return $this->belongsTo(Enrollment::class, 'maHV', 'maHV');
+    }
+
+    // Các câu trả lời của học viên
+    public function studentAnswers()
+    {
+        return $this->hasMany(MiniTestStudentAnswer::class, 'maKQDG', 'maKQDG');
+    }
+
+    // Kiểm tra đã chấm xong chưa
+    public function isFullyGraded(): bool
+    {
+        return $this->is_fully_graded;
     }
 }

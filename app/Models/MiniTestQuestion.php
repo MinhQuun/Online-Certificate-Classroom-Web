@@ -9,17 +9,25 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class MiniTestQuestion extends Model
 {
     protected $table = 'MINITEST_QUESTIONS';
-    protected $primaryKey = 'maCH';
+    protected $primaryKey = 'maCauHoi';
     public $incrementing = true;
     protected $keyType = 'int';
 
     protected $fillable = [
         'maMT',
         'thuTu',
-        'noiDung',
-        'image_url',
-        'audio_url',
+        'loai',
+        'noiDungCauHoi',
+        'phuongAnA',
+        'phuongAnB',
+        'phuongAnC',
+        'phuongAnD',
+        'dapAnDung',
+        'giaiThich',
         'diem',
+        'audio_url',
+        'image_url',
+        'pdf_url',
     ];
 
     protected $casts = [
@@ -35,19 +43,36 @@ class MiniTestQuestion extends Model
     }
 
     /**
-     * Các đáp án của câu hỏi
+     * Câu trả lời của học viên cho câu hỏi này
      */
-    public function answers(): HasMany
+    public function studentAnswers(): HasMany
     {
-        return $this->hasMany(MiniTestAnswer::class, 'maCH', 'maCH')->orderBy('thuTu');
+        return $this->hasMany(MiniTestStudentAnswer::class, 'maCauHoi', 'maCauHoi');
     }
 
     /**
-     * Lấy đáp án đúng
+     * Kiểm tra xem câu hỏi có phải là essay (tự luận) không
      */
-    public function correctAnswer(): HasMany
+    public function isEssay(): bool
     {
-        return $this->hasMany(MiniTestAnswer::class, 'maCH', 'maCH')
-            ->where('isDung', true);
+        return $this->loai === 'essay';
+    }
+
+    /**
+     * Kiểm tra đáp án có đúng không
+     */
+    public function checkAnswer(string $answer): bool
+    {
+        if ($this->isEssay()) {
+            return false; // Essay không tự động chấm
+        }
+
+        $correctAnswers = explode(';', $this->dapAnDung ?? '');
+        $studentAnswers = explode(';', $answer);
+
+        sort($correctAnswers);
+        sort($studentAnswers);
+
+        return $correctAnswers === $studentAnswers;
     }
 }
