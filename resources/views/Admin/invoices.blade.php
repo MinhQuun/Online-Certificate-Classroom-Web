@@ -19,6 +19,7 @@
         <p class="muted">Theo dõi công nợ, lọc giao dịch và xem chi tiết hóa đơn.</p>
     </section>
 
+    {{-- Tổng quan --}}
     <div class="row g-3 mb-3">
         <div class="col-md-4">
             <div class="metric-card">
@@ -43,6 +44,7 @@
         </div>
     </div>
 
+    {{-- Bộ lọc + Tóm tắt --}}
     <div class="row g-3 align-items-stretch mb-3">
         <div class="col-lg-9">
             <div class="card invoices-filter">
@@ -77,18 +79,24 @@
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <label class="form-label text-uppercase small text-muted mb-1">Tổng tiền từ</label>
-                            <input type="number" name="amount_min" class="form-control"
-                                   step="0.01" min="0"
+                            <input type="number" 
+                                   name="amount_min" 
+                                   class="form-control"
+                                   min="0"
+                                   step="1000"
                                    value="{{ $filters['amount_min'] }}">
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <label class="form-label text-uppercase small text-muted mb-1">Tổng tiền đến</label>
-                            <input type="number" name="amount_max" class="form-control"
-                                   step="0.01" min="0"
+                            <input type="number" 
+                                   name="amount_max" 
+                                   class="form-control"
+                                   min="0"
+                                   step="1000"
                                    value="{{ $filters['amount_max'] }}">
                         </div>
                         <div class="col-lg-6 d-flex align-items-end justify-content-end gap-2">
-                            <button class="btn btn-primary">
+                            <button class="btn btn-outline-primary">
                                 <i class="bi bi-funnel me-1"></i> Lọc kết quả
                             </button>
                             <a class="btn btn-outline-secondary" href="{{ route('admin.invoices.index') }}">
@@ -131,28 +139,34 @@
         </div>
     </div>
 
-    <div class="card invoice-list-card">
-        <div class="card-header flex-wrap gap-3 d-flex justify-content-between align-items-center">
+    {{-- Danh sách hóa đơn --}}
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
                 <h5 class="m-0">Danh sách hóa đơn</h5>
                 <span class="text-muted small">
                     Hiển thị {{ $invoices->firstItem() ?? 0 }} - {{ $invoices->lastItem() ?? 0 }} / {{ $invoices->total() }}
                 </span>
             </div>
-            <div class="d-flex gap-2 flex-wrap">
-                <a class="btn btn-outline-success"
-                   href="{{ route('admin.invoices.export', $exportQuery) }}">
-                    <i class="bi bi-file-earmark-excel me-1"></i> Xuất Excel
-                </a>
-            </div>
+            <a class="btn btn-primary" href="{{ route('admin.invoices.export', $exportQuery) }}">
+                <i class="bi bi-file-earmark-excel me-1"></i> Xuất Excel
+            </a>
         </div>
 
         <div class="table-responsive">
-            <table
-                class="table table-hover table-align-middle invoice-table mb-0"
-                data-detail-url="{{ $detailUrlTemplate }}"
-                data-pdf-url="{{ $pdfUrlTemplate }}"
-            >
+            <table class="table align-middle mb-0 table-hover invoice-table table-fixed"
+                   data-detail-url="{{ $detailUrlTemplate }}"
+                   data-pdf-url="{{ $pdfUrlTemplate }}">
+                <colgroup>
+                    <col style="width:80px;">
+                    <col style="width:20%;">
+                    <col style="width:18%;">
+                    <col style="width:14%;">
+                    <col style="width:12%;">
+                    <col style="width:10%;">
+                    <col style="width:14%;">
+                    <col style="width:12%;">
+                </colgroup>
                 <thead>
                     <tr>
                         <th>Mã HĐ</th>
@@ -162,7 +176,7 @@
                         <th class="text-end">Tổng tiền</th>
                         <th class="text-center">Số khóa</th>
                         <th>Ngày lập</th>
-                        <th class="text-end"></th>
+                        <th class="text-end">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -179,19 +193,14 @@
                         @endphp
                         <tr class="invoice-row" data-invoice-id="{{ $invoice->maHD }}">
                             <td><strong>#{{ $invoice->maHD }}</strong></td>
-                            <td>
-                                <div class="fw-semibold text-truncate" title="{{ $studentName }}">{{ $studentName }}</div>
-                                @if ($student)
-                                    <div class="text-muted small">HV#{{ $student->maHV }}</div>
-                                @endif
-                            </td>
+                            <td class="text-truncate" title="{{ $studentName }}">{{ $studentName }}</td>
                             <td class="text-truncate" title="{{ $email }}">{{ $email }}</td>
-                            <td><span class="badge rounded-pill text-bg-light">{{ $methodLabel }}</span></td>
+                            <td>
+                                <span class="badge rounded-pill text-bg-light">{{ $methodLabel }}</span>
+                            </td>
                             <td class="text-end fw-semibold text-primary">{{ number_format($invoice->tongTien) }} VND</td>
                             <td class="text-center">
-                                <span class="badge rounded-pill text-bg-light">
-                                    {{ $invoice->items_count }}
-                                </span>
+                                <span class="badge rounded-pill text-bg-light">{{ $invoice->items_count }}</span>
                             </td>
                             <td>
                                 @if ($issuedAt)
@@ -201,19 +210,17 @@
                                     <span class="text-muted">N/A</span>
                                 @endif
                             </td>
-                            <td class="text-end">
+                            <td class="td-actions text-end">
                                 <button type="button"
-                                        class="btn btn-sm btn-outline-primary js-invoice-detail"
+                                        class="btn btn-sm btn-primary-soft js-invoice-detail"
                                         data-invoice-id="{{ $invoice->maHD }}">
-                                    <i class="bi bi-eye me-1"></i> Chi tiết
+                                    <i class="bi bi-eye me-1"></i>
                                 </button>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center py-4 text-muted">
-                                Không tìm thấy hóa đơn phù hợp.
-                            </td>
+                            <td colspan="8" class="text-center text-muted py-4">Không tìm thấy hóa đơn phù hợp.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -225,13 +232,12 @@
                 @include('components.pagination', [
                     'paginator' => $invoices,
                     'ariaLabel' => 'Điều hướng hóa đơn',
-                    'containerClass' => 'mt-2',
-                    'alignClass' => 'justify-content-center justify-content-lg-end',
                 ])
             </div>
         @endif
     </div>
 
+    {{-- Modal chi tiết --}}
     <div class="modal fade" id="invoiceDetailModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
@@ -240,7 +246,7 @@
                         <h5 class="modal-title">Hóa đơn #<span data-invoice-number>---</span></h5>
                         <p class="text-muted modal-subtitle mb-0" data-invoice-issued-full></p>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="invoice-modal-loader" data-modal-loader>
