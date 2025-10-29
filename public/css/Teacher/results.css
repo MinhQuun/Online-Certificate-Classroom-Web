@@ -1,0 +1,120 @@
+/* =================================================================
+   Teacher Results Page - Modern Blue Theme
+   ================================================================= */
+
+:root {
+    --primary-blue: #2563eb;
+    --primary-blue-light: #3b82f6;
+    --secondary-blue: #60a5fa;
+    --bg-blue: #eff6ff;
+}
+
+.page-header {
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 40px rgba(37, 99, 235, 0.25);
+    position: relative;
+    overflow: hidden;
+}
+
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.2), transparent 50%);
+    pointer-events: none;
+}
+
+.stats-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+    margin-bottom: 20px;
+    border: 2px solid #e5e7eb;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stats-card:hover {
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+    transform: translateY(-2px);
+}
+
+.stats-value {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--primary-blue);
+}
+
+.filter-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+    margin-bottom: 20px;
+    border: 2px solid #e5e7eb;
+}
+
+.result-table {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+    overflow: hidden;
+    border: 2px solid #e5e7eb;
+}
+
+.badge-graded {
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+    color: #065f46;
+    font-weight: 600;
+}
+
+.badge-pending {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    color: #92400e;
+    font-weight: 600;
+}
+
+.score-badge {
+    font-size: 16px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.score-excellent { 
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+    color: #065f46;
+}
+
+.score-good { 
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+    color: #1e40af;
+}
+
+.score-average { 
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    color: #92400e;
+}
+
+.score-poor { 
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
+    color: #991b1b;
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        padding: 20px;
+        border-radius: 12px;
+    }
+    
+    .stats-card {
+        padding: 15px;
+    }
+}

@@ -3,61 +3,7 @@
 @section('title', 'Chấm điểm Mini-Test')
 
 @push('styles')
-    <style>
-        .grading-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: all 0.3s;
-        }
-        .grading-card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        .student-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        .student-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #4285f4;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: bold;
-        }
-        .pending-badge {
-            background: #fff3cd;
-            color: #856404;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .metric-box {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-        }
-        .metric-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #4285f4;
-        }
-        .metric-label {
-            font-size: 12px;
-            color: #666;
-            text-transform: uppercase;
-        }
-    </style>
+<link rel="stylesheet" href="{{ asset('css/Teacher/grading.css') }}">
 @endpush
 
 @section('content')

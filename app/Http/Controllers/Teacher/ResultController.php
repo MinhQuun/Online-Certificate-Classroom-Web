@@ -97,7 +97,7 @@ class ResultController extends Controller
             'avg_score' => MiniTestResult::whereHas('miniTest.course', fn($q) => $q->where('maND', $teacherId))->where('is_fully_graded', true)->avg('diem') ?? 0,
         ];
 
-        return view('Teacher.results.index', [
+        return view('Teacher.results', [
             'teacher' => $teacher,
             'courses' => $courses,
             'miniTests' => $miniTests,

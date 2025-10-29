@@ -3,137 +3,7 @@
 @section('title', 'Quản lý Mini-Test')
 
 @push('styles')
-<style>
-    .page-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 40px 30px;
-        border-radius: 16px;
-        margin-bottom: 30px;
-    }
-    .course-selector-card {
-        background: white;
-        border-radius: 12px;
-        padding: 25px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        margin-bottom: 25px;
-    }
-    .minitest-card {
-        background: white;
-        border-radius: 12px;
-        padding: 25px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        transition: all 0.3s;
-        border-left: 5px solid #4285f4;
-    }
-    .minitest-card:hover {
-        box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-        transform: translateY(-2px);
-    }
-    .skill-badge {
-        display: inline-block;
-        padding: 6px 14px;
-        border-radius: 20px;
-        font-weight: 600;
-        font-size: 13px;
-    }
-    .skill-LISTENING { background: #e3f2fd; color: #1976d2; }
-    .skill-SPEAKING { background: #f3e5f5; color: #7b1fa2; }
-    .skill-READING { background: #e8f5e9; color: #388e3c; }
-    .skill-WRITING { background: #fff3e0; color: #f57c00; }
-    .minitest-info {
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-        margin-top: 15px;
-        color: #666;
-        font-size: 14px;
-    }
-    .minitest-info > span {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-    .chapter-section {
-        background: #f8f9fa;
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-    .chapter-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #dee2e6;
-    }
-    .stats-box {
-        display: flex;
-        gap: 20px;
-        margin-bottom: 30px;
-    }
-    .stat-item {
-        flex: 1;
-        background: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        text-align: center;
-    }
-    .stat-value {
-        font-size: 32px;
-        font-weight: bold;
-        color: #4285f4;
-    }
-    .stat-label {
-        color: #666;
-        margin-top: 5px;
-        font-size: 14px;
-    }
-    .action-buttons {
-        display: flex;
-        gap: 10px;
-        margin-top: 15px;
-    }
-    .btn-manage {
-        background: #4285f4;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 8px;
-        font-size: 14px;
-        transition: all 0.3s;
-    }
-    .btn-manage:hover {
-        background: #3367d6;
-        color: white;
-    }
-    .btn-publish {
-        background: #34a853;
-        color: white;
-    }
-    .btn-publish:hover {
-        background: #2d9047;
-    }
-    .btn-unpublish {
-        background: #fbbc04;
-        color: #333;
-    }
-    .btn-edit {
-        background: #f8f9fa;
-        color: #333;
-        border: 1px solid #dee2e6;
-    }
-    .btn-delete {
-        background: #ea4335;
-        color: white;
-    }
-    .btn-delete:hover {
-        background: #d33828;
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/Teacher/minitests.css') }}">
 @endpush
 
 @section('content')
@@ -189,19 +59,23 @@
 
             <!-- Statistics -->
             <div class="stats-box">
-                <div class="stat-item">
+                <div class="stat-item stat-total">
+                    <i class="bi bi-collection"></i>
                     <div class="stat-value">{{ $totalTests }}</div>
                     <div class="stat-label">Tổng Mini-Test</div>
                 </div>
-                <div class="stat-item">
+                <div class="stat-item stat-published">
+                    <i class="bi bi-check-circle-fill"></i>
                     <div class="stat-value">{{ $publishedTests }}</div>
                     <div class="stat-label">Đã Công Bố</div>
                 </div>
-                <div class="stat-item">
+                <div class="stat-item stat-draft">
+                    <i class="bi bi-question-circle-fill"></i>
                     <div class="stat-value">{{ $totalQuestions }}</div>
                     <div class="stat-label">Tổng Câu Hỏi</div>
                 </div>
-                <div class="stat-item">
+                <div class="stat-item stat-inactive">
+                    <i class="bi bi-journal-bookmark-fill"></i>
                     <div class="stat-value">{{ $activeCourse->chapters->count() }}</div>
                     <div class="stat-label">Số Chương</div>
                 </div>
@@ -442,7 +316,7 @@
                 </div>
                 <form id="editMiniTestForm" method="POST">
                     @csrf
-                    @method('PUT')
+                    @method('PATCH')
                     <div class="modal-body">
                         <input type="hidden" name="course_id" id="edit_course_id">
                         

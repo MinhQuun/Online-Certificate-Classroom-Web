@@ -3,60 +3,7 @@
 @section('title', 'Mini-Tests - ' . $chapter->tenChuong)
 
 @push('styles')
-    <style>
-        .chapter-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 20px;
-            border-radius: 16px;
-            margin-bottom: 30px;
-        }
-        .minitest-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            padding: 25px;
-            margin-bottom: 20px;
-            transition: all 0.3s;
-            border-left: 5px solid #4285f4;
-        }
-        .minitest-card:hover {
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-            transform: translateY(-2px);
-        }
-        .skill-badge {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .skill-LISTENING { background: #e3f2fd; color: #1976d2; border-left-color: #1976d2; }
-        .skill-SPEAKING { background: #f3e5f5; color: #7b1fa2; border-left-color: #7b1fa2; }
-        .skill-READING { background: #e8f5e9; color: #388e3c; border-left-color: #388e3c; }
-        .skill-WRITING { background: #fff3e0; color: #f57c00; border-left-color: #f57c00; }
-        .attempt-badge {
-            background: #f8f9fa;
-            padding: 8px 16px;
-            border-radius: 8px;
-            display: inline-block;
-        }
-        .score-display {
-            font-size: 32px;
-            font-weight: bold;
-            color: #4285f4;
-        }
-        .status-completed { color: #28a745; }
-        .status-pending { color: #ffc107; }
-        .status-available { color: #17a2b8; }
-        .test-info-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-            color: #666;
-        }
-    </style>
+<link rel="stylesheet" href="{{ asset('css/Student/minitests-index.css') }}">
 @endpush
 
 @section('content')

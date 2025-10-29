@@ -73,6 +73,7 @@ class LessonController extends Controller
 
         $lessonProgress = null;
         $enrollment = null;
+        $miniTestResults = collect();
 
         if (!empty($student) && $isEnrolled) {
             $enrollment = Enrollment::where('maHV', $student->maHV)
@@ -84,6 +85,19 @@ class LessonController extends Controller
                 ->where('maKH', $course->maKH)
                 ->where('maBH', $lesson->maBH)
                 ->first();
+
+            // Lấy kết quả tốt nhất của từng mini-test trong chương này
+            $chapterMiniTestIds = $lesson->chapter->miniTests->pluck('maMT');
+            if ($chapterMiniTestIds->isNotEmpty()) {
+                $miniTestResults = DB::table('KETQUA_MINITEST')
+                    ->whereIn('maMT', $chapterMiniTestIds)
+                    ->where('maHV', $student->maHV)
+                    ->where('is_fully_graded', 1)
+                    ->select('maMT', DB::raw('MAX(diem) as best_score'), DB::raw('COUNT(*) as attempts_used'))
+                    ->groupBy('maMT')
+                    ->get()
+                    ->keyBy('maMT');
+            }
         }
 
         return view('Student.lesson-show', [
@@ -92,6 +106,7 @@ class LessonController extends Controller
             'isEnrolled' => $isEnrolled,
             'enrollment' => $enrollment,
             'lessonProgress' => $lessonProgress,
+            'miniTestResults' => $miniTestResults,
         ]);
     }
 }

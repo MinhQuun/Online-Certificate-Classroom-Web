@@ -3,58 +3,7 @@
 @section('title', 'Điểm học viên')
 
 @push('styles')
-<style>
-    .page-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 30px;
-        border-radius: 16px;
-        margin-bottom: 30px;
-    }
-    .stats-card {
-        background: white;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        margin-bottom: 20px;
-    }
-    .stats-value {
-        font-size: 32px;
-        font-weight: bold;
-        color: #667eea;
-    }
-    .filter-card {
-        background: white;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        margin-bottom: 20px;
-    }
-    .result-table {
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        overflow: hidden;
-    }
-    .badge-graded {
-        background: linear-gradient(135deg, #d4edda, #c3e6cb);
-        color: #155724;
-    }
-    .badge-pending {
-        background: linear-gradient(135deg, #fff3cd, #ffe8a1);
-        color: #856404;
-    }
-    .score-badge {
-        font-size: 16px;
-        padding: 8px 14px;
-        border-radius: 8px;
-        font-weight: 600;
-    }
-    .score-excellent { background: #d4edda; color: #155724; }
-    .score-good { background: #d1ecf1; color: #0c5460; }
-    .score-average { background: #fff3cd; color: #856404; }
-    .score-poor { background: #f8d7da; color: #721c24; }
-</style>
+<link rel="stylesheet" href="{{ asset('css/Teacher/results.css') }}">
 @endpush
 
 @section('content')

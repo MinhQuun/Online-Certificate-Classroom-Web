@@ -193,6 +193,13 @@
                         </header>
                         <div class="mini-tests__grid">
                             @foreach ($chapterMiniTests as $miniTest)
+                                @php
+                                    $testResult = $miniTestResults->get($miniTest->maMT);
+                                    $hasDone = $testResult !== null;
+                                    $bestScore = $hasDone ? $testResult->best_score : null;
+                                    $attemptsUsed = $hasDone ? $testResult->attempts_used : 0;
+                                    $attemptsLeft = $miniTest->attempts_allowed - $attemptsUsed;
+                                @endphp
                                 <article class="mini-test-card">
                                     <header>
                                         <span class="chip">Mini test</span>
@@ -201,24 +208,36 @@
                                     <div class="meta-content">
                                         <ul class="meta-list meta-list--inline">
                                             <li><strong>⏱️</strong> {{ $miniTest->time_limit_min }} phút</li>
-                                            <li><strong>🔄</strong> {{ $miniTest->attempts_allowed }} lần làm</li>
+                                            <li><strong>🔄</strong> {{ $attemptsLeft }}/{{ $miniTest->attempts_allowed }} lần còn lại</li>
                                             <li><strong>⭐</strong> {{ $miniTest->max_score }} điểm</li>
                                         </ul>
                                         <p class="muted">Trọng số: <strong>{{ $miniTest->trongSo }}</strong></p>
-                                    </div>
-                                    @if ($miniTest->materials->count())
-                                        <div class="resource-list">
-                                            @foreach ($miniTest->materials as $resource)
+                                        @if ($hasDone)
+                                            <div class="mini-test-score">
+                                                <span class="score-label">Điểm cao nhất:</span>
+                                                <span class="score-value">{{ number_format($bestScore, 2) }}/{{ $miniTest->max_score }}</span>
                                                 @php
-                                                    $resTypeKey = preg_replace('/[^a-z0-9]+/', '-', strtolower($resource->loai)) ?: 'default';
+                                                    $percentage = ($bestScore / $miniTest->max_score) * 100;
+                                                    $scoreClass = $percentage >= 80 ? 'excellent' : ($percentage >= 60 ? 'good' : ($percentage >= 40 ? 'average' : 'poor'));
                                                 @endphp
-                                                <a href="{{ $resource->public_url }}" target="_blank" rel="noopener">
-                                                    <span>{{ $resource->tenTL }}</span>
-                                                    <span class="badge badge--{{ $resTypeKey }}">{{ strtoupper($resource->loai) }}</span>
-                                                </a>
-                                            @endforeach
-                                        </div>
-                                    @endif
+                                                <span class="score-badge score-badge--{{ $scoreClass }}">
+                                                    {{ number_format($percentage, 0) }}%
+                                                </span>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="mini-test-card__actions">
+                                        @if ($attemptsLeft > 0)
+                                            <a class="btn btn--primary" href="{{ route('student.minitests.show', $miniTest->maMT) }}">
+                                                <span>{{ $hasDone ? 'Làm lại bài kiểm tra' : 'Làm bài kiểm tra' }}</span>
+                                                <i class="bi bi-arrow-right"></i>
+                                            </a>
+                                        @else
+                                            <button class="btn btn--disabled" disabled>
+                                                <span>Đã hết lượt làm bài</span>
+                                            </button>
+                                        @endif
+                                    </div>
                                 </article>
                             @endforeach
                         </div>

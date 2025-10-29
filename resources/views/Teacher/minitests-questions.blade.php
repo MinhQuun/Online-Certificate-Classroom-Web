@@ -1,6 +1,12 @@
 @extends('layouts.teacher')
 
-@section('title', 'Quản lý câu hỏi - ' . $miniTest->title)
+@extends('layouts.teacher')
+
+@section('title', 'Quản Lý Câu Hỏi - ' . ($mini_test->title ?? 'Mini-Test'))
+
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/Teacher/minitest-questions.css') }}">
+@endpush
 
 @push('styles')
 <style>

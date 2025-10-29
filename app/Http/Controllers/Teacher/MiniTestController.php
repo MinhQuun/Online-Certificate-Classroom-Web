@@ -60,7 +60,7 @@ class MiniTestController extends Controller
             ? $courses->firstWhere('maKH', $selectedCourseId)
             : $courses->first();
 
-        return view('Teacher.minitests-new', [
+        return view('Teacher.minitests-create', [
             'teacher' => $teacher,
             'courses' => $courses,
             'activeCourse' => $activeCourse,
@@ -359,7 +359,7 @@ class MiniTestController extends Controller
         // Load questions
         $miniTest->load(['questions' => fn($q) => $q->orderBy('thuTu'), 'course', 'chapter']);
 
-        return view('Teacher.minitest-questions-simple', [
+        return view('Teacher.minitests-questions', [
             'miniTest' => $miniTest,
             'teacher' => Auth::user(),
             'badges' => $this->teacherSidebarBadges($teacherId),

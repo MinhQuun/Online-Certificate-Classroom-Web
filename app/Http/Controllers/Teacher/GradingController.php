@@ -53,7 +53,7 @@ class GradingController extends Controller
             ->orderBy('nop_luc', 'desc')
             ->paginate(20);
 
-        return view('Teacher.grading.index', [
+        return view('Teacher.grading', [
             'teacher' => $teacher,
             'courses' => $courses,
             'selectedCourseId' => $selectedCourseId,
@@ -82,7 +82,7 @@ class GradingController extends Controller
             'studentAnswers.question',
         ]);
 
-        return view('Teacher.grading.show', [
+        return view('Teacher.grading-show', [
             'teacher' => Auth::user(),
             'result' => $result,
             'badges' => $this->teacherSidebarBadges($teacherId),

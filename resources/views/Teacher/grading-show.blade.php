@@ -3,45 +3,7 @@
 @section('title', 'Chấm điểm bài làm')
 
 @push('styles')
-    <style>
-        .answer-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            padding: 25px;
-            margin-bottom: 25px;
-        }
-        .question-header {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-        .student-answer {
-            background: #e3f2fd;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #2196f3;
-            margin: 15px 0;
-        }
-        .scoring-section {
-            background: #fff3cd;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 15px;
-        }
-        .info-box {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-        }
-        .score-input {
-            font-size: 20px;
-            font-weight: bold;
-            text-align: center;
-        }
-    </style>
+<link rel="stylesheet" href="{{ asset('css/Teacher/grading-show.css') }}">
 @endpush
 
 @section('content')

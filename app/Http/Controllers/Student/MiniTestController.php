@@ -52,7 +52,7 @@ class MiniTestController extends Controller
             ->get()
             ->groupBy('maMT');
 
-        return view('Student.minitests.index', compact('chapter', 'miniTests', 'results', 'student'));
+        return view('Student.minitests-index', compact('chapter', 'miniTests', 'results', 'student'));
     }
 
     /**
@@ -94,7 +94,7 @@ class MiniTestController extends Controller
         
         $attemptNo = $attemptCount + 1;
 
-        return view('Student.minitests.show', compact('miniTest', 'student', 'attemptNo'));
+        return view('Student.minitests-show', compact('miniTest', 'student', 'attemptNo'));
     }
 
     /**
@@ -235,6 +235,6 @@ class MiniTestController extends Controller
             ->count();
         $attemptsLeft = $result->miniTest->attempts_allowed - $totalAttempts;
 
-        return view('Student.minitests.result', compact('result', 'student', 'correctCount', 'incorrectCount', 'essayCount', 'attemptsLeft'));
+        return view('Student.minitests-result', compact('result', 'student', 'correctCount', 'incorrectCount', 'essayCount', 'attemptsLeft'));
     }
 }

@@ -1008,6 +1008,105 @@
     font-weight: 700;
 }
 
+/* Mini Test Score Display */
+.mini-test-score {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(5, 150, 105, 0.08));
+    border: 1.5px solid rgba(16, 185, 129, 0.25);
+    border-radius: 10px;
+    margin-top: 8px;
+}
+
+.mini-test-score .score-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+}
+
+.mini-test-score .score-value {
+    font-size: 18px;
+    font-weight: 800;
+    color: #10b981;
+    margin-left: auto;
+}
+
+.mini-test-score .score-badge {
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.score-badge--excellent {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+}
+
+.score-badge--good {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+}
+
+.score-badge--average {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+}
+
+.score-badge--poor {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+}
+
+/* Mini Test Card Actions */
+.mini-test-card__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.mini-test-card__actions .btn {
+    flex: 1;
+    padding: 14px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.mini-test-card__actions .btn--primary {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.mini-test-card__actions .btn--primary:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    transform: translateY(-2px);
+}
+
+.mini-test-card__actions .btn--disabled {
+    background: #e5e7eb;
+    color: #9ca3af;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.mini-test-card__actions .btn i {
+    font-size: 16px;
+}
+
 /* ============================================
    RESOURCE LIST - Compact & Modern
    ============================================ */
