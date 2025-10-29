@@ -51,7 +51,8 @@ class ProgressController extends Controller
             'lastLesson',
         ])
             ->where('maHV', $student->maHV)
-            ->whereIn('trangThai', ['ACTIVE', 'PENDING'])
+            ->where('trangThai', 'ACTIVE')          // Chỉ ACTIVE
+            ->whereNotNull('activated_at')
             ->orderByDesc('activated_at')
             ->orderByDesc('created_at')
             ->get();
