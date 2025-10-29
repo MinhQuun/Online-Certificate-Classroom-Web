@@ -111,6 +111,21 @@
                     @endif
                 </a>
                 </li>
+                <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('teacher.grading.*') ? 'active' : '' }}"
+                    href="{{ route('teacher.grading.index') }}">
+                    <i class="bi bi-pencil-square me-2"></i> Chấm bài Writing
+                    @if(($badges['essays_pending'] ?? 0) > 0)
+                    <span class="badge text-bg-warning ms-2">{{ $badges['essays_pending'] }}</span>
+                    @endif
+                </a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('teacher.results.*') ? 'active' : '' }}"
+                    href="{{ route('teacher.results.index') }}">
+                    <i class="bi bi-clipboard-data me-2"></i> Điểm học viên
+                </a>
+                </li>
             </ul>
             </div>
         </aside>

@@ -87,6 +87,11 @@ class MiniTestController extends Controller
         // Load câu hỏi
         $miniTest->load(['questions' => fn($q) => $q->orderBy('thuTu'), 'chapter', 'course']);
         
+        // Kiểm tra nếu chưa có câu hỏi
+        if ($miniTest->questions->isEmpty()) {
+            return redirect()->back()->with('error', 'Bài kiểm tra này chưa có câu hỏi. Vui lòng liên hệ giảng viên.');
+        }
+        
         $attemptNo = $attemptCount + 1;
 
         return view('Student.minitests.show', compact('miniTest', 'student', 'attemptNo'));

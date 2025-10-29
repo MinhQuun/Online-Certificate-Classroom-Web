@@ -32,6 +32,7 @@ use App\Http\Controllers\Teacher\ProgressController;
 use App\Http\Controllers\Teacher\ChapterController;
 use App\Http\Controllers\Teacher\MiniTestController;
 use App\Http\Controllers\Teacher\GradingController;
+use App\Http\Controllers\Teacher\ResultController;
 
 /*
 |--------------------------------------------------------------------------
@@ -212,4 +213,8 @@ Route::middleware(['auth', 'teacher'])
         Route::get('/grading/{result}', [GradingController::class, 'show'])->name('grading.show');
         Route::post('/grading/{result}', [GradingController::class, 'grade'])->name('grading.grade');
         Route::post('/grading/bulk', [GradingController::class, 'bulkGrade'])->name('grading.bulk');
+
+        // Xem điểm học viên
+        Route::get('/results', [ResultController::class, 'index'])->name('results.index');
+        Route::get('/results/{result}', [ResultController::class, 'show'])->name('results.show');
     });

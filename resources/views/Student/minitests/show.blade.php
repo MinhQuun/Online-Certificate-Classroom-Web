@@ -410,6 +410,12 @@
             <div class="row">
                 <!-- Questions Column -->
                 <div class="col-lg-8">
+                    @if($miniTest->questions->isEmpty())
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Bài kiểm tra này chưa có câu hỏi. Vui lòng liên hệ giảng viên.
+                        </div>
+                    @else
                     @foreach($miniTest->questions as $index => $question)
                         <div class="question-card" id="question-{{ $question->maCauHoi }}">
                             <div class="d-flex align-items-start">
@@ -502,8 +508,10 @@
                             </div>
                         </div>
                     @endforeach
+                    @endif
 
                     <!-- Submit Section -->
+                    @if($miniTest->questions->isNotEmpty())
                     <div class="submit-section">
                         <div class="row align-items-center">
                             <div class="col-md-8">
@@ -521,10 +529,12 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
 
                 <!-- Progress Sidebar -->
                 <div class="col-lg-4">
+                    @if($miniTest->questions->isNotEmpty())
                     <div class="progress-sidebar">
                         <div class="progress-card">
                             <h5 class="mb-4">
@@ -569,6 +579,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
         </form>
