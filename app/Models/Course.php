@@ -36,11 +36,6 @@ class Course extends Model
         return $this->hasMany(Chapter::class, 'maKH', 'maKH')->orderBy('thuTu');
     }
 
-    public function finalTests(): HasMany
-    {
-        return $this->hasMany(CourseTest::class, 'maKH', 'maKH')->orderBy('maTest');
-    }
-
     public function lessons(): HasManyThrough
     {
         return $this->hasManyThrough(

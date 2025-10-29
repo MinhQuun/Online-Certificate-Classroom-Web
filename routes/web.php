@@ -156,6 +156,8 @@ Route::middleware(['auth', 'admin'])
 
         // Quản lý hóa đơn
         Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
+        Route::get('/invoices/export', [InvoiceController::class, 'exportExcel'])->name('invoices.export');
+        Route::get('/invoices/{invoice}/pdf', [InvoiceController::class, 'exportPdf'])->name('invoices.pdf');
         Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
     });
 

@@ -38,6 +38,7 @@ php artisan config:clear
 php artisan route:clear
 php artisan view:clear
 
-
+Các package cần cài đặt
 
 composer require barryvdh/laravel-dompdf
+composer require maatwebsite/excel:^3.1.55

@@ -77,59 +77,158 @@
     color: var(--muted);
 }
 
-.invoice-table tbody tr.invoice-row {
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+.invoice-list-card .card-header {
+    background: linear-gradient(135deg, rgba(58, 134, 255, 0.08), rgba(26, 163, 163, 0.08));
+    border-bottom: 1px solid rgba(58, 134, 255, 0.16);
 }
 
-.invoice-table tbody tr.invoice-row:hover {
+.invoice-table tbody tr {
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.invoice-table tbody tr:hover {
     transform: translateY(-1px);
     box-shadow: 0 6px 16px rgba(26, 163, 163, 0.16);
 }
 
-.invoice-table tbody tr.invoice-row td {
+.invoice-table tbody td {
     vertical-align: middle;
 }
 
-.invoice-summary .summary-value {
-    font-size: 1.2rem;
+.invoice-table .btn {
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
-.invoice-summary .divider {
-    height: 1px;
-    background: rgba(0, 0, 0, 0.08);
-    width: 100%;
+.invoice-table .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(26, 163, 163, 0.15);
 }
 
-.student-card .student-name {
-    font-weight: 700;
-    font-size: 1.1rem;
-    margin-bottom: 12px;
-}
-
-.student-card .student-meta li {
-    font-size: 0.9rem;
-    margin-bottom: 6px;
+.invoice-modal-loader {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+    gap: 16px;
+}
+
+.invoice-modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.invoice-detail-grid .detail-tile {
+    border: 1px solid var(--card-brd);
+    border-radius: 14px;
+    background: var(--card);
+    padding: 16px 18px;
+    box-shadow: 0 18px 36px rgba(21, 94, 181, 0.12);
+}
+
+.detail-tile .label {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+}
+
+.detail-tile .value {
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.detail-tile .sub {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+.detail-card {
+    border: 1px solid var(--card-brd);
+    border-radius: 16px;
+    background: var(--card);
+    padding: 18px;
+    box-shadow: var(--shadow);
+    height: 100%;
+}
+
+.detail-card__title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--wood);
+}
+
+.detail-card__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
     gap: 8px;
 }
 
-.student-card .student-meta span {
-    min-width: 110px;
-    font-weight: 600;
-    color: var(--muted);
-}
-
-.total-box {
-    font-size: 1rem;
-    font-weight: 600;
+.detail-card__list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 0.92rem;
     color: var(--text);
 }
 
-.total-box span {
-    font-size: 1.25rem;
+.detail-card__list span {
+    color: var(--muted);
+}
+
+.section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.invoice-total-box {
+    font-size: 1.05rem;
+    font-weight: 600;
+    border: 1px solid var(--card-brd);
+    border-radius: 999px;
+    padding: 10px 18px;
+    background: linear-gradient(135deg, rgba(58, 134, 255, 0.12), rgba(26, 163, 163, 0.12));
+    color: var(--text);
+}
+
+.invoice-total-box span {
     color: var(--wood);
-    margin-left: 6px;
+    font-weight: 700;
+}
+
+.related-invoices .list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+}
+
+.related-invoices .list-group-item + .list-group-item {
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.related-invoices .list-group-item strong {
+    color: var(--wood);
+}
+
+.modal-subtitle {
+    font-size: 0.85rem;
+}
+
+.invoice-modal-loader,
+.invoice-modal-content,
+[data-modal-error] {
+    transition: opacity 0.2s ease;
 }
 
 @media (max-width: 992px) {
@@ -139,5 +238,23 @@
 
     .invoices-filter .col-lg-6.d-flex {
         justify-content: flex-start;
+    }
+
+    .invoice-list-card .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 576px) {
+    .detail-card__list li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .invoice-total-box {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
     }
 }

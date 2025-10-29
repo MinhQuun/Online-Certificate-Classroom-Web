@@ -124,7 +124,7 @@
                 <a class="nav-link {{ request()->routeIs('admin.invoices.*') ? 'active' : '' }}"
                     href="{{ route('admin.invoices.index') }}"
                     title="Quan ly hoa don">
-                <i class="bi bi-receipt-cutoff me-2"></i> Hoa don
+                <i class="bi bi-receipt-cutoff me-2"></i> Hóa đơn
                 </a>
             </li>
             {{-- Chứng chỉ --}}
