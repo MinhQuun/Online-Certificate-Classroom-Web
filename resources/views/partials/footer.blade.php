@@ -11,10 +11,10 @@
         <div class="footer-column">
             <h4>Dịch vụ</h4>
             <ul>
-                <li><a href="#">Lộ trình chứng chỉ TOEIC</a></li>
-                <li><a href="#">Lộ trình chứng chỉ IELTS</a></li>
-                <li><a href="#">Tư vấn cá nhân</a></li>
-                <li><a href="#">Chứng chỉ doanh nghiệp</a></li>
+                <li><a href="{{ route('student.services') }}#toeic">Lộ trình chứng chỉ TOEIC</a></li>
+                <li><a href="{{ route('student.services') }}#ielts">Lộ trình chứng chỉ IELTS</a></li>
+                <li><a href="{{ route('student.services') }}#corporate">Đào tạo doanh nghiệp</a></li>
+                <li><a href="{{ route('student.services') }}#consulting">Tư vấn cá nhân</a></li>
             </ul>
         </div>
         <div class="footer-column" id="about">

@@ -221,3 +221,7 @@ Route::middleware(['auth', 'teacher'])
         Route::get('/results', [ResultController::class, 'index'])->name('results.index');
         Route::get('/results/{result}', [ResultController::class, 'show'])->name('results.show');
     });
+
+Route::get('/services', function () {
+    return view('Student.services');
+})->name('student.services');
