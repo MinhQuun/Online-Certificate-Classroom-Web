@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Category;
+use App\Models\CourseReview;
 use App\Support\Cart\StudentCart;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -62,6 +63,7 @@ class CourseController extends Controller
                             ->with('materials'),
                     ]);
                 },
+                'teacher',
             ])
             ->firstOrFail();
 
@@ -111,6 +113,41 @@ class CourseController extends Controller
             ->limit(4)
             ->get();
 
+        $reviewsQuery = CourseReview::with([
+                'student.user' => function ($query) {
+                    $query->select('maND', 'hoTen');
+                },
+                'student' => function ($query) {
+                    $query->select('maHV', 'maND', 'hoTen');
+                },
+            ])
+            ->where('maKH', $course->maKH)
+            ->orderByDesc('created_at');
+
+        $courseReviews = (clone $reviewsQuery)->paginate(10)->withQueryString();
+
+        $ratingAggregate = CourseReview::selectRaw('AVG(diemSo) as average_rating, COUNT(*) as total_reviews')
+            ->where('maKH', $course->maKH)
+            ->first();
+
+        $ratingBreakdown = CourseReview::selectRaw('CAST(diemSo AS UNSIGNED) as star, COUNT(*) as total')
+            ->where('maKH', $course->maKH)
+            ->groupBy('star')
+            ->orderByDesc('star')
+            ->pluck('total', 'star');
+
+        $averageRating = $ratingAggregate && $ratingAggregate->average_rating !== null
+            ? round((float) $ratingAggregate->average_rating, 1)
+            : null;
+
+        $studentReview = null;
+        if ($isAuthenticated && $enrollment['student']) {
+            $studentId = $enrollment['student']->maHV;
+            $studentReview = CourseReview::where('maHV', $studentId)
+                ->where('maKH', $course->maKH)
+                ->first();
+        }
+
         return view('Student.course-show', [
             'course'          => $course,
             'isInCart'        => $isInCart,
@@ -123,6 +160,13 @@ class CourseController extends Controller
             'activeCourseIds'   => $activeCourseIds,
             'pendingCourseIds'  => $pendingCourseIds,
             'miniTestScores'  => $miniTestScores,
+            'courseReviews'   => $courseReviews,
+            'ratingSummary'   => [
+                'average' => $averageRating,
+                'total'   => (int) ($ratingAggregate->total_reviews ?? 0),
+                'breakdown' => $ratingBreakdown,
+            ],
+            'studentReview'   => $studentReview,
         ]);
     }
 

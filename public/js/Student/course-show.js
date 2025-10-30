@@ -135,4 +135,88 @@ document.addEventListener("DOMContentLoaded", () => {
     if (lockedTarget === "lesson" && !isEnrolled) {
         showLockedNotice();
     }
+
+    const initRatingForm = () => {
+        const wrapper = document.querySelector("[data-rating-input]");
+        if (!wrapper) return;
+
+        const form = wrapper.closest("form");
+        const hiddenInput = form?.querySelector('input[name="diemSo"]');
+        if (!form || !hiddenInput) return;
+
+        const stars = Array.from(wrapper.querySelectorAll(".review-form__star"));
+        let committed = parseInt(hiddenInput.value || wrapper.dataset.initial || "0", 10) || 0;
+
+        const applyState = (value) => {
+            stars.forEach((star) => {
+                const starValue = parseInt(star.dataset.value || "0", 10);
+                const isActive = value >= starValue;
+                star.classList.toggle("is-active", isActive);
+                star.setAttribute("aria-pressed", isActive ? "true" : "false");
+            });
+        };
+
+        const commitValue = (value) => {
+            committed = value;
+            hiddenInput.value = value > 0 ? String(value) : "";
+            applyState(committed);
+        };
+
+        stars.forEach((star) => {
+            const starValue = parseInt(star.dataset.value || "0", 10);
+            star.addEventListener("mouseenter", () => applyState(starValue));
+            star.addEventListener("focus", () => applyState(starValue));
+            star.addEventListener("click", (event) => {
+                event.preventDefault();
+                commitValue(starValue);
+                wrapper.classList.remove("review-form__rating--error");
+            });
+            star.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    commitValue(starValue);
+                    wrapper.classList.remove("review-form__rating--error");
+                }
+                if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
+                    event.preventDefault();
+                    const next = Math.max(1, committed - 1);
+                    stars[Math.max(next - 1, 0)]?.focus();
+                    commitValue(next);
+                }
+                if (event.key === "ArrowRight" || event.key === "ArrowUp") {
+                    event.preventDefault();
+                    const next = Math.min(5, committed + 1);
+                    stars[Math.min(next - 1, stars.length - 1)]?.focus();
+                    commitValue(next);
+                }
+            });
+        });
+
+        wrapper.addEventListener("mouseleave", () => applyState(committed));
+        wrapper.addEventListener("focusout", (event) => {
+            if (!wrapper.contains(event.relatedTarget)) {
+                applyState(committed);
+            }
+        });
+
+        form.addEventListener("submit", (event) => {
+            const currentValue = parseInt(hiddenInput.value || "0", 10);
+            if (!currentValue) {
+                event.preventDefault();
+                wrapper.classList.add("review-form__rating--error");
+                stars[0]?.focus();
+            }
+        });
+
+        applyState(committed);
+    };
+
+    initRatingForm();
+
+    const reviewSection = document.getElementById("course-reviews");
+    if (reviewSection && reviewSection.querySelector(".alert")) {
+        window.setTimeout(() => {
+            reviewSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 150);
+    }
 });

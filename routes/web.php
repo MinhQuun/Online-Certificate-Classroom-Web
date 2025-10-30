@@ -48,6 +48,7 @@ use App\Http\Controllers\Student\CheckoutController;
 use App\Http\Controllers\Student\ActivationController;
 use App\Http\Controllers\Student\ProgressController as StudentProgressController;
 use App\Http\Controllers\Student\MiniTestController as StudentMiniTestController;
+use App\Http\Controllers\Student\CourseReviewController as StudentCourseReviewController;
 
 // =====================
 // Public (Student-facing)
@@ -99,6 +100,8 @@ Route::middleware('auth')
         Route::get('/minitests/{miniTest}', [StudentMiniTestController::class, 'show'])->name('minitests.show');
         Route::post('/minitests/{miniTest}/submit', [StudentMiniTestController::class, 'submit'])->name('minitests.submit');
         Route::get('/minitests/{result}/result', [StudentMiniTestController::class, 'result'])->name('minitests.result');
+
+        Route::post('/courses/{course:slug}/reviews', [StudentCourseReviewController::class, 'store'])->name('courses.reviews.store');
     });
 
 

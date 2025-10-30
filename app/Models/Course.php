@@ -53,6 +53,11 @@ class Course extends Model
         return $this->hasMany(MiniTest::class, 'maKH', 'maKH')->orderBy('thuTu');
     }
 
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(CourseReview::class, 'maKH', 'maKH');
+    }
+
     public function category(): BelongsTo
     {
         // withDefault để tránh null khi hiển thị blade
