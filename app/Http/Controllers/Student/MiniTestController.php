@@ -24,6 +24,7 @@ class MiniTestController extends Controller
      */
     public function index(Chapter $chapter): View
     {
+        $type = 'index';
         $user = Auth::user();
         $student = Student::where('maND', $user->maND)->first();
 
@@ -52,7 +53,7 @@ class MiniTestController extends Controller
             ->get()
             ->groupBy('maMT');
 
-        return view('Student.minitests-index', compact('chapter', 'miniTests', 'results', 'student'));
+        return view('Student.minitests', compact('type', 'chapter', 'miniTests', 'results', 'student'));
     }
 
     /**
@@ -60,6 +61,7 @@ class MiniTestController extends Controller
      */
     public function show(MiniTest $miniTest): View|RedirectResponse
     {
+        $type = 'show';
         // Kiểm tra mini-test đã công bố chưa
         if (!$miniTest->is_published || !$miniTest->is_active) {
             abort(404, 'Mini-test không tồn tại hoặc chưa được công bố.');
@@ -86,15 +88,15 @@ class MiniTestController extends Controller
 
         // Load câu hỏi
         $miniTest->load(['questions' => fn($q) => $q->orderBy('thuTu'), 'chapter', 'course']);
-        
+
         // Kiểm tra nếu chưa có câu hỏi
         if ($miniTest->questions->isEmpty()) {
             return redirect()->back()->with('error', 'Bài kiểm tra này chưa có câu hỏi. Vui lòng liên hệ giảng viên.');
         }
-        
+
         $attemptNo = $attemptCount + 1;
 
-        return view('Student.minitests-show', compact('miniTest', 'student', 'attemptNo'));
+        return view('Student.minitests', compact('type', 'miniTest', 'student', 'attemptNo'));
     }
 
     /**
@@ -209,6 +211,7 @@ class MiniTestController extends Controller
      */
     public function result(MiniTestResult $result): View
     {
+        $type = 'result';
         $user = Auth::user();
         $student = Student::where('maND', $user->maND)->first();
 
@@ -235,6 +238,6 @@ class MiniTestController extends Controller
             ->count();
         $attemptsLeft = $result->miniTest->attempts_allowed - $totalAttempts;
 
-        return view('Student.minitests-result', compact('result', 'student', 'correctCount', 'incorrectCount', 'essayCount', 'attemptsLeft'));
+        return view('Student.minitests', compact('type', 'result', 'student', 'correctCount', 'incorrectCount', 'essayCount', 'attemptsLeft'));
     }
 }

@@ -1,5 +1,5 @@
 /* =================================================================
-   Teacher Grading Page - Modern Blue Theme  
+   Unified Teacher Grading CSS - Modern Blue Theme
    ================================================================= */
 
 :root {
@@ -8,6 +8,10 @@
     --secondary-blue: #60a5fa;
     --bg-blue: #eff6ff;
 }
+
+/* =================================================================
+   Index Styles
+   ================================================================= */
 
 .grading-card {
     background: white;
@@ -35,7 +39,11 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+    background: linear-gradient(
+        135deg,
+        var(--primary-blue),
+        var(--secondary-blue)
+    );
     color: white;
     display: flex;
     align-items: center;
@@ -75,8 +83,74 @@
     font-weight: 600;
 }
 
+/* =================================================================
+   Show Styles
+   ================================================================= */
+
+.answer-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+    padding: 25px;
+    margin-bottom: 25px;
+    border-left: 5px solid var(--primary-blue);
+}
+
+.question-header {
+    background: linear-gradient(135deg, var(--bg-blue), #dbeafe);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border: 2px solid var(--secondary-blue);
+}
+
+.student-answer {
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-blue);
+    margin: 15px 0;
+}
+
+.scoring-section {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 15px;
+    border: 2px solid #f59e0b;
+}
+
+.info-box {
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 2px solid #d1d5db;
+}
+
+.score-input {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    border: 2px solid var(--primary-blue);
+    border-radius: 8px;
+}
+
+.score-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+/* =================================================================
+   Media Queries
+   ================================================================= */
+
 @media (max-width: 768px) {
     .grading-card {
         padding: 15px;
+    }
+
+    .answer-card {
+        padding: 20px;
     }
 }

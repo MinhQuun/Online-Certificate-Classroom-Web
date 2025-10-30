@@ -22,6 +22,7 @@ class GradingController extends Controller
      */
     public function index(Request $request): View
     {
+        $type = 'index';
         $teacher = Auth::user();
         $teacherId = $teacher?->getKey() ?? 0;
 
@@ -54,6 +55,7 @@ class GradingController extends Controller
             ->paginate(20);
 
         return view('Teacher.grading', [
+            'type' => $type,
             'teacher' => $teacher,
             'courses' => $courses,
             'selectedCourseId' => $selectedCourseId,
@@ -67,6 +69,7 @@ class GradingController extends Controller
      */
     public function show(MiniTestResult $result): View
     {
+        $type = 'show';
         $teacherId = Auth::id() ?? 0;
 
         // Kiểm tra quyền
@@ -82,7 +85,8 @@ class GradingController extends Controller
             'studentAnswers.question',
         ]);
 
-        return view('Teacher.grading-show', [
+        return view('Teacher.grading', [
+            'type' => $type,
             'teacher' => Auth::user(),
             'result' => $result,
             'badges' => $this->teacherSidebarBadges($teacherId),
