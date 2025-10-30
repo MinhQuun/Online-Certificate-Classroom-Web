@@ -70,7 +70,7 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('student.progress.index') }}">Tiến độ học tập</a></li>
                 @endauth --}}
                 <li class="nav-item"><a class="nav-link" href="{{ route('student.services') }}">Dịch vụ</a></li>
-                <li class="nav-item"><a class="nav-link" href="#about">Về chúng tôi</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('student.about') }}">Về chúng tôi</a></li>
                 <li class="nav-item"><a class="nav-link" href="#contact">Liên hệ</a></li>
             </ul>
         </nav>

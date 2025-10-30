@@ -225,3 +225,7 @@ Route::middleware(['auth', 'teacher'])
 Route::get('/services', function () {
     return view('Student.services');
 })->name('student.services');
+
+Route::get('/about-us', function () {
+    return view('Student.about-us');
+})->name('student.about');

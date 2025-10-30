@@ -1,0 +1,324 @@
+/* ====== About Page — Modern Education Design ====== */
+/* Tone sáng xanh dương đồng bộ với hệ thống OCC */
+:root {
+    --about-bg-1: #f4f6ff;
+    --about-bg-2: #f9fbff;
+    --about-card: #ffffff;
+    --about-card-brd: #e2e8f0;
+    --about-text: #1e293b;
+    --about-muted: #64748b;
+    --about-accent: #2563eb;
+    --about-accent-light: #3b82f6;
+    --about-success: #10b981;
+    --about-shadow: 0 20px 40px rgba(37, 99, 235, 0.12);
+}
+
+/* Nền trang */
+.about-page {
+    padding-top: 96px;
+    padding-bottom: 56px;
+    color: var(--about-text);
+    background: radial-gradient(
+            900px 600px at 10% -10%,
+            rgba(96, 165, 250, 0.15),
+            transparent 60%
+        ),
+        radial-gradient(
+            800px 600px at 110% 0%,
+            rgba(59, 130, 246, 0.12),
+            transparent 60%
+        ),
+        linear-gradient(180deg, var(--about-bg-1), var(--about-bg-2)) fixed;
+}
+
+/* ===== HERO ===== */
+.about-hero {
+    width: min(1100px, 92%);
+    margin: 0 auto 32px;
+    border-radius: 24px;
+    padding: 40px 28px;
+    background: radial-gradient(
+            1200px 520px at 15% 0%,
+            rgba(96, 165, 250, 0.18),
+            transparent 60%
+        ),
+        linear-gradient(135deg, #ffffff, var(--about-bg-2));
+    border: 1px solid var(--about-card-brd);
+    box-shadow: var(--about-shadow);
+    animation: fadeIn 0.6s ease-out both;
+}
+
+.about-hero .kicker {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(37, 99, 235, 0.1);
+    border: 1px solid var(--about-card-brd);
+    color: var(--about-muted);
+    font-weight: 600;
+}
+
+.about-hero h1 {
+    margin: 16px 0 12px;
+    font-size: clamp(30px, 5vw, 44px);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #1e293b, var(--about-accent), var(--about-accent-light));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.about-hero p {
+    margin: 0;
+    color: var(--about-muted);
+    max-width: 900px;
+    line-height: 1.7;
+    font-size: 16px;
+}
+
+/* stats */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+    .stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+.stat {
+    border-radius: 16px;
+    padding: 18px;
+    background: var(--about-card);
+    border: 1px solid var(--about-card-brd);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--about-text);
+    box-shadow: var(--about-shadow);
+    transition: all 0.3s ease;
+}
+
+.stat .n {
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--about-accent);
+    flex-shrink: 0;
+}
+
+.stat .t {
+    font-size: 14px;
+    color: var(--about-muted);
+    line-height: 1.4;
+}
+
+.stat:hover {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(59, 130, 246, 0.05));
+    border-color: var(--about-accent);
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px rgba(37, 99, 235, 0.18);
+}
+
+/* ===== GRID ===== */
+.about-grid {
+    width: min(1100px, 92%);
+    margin: 24px auto 0;
+    display: grid;
+    gap: 28px;
+    grid-template-columns: 1.2fr 0.8fr;
+}
+
+@media (max-width: 992px) {
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== Card ===== */
+.about-card {
+    border-radius: 22px;
+    padding: 28px;
+    background: var(--about-card);
+    border: 1px solid var(--about-card-brd);
+    box-shadow: var(--about-shadow);
+    animation: slideUp 0.5s ease-out both;
+}
+
+.about-card h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 6px 0 12px;
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--about-accent);
+}
+
+.divider {
+    height: 4px;
+    width: 72px;
+    background: linear-gradient(90deg, var(--about-accent), var(--about-accent-light));
+    border-radius: 999px;
+    margin: 10px 0 18px;
+}
+
+/* ===== Lists ===== */
+.about-card p {
+    color: var(--about-muted);
+    margin: 0 0 14px;
+    line-height: 1.7;
+    font-size: 15px;
+}
+
+.about-list,
+.team-list {
+    margin: 0;
+    padding-left: 20px;
+    line-height: 1.8;
+    color: var(--about-text);
+}
+
+.about-list li,
+.team-list li {
+    margin: 6px 0;
+    font-size: 15px;
+}
+
+.about-list li strong,
+.team-list li strong {
+    color: var(--about-accent);
+    font-weight: 700;
+}
+
+/* ===== Chips ===== */
+.tech-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+    padding: 0;
+    list-style: none;
+}
+
+.tech-chips li {
+    border: 1px solid var(--about-card-brd);
+    background: var(--about-bg-2);
+    color: var(--about-text);
+    padding: 9px 14px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 13px;
+    box-shadow: 0 6px 12px rgba(37, 99, 235, 0.08);
+    transition: all 0.25s ease;
+}
+
+.tech-chips li:hover {
+    background: linear-gradient(135deg, var(--about-accent), var(--about-accent-light));
+    color: #fff;
+    border-color: transparent;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.2);
+}
+
+/* ===== Links ===== */
+.contact-note {
+    line-height: 1.7;
+}
+
+.contact-note a {
+    color: var(--about-accent);
+    border-bottom: 1px dashed rgba(37, 99, 235, 0.4);
+    text-decoration: none;
+    transition: all 0.2s;
+    font-weight: 600;
+}
+
+.contact-note a:hover {
+    opacity: 0.8;
+    border-bottom-style: solid;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .about-page {
+        padding-top: 80px;
+    }
+
+    .about-hero {
+        padding: 32px 20px;
+    }
+
+    .about-hero h1 {
+        font-size: 28px;
+    }
+
+    .about-card {
+        padding: 22px;
+    }
+
+    .about-card h2 {
+        font-size: 20px;
+    }
+
+    .stats {
+        gap: 12px;
+    }
+
+    .stat {
+        padding: 14px;
+    }
+
+    .stat .n {
+        font-size: 18px;
+    }
+
+    .stat .t {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 576px) {
+    .about-hero {
+        padding: 24px 16px;
+    }
+
+    .about-card {
+        padding: 18px;
+    }
+
+    .tech-chips li {
+        font-size: 12px;
+        padding: 7px 12px;
+    }
+}
