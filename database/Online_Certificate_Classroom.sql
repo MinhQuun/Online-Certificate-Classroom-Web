@@ -392,31 +392,40 @@ CREATE TABLE KETQUA_MINITEST (
     CONSTRAINT FK_KQDG_ENROLL FOREIGN KEY (maHV, maKH)  REFERENCES HOCVIEN_KHOAHOC(maHV, maKH) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng MINITEST_STUDENT_ANSWERS: Câu trả lời của học viên (đặc biệt quan trọng cho kỹ năng viết).
--- TẠO SAU KETQUA_MINITEST vì có FK tham chiếu đến bảng đó.
+-- Bảng MINITEST_STUDENT_ANSWERS: Câu trả lời của học viên.
 CREATE TABLE MINITEST_STUDENT_ANSWERS (
     id INT NOT NULL AUTO_INCREMENT,
-    maKQDG INT NOT NULL,                      -- Liên kết kết quả mini-test
-    maCauHoi INT NOT NULL,                    -- Liên kết câu hỏi
-    maHV INT NOT NULL,                        -- Học viên
-    answer_choice VARCHAR(50) NULL,           -- Đáp án chọn (A, B, C, D) cho trắc nghiệm
-    answer_text TEXT NULL,                    -- Câu trả lời tự luận (cho essay/writing)
-    is_correct TINYINT(1) NULL,               -- Đúng/sai (NULL nếu chưa chấm)
-    diem DECIMAL(5,2) NULL,                   -- Điểm đạt được (NULL nếu chưa chấm)
-    teacher_feedback TEXT NULL,               -- Phản hồi của giảng viên (cho essay)
-    graded_at DATETIME NULL,                  -- Thời điểm chấm điểm
-    graded_by INT NULL,                       -- Giảng viên chấm điểm
+    maKQDG INT NOT NULL,
+    maCauHoi INT NOT NULL,
+    maHV INT NOT NULL,
+
+    -- đáp án
+    answer_choice VARCHAR(50) NULL,
+    answer_text   TEXT NULL,                    -- dùng cho essay/writing
+    answer_audio_url VARCHAR(700) NULL,        -- file mp3 speaking
+    audio_duration_sec INT NULL,
+    audio_mime VARCHAR(50) DEFAULT 'audio/mpeg',
+    audio_size_kb INT NULL,
+
+    -- chấm điểm
+    is_correct TINYINT(1) NULL,
+    diem DECIMAL(5,2) NULL,
+    teacher_feedback TEXT NULL,
+    graded_at DATETIME NULL,
+    graded_by INT NULL,
+
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
     PRIMARY KEY (id),
     UNIQUE KEY uq_student_answer (maKQDG, maCauHoi, maHV),
     KEY IX_MSA_KQDG (maKQDG),
     KEY IX_MSA_CAUHOI (maCauHoi),
     KEY IX_MSA_HV (maHV),
     KEY IX_MSA_GRADER (graded_by),
-    CONSTRAINT FK_MSA_KQDG FOREIGN KEY (maKQDG) REFERENCES KETQUA_MINITEST(maKQDG) ON DELETE CASCADE,
+    CONSTRAINT FK_MSA_KQDG  FOREIGN KEY (maKQDG)  REFERENCES KETQUA_MINITEST(maKQDG) ON DELETE CASCADE,
     CONSTRAINT FK_MSA_CAUHOI FOREIGN KEY (maCauHoi) REFERENCES MINITEST_QUESTIONS(maCauHoi) ON DELETE CASCADE,
-    CONSTRAINT FK_MSA_HV FOREIGN KEY (maHV) REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
+    CONSTRAINT FK_MSA_HV    FOREIGN KEY (maHV)     REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
     CONSTRAINT FK_MSA_GRADER FOREIGN KEY (graded_by) REFERENCES NGUOIDUNG(maND) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
