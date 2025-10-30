@@ -103,7 +103,23 @@ Route::middleware('auth')
 
         Route::post('/courses/{course:slug}/reviews', [StudentCourseReviewController::class, 'store'])->name('courses.reviews.store');
     });
+    // Trang dịch vụ
+        Route::get('/services', function () {
+        return view('Student.services');
+        })->name('student.services');
 
+    // Trang về chúng tôi
+        Route::get('/about-us', function () {
+        return view('Student.about-us');
+        })->name('student.about');
+    // Trang liên hệ
+        Route::get('/contact', function () {
+            return view('Student.contact');
+        })->name('student.contact');
+
+    // Xử lý form liên hệ
+    Route::post('/contact', [App\Http\Controllers\ContactController::class, 'submit'])
+        ->name('contact.submit');
 
 /*
 |--------------------------------------------------------------------------
@@ -222,10 +238,4 @@ Route::middleware(['auth', 'teacher'])
         Route::get('/results/{result}', [ResultController::class, 'show'])->name('results.show');
     });
 
-Route::get('/services', function () {
-    return view('Student.services');
-})->name('student.services');
 
-Route::get('/about-us', function () {
-    return view('Student.about-us');
-})->name('student.about');
