@@ -309,6 +309,7 @@
 .related-invoices .list-group-item strong { color: var(--wood); }
 .modal-subtitle { font-size: 0.85rem; }
 
+
 /* ================== Responsive ================== */
 @media (max-width: 1200px) {
     .table-fixed { table-layout: auto; }
