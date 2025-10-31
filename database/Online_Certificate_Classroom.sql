@@ -418,14 +418,19 @@ CREATE TABLE KETQUA_MINITEST (
     maHV INT NOT NULL,
     maKH INT NOT NULL,                        -- Liên kết ghi danh
     attempt_no TINYINT DEFAULT 1,             -- Lần thử
+    status VARCHAR(50) NOT NULL DEFAULT 'IN_PROGRESS' ,  -- Trạng thái (IN_PROGRESS, COMPLETED)
     diem DECIMAL(5,2),                        -- Điểm đạt được
     auto_graded_score DECIMAL(5,2),           -- Điểm tự động (trắc nghiệm)
     essay_score DECIMAL(5,2),                 -- Điểm tự luận (do giảng viên chấm)
     is_fully_graded TINYINT(1) DEFAULT 0,     -- Đã chấm đầy đủ hay chưa
+    submitted_late TINYINT(1) NOT NULL DEFAULT 0,      -- Nộp muộn hay không
+    started_at DATETIME NULL,
+    expires_at DATETIME NULL,
     nhanxet VARCHAR(1000),                    -- Nhận xét
     nop_luc DATETIME,                         -- Thời điểm nộp
     completed_at DATETIME,                    -- Thời điểm hoàn thành
     graded_at DATETIME,                       -- Thời điểm chấm xong
+    time_spent_sec INT NULL,                  -- Thời gian làm bài (giây)
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (maKQDG),

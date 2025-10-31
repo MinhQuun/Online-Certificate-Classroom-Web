@@ -1,150 +1,198 @@
-/**
- * Khởi tạo trang làm bài mini-test.
- * Hàm này được gọi từ file Blade để truyền các biến động từ server.
- * @param {number} timeLimitMin - Thời gian làm bài (phút).
- * @param {number} totalQuestions - Tổng số câu hỏi.
- */
-function initMiniTest(timeLimitMin, totalQuestions) {
-    // 1. Timer functionality
-    let timeRemaining = timeLimitMin * 60; // seconds
-    const timerDisplay = document.getElementById("timer");
+document.addEventListener("DOMContentLoaded", () => {
+    const config = document.getElementById("studentMiniTestConfig");
+    if (config) {
+        initAttemptPage(config);
+    }
+});
 
-    function updateTimer() {
-        const minutes = Math.floor(timeRemaining / 60);
-        const seconds = timeRemaining % 60;
-        timerDisplay.textContent = `${minutes}:${seconds
-            .toString()
-            .padStart(2, "0")}`;
+function initAttemptPage(configEl) {
+    const resultId = configEl.dataset.resultId;
+    const countdownValue = parseInt(configEl.dataset.countdown ?? "", 10);
+    const autosaveTemplate = configEl.dataset.autosaveTemplate;
+    const uploadTemplate = configEl.dataset.uploadTemplate;
+    const submitUrl = configEl.dataset.submitUrl;
 
-        // Color warnings
-        timerDisplay.classList.remove("timer-warning", "timer-danger");
-        if (timeRemaining <= 60) {
-            timerDisplay.classList.add("timer-danger");
-        } else if (timeRemaining <= 300) {
-            timerDisplay.classList.add("timer-warning");
-        }
+    const form = document.getElementById("attemptForm");
+    const submitBtn = document.getElementById("submitAttemptBtn");
+    const questionCards = document.querySelectorAll(".question-card");
+    const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        ?.getAttribute("content");
 
-        if (timeRemaining <= 0) {
-            clearInterval(timerInterval);
-            alert("Hết giờ! Bài làm sẽ được tự động nộp.");
-            document.getElementById("testForm").submit();
-        }
-
-        timeRemaining--;
+    if (!csrfToken) {
+        console.error("Không tìm thấy CSRF token.");
+        return;
     }
 
-    const timerInterval = setInterval(updateTimer, 1000);
-    updateTimer(); // Gọi ngay lần đầu để hiển thị
-
-    // 2. Progress tracking
-    const questionInputs = document.querySelectorAll(".question-input");
-    const answeredCount = document.getElementById("answeredCount");
-    const progressBar = document.getElementById("progressBar");
-    const questionNavItems = document.querySelectorAll(".question-nav-item");
-
-    function updateProgress() {
-        let answered = 0;
-        const answeredQuestions = new Set();
-
-        questionInputs.forEach((input) => {
-            if (input.type === "radio" && input.checked) {
-                answeredQuestions.add(input.dataset.question);
-            } else if (input.type === "textarea" && input.value.trim() !== "") {
-                answeredQuestions.add(input.dataset.question);
-            }
-        });
-
-        answered = answeredQuestions.size;
-
-        if (answeredCount) {
-            answeredCount.textContent = answered;
-        }
-
-        const percentage = Math.round((answered / totalQuestions) * 100);
-
-        if (progressBar) {
-            progressBar.style.width = percentage + "%";
-        }
-
-        // Update progress percent text
-        const progressPercentEl = document.getElementById("progressPercent");
-        if (progressPercentEl) {
-            progressPercentEl.textContent = percentage;
-        }
-
-        // Update nav items
-        questionNavItems.forEach((item) => {
-            const questionId = item.dataset.question;
-            if (answeredQuestions.has(questionId)) {
-                item.classList.add("answered");
-            } else {
-                item.classList.remove("answered");
-            }
-        });
+    if (!resultId || !autosaveTemplate) {
+        return;
     }
 
-    questionInputs.forEach((input) => {
-        input.addEventListener("change", updateProgress);
-        if (input.type === "textarea") {
-            input.addEventListener("input", updateProgress);
-        }
-    });
+    const buildUrl = (template, questionId) =>
+        template.replace("__QUESTION__", questionId);
 
-    // 3. Submit confirmation
-    const submitBtn = document.getElementById("submitBtn");
-    if (submitBtn) {
-        submitBtn.addEventListener("click", function () {
-            const answeredSet = new Set();
-            questionInputs.forEach((input) => {
-                if (input.type === "radio" && input.checked) {
-                    answeredSet.add(input.dataset.question);
-                } else if (
-                    input.type === "textarea" &&
-                    input.value.trim() !== ""
-                ) {
-                    answeredSet.add(input.dataset.question);
-                }
+    const autosaveTimeouts = {};
+
+    const scheduleAutosave = (questionId, payload, statusEl) => {
+        if (autosaveTimeouts[questionId]) {
+            clearTimeout(autosaveTimeouts[questionId]);
+        }
+
+        autosaveTimeouts[questionId] = setTimeout(() => {
+            sendAutosave(questionId, payload, statusEl);
+        }, 500);
+    };
+
+    const sendAutosave = async (questionId, payload, statusEl) => {
+        if (!questionId) return;
+
+        const url = buildUrl(autosaveTemplate, questionId);
+
+        try {
+            setStatus(statusEl, "Đang lưu...", "saving");
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": csrfToken,
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ answer: payload }),
             });
 
-            const answered = answeredSet.size;
-            const unanswered = totalQuestions - answered;
-
-            let message = "Bạn có chắc chắn muốn nộp bài?";
-            if (unanswered > 0) {
-                message += `\n\nBạn còn ${unanswered} câu chưa trả lời.`;
+            if (!response.ok) {
+                throw new Error(await response.text());
             }
 
-            if (confirm(message)) {
-                this.disabled = true;
-                this.innerHTML =
-                    '<span class="spinner-border spinner-border-sm me-2"></span>Đang nộp bài...';
-                document.getElementById("testForm").submit();
-            }
-        });
-    }
+            setStatus(statusEl, "Đã lưu", "saved");
+        } catch (error) {
+            console.error(error);
+            setStatus(statusEl, "Lỗi khi lưu", "error");
+        }
+    };
 
-    // 4. Smooth scroll for question navigation
-    document.querySelectorAll(".question-nav-item").forEach((item) => {
-        item.addEventListener("click", function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute("href"));
-            if (target) {
-                const offset = 120; // Account for sticky header
-                const targetPosition = target.offsetTop - offset;
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: "smooth",
+    const uploadSpeaking = async (questionId, file, statusEl) => {
+        const url = buildUrl(uploadTemplate, questionId);
+        const formData = new FormData();
+        formData.append("audio", file);
+
+        try {
+            setStatus(statusEl, "Đang tải lên...", "saving");
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": csrfToken,
+                    Accept: "application/json",
+                },
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error(await response.text());
+            }
+
+            setStatus(statusEl, "Tải lên thành công", "saved");
+        } catch (error) {
+            console.error(error);
+            setStatus(statusEl, "Tải lên thất bại", "error");
+        }
+    };
+
+    questionCards.forEach((card) => {
+        const questionId = card.dataset.questionId;
+        const type = card.dataset.questionType;
+        const statusEl = card.querySelector("[data-status]");
+
+        if (!questionId) return;
+
+        if (type === "multiple_choice" || type === "single_choice") {
+            const inputs = card.querySelectorAll(".answer-input");
+            inputs.forEach((input) => {
+                input.addEventListener("change", () => {
+                    const selected = Array.from(
+                        card.querySelectorAll(".answer-input:checked")
+                    ).map((el) => el.value);
+                    const payload =
+                        type === "multiple_choice"
+                            ? selected
+                            : selected[0] ?? null;
+                    scheduleAutosave(questionId, payload, statusEl);
+                });
+            });
+        } else if (type === "true_false") {
+            const inputs = card.querySelectorAll(".answer-input");
+            inputs.forEach((input) =>
+                input.addEventListener("change", () => {
+                    scheduleAutosave(questionId, input.value, statusEl);
+                })
+            );
+        } else {
+            const textarea = card.querySelector(".answer-text");
+            if (textarea && textarea.disabled === false) {
+                textarea.addEventListener("input", () => {
+                    scheduleAutosave(questionId, textarea.value, statusEl);
                 });
             }
-        });
-    });
 
-    // 5. Prevent accidental page leave
-    window.addEventListener("beforeunload", function (e) {
-        // Chỉ chặn khi thời gian vẫn còn
-        if (timeRemaining > 0 && totalQuestions > 0) {
-            e.preventDefault();
-            e.returnValue = ""; // Bắt buộc cho một số trình duyệt
+            if (card.dataset.speaking === "1") {
+                const fileInput = card.querySelector(".speaking-file-input");
+                fileInput?.addEventListener("change", () => {
+                    const file = fileInput.files?.[0];
+                    if (file) {
+                        uploadSpeaking(questionId, file, statusEl);
+                    }
+                });
+            }
         }
     });
+
+    form?.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (!confirm("Bạn chắc chắn muốn nộp bài?")) {
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML =
+            '<span class="spinner-border spinner-border-sm me-2"></span>Đang nộp...';
+        form.submit();
+    });
+
+    if (!isNaN(countdownValue) && countdownValue > 0) {
+        startCountdown(countdownValue, document.getElementById("countdown"), () => {
+            setTimeout(() => form?.submit(), 500);
+        });
+    }
+}
+
+function startCountdown(seconds, displayEl, onExpire) {
+    let remaining = seconds;
+
+    const updateDisplay = () => {
+        if (!displayEl) return;
+        const minutes = Math.floor(remaining / 60)
+            .toString()
+            .padStart(2, "0");
+        const secs = (remaining % 60).toString().padStart(2, "0");
+        displayEl.textContent = `${minutes}:${secs}`;
+    };
+
+    updateDisplay();
+
+    const interval = setInterval(() => {
+        remaining -= 1;
+        if (remaining <= 0) {
+            clearInterval(interval);
+            updateDisplay();
+            onExpire?.();
+        } else {
+            updateDisplay();
+        }
+    }, 1000);
+}
+
+function setStatus(el, message, state) {
+    if (!el) return;
+    el.textContent = message;
+    el.dataset.state = state;
 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
-use App\Models\MiniTest;
 use App\Models\MiniTestResult;
 use App\Models\MiniTestStudentAnswer;
 use Illuminate\Http\RedirectResponse;
@@ -17,16 +16,11 @@ class GradingController extends Controller
 {
     use LoadsTeacherContext;
 
-    /**
-     * Hiển thị danh sách bài cần chấm điểm.
-     */
     public function index(Request $request): View
     {
-        $type = 'index';
         $teacher = Auth::user();
         $teacherId = $teacher?->getKey() ?? 0;
 
-        // Lấy các khóa học của giảng viên
         $courses = Course::where('maND', $teacherId)->get();
 
         $selectedCourseId = (int) $request->query('course');
@@ -34,49 +28,39 @@ class GradingController extends Controller
             $selectedCourseId = 0;
         }
 
-        // Lấy các bài cần chấm (có câu essay chưa chấm)
-        $query = MiniTestResult::query()
+        $pendingResults = MiniTestResult::query()
             ->where('is_fully_graded', false)
-            ->whereHas('miniTest', function ($q) use ($teacherId, $selectedCourseId) {
-                $q->whereHas('course', fn($query) => $query->where('maND', $teacherId));
-                if ($selectedCourseId) {
-                    $q->where('maKH', $selectedCourseId);
-                }
-            })
+            ->whereIn('status', [MiniTestResult::STATUS_SUBMITTED, MiniTestResult::STATUS_EXPIRED])
+            ->whereHas('miniTest.course', fn ($query) => $query->where('maND', $teacherId))
+            ->when($selectedCourseId, fn ($query) => $query->where('maKH', $selectedCourseId))
             ->with([
                 'miniTest.chapter',
                 'miniTest.course',
                 'student.user',
-                'studentAnswers' => fn($q) => $q->whereNull('graded_at')
-                    ->whereHas('question', fn($query) => $query->where('loai', 'essay'))
-                    ->with('question')
+                'studentAnswers' => fn ($query) => $query
+                    ->whereNull('graded_at')
+                    ->whereHas('question', fn ($q) => $q->where('loai', 'essay'))
+                    ->with('question'),
             ])
-            ->orderBy('nop_luc', 'desc')
+            ->orderByDesc('nop_luc')
             ->paginate(20);
 
         return view('Teacher.grading', [
-            'type' => $type,
+            'type' => 'index',
             'teacher' => $teacher,
             'courses' => $courses,
             'selectedCourseId' => $selectedCourseId,
-            'results' => $query,
+            'results' => $pendingResults,
             'badges' => $this->teacherSidebarBadges($teacherId),
         ]);
     }
 
-    /**
-     * Hiển thị chi tiết bài làm để chấm điểm.
-     */
     public function show(MiniTestResult $result): View
     {
-        $type = 'show';
         $teacherId = Auth::id() ?? 0;
 
-        // Kiểm tra quyền
-        $courseTeacher = $result->miniTest->course->maND;
-        if ($courseTeacher !== $teacherId) {
-            abort(403, 'Bạn không có quyền chấm bài này.');
-        }
+        abort_if($result->miniTest->course->maND !== $teacherId, 403, 'Bạn không có quyền chấm bài này.');
+        abort_if($result->status === MiniTestResult::STATUS_IN_PROGRESS, 403, 'Bài làm vẫn đang trong quá trình thực hiện.');
 
         $result->load([
             'miniTest.chapter',
@@ -86,25 +70,19 @@ class GradingController extends Controller
         ]);
 
         return view('Teacher.grading', [
-            'type' => $type,
+            'type' => 'show',
             'teacher' => Auth::user(),
             'result' => $result,
             'badges' => $this->teacherSidebarBadges($teacherId),
         ]);
     }
 
-    /**
-     * Lưu điểm chấm cho các câu essay.
-     */
     public function grade(Request $request, MiniTestResult $result): RedirectResponse
     {
         $teacherId = Auth::id() ?? 0;
 
-        // Kiểm tra quyền
-        $courseTeacher = $result->miniTest->course->maND;
-        if ($courseTeacher !== $teacherId) {
-            abort(403);
-        }
+        abort_if($result->miniTest->course->maND !== $teacherId, 403);
+        abort_if($result->status === MiniTestResult::STATUS_IN_PROGRESS, 403);
 
         $validated = $request->validate([
             'grades' => ['required', 'array'],
@@ -116,32 +94,9 @@ class GradingController extends Controller
         try {
             DB::beginTransaction();
 
-            $essayScore = 0;
+            $essayScore = $this->gradeAnswers($validated['grades'], $result, $teacherId);
 
-            foreach ($validated['grades'] as $gradeData) {
-                $answer = MiniTestStudentAnswer::findOrFail($gradeData['answer_id']);
-
-                // Kiểm tra câu trả lời thuộc về result này
-                if ($answer->maKQDG !== $result->maKQDG) {
-                    continue;
-                }
-
-                // Kiểm tra điểm không vượt quá điểm tối đa của câu hỏi
-                $maxScore = $answer->question->diem;
-                $score = min($gradeData['score'], $maxScore);
-
-                $answer->update([
-                    'diem' => $score,
-                    'teacher_feedback' => $gradeData['feedback'] ?? null,
-                    'graded_at' => now(),
-                    'graded_by' => $teacherId,
-                    'is_correct' => $score > 0,
-                ]);
-
-                $essayScore += $score;
-            }
-
-            // Cập nhật điểm tổng
+            $result->refresh();
             $autoScore = $result->auto_graded_score ?? 0;
             $totalScore = $autoScore + $essayScore;
 
@@ -153,20 +108,18 @@ class GradingController extends Controller
             ]);
 
             DB::commit();
-
-            return redirect()
-                ->route('teacher.grading.index')
-                ->with('success', 'Đã chấm điểm thành công. Tổng điểm: ' . number_format($totalScore, 2));
-        } catch (\Exception $e) {
+        } catch (\Throwable $throwable) {
             DB::rollBack();
-            \Log::error('Lỗi chấm điểm: ' . $e->getMessage());
-            return back()->with('error', 'Có lỗi xảy ra khi chấm điểm. Vui lòng thử lại.');
+            report($throwable);
+
+            return back()->with('error', 'Có lỗi xảy ra khi chấm bài. Vui lòng thử lại.');
         }
+
+        return redirect()
+            ->route('teacher.grading.index')
+            ->with('success', 'Đã chấm bài thành công. Tổng điểm: ' . number_format($totalScore, 2));
     }
 
-    /**
-     * Chấm nhanh nhiều bài cùng lúc.
-     */
     public function bulkGrade(Request $request): RedirectResponse
     {
         $teacherId = Auth::id() ?? 0;
@@ -183,36 +136,14 @@ class GradingController extends Controller
         try {
             DB::beginTransaction();
 
-            foreach ($validated['results'] as $resultData) {
-                $result = MiniTestResult::findOrFail($resultData['result_id']);
+            foreach ($validated['results'] as $payload) {
+                $result = MiniTestResult::findOrFail($payload['result_id']);
 
-                // Kiểm tra quyền
-                if ($result->miniTest->course->maND !== $teacherId) {
+                if ($result->miniTest->course->maND !== $teacherId || $result->status === MiniTestResult::STATUS_IN_PROGRESS) {
                     continue;
                 }
 
-                $essayScore = 0;
-
-                foreach ($resultData['answers'] as $gradeData) {
-                    $answer = MiniTestStudentAnswer::findOrFail($gradeData['answer_id']);
-
-                    if ($answer->maKQDG !== $result->maKQDG) {
-                        continue;
-                    }
-
-                    $maxScore = $answer->question->diem;
-                    $score = min($gradeData['score'], $maxScore);
-
-                    $answer->update([
-                        'diem' => $score,
-                        'teacher_feedback' => $gradeData['feedback'] ?? null,
-                        'graded_at' => now(),
-                        'graded_by' => $teacherId,
-                        'is_correct' => $score > 0,
-                    ]);
-
-                    $essayScore += $score;
-                }
+                $essayScore = $this->gradeAnswers($payload['answers'], $result, $teacherId);
 
                 $autoScore = $result->auto_graded_score ?? 0;
                 $totalScore = $autoScore + $essayScore;
@@ -226,14 +157,51 @@ class GradingController extends Controller
             }
 
             DB::commit();
-
-            return redirect()
-                ->route('teacher.grading.index')
-                ->with('success', 'Đã chấm ' . count($validated['results']) . ' bài thành công.');
-        } catch (\Exception $e) {
+        } catch (\Throwable $throwable) {
             DB::rollBack();
-            \Log::error('Lỗi chấm điểm hàng loạt: ' . $e->getMessage());
-            return back()->with('error', 'Có lỗi xảy ra. Vui lòng thử lại.');
+            report($throwable);
+
+            return back()->with('error', 'Không thể chấm hàng loạt. Vui lòng thử lại.');
         }
+
+        return redirect()
+            ->route('teacher.grading.index')
+            ->with('success', 'Đã chấm ' . count($validated['results']) . ' bài.');
+    }
+
+    protected function gradeAnswers(array $items, MiniTestResult $result, int $teacherId): float
+    {
+        $essayScore = 0;
+        $now = now();
+
+        foreach ($items as $gradeData) {
+            $answer = MiniTestStudentAnswer::with('question')
+                ->where('maKQDG', $result->maKQDG)
+                ->find($gradeData['answer_id']);
+
+            if (!$answer) {
+                continue;
+            }
+
+            $question = $answer->question;
+            if (!$question || $question->loai !== 'essay') {
+                continue;
+            }
+
+            $maxScore = (float) $question->diem;
+            $score = min((float) $gradeData['score'], $maxScore);
+
+            $answer->update([
+                'diem' => $score,
+                'teacher_feedback' => $gradeData['feedback'] ?? null,
+                'graded_at' => $now,
+                'graded_by' => $teacherId,
+                'is_correct' => $score > 0,
+            ]);
+
+            $essayScore += $score;
+        }
+
+        return $essayScore;
     }
 }

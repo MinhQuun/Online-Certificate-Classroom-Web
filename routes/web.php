@@ -60,11 +60,11 @@ use App\Http\Controllers\Student\MyCoursesController;
 // Public (Student-facing)
 // =====================
 
-// Trang chủ & điều hướng cơ bản
+// Trang chá»§ & Ä‘iá»u hÆ°á»›ng cÆ¡ báº£n
 Route::get('/', [StudentCourseController::class, 'index'])->name('student.courses.index');
 Route::get('/home', fn () => redirect()->route('student.courses.index'))->name('home');
 
-// Khóa học & bài học (public)
+// KhÃ³a há»c & bÃ i há»c (public)
 Route::get('/courses/{slug}',   [StudentCourseController::class, 'show'])->name('student.courses.show');
 Route::get('/lessons/{maBH}',   [StudentLessonController::class,  'show'])->name('student.lessons.show');
 
@@ -75,12 +75,12 @@ Route::prefix('student')
             ->name('lessons.discussions.index');
     });
 
-// Đường dẫn cũ -> điều hướng mới (legacy redirects)
+// ÄÆ°á»ng dáº«n cÅ© -> Ä‘iá»u hÆ°á»›ng má»›i (legacy redirects)
 Route::redirect('/student/courses', '/');
 Route::get('/student/courses/{slug}', fn ($slug)   => redirect()->route('student.courses.show', $slug));
 Route::get('/student/lessons/{maBH}', fn ($maBH)   => redirect()->route('student.lessons.show', $maBH));
 
-// Giỏ hàng & thanh toán
+// Giá» hÃ ng & thanh toÃ¡n
 Route::prefix('cart')
     ->name('student.cart.')
     ->group(function () {
@@ -117,29 +117,34 @@ Route::middleware('auth')
         Route::delete('/lessons/{lesson}/discussions/{discussion}/replies/{reply}', [StudentLessonDiscussionController::class, 'destroyReply'])
             ->name('lessons.discussions.replies.destroy');
 
-        // Mini-tests cho học viên
-        Route::get('/chapters/{chapter}/minitests', [StudentMiniTestController::class, 'index'])->name('minitests.index');
+        // Mini-tests cho há»c viÃªn
         Route::get('/minitests/{miniTest}', [StudentMiniTestController::class, 'show'])->name('minitests.show');
-        Route::post('/minitests/{miniTest}/submit', [StudentMiniTestController::class, 'submit'])->name('minitests.submit');
-        Route::get('/minitests/{result}/result', [StudentMiniTestController::class, 'result'])->name('minitests.result');
+        Route::get('/chapters/{chapter}/minitests', [StudentMiniTestController::class, 'index'])->name('minitests.index');
+        Route::post('/minitests/{miniTest}/start', [StudentMiniTestController::class, 'start'])->name('minitests.start');
+        Route::get('/minitests/{miniTest}', [StudentMiniTestController::class, 'show'])->name('minitests.show');
+        Route::get('/minitests/attempts/{result}', [StudentMiniTestController::class, 'attempt'])->name('minitests.attempt');
+        Route::post('/minitests/attempts/{result}/answers/{question}', [StudentMiniTestController::class, 'saveAnswer'])->name('minitests.answers.save');
+        Route::post('/minitests/attempts/{result}/answers/{question}/upload', [StudentMiniTestController::class, 'uploadSpeakingAnswer'])->name('minitests.answers.upload');
+        Route::post('/minitests/attempts/{result}/submit', [StudentMiniTestController::class, 'submit'])->name('minitests.submit');
+        Route::get('/minitests/results/{result}', [StudentMiniTestController::class, 'result'])->name('minitests.result');
 
         Route::post('/courses/{course:slug}/reviews', [StudentCourseReviewController::class, 'store'])->name('courses.reviews.store');
     });
-    // Trang dịch vụ
+    // Trang dá»‹ch vá»¥
         Route::get('/services', function () {
         return view('Student.services');
         })->name('student.services');
 
-    // Trang về chúng tôi
+    // Trang vá» chÃºng tÃ´i
         Route::get('/about-us', function () {
         return view('Student.about-us');
         })->name('student.about');
-    // Trang liên hệ
+    // Trang liÃªn há»‡
         Route::get('/contact', function () {
             return view('Student.contact');
         })->name('student.contact');
 
-    // Xử lý form liên hệ
+    // Xá»­ lÃ½ form liÃªn há»‡
     Route::post('/contact', [ContactController::class, 'submit'])
         ->name('contact.submit');
     // Profile routes (Student)
@@ -157,11 +162,11 @@ Route::middleware('auth')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| AUTH & USER (đăng nhập/đăng ký/đổi mật khẩu qua OTP)
+| AUTH & USER (Ä‘Äƒng nháº­p/Ä‘Äƒng kÃ½/Ä‘á»•i máº­t kháº©u qua OTP)
 |--------------------------------------------------------------------------
 */
 
-// Mở modal đăng nhập/đăng ký trên trang chủ (giữ nguyên name & hành vi)
+// Má»Ÿ modal Ä‘Äƒng nháº­p/Ä‘Äƒng kÃ½ trÃªn trang chá»§ (giá»¯ nguyÃªn name & hÃ nh vi)
 Route::get('/login', function (Request $request) {
     $redir = $request->query('redirect', url()->previous());
     return redirect()->to(route('student.courses.index') . '?open=login&redirect=' . urlencode($redir));
@@ -172,12 +177,12 @@ Route::get('/register', function (Request $request) {
     return redirect()->to(route('student.courses.index') . '?open=register&redirect=' . urlencode($redir));
 })->name('register');
 
-// Xử lý form đăng nhập/đăng ký/đăng xuất
+// Xá»­ lÃ½ form Ä‘Äƒng nháº­p/Ä‘Äƒng kÃ½/Ä‘Äƒng xuáº¥t
 Route::post('/login',    [UserController::class, 'login'])->name('users.login');
 Route::post('/register', [UserController::class, 'store'])->name('users.store');
 Route::post('/logout',   [UserController::class, 'logout'])->name('logout');
 
-// Quên mật khẩu qua OTP
+// QuÃªn máº­t kháº©u qua OTP
 Route::name('password.')->group(function () {
     Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetCode'])->name('send');    // password.send
     Route::post('/verify-otp',      [ForgotPasswordController::class, 'verifyOtp'])->name('verify');      // password.verify
@@ -197,26 +202,26 @@ Route::middleware(['auth', 'admin'])
         // Dashboard
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-        // Quản lý người dùng
+        // Quáº£n lÃ½ ngÆ°á»i dÃ¹ng
         Route::get('/users',                 [UserAdminController::class, 'index'])->name('users.index');
         Route::post('/users',                [UserAdminController::class, 'store'])->name('users.store');
-        Route::put('/users/{user}',          [UserAdminController::class, 'update'])->name('users.update'); // Đảm bảo route PUT
+        Route::put('/users/{user}',          [UserAdminController::class, 'update'])->name('users.update'); // Äáº£m báº£o route PUT
         Route::post('/users/{user}/role',    [UserAdminController::class, 'updateRole'])->name('users.updateRole');
         Route::delete('/users/{user}',       [UserAdminController::class, 'destroy'])->name('users.destroy');
 
-        // Quản lý danh mục
+        // Quáº£n lÃ½ danh má»¥c
         Route::get('/categories',                [CategoryAdminController::class, 'index'])->name('categories.index');
         Route::post('/categories',               [CategoryAdminController::class, 'store'])->name('categories.store');
         Route::put('/categories/{category}',     [CategoryAdminController::class, 'update'])->name('categories.update');
         Route::delete('/categories/{category}',  [CategoryAdminController::class, 'destroy'])->name('categories.destroy');
 
-        // Quản lý khóa học
+        // Quáº£n lÃ½ khÃ³a há»c
         Route::get('/courses', [CourseAdminController::class, 'index'])->name('courses.index');
         Route::post('/courses', [CourseAdminController::class, 'store'])->name('courses.store');
         Route::put('/courses/{course}', [CourseAdminController::class, 'update'])->name('courses.update');
         Route::delete('/courses/{course}', [CourseAdminController::class, 'destroy'])->name('courses.destroy');
 
-        // Quản lý hóa đơn
+        // Quáº£n lÃ½ hÃ³a Ä‘Æ¡n
         Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
         Route::get('/invoices/export', [InvoiceController::class, 'exportExcel'])->name('invoices.export');
         Route::get('/invoices/{invoice}/pdf', [InvoiceController::class, 'exportPdf'])->name('invoices.pdf');
@@ -268,13 +273,13 @@ Route::middleware(['auth', 'teacher'])
         Route::post('/minitests/{miniTest}/publish', [MiniTestController::class, 'publish'])->name('minitests.publish');
         Route::post('/minitests/{miniTest}/unpublish', [MiniTestController::class, 'unpublish'])->name('minitests.unpublish');
 
-        // Chấm điểm
+        // Cháº¥m Ä‘iá»ƒm
         Route::get('/grading', [GradingController::class, 'index'])->name('grading.index');
         Route::get('/grading/{result}', [GradingController::class, 'show'])->name('grading.show');
         Route::post('/grading/{result}', [GradingController::class, 'grade'])->name('grading.grade');
         Route::post('/grading/bulk', [GradingController::class, 'bulkGrade'])->name('grading.bulk');
 
-        // Xem điểm học viên
+        // Xem Ä‘iá»ƒm há»c viÃªn
         Route::get('/results', [ResultController::class, 'index'])->name('results.index');
         Route::get('/results/{result}', [ResultController::class, 'show'])->name('results.show');
     });

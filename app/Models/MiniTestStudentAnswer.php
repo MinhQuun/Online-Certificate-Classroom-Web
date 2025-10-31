@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\User;
 
 class MiniTestStudentAnswer extends Model
 {
@@ -18,6 +19,10 @@ class MiniTestStudentAnswer extends Model
         'maHV',
         'answer_choice',
         'answer_text',
+        'answer_audio_url',
+        'audio_duration_sec',
+        'audio_mime',
+        'audio_size_kb',
         'is_correct',
         'diem',
         'teacher_feedback',
@@ -28,44 +33,31 @@ class MiniTestStudentAnswer extends Model
     protected $casts = [
         'is_correct' => 'boolean',
         'diem' => 'decimal:2',
+        'audio_duration_sec' => 'integer',
+        'audio_size_kb' => 'integer',
         'graded_at' => 'datetime',
     ];
 
-    /**
-     * Thuộc kết quả mini-test nào
-     */
     public function result(): BelongsTo
     {
         return $this->belongsTo(MiniTestResult::class, 'maKQDG', 'maKQDG');
     }
 
-    /**
-     * Câu hỏi nào
-     */
     public function question(): BelongsTo
     {
         return $this->belongsTo(MiniTestQuestion::class, 'maCauHoi', 'maCauHoi');
     }
 
-    /**
-     * Học viên nào
-     */
     public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class, 'maHV', 'maHV');
     }
 
-    /**
-     * Giảng viên chấm điểm
-     */
     public function grader(): BelongsTo
     {
         return $this->belongsTo(User::class, 'graded_by', 'maND');
     }
 
-    /**
-     * Kiểm tra đã được chấm chưa
-     */
     public function isGraded(): bool
     {
         return !is_null($this->diem) && !is_null($this->graded_at);

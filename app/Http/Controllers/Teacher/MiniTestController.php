@@ -9,35 +9,49 @@ use App\Models\Course;
 use App\Models\MiniTest;
 use App\Models\MiniTestMaterial;
 use App\Models\MiniTestQuestion;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Log;
+use Throwable;
 
 class MiniTestController extends Controller
 {
     use LoadsTeacherContext;
 
-    /**
-     * Hiển thị danh sách mini-test của giảng viên.
-     */
     public function index(Request $request)
     {
-        $type = 'index';
         $teacher = Auth::user();
         $teacherId = $teacher?->getKey() ?? 0;
 
-        // Lấy tất cả khóa học của giảng viên với các chương và mini-test
-        $courses = Course::with(['chapters.miniTests.materials' => fn ($query) => $query->orderBy('created_at'),
-                                 'chapters.miniTests.questions'])
+        $courses = Course::query()
+            ->with([
+                'chapters' => fn ($query) => $query->orderBy('thuTu'),
+                'chapters.miniTests' => fn ($query) => $query
+                    ->with([
+                        'materials' => fn ($q) => $q->orderBy('created_at'),
+                        'questions' => fn ($q) => $q->orderBy('thuTu'),
+                    ])
+                    ->orderBy('thuTu'),
+            ])
             ->where('maND', $teacherId)
             ->orderBy('tenKH')
             ->get();
+
+        $selectedCourseId = (int) $request->query('course', 0);
+        if ($selectedCourseId && !$courses->contains('maKH', $selectedCourseId)) {
+            $selectedCourseId = 0;
+        }
+
+        $activeCourse = $selectedCourseId
+            ? $courses->firstWhere('maKH', $selectedCourseId)
+            : $courses->first();
 
         if ($courses->isNotEmpty()) {
             $studentCounts = DB::table('HOCVIEN_KHOAHOC')
@@ -51,17 +65,8 @@ class MiniTestController extends Controller
             }
         }
 
-        $selectedCourseId = (int) $request->query('course');
-        if ($selectedCourseId && !$courses->contains('maKH', $selectedCourseId)) {
-            $selectedCourseId = 0;
-        }
-
-        $activeCourse = $selectedCourseId
-            ? $courses->firstWhere('maKH', $selectedCourseId)
-            : $courses->first();
-
         return view('Teacher.minitests', [
-            'type' => $type,
+            'type' => 'index',
             'teacher' => $teacher,
             'courses' => $courses,
             'activeCourse' => $activeCourse,
@@ -69,79 +74,79 @@ class MiniTestController extends Controller
         ]);
     }
 
-    /**
-     * Hiển thị form quản lý câu hỏi cho mini-test.
-     */
-    public function questions(MiniTest $miniTest)
+    public function showQuestionForm(MiniTest $miniTest)
     {
-        $type = 'questions';
         $teacherId = Auth::id() ?? 0;
         $this->authorizeMiniTest($miniTest, $teacherId);
 
-        $miniTest->load(['course', 'chapter', 'questions']);
+        $miniTest->load([
+            'course',
+            'chapter',
+            'questions' => fn ($query) => $query->orderBy('thuTu'),
+        ]);
 
         return view('Teacher.minitests', [
-            'type' => $type,
+            'type' => 'questions',
             'teacher' => Auth::user(),
             'miniTest' => $miniTest,
             'badges' => $this->teacherSidebarBadges($teacherId),
         ]);
     }
 
-    /**
-     * Lưu mini-test mới.
-     */
     public function store(Request $request): RedirectResponse
     {
-        $teacher = Auth::user();
-        $teacherId = $teacher?->getKey() ?? 0;
+        $teacherId = Auth::id() ?? 0;
 
         $validated = $request->validate([
             'course_id' => ['required', 'integer'],
             'chapter_id' => ['required', 'integer'],
             'title' => ['required', 'string', 'max:255'],
-            'skill_type' => ['required', 'string', Rule::in(['LISTENING', 'SPEAKING', 'READING', 'WRITING'])],
+            'skill_type' => ['required', Rule::in([
+                MiniTest::SKILL_LISTENING,
+                MiniTest::SKILL_READING,
+                MiniTest::SKILL_WRITING,
+                MiniTest::SKILL_SPEAKING,
+            ])],
             'order' => ['nullable', 'integer', 'min:1'],
-            'max_score' => ['nullable', 'numeric', 'min:0'],
             'weight' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'time_limit' => ['nullable', 'integer', 'min:1'],
-            'attempts' => ['nullable', 'integer', 'min:1'],
-            'is_active' => ['boolean'],
+            'time_limit' => ['nullable', 'integer', 'min:0', 'max:600'],
+            'attempts' => ['nullable', 'integer', 'min:1', 'max:10'],
+            'is_active' => ['nullable', 'boolean'],
         ]);
 
-        // Kiểm tra quyền trên khóa học
-        $course = Course::findOrFail($validated['course_id']);
-        abort_if($course->maND !== $teacherId, 403, 'Bạn không có quyền trên khóa học này.');
+        $course = Course::where('maKH', $validated['course_id'])
+            ->where('maND', $teacherId)
+            ->firstOrFail();
 
-        // Kiểm tra chương thuộc khóa học
-        $chapter = Chapter::findOrFail($validated['chapter_id']);
-        abort_if($chapter->maKH !== $validated['course_id'], 400, 'Chương không thuộc khóa học.');
+        $chapter = Chapter::where('maChuong', $validated['chapter_id'])
+            ->where('maKH', $course->maKH)
+            ->firstOrFail();
+
+        $nextOrder = $validated['order']
+            ?? ((MiniTest::where('maChuong', $chapter->maChuong)->max('thuTu') ?? 0) + 1);
 
         $miniTest = MiniTest::create([
-            'maKH' => $validated['course_id'],
-            'maChuong' => $validated['chapter_id'],
+            'maKH' => $course->maKH,
+            'maChuong' => $chapter->maChuong,
             'title' => $validated['title'],
             'skill_type' => $validated['skill_type'],
-            'thuTu' => $validated['order'] ?? MiniTest::where('maChuong', $validated['chapter_id'])->max('thuTu') + 1,
-            'max_score' => $validated['max_score'] ?? 0,
-            'weight' => $validated['weight'] ?? 100,
-            'time_limit_min' => $validated['time_limit'] ?? 30,
-            'attempts_allowed' => $validated['attempts'] ?? 3,
-            'is_active' => $validated['is_active'] ?? false,
-            'created_by' => $teacherId,
+            'thuTu' => $nextOrder,
+            'max_score' => 0,
+            'trongSo' => $validated['weight'] ?? 0,
+            'time_limit_min' => $validated['time_limit'] ?? 0,
+            'attempts_allowed' => $validated['attempts'] ?? 1,
+            'is_active' => (bool) ($validated['is_active'] ?? true),
+            'is_published' => false,
         ]);
 
         return redirect()
             ->route('teacher.minitests.index', [
-                'course' => $validated['course_id'],
+                'course' => $course->maKH,
                 '_fragment' => 'minitest-' . $miniTest->maMT,
             ])
             ->with('success', 'Đã tạo mini-test mới thành công.');
     }
 
-    /**
-     * Cập nhật mini-test.
-     */
     public function update(Request $request, MiniTest $miniTest): RedirectResponse
     {
         $teacherId = Auth::id() ?? 0;
@@ -151,40 +156,47 @@ class MiniTestController extends Controller
             'course_id' => ['required', 'integer'],
             'chapter_id' => ['required', 'integer'],
             'title' => ['required', 'string', 'max:255'],
-            'skill_type' => ['required', 'string', Rule::in(['LISTENING', 'SPEAKING', 'READING', 'WRITING'])],
+            'skill_type' => ['required', Rule::in([
+                MiniTest::SKILL_LISTENING,
+                MiniTest::SKILL_READING,
+                MiniTest::SKILL_WRITING,
+                MiniTest::SKILL_SPEAKING,
+            ])],
             'order' => ['nullable', 'integer', 'min:1'],
-            'max_score' => ['nullable', 'numeric', 'min:0'],
             'weight' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'time_limit' => ['nullable', 'integer', 'min:1'],
-            'attempts' => ['nullable', 'integer', 'min:1'],
-            'is_active' => ['boolean'],
+            'time_limit' => ['nullable', 'integer', 'min:0', 'max:600'],
+            'attempts' => ['nullable', 'integer', 'min:1', 'max:10'],
+            'is_active' => ['nullable', 'boolean'],
         ]);
 
+        $course = Course::where('maKH', $validated['course_id'])
+            ->where('maND', $teacherId)
+            ->firstOrFail();
+
+        $chapter = Chapter::where('maChuong', $validated['chapter_id'])
+            ->where('maKH', $course->maKH)
+            ->firstOrFail();
+
         $miniTest->update([
-            'maKH' => $validated['course_id'],
-            'maChuong' => $validated['chapter_id'],
+            'maKH' => $course->maKH,
+            'maChuong' => $chapter->maChuong,
             'title' => $validated['title'],
             'skill_type' => $validated['skill_type'],
             'thuTu' => $validated['order'] ?? $miniTest->thuTu,
-            'max_score' => $validated['max_score'] ?? $miniTest->max_score,
-            'weight' => $validated['weight'] ?? $miniTest->weight,
+            'trongSo' => $validated['weight'] ?? $miniTest->weight,
             'time_limit_min' => $validated['time_limit'] ?? $miniTest->time_limit_min,
             'attempts_allowed' => $validated['attempts'] ?? $miniTest->attempts_allowed,
-            'is_active' => $validated['is_active'] ?? $miniTest->is_active,
-            'updated_by' => $teacherId,
+            'is_active' => (bool) ($validated['is_active'] ?? $miniTest->is_active),
         ]);
 
         return redirect()
             ->route('teacher.minitests.index', [
-                'course' => $validated['course_id'],
+                'course' => $course->maKH,
                 '_fragment' => 'minitest-' . $miniTest->maMT,
             ])
-            ->with('success', 'Đã cập nhật mini-test thành công.');
+            ->with('success', 'Đã cập nhật mini-test.');
     }
 
-    /**
-     * Xóa mini-test.
-     */
     public function destroy(MiniTest $miniTest): RedirectResponse
     {
         $teacherId = Auth::id() ?? 0;
@@ -192,121 +204,173 @@ class MiniTestController extends Controller
 
         $courseId = $miniTest->maKH;
 
+        DB::beginTransaction();
+
         try {
-            DB::beginTransaction();
+            $miniTest->load(['questions', 'materials']);
 
-            // Xóa câu hỏi
-            $miniTest->questions()->delete();
+            foreach ($miniTest->questions as $question) {
+                $this->deleteQuestionAssets($question);
+            }
 
-            // Xóa tài liệu và file trên R2
             foreach ($miniTest->materials as $material) {
-                $filePath = parse_url($material->public_url, PHP_URL_PATH);
-                if ($filePath && Storage::disk('s3')->exists($filePath)) {
-                    Storage::disk('s3')->delete($filePath);
-                }
+                $this->deleteStoredFile($material->public_url ?? null);
                 $material->delete();
             }
 
-            // Xóa mini-test
+            $miniTest->questions()->delete();
             $miniTest->delete();
 
             DB::commit();
-
-            return redirect()
-                ->route('teacher.minitests.index', ['course' => $courseId])
-                ->with('success', 'Đã xóa mini-test thành công.');
-        } catch (\Exception $e) {
+        } catch (Throwable $throwable) {
             DB::rollBack();
-            Log::error('Lỗi xóa mini-test: ' . $e->getMessage());
-            return back()->with('error', 'Có lỗi xảy ra khi xóa. Vui lòng thử lại.');
+            Log::error('Delete mini-test failed', [
+                'mini_test_id' => $miniTest->maMT,
+                'error' => $throwable->getMessage(),
+            ]);
+
+            return back()->with('error', 'Có lỗi xảy ra khi xóa mini-test. Vui lòng thử lại.');
         }
+
+        return redirect()
+            ->route('teacher.minitests.index', ['course' => $courseId])
+            ->with('success', 'Đã xóa mini-test.');
     }
 
-    /**
-     * Lưu câu hỏi cho mini-test.
-     */
     public function storeQuestions(Request $request, MiniTest $miniTest): JsonResponse
     {
         $teacherId = Auth::id() ?? 0;
         $this->authorizeMiniTest($miniTest, $teacherId);
 
         $validated = $request->validate([
-            'questions' => ['required', 'array'],
+            'questions' => ['required', 'array', 'min:1'],
             'questions.*.content' => ['required', 'string'],
-            'questions.*.type' => ['required', Rule::in(['multiple_choice', 'essay'])],
+            'questions.*.type' => ['required', Rule::in([
+                MiniTestQuestion::TYPE_SINGLE_CHOICE,
+                MiniTestQuestion::TYPE_MULTIPLE_CHOICE,
+                MiniTestQuestion::TYPE_TRUE_FALSE,
+                MiniTestQuestion::TYPE_ESSAY,
+            ])],
             'questions.*.points' => ['required', 'numeric', 'min:0'],
-            'questions.*.options' => ['required_if:questions.*.type,multiple_choice', 'array'],
-            'questions.*.options.*' => ['required_if:questions.*.type,multiple_choice', 'string'],
-            'questions.*.correct' => ['required_if:questions.*.type,multiple_choice', 'string', Rule::in(['A', 'B', 'C', 'D'])],
-            'questions.*.audio' => ['nullable', 'file', 'mimes:mp3,wav', 'max:51200'],
-            'questions.*.pdf' => ['nullable', 'file', 'mimes:pdf', 'max:51200'],
-            'questions.*.image' => ['nullable', 'file', 'mimes:jpg,png,jpeg', 'max:10240'],
+            'questions.*.explanation' => ['nullable', 'string'],
         ]);
 
-        try {
-            DB::beginTransaction();
+        $questionPayloads = collect($request->input('questions', []));
 
-            // Xóa câu hỏi cũ
+        DB::beginTransaction();
+
+        try {
+            $existingQuestions = $miniTest->questions()->get();
+            foreach ($existingQuestions as $existingQuestion) {
+                $this->deleteQuestionAssets($existingQuestion);
+            }
             $miniTest->questions()->delete();
 
             $totalScore = 0;
 
-            foreach ($validated['questions'] as $index => $qData) {
-                $question = MiniTestQuestion::create([
+            foreach ($questionPayloads as $index => $payload) {
+                $questionType = $payload['type'];
+
+                $options = Arr::get($payload, 'options', []);
+                $options = is_array($options) ? $options : [];
+
+                $correctRaw = Arr::get($payload, 'correct');
+                $correctAnswers = $this->normalizeCorrectAnswers($correctRaw);
+
+                if (in_array($questionType, [
+                    MiniTestQuestion::TYPE_SINGLE_CHOICE,
+                    MiniTestQuestion::TYPE_MULTIPLE_CHOICE,
+                ], true)) {
+                    $options = $this->prepareChoiceOptions($options);
+
+                    if (count($options) < 2) {
+                        throw new \InvalidArgumentException('Cần tối thiểu 2 đáp án cho câu hỏi trắc nghiệm.');
+                    }
+
+                    if (empty($correctAnswers)) {
+                        throw new \InvalidArgumentException('Vui lòng chọn đáp án đúng cho câu hỏi trắc nghiệm.');
+                    }
+
+                    if (
+                        $questionType === MiniTestQuestion::TYPE_SINGLE_CHOICE
+                        && count($correctAnswers) !== 1
+                    ) {
+                        throw new \InvalidArgumentException('Câu hỏi một đáp án chỉ được chọn một đáp án đúng.');
+                    }
+
+                    foreach ($correctAnswers as $answer) {
+                        if (!array_key_exists($answer, $options)) {
+                            throw new \InvalidArgumentException('Đáp án đúng không hợp lệ.');
+                        }
+                    }
+                } elseif ($questionType === MiniTestQuestion::TYPE_TRUE_FALSE) {
+                    if (empty($correctAnswers)) {
+                        throw new \InvalidArgumentException('Vui lòng chọn TRUE hoặc FALSE cho câu hỏi đúng sai.');
+                    }
+                    $firstAnswer = strtoupper($correctAnswers[0]);
+                    if (!in_array($firstAnswer, ['TRUE', 'FALSE'], true)) {
+                        throw new \InvalidArgumentException('Đáp án cho câu đúng sai phải là TRUE hoặc FALSE.');
+                    }
+                    $correctAnswers = [$firstAnswer];
+                    $options = [
+                        'A' => 'TRUE',
+                        'B' => 'FALSE',
+                    ];
+                } else {
+                    // essay
+                    $options = [];
+                    $correctAnswers = [];
+                }
+
+                $question = new MiniTestQuestion([
                     'maMT' => $miniTest->maMT,
-                    'noiDungCauHoi' => $qData['content'],
-                    'loai' => $qData['type'],
-                    'diem' => $qData['points'],
-                    'thuTu' => $index + 1,
+                    'thuTu' => (int) (Arr::get($payload, 'order') ?: $index + 1),
+                    'loai' => $questionType,
+                    'noiDungCauHoi' => $payload['content'],
+                    'giaiThich' => Arr::get($payload, 'explanation'),
+                    'diem' => (float) $payload['points'],
                 ]);
 
-                $totalScore += (float) $qData['points'];
+                $question->phuongAnA = $options['A'] ?? null;
+                $question->phuongAnB = $options['B'] ?? null;
+                $question->phuongAnC = $options['C'] ?? null;
+                $question->phuongAnD = $options['D'] ?? null;
+                $question->dapAnDung = implode(';', $correctAnswers);
 
-                if ($qData['type'] === 'multiple_choice') {
-                    $question->update([
-                        'phuongAnA' => $qData['options']['A'] ?? '',
-                        'phuongAnB' => $qData['options']['B'] ?? '',
-                        'phuongAnC' => $qData['options']['C'] ?? '',
-                        'phuongAnD' => $qData['options']['D'] ?? '',
-                        'dapAnDung' => $qData['correct'],
-                    ]);
-                }
+                $question->save();
 
-                // Xử lý file upload
-                foreach (['audio', 'pdf', 'image'] as $fileType) {
-                    if ($request->hasFile("questions.{$index}.{$fileType}")) {
-                        $file = $request->file("questions.{$index}.{$fileType}");
-                        $path = $file->store('minitest_questions/' . $miniTest->maMT, 's3');
-                        $url = Storage::disk('s3')->url($path);
+                $this->storeQuestionMedia($request, $question, $index);
 
-                        $question->update(["{$fileType}_url" => $url]);
-                    }
-                }
+                $totalScore += (float) $payload['points'];
             }
 
-            // Cập nhật max_score của mini-test
             $miniTest->update(['max_score' => $totalScore]);
 
             DB::commit();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Đã lưu câu hỏi thành công.',
-                'redirect' => route('teacher.minitests.index', ['course' => $miniTest->maKH]),
+                'message' => 'Đã lưu câu hỏi mini-test.',
+                'redirect' => route('teacher.minitests.index', [
+                    'course' => $miniTest->maKH,
+                    '_fragment' => 'minitest-' . $miniTest->maMT,
+                ]),
             ]);
-        } catch (\Exception $e) {
+        } catch (Throwable $throwable) {
             DB::rollBack();
-            Log::error('Lỗi lưu câu hỏi: ' . $e->getMessage());
+
+            Log::error('Save mini-test questions failed', [
+                'mini_test_id' => $miniTest->maMT,
+                'error' => $throwable->getMessage(),
+            ]);
+
             return response()->json([
                 'success' => false,
-                'error' => 'Có lỗi xảy ra khi lưu câu hỏi. Vui lòng thử lại.',
-            ], 500);
+                'error' => $throwable->getMessage() ?: 'Đã xảy ra lỗi khi lưu câu hỏi.',
+            ], 422);
         }
     }
 
-    /**
-     * Thêm tài liệu cho mini-test.
-     */
     public function storeMaterial(Request $request, MiniTest $miniTest): RedirectResponse
     {
         $teacherId = Auth::id() ?? 0;
@@ -314,42 +378,43 @@ class MiniTestController extends Controller
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'type' => ['required', 'string'],
-            'source_type' => ['required', 'in:file,url'],
-            'file' => ['required_if:source_type,file', 'file', 'max:102400'],
-            'url' => ['required_if:source_type,url', 'url'],
-            'visibility' => ['required', 'in:public,private'],
+            'type' => ['required', Rule::in(['pdf', 'image', 'zip', 'audio'])],
+            'source_type' => ['required', Rule::in(['file', 'url'])],
+            'file' => ['required_if:source_type,file', 'file', 'max:102400', 'mimetypes:application/pdf,image/jpeg,image/png,image/jpg,application/zip,application/x-zip-compressed,audio/mpeg,audio/mp3,audio/wav'],
+            'url' => ['required_if:source_type,url', 'url', 'max:700'],
+            'visibility' => ['required', Rule::in(['public', 'private'])],
+        ], [
+            'file.mimetypes' => 'File không đúng định dạng cho phép.',
         ]);
 
         try {
-            DB::beginTransaction();
-
             $publicUrl = null;
-            $privateUrl = null;
+            $mimeType = null;
 
             if ($validated['source_type'] === 'file') {
                 $file = $request->file('file');
-                $mime = $file->getMimeType();
+                $mimeType = $file->getMimeType();
+                $fileName = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
                 $extension = $file->getClientOriginalExtension();
-                $fileName = Str::slug($validated['name']) . '.' . $extension;
-                $path = $file->storeAs('minitest_materials/' . $miniTest->maMT, $fileName, 's3');
+                $path = $file->storeAs(
+                    'mini-tests/materials/' . $miniTest->maMT,
+                    $fileName . '-' . now()->timestamp . '.' . $extension,
+                    's3'
+                );
                 $publicUrl = Storage::disk('s3')->url($path);
             } else {
                 $publicUrl = $validated['url'];
-                $mime = $this->guessMime($validated['type'], $publicUrl);
+                $mimeType = $this->guessMime($validated['type'], $publicUrl);
             }
 
             MiniTestMaterial::create([
                 'maMT' => $miniTest->maMT,
-                'name' => $validated['name'],
-                'mime_type' => $mime,
-                'public_url' => $publicUrl,
-                'private_url' => $privateUrl,
+                'tenTL' => $validated['name'],
+                'loai' => $validated['type'],
+                'mime_type' => $mimeType ?? 'application/octet-stream',
                 'visibility' => $validated['visibility'],
-                'uploaded_by' => $teacherId,
+                'public_url' => $publicUrl,
             ]);
-
-            DB::commit();
 
             return redirect()
                 ->route('teacher.minitests.index', [
@@ -357,40 +422,39 @@ class MiniTestController extends Controller
                     '_fragment' => 'minitest-' . $miniTest->maMT,
                 ])
                 ->with('success', 'Đã thêm tài liệu thành công.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Lỗi thêm tài liệu: ' . $e->getMessage());
-            return back()->with('error', 'Có lỗi xảy ra khi thêm tài liệu. Vui lòng thử lại.');
+        } catch (Throwable $throwable) {
+            Log::error('Store mini-test material failed', [
+                'mini_test_id' => $miniTest->maMT,
+                'error' => $throwable->getMessage(),
+            ]);
+
+            return back()->with('error', 'Không thể lưu tài liệu. Vui lòng thử lại.');
         }
     }
 
-    /**
-     * Công bố mini-test.
-     */
     public function publish(MiniTest $miniTest): RedirectResponse
     {
         $teacherId = Auth::id() ?? 0;
         $this->authorizeMiniTest($miniTest, $teacherId);
 
-        if ($miniTest->questions->isEmpty()) {
+        $miniTest->loadCount('questions');
+
+        if ($miniTest->questions_count === 0) {
             return redirect()
                 ->route('teacher.minitests.index', ['course' => $miniTest->maKH])
-                ->with('error', 'Không thể công bố mini-test chưa có câu hỏi.');
+                ->with('error', 'Mini-test cần có ít nhất một câu hỏi trước khi công bố.');
         }
 
-        $miniTest->update(['is_published' => true]);
+        $miniTest->update(['is_published' => true, 'is_active' => true]);
 
         return redirect()
             ->route('teacher.minitests.index', [
                 'course' => $miniTest->maKH,
                 '_fragment' => 'minitest-' . $miniTest->maMT,
             ])
-            ->with('success', 'Đã công bố mini-test thành công.');
+            ->with('success', 'Đã công bố mini-test.');
     }
 
-    /**
-     * Hủy công bố mini-test.
-     */
     public function unpublish(MiniTest $miniTest): RedirectResponse
     {
         $teacherId = Auth::id() ?? 0;
@@ -406,72 +470,174 @@ class MiniTestController extends Controller
             ->with('success', 'Đã hủy công bố mini-test.');
     }
 
-    /**
-     * Xóa tài nguyên.
-     */
     public function destroyMaterial(MiniTestMaterial $material): RedirectResponse
     {
         $teacherId = Auth::id() ?? 0;
-        $miniTest = $material->miniTest()->with('chapter')->firstOrFail();
+        $miniTest = $material->miniTest()->firstOrFail();
 
         $this->authorizeMiniTest($miniTest, $teacherId);
 
         $courseId = $miniTest->maKH;
 
-        // Xóa file trên R2 nếu tồn tại
         try {
-            $filePath = parse_url($material->public_url, PHP_URL_PATH);
-            if ($filePath && Storage::disk('s3')->exists($filePath)) {
-                Storage::disk('s3')->delete($filePath);
-            }
-        } catch (\Exception $e) {
-            Log::error('Lỗi xóa file trên R2: ' . $e->getMessage());
+            $this->deleteStoredFile($material->public_url ?? null);
+            $material->delete();
+
+            return redirect()
+                ->route('teacher.minitests.index', [
+                    'course' => $courseId,
+                    '_fragment' => 'minitest-' . $miniTest->maMT,
+                ])
+                ->with('success', 'Đã xóa tài liệu.');
+        } catch (Throwable $throwable) {
+            Log::error('Delete mini-test material failed', [
+                'material_id' => $material->id,
+                'error' => $throwable->getMessage(),
+            ]);
+
+            return back()->with('error', 'Không thể xóa tài liệu. Vui lòng thử lại.');
         }
-
-        $material->delete();
-
-        return redirect()
-            ->route('teacher.minitests.index', [
-                'course' => $courseId,
-                '_fragment' => 'minitest-' . $miniTest->maMT,
-            ])
-            ->with('success', 'Đã xóa tài nguyên.');
     }
 
-    /**
-     * Kiểm tra quyền truy cập mini-test.
-     */
     protected function authorizeMiniTest(MiniTest $miniTest, int $teacherId): void
     {
-        $courseTeacher = $miniTest->course()->value('maND');
+        $ownerId = $miniTest->course()
+            ->value('maND');
 
-        abort_if($courseTeacher !== $teacherId, 403, 'Bạn không có quyền trên mini-test này.');
+        abort_if($ownerId !== $teacherId, 403, 'Bạn không có quyền truy cập mini-test này.');
     }
 
-    /**
-     * Đoán MIME type dựa trên loại hoặc URL.
-     */
+    protected function normalizeCorrectAnswers(mixed $raw): array
+    {
+        if (is_null($raw)) {
+            return [];
+        }
+
+        if (is_array($raw)) {
+            return array_values(array_filter(array_map(
+                fn ($value) => is_string($value) ? strtoupper(trim($value)) : $value,
+                $raw
+            ), fn ($value) => $value !== '' && !is_null($value)));
+        }
+
+        $stringValue = trim((string) $raw);
+        if ($stringValue === '') {
+            return [];
+        }
+
+        if (str_contains($stringValue, ';')) {
+            return array_values(array_filter(array_map('trim', explode(';', $stringValue))));
+        }
+
+        return [$stringValue];
+    }
+
+    protected function prepareChoiceOptions(array $options): array
+    {
+        $prepared = [];
+
+        foreach (['A', 'B', 'C', 'D'] as $label) {
+            $value = Arr::get($options, $label);
+            if (!is_null($value) && trim((string) $value) !== '') {
+                $prepared[$label] = trim((string) $value);
+            }
+        }
+
+        return $prepared;
+    }
+
+    protected function storeQuestionMedia(Request $request, MiniTestQuestion $question, int $index): void
+    {
+        foreach (['audio' => 'audio/mpeg', 'image' => null, 'pdf' => 'application/pdf'] as $type => $defaultMime) {
+            $file = $request->file("questions.$index.$type");
+            if (!$file) {
+                continue;
+            }
+
+            $folder = match ($type) {
+                'audio' => 'audio',
+                'image' => 'images',
+                'pdf' => 'pdf',
+                default => 'files',
+            };
+
+            $path = $file->storeAs(
+                "mini-tests/questions/{$question->maMT}/{$folder}",
+                Str::uuid()->toString() . '.' . $file->getClientOriginalExtension(),
+                's3'
+            );
+
+            $url = Storage::disk('s3')->url($path);
+
+            if ($type === 'audio') {
+                $question->audio_url = $url;
+            } elseif ($type === 'image') {
+                $question->image_url = $url;
+            } else {
+                $question->pdf_url = $url;
+            }
+
+            $question->save();
+        }
+    }
+
+    protected function deleteQuestionAssets(MiniTestQuestion $question): void
+    {
+        $this->deleteStoredFile($question->audio_url);
+        $this->deleteStoredFile($question->image_url);
+        $this->deleteStoredFile($question->pdf_url);
+    }
+
+    protected function deleteStoredFile(?string $url): void
+    {
+        if (!$url) {
+            return;
+        }
+
+        $path = parse_url($url, PHP_URL_PATH);
+        if (!$path) {
+            return;
+        }
+
+        $path = ltrim($path, '/');
+
+        try {
+            if (Storage::disk('s3')->exists($path)) {
+                Storage::disk('s3')->delete($path);
+            }
+        } catch (Throwable $throwable) {
+            Log::warning('Unable to delete stored file from R2', [
+                'path' => $path,
+                'error' => $throwable->getMessage(),
+            ]);
+        }
+    }
+
     protected function guessMime(string $type, string $url): string
     {
         $type = strtolower($type);
-        $map = [
+
+        return match ($type) {
             'pdf' => 'application/pdf',
             'audio' => 'audio/mpeg',
-            'mp3' => 'audio/mpeg',
-            'video' => 'video/mp4',
-            'mp4' => 'video/mp4',
+            'zip' => 'application/zip',
             'image' => 'image/jpeg',
-            'jpg' => 'image/jpeg',
-            'jpeg' => 'image/jpeg',
-            'png' => 'image/png',
-        ];
+            default => $this->inferMimeFromUrl($url),
+        };
+    }
 
-        if (isset($map[$type])) {
-            return $map[$type];
-        }
-
+    protected function inferMimeFromUrl(string $url): string
+    {
         $extension = strtolower(pathinfo(parse_url($url, PHP_URL_PATH) ?? '', PATHINFO_EXTENSION));
 
-        return $map[$extension] ?? 'application/octet-stream';
+        return match ($extension) {
+            'pdf' => 'application/pdf',
+            'jpg', 'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'zip' => 'application/zip',
+            'mp3' => 'audio/mpeg',
+            'wav' => 'audio/wav',
+            default => 'application/octet-stream',
+        };
     }
 }

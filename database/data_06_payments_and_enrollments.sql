@@ -17,6 +17,9 @@ ON DUPLICATE KEY UPDATE tenPhuongThuc=VALUES(tenPhuongThuc);
 -- =========================================================
 INSERT INTO HOCVIEN_KHOAHOC (maHV, maKH, ngayNhapHoc, trangThai, activated_at) VALUES
 (@hv_trinh, @kh_reading_405_600, '2025-02-01', 'ACTIVE', '2025-10-15 00:00:00'),
+(@hv_trinh, @kh_writing_405_600, '2025-02-10', 'ACTIVE', '2025-10-15 00:00:00'),
+(@hv_trinh, @kh_speaking_405_600, '2025-02-10', 'ACTIVE', '2025-10-15 00:00:00'),
+(@hv_trinh, @kh_listening_405_600, '2025-02-10', 'ACTIVE', '2025-10-15 00:00:00'),
 (@hv_trinh, @kh_writing_605_780, '2025-02-10', 'ACTIVE', '2025-10-15 00:00:00');
 
 COMMIT;
