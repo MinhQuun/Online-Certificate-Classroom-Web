@@ -132,14 +132,14 @@
                         <i class="fa-solid fa-key"></i>
                         <span> Mã kích hoạt</span>
                     </a>
+                    <a href="{{ route('student.order-history') }}">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span> Lịch sử đơn hàng</span>
+                    </a>
                     <a href="#">
-                                <i class="fa-solid fa-cart-shopping"></i>
-                                <span> Lịch sử đơn hàng</span>
-                            </a>
-                            <a href="#">
-                                <i class="fa-solid fa-download"></i>
-                                <span> Bảo lưu</span>
-                            </a>
+                        <i class="fa-solid fa-download"></i>
+                        <span> Bảo lưu</span>
+                    </a>
                         </nav>
 
                         <form action="{{ route('logout') }}" method="post" class="header-profile__logout">

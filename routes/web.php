@@ -49,6 +49,7 @@ use App\Http\Controllers\Student\ActivationController;
 use App\Http\Controllers\Student\ProgressController as StudentProgressController;
 use App\Http\Controllers\Student\MiniTestController as StudentMiniTestController;
 use App\Http\Controllers\Student\CourseReviewController as StudentCourseReviewController;
+use App\Http\Controllers\Student\OrderHistoryController;
 
 // =====================
 // Public (Student-facing)
@@ -128,6 +129,9 @@ Route::middleware('auth')->group(function () {
     
     // My Courses
     Route::get('/my-courses', [App\Http\Controllers\Student\MyCoursesController::class, 'index'])->name('student.my-courses');
+    
+    // Order History
+    Route::get('/order-history', [OrderHistoryController::class, 'index'])->name('student.order-history');
 });
 
 /*
