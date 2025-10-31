@@ -130,8 +130,8 @@
                                             @php
                                                 $isFreeLesson = $freeLessonId && $lesson->maBH == $freeLessonId;
                                                 $isLocked = !$isEnrolled && !$isFreeLesson;
-                                                $labelClass = $isLocked ? 'label--locked' : 'label--success';
-                                                $labelText = $isLocked ? 'Khóa' : 'Mở khóa';
+                                                $labelClass = $isLocked ? 'label--paid' : 'label--free';
+                                                $labelText = $isLocked ? 'Paid' : 'Free';
                                             @endphp
                                             <li class="lesson-item">
                                                 <span class="label {{ $labelClass }}">{{ $labelText }}</span>
@@ -168,8 +168,8 @@
                                                         @php
                                                             $isFreeMiniTest = $freeMiniTestId && $miniTest->maMT == $freeMiniTestId;
                                                             $isLocked = !$isEnrolled && !$isFreeMiniTest;
-                                                            $labelClass = $isLocked ? 'label--locked' : 'label--success';
-                                                            $labelText = $isLocked ? 'Khóa' : 'Mở khóa';
+                                                            $labelClass = $isLocked ? 'label--paid' : 'label--free';
+                                                            $labelText = $isLocked ? 'Paid' : 'Free';
 
                                                             $scoreData = $miniTestScores[$miniTest->maMT] ?? null;
                                                             $bestScore = $scoreData['best_score'] ?? null;
