@@ -50,6 +50,8 @@ use App\Http\Controllers\Student\ProgressController as StudentProgressController
 use App\Http\Controllers\Student\MiniTestController as StudentMiniTestController;
 use App\Http\Controllers\Student\CourseReviewController as StudentCourseReviewController;
 use App\Http\Controllers\Student\OrderHistoryController;
+use App\Http\Controllers\Student\LessonDiscussionController as StudentLessonDiscussionController;
+use App\Http\Controllers\Teacher\LessonDiscussionController as TeacherLessonDiscussionController;
 
 // =====================
 // Public (Student-facing)
@@ -62,6 +64,13 @@ Route::get('/home', fn () => redirect()->route('student.courses.index'))->name('
 // Khóa học & bài học (public)
 Route::get('/courses/{slug}',   [StudentCourseController::class, 'show'])->name('student.courses.show');
 Route::get('/lessons/{maBH}',   [StudentLessonController::class,  'show'])->name('student.lessons.show');
+
+Route::prefix('student')
+    ->name('student.')
+    ->group(function () {
+        Route::get('/lessons/{lesson}/discussions', [StudentLessonDiscussionController::class, 'index'])
+            ->name('lessons.discussions.index');
+    });
 
 // Đường dẫn cũ -> điều hướng mới (legacy redirects)
 Route::redirect('/student/courses', '/');
@@ -95,6 +104,15 @@ Route::middleware('auth')
         Route::get('/progress', [StudentProgressController::class, 'index'])->name('progress.index');
         Route::post('/lessons/{lesson}/progress', [StudentLessonProgressController::class, 'store'])
             ->name('lessons.progress.store');
+
+        Route::post('/lessons/{lesson}/discussions', [StudentLessonDiscussionController::class, 'store'])
+            ->name('lessons.discussions.store');
+        Route::post('/lessons/{lesson}/discussions/{discussion}/replies', [StudentLessonDiscussionController::class, 'storeReply'])
+            ->name('lessons.discussions.replies.store');
+        Route::delete('/lessons/{lesson}/discussions/{discussion}', [StudentLessonDiscussionController::class, 'destroy'])
+            ->name('lessons.discussions.destroy');
+        Route::delete('/lessons/{lesson}/discussions/{discussion}/replies/{reply}', [StudentLessonDiscussionController::class, 'destroyReply'])
+            ->name('lessons.discussions.replies.destroy');
 
         // Mini-tests cho học viên
         Route::get('/chapters/{chapter}/minitests', [StudentMiniTestController::class, 'index'])->name('minitests.index');
@@ -214,6 +232,13 @@ Route::middleware(['auth', 'teacher'])
         Route::get('/', [TeacherDashboardController::class, 'index'])->name('dashboard');
         Route::get('/dashboard', fn () => redirect()->route('teacher.dashboard'));
 
+        Route::patch('/discussions/{discussion}/pin', [TeacherLessonDiscussionController::class, 'togglePin'])
+            ->name('discussions.pin');
+        Route::patch('/discussions/{discussion}/lock', [TeacherLessonDiscussionController::class, 'toggleLock'])
+            ->name('discussions.lock');
+        Route::patch('/discussions/{discussion}/status', [TeacherLessonDiscussionController::class, 'updateStatus'])
+            ->name('discussions.status');
+
         Route::get('/chapters', [ChapterController::class, 'index'])->name('chapters.index');
         Route::post('/chapters', [ChapterController::class, 'store'])->name('chapters.store');
         Route::put('/chapters/{chapter}', [ChapterController::class, 'update'])->name('chapters.update');
@@ -250,7 +275,3 @@ Route::middleware(['auth', 'teacher'])
         Route::get('/results', [ResultController::class, 'index'])->name('results.index');
         Route::get('/results/{result}', [ResultController::class, 'show'])->name('results.show');
     });
-
-
-
-

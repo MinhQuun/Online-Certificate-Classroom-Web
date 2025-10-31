@@ -27,6 +27,11 @@ class Lesson extends Model
         return $this->hasMany(Material::class, 'maBH', 'maBH');
     }
 
+    public function discussions(): HasMany
+    {
+        return $this->hasMany(LessonDiscussion::class, 'maBH', 'maBH');
+    }
+
     public function progressEntries(): HasMany
     {
         return $this->hasMany(LessonProgress::class, 'maBH', 'maBH');

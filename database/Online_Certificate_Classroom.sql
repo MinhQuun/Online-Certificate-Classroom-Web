@@ -169,6 +169,51 @@ CREATE TABLE HOCVIEN_KHOAHOC (
     CONSTRAINT FK_HVK_LAST FOREIGN KEY (last_lesson_id) REFERENCES BAIHOC(maBH) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- =========================================================
+-- 3.5) HỎI ĐÁP TRONG BÀI HỌC (HOIDAP_BAIHOC & PHANHOI)
+-- =========================================================
+
+-- Bảng HOIDAP_BAIHOC: Câu hỏi / thảo luận trong bài học
+CREATE TABLE HOIDAP_BAIHOC (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    maBH INT NOT NULL,                                 -- Liên kết bài học
+    maND INT NOT NULL,                                 -- Người hỏi (học viên/giảng viên)
+    noiDung TEXT NOT NULL,                             -- Nội dung câu hỏi
+    status ENUM('OPEN', 'RESOLVED', 'HIDDEN') DEFAULT 'OPEN',
+    is_pinned TINYINT(1) DEFAULT 0,
+    is_locked TINYINT(1) DEFAULT 0,
+    reply_count INT UNSIGNED DEFAULT 0,
+    last_replied_at TIMESTAMP NULL DEFAULT NULL,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    INDEX idx_hdb_bh_status (maBH, status),
+    INDEX idx_hdb_mand (maND),
+    INDEX idx_hdb_pinned (is_pinned, last_replied_at),
+    CONSTRAINT FK_HDB_BH FOREIGN KEY (maBH) REFERENCES BAIHOC(maBH) ON DELETE CASCADE,
+    CONSTRAINT FK_HDB_ND FOREIGN KEY (maND) REFERENCES NGUOIDUNG(maND) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Bảng HOIDAP_BAIHOC_PHANHOI: Phản hồi (trả lời) cho câu hỏi
+CREATE TABLE HOIDAP_BAIHOC_PHANHOI (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    discussion_id BIGINT UNSIGNED NOT NULL,            -- Liên kết HOIDAP_BAIHOC.id
+    maND INT NOT NULL,                                 -- Người trả lời
+    noiDung TEXT NOT NULL,                             -- Nội dung phản hồi
+    parent_reply_id BIGINT UNSIGNED NULL,              -- Trả lời cho phản hồi khác (thread)
+    is_official TINYINT(1) DEFAULT 0,                  -- Phản hồi chính thức (giảng viên)
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    INDEX idx_hdbph_disc (discussion_id),
+    INDEX idx_hdbph_mand (maND),
+    INDEX idx_hdbph_parent (parent_reply_id),
+    INDEX idx_hdbph_official (is_official),
+    CONSTRAINT FK_HDBPH_DISC FOREIGN KEY (discussion_id) REFERENCES HOIDAP_BAIHOC(id) ON DELETE CASCADE,
+    CONSTRAINT FK_HDBPH_ND FOREIGN KEY (maND) REFERENCES NGUOIDUNG(maND) ON DELETE CASCADE,
+    CONSTRAINT FK_HDBPH_PARENT FOREIGN KEY (parent_reply_id) REFERENCES HOIDAP_BAIHOC_PHANHOI(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Bảng TIENDO_HOCTAP: Tiến độ chi tiết theo từng bài học.
 CREATE TABLE TIENDO_HOCTAP (
     id INT NOT NULL AUTO_INCREMENT,

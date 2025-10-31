@@ -5,8 +5,10 @@
 @push('styles')
     @php
         $pageStyle = 'css/Student/pages-lesson.css';
+        $discussionStyle = 'css/Student/lesson-discussion.css';
     @endphp
     <link rel="stylesheet" href="{{ asset($pageStyle) }}?v={{ student_asset_version($pageStyle) }}">
+    <link rel="stylesheet" href="{{ asset($discussionStyle) }}?v={{ student_asset_version($discussionStyle) }}">
 @endpush
 
 @section('content')
@@ -295,6 +297,96 @@
             </aside>
         </div>
     </section>
+
+    @php
+        $discussionPermissions = $discussionBootstrap['permissions'] ?? ['can_post' => false, 'can_reply' => false, 'can_moderate' => false];
+        $discussionUserRole = $discussionPermissions['role'] ?? null;
+        $discussionIsAuthenticated = !empty($discussionBootstrap['user']);
+    @endphp
+
+    <button
+        class="lesson-discussion-toggle"
+        type="button"
+        data-discussion-toggle
+        aria-haspopup="dialog"
+        aria-controls="lessonDiscussionPanel"
+        aria-expanded="false"
+    >
+
+        <span class="lesson-discussion-toggle__label">Hỏi đáp</span>
+        <span class="lesson-discussion-toggle__count" data-discussion-count>{{ $discussionBootstrap['total'] ?? 0 }}</span>
+    </button>
+
+    <div class="lesson-discussion" data-discussion-root>
+        <div class="lesson-discussion__overlay" data-discussion-close aria-hidden="true"></div>
+
+        <aside
+            class="lesson-discussion__panel"
+            id="lessonDiscussionPanel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="lessonDiscussionTitle"
+            tabindex="-1"
+        >
+            <header class="lesson-discussion__header">
+                <div class="lesson-discussion__header-info">
+                    <h2 id="lessonDiscussionTitle">Hỏi đáp bài học</h2>
+                    <p class="lesson-discussion__subtitle">Trao đổi với giáo viên và các bạn cùng khóa.</p>
+                </div>
+                <button class="lesson-discussion__close" type="button" data-discussion-close aria-label="Đóng hỏi đáp">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </header>
+
+            <section class="lesson-discussion__composer" data-discussion-composer>
+                @if ($discussionPermissions['can_post'] ?? false)
+                    <form class="discussion-form" data-discussion-form>
+                        <div class="discussion-form__input">
+                            <textarea
+                                rows="3"
+                                data-discussion-input
+                                placeholder="Nhập câu hỏi cụ thể để được giải đáp nhanh hơn..."
+                                aria-label="Nội dung câu hỏi"
+                            ></textarea>
+                        </div>
+                        <div class="discussion-form__actions">
+                            <button type="submit" class="btn btn--primary" data-discussion-submit>
+                                <span>Đăng câu hỏi</span>
+                            </button>
+                        </div>
+                        <p class="discussion-form__hint">Câu hỏi rõ ràng giúp giáo viên và bạn học hỗ trợ chính xác hơn.</p>
+                    </form>
+                @else
+                    <div class="discussion-form__placeholder">
+                        @if (! $discussionIsAuthenticated)
+                            <p>Đăng nhập để tham gia hỏi đáp và theo dõi phản hồi mới.</p>
+                            <a class="btn btn--ghost" href="{{ route('login') }}?redirect={{ urlencode(request()->fullUrl()) }}">
+                                Đăng nhập
+                            </a>
+                        @elseif ($discussionUserRole === 'GIANG_VIEN')
+                            <p>Bạn đang xem với vai trò giảng viên. Hãy phản hồi câu hỏi của học viên bên dưới.</p>
+                        @elseif ($discussionUserRole === 'ADMIN')
+                            <p>Bạn có thể hỗ trợ học viên bằng cách phản hồi hoặc ghim thông tin quan trọng.</p>
+                        @else
+                            <p>Tính năng hỏi đáp chỉ dành cho học viên đã tham gia khóa học.</p>
+                            <a class="btn btn--ghost" href="{{ route('student.courses.show', $course->slug) }}">Quay lại khóa học</a>
+                        @endif
+                    </div>
+                @endif
+            </section>
+
+            <section class="lesson-discussion__list" data-discussion-list>
+                <div class="discussion-empty" data-discussion-empty>
+                    <i class="bi bi-emoji-smile" aria-hidden="true"></i>
+                    <p>Chưa có câu hỏi nào. Hãy mở đầu cuộc trao đổi cho bài học này!</p>
+                </div>
+            </section>
+
+            <footer class="lesson-discussion__footer" data-discussion-footer>
+                <button type="button" class="btn btn--ghost" data-discussion-load-more hidden>Tải thêm</button>
+            </footer>
+        </aside>
+    </div>
 @endsection
 
 @push('scripts')
@@ -303,5 +395,9 @@
             window.lessonProgressConfig = @json($progressConfig);
         </script>
     @endif
+    <script>
+        window.lessonDiscussionBootstrap = @json($discussionBootstrap ?? []);
+    </script>
+    <script src="{{ asset('js/Student/lesson-discussion.js') }}" defer></script>
     <script src="{{ asset('js/Student/lesson-show.js') }}" defer></script>
 @endpush
