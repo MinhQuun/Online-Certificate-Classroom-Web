@@ -52,6 +52,9 @@ use App\Http\Controllers\Student\CourseReviewController as StudentCourseReviewCo
 use App\Http\Controllers\Student\OrderHistoryController;
 use App\Http\Controllers\Student\LessonDiscussionController as StudentLessonDiscussionController;
 use App\Http\Controllers\Teacher\LessonDiscussionController as TeacherLessonDiscussionController;
+use App\Http\Controllers\Student\ContactController;
+use App\Http\Controllers\Student\ProfileController;
+use App\Http\Controllers\Student\MyCoursesController;
 
 // =====================
 // Public (Student-facing)
@@ -137,17 +140,17 @@ Route::middleware('auth')
         })->name('student.contact');
 
     // Xử lý form liên hệ
-    Route::post('/contact', [App\Http\Controllers\ContactController::class, 'submit'])
+    Route::post('/contact', [ContactController::class, 'submit'])
         ->name('contact.submit');
     // Profile routes (Student)
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
-    Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
-    Route::put('/profile/change-password', [App\Http\Controllers\ProfileController::class, 'changePassword'])->name('profile.changePassword');
-    
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
+
     // My Courses
-    Route::get('/my-courses', [App\Http\Controllers\Student\MyCoursesController::class, 'index'])->name('student.my-courses');
-    
+    Route::get('/my-courses', [MyCoursesController::class, 'index'])->name('student.my-courses');
+
     // Order History
     Route::get('/order-history', [OrderHistoryController::class, 'index'])->name('student.order-history');
 });

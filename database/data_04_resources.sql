@@ -169,28 +169,6 @@ CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N3.%20Respond%20to%20Questions/BaiGiang/Bai3/BaiGiang3_N3.%20Respond%20to%20Questions.mp4')),
 
 (@bh_wr_405_600_3_3, 'Respond to Written Request 3 (PDF)', 'PDF', '10MB', 'Thực hành viết email phản hồi cho các tình huống công việc cụ thể.', 'application/pdf', 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/TaiLieuHocTap/Bai3/TaiLieuBai3_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf')),
-
--- Chương 4 - V4. Write an Opinion Essay
--- Bài 1
-(@bh_wr_405_600_4_1, 'Write an Opinion Essay 1 (Video)', 'Video', '300MB', 'Hướng dẫn cách lên dàn ý chi tiết cho một bài luận trình bày quan điểm.', 'video/mp4', 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N3.%20Respond%20to%20Questions/BaiGiang/Bai3/BaiGiang3_N3.%20Respond%20to%20Questions.mp4')),
-
-(@bh_wr_405_600_4_1, 'Write an Opinion Essay 1 (PDF)', 'PDF', '10MB', 'Hướng dẫn cách lên dàn ý chi tiết cho một bài luận trình bày quan điểm.', 'application/pdf', 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/TaiLieuHocTap/Bai3/TaiLieuBai3_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf')),
-
--- Bài 2
-(@bh_wr_405_600_4_2, 'Write an Opinion Essay 2 (Video)', 'Video', '300MB', 'Phát triển luận điểm, đưa ra ví dụ và dẫn chứng để bài viết có sức thuyết phục.', 'video/mp4', 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N3.%20Respond%20to%20Questions/BaiGiang/Bai3/BaiGiang3_N3.%20Respond%20to%20Questions.mp4')),
-
-(@bh_wr_405_600_4_2, 'Write an Opinion Essay 2 (PDF)', 'PDF', '10MB', 'Phát triển luận điểm, đưa ra ví dụ và dẫn chứng để bài viết có sức thuyết phục.', 'application/pdf', 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/TaiLieuHocTap/Bai3/TaiLieuBai3_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf')),
-
--- Bài 3
-(@bh_wr_405_600_4_3, 'Write an Opinion Essay 3 (Video)', 'Video', '300MB', 'Thực hành viết một bài luận hoàn chỉnh và các tiêu chí tự đánh giá.', 'video/mp4', 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N3.%20Respond%20to%20Questions/BaiGiang/Bai3/BaiGiang3_N3.%20Respond%20to%20Questions.mp4')),
-
-(@bh_wr_405_600_4_3, 'Write an Opinion Essay 3 (PDF)', 'PDF', '10MB', 'Thực hành viết một bài luận hoàn chỉnh và các tiêu chí tự đánh giá.', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/TaiLieuHocTap/Bai3/TaiLieuBai3_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf'));
 
 -- =========================================================
@@ -615,28 +593,6 @@ CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/BaiGiang/Bai1/BaiGiang1_N1.%20Read%20a%20Text%20Aloud.mp4')),
 
 (@bh_wr_605_780_3_3, 'Respond to Written Request 3 (PDF)', 'PDF', '10MB', 'Thực hành viết email phản hồi cho các tình huống công việc cụ thể.', 'application/pdf', 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/TaiLieuHocTap/Bai3/TaiLieuBai3_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf')),
-
--- Chương 4 - V4. Write an Opinion Essay
--- Bài 1
-(@bh_wr_605_780_4_1, 'Write an Opinion Essay 1 (Video)', 'Video', '300MB', 'Hướng dẫn cách lên dàn ý chi tiết cho một bài luận trình bày quan điểm.', 'video/mp4', 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/BaiGiang/Bai1/BaiGiang1_N1.%20Read%20a%20Text%20Aloud.mp4')),
-
-(@bh_wr_605_780_4_1, 'Write an Opinion Essay 1 (PDF)', 'PDF', '10MB', 'Hướng dẫn cách lên dàn ý chi tiết cho một bài luận trình bày quan điểm.', 'application/pdf', 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/TaiLieuHocTap/Bai3/TaiLieuBai3_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf')),
-
--- Bài 2
-(@bh_wr_605_780_4_2, 'Write an Opinion Essay 2 (Video)', 'Video', '300MB', 'Phát triển luận điểm, đưa ra ví dụ và dẫn chứng để bài viết có sức thuyết phục.', 'video/mp4', 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/BaiGiang/Bai1/BaiGiang1_N1.%20Read%20a%20Text%20Aloud.mp4')),
-
-(@bh_wr_605_780_4_2, 'Write an Opinion Essay 2 (PDF)', 'PDF', '10MB', 'Phát triển luận điểm, đưa ra ví dụ và dẫn chứng để bài viết có sức thuyết phục.', 'application/pdf', 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/TaiLieuHocTap/Bai3/TaiLieuBai3_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf')),
-
--- Bài 3
-(@bh_wr_605_780_4_3, 'Write an Opinion Essay 3 (Video)', 'Video', '300MB', 'Thực hành viết một bài luận hoàn chỉnh và các tiêu chí tự đánh giá.', 'video/mp4', 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/BaiGiang/Bai1/BaiGiang1_N1.%20Read%20a%20Text%20Aloud.mp4')),
-
-(@bh_wr_605_780_4_3, 'Write an Opinion Essay 3 (PDF)', 'PDF', '10MB', 'Thực hành viết một bài luận hoàn chỉnh và các tiêu chí tự đánh giá.', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/TaiLieuHocTap/Bai3/TaiLieuBai3_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf'));
 
 -- =========================================================
@@ -1061,28 +1017,6 @@ CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/BaiGiang/Bai1/BaiGiang1_N1.%20Read%20a%20Text%20Aloud.mp4')),
 
 (@bh_wr_785_990_3_3, 'Respond to Written Request 3 (PDF)', 'PDF', '10MB', 'Thực hành viết email phản hồi cho các tình huống công việc cụ thể.', 'application/pdf', 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/TaiLieuHocTap/Bai3/TaiLieuBai3_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf')),
-
--- Chương 4 - V4. Write an Opinion Essay
--- Bài 1
-(@bh_wr_785_990_4_1, 'Write an Opinion Essay 1 (Video)', 'Video', '300MB', 'Hướng dẫn cách lên dàn ý chi tiết cho một bài luận trình bày quan điểm.', 'video/mp4', 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/BaiGiang/Bai1/BaiGiang1_N1.%20Read%20a%20Text%20Aloud.mp4')),
-
-(@bh_wr_785_990_4_1, 'Write an Opinion Essay 1 (PDF)', 'PDF', '10MB', 'Hướng dẫn cách lên dàn ý chi tiết cho một bài luận trình bày quan điểm.', 'application/pdf', 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/TaiLieuHocTap/Bai3/TaiLieuBai3_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf')),
-
--- Bài 2
-(@bh_wr_785_990_4_2, 'Write an Opinion Essay 2 (Video)', 'Video', '300MB', 'Phát triển luận điểm, đưa ra ví dụ và dẫn chứng để bài viết có sức thuyết phục.', 'video/mp4', 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/BaiGiang/Bai1/BaiGiang1_N1.%20Read%20a%20Text%20Aloud.mp4')),
-
-(@bh_wr_785_990_4_2, 'Write an Opinion Essay 2 (PDF)', 'PDF', '10MB', 'Phát triển luận điểm, đưa ra ví dụ và dẫn chứng để bài viết có sức thuyết phục.', 'application/pdf', 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/TaiLieuHocTap/Bai3/TaiLieuBai3_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf')),
-
--- Bài 3
-(@bh_wr_785_990_4_3, 'Write an Opinion Essay 3 (Video)', 'Video', '300MB', 'Thực hành viết một bài luận hoàn chỉnh và các tiêu chí tự đánh giá.', 'video/mp4', 'public',
-CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N1.%20Read%20a%20Text%20Aloud/BaiGiang/Bai1/BaiGiang1_N1.%20Read%20a%20Text%20Aloud.mp4')),
-
-(@bh_wr_785_990_4_3, 'Write an Opinion Essay 3 (PDF)', 'PDF', '10MB', 'Thực hành viết một bài luận hoàn chỉnh và các tiêu chí tự đánh giá.', 'application/pdf', 'public',
 CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%BFt)/N4.%20Respond%20to%20Questions%20Using%20Information%20Provided/TaiLieuHocTap/Bai3/TaiLieuBai3_N4.%20Respond%20to%20Questions%20Using%20Information%20Provided.pdf'));
 
 -- =========================================================

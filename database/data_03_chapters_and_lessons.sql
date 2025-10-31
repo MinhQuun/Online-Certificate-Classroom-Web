@@ -37,10 +37,6 @@ INSERT INTO CHUONG (maKH, tenChuong, thuTu, moTa) VALUES
 (@kh_writing_405_600, 'Respond to a Written Request', 3, 'Nâng cao kỹ năng viết email chuyên nghiệp, học cách phản hồi các yêu cầu công việc một cách hiệu quả, rõ ràng và lịch sự.');
 SET @ch_wr_405_600_3 := LAST_INSERT_ID();
 
-INSERT INTO CHUONG (maKH, tenChuong, thuTu, moTa) VALUES
-(@kh_writing_405_600, 'Write an Opinion Essay', 4, 'Hướng dẫn chi tiết cách viết một bài luận trình bày quan điểm, từ việc xây dựng dàn ý, phát triển luận điểm đến việc đưa ra dẫn chứng.');
-SET @ch_wr_405_600_4 := LAST_INSERT_ID();
-
 -- =========================================================
 -- 7.3 Nghe - Band 405-600
 -- =========================================================
@@ -105,10 +101,6 @@ INSERT INTO CHUONG (maKH, tenChuong, thuTu, moTa) VALUES
 (@kh_writing_605_780, 'Respond to a Written Request', 3, 'Nâng cao kỹ năng viết email chuyên nghiệp, học cách phản hồi các yêu cầu công việc một cách hiệu quả, rõ ràng và lịch sự.');
 SET @ch_wr_605_780_3 := LAST_INSERT_ID();
 
-INSERT INTO CHUONG (maKH, tenChuong, thuTu, moTa) VALUES
-(@kh_writing_605_780, 'Write an Opinion Essay', 4, 'Hướng dẫn chi tiết cách viết một bài luận trình bày quan điểm, từ việc xây dựng dàn ý, phát triển luận điểm đến việc đưa ra dẫn chứng.');
-SET @ch_wr_605_780_4 := LAST_INSERT_ID();
-
 -- =========================================================
 -- 7.7 Nghe - Band 605-780
 -- =========================================================
@@ -172,10 +164,6 @@ SET @ch_wr_785_990_2 := LAST_INSERT_ID();
 INSERT INTO CHUONG (maKH, tenChuong, thuTu, moTa) VALUES
 (@kh_writing_785_990, 'Respond to a Written Request', 3, 'Nâng cao kỹ năng viết email chuyên nghiệp, học cách phản hồi các yêu cầu công việc một cách hiệu quả, rõ ràng và lịch sự.');
 SET @ch_wr_785_990_3 := LAST_INSERT_ID();
-
-INSERT INTO CHUONG (maKH, tenChuong, thuTu, moTa) VALUES
-(@kh_writing_785_990, 'Write an Opinion Essay', 4, 'Hướng dẫn chi tiết cách viết một bài luận trình bày quan điểm, từ việc xây dựng dàn ý, phát triển luận điểm đến việc đưa ra dẫn chứng.');
-SET @ch_wr_785_990_4 := LAST_INSERT_ID();
 
 -- =========================================================
 -- 7.11 Nghe - Band 785-990
@@ -305,19 +293,6 @@ INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
 (@ch_wr_405_600_3, 'Respond to Written Request 3', 'Thực hành viết email phản hồi cho các tình huống công việc cụ thể.', 3, 'video');
 SET @bh_wr_405_600_3_3 := LAST_INSERT_ID();
 
--- Chương 4
-INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
-(@ch_wr_405_600_4, 'Write an Opinion Essay 1', 'Hướng dẫn cách lên dàn ý chi tiết cho một bài luận trình bày quan điểm.', 1, 'video');
-SET @bh_wr_405_600_4_1 := LAST_INSERT_ID();
-
-INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
-(@ch_wr_405_600_4, 'Write an Opinion Essay 2', 'Phát triển luận điểm, đưa ra ví dụ và dẫn chứng để bài viết có sức thuyết phục.', 2, 'video');
-SET @bh_wr_405_600_4_2 := LAST_INSERT_ID();
-
-INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
-(@ch_wr_405_600_4, 'Write an Opinion Essay 3', 'Thực hành viết một bài luận hoàn chỉnh và các tiêu chí tự đánh giá.', 3, 'video');
-SET @bh_wr_405_600_4_3 := LAST_INSERT_ID();
-
 -- =========================================================
 -- 8.3 Listening - Band 405-600
 -- =========================================================
@@ -403,7 +378,7 @@ INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
 SET @bh_re_405_600_2_3 := LAST_INSERT_ID();
 
 -- =========================================================
--- 8.5 Speaking - Band 605-780 
+-- 8.5 Speaking - Band 605-780
 -- =========================================================
 -- Chương 1
 INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
@@ -458,7 +433,7 @@ INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
 SET @bh_sp_605_780_4_3 := LAST_INSERT_ID();
 
 -- =========================================================
--- 8.6 Writing - Band 605-780 
+-- 8.6 Writing - Band 605-780
 -- =========================================================
 -- Chương 1
 INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
@@ -499,21 +474,8 @@ INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
 (@ch_wr_605_780_3, 'Respond to Written Request 3', 'Thực hành viết email phản hồi cho các tình huống công việc cụ thể.', 3, 'video');
 SET @bh_wr_605_780_3_3 := LAST_INSERT_ID();
 
--- Chương 4
-INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
-(@ch_wr_605_780_4, 'Write an Opinion Essay 1', 'Hướng dẫn cách lên dàn ý chi tiết cho một bài luận trình bày quan điểm.', 1, 'video');
-SET @bh_wr_605_780_4_1 := LAST_INSERT_ID();
-
-INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
-(@ch_wr_605_780_4, 'Write an Opinion Essay 2', 'Phát triển luận điểm, đưa ra ví dụ và dẫn chứng để bài viết có sức thuyết phục.', 2, 'video');
-SET @bh_wr_605_780_4_2 := LAST_INSERT_ID();
-
-INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
-(@ch_wr_605_780_4, 'Write an Opinion Essay 3', 'Thực hành viết một bài luận hoàn chỉnh và các tiêu chí tự đánh giá.', 3, 'video');
-SET @bh_wr_605_780_4_3 := LAST_INSERT_ID();
-
 -- =========================================================
--- 8.7 Listening - Band 605-780 
+-- 8.7 Listening - Band 605-780
 -- =========================================================
 -- Chương 1
 INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
@@ -597,7 +559,7 @@ INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
 SET @bh_re_605_780_2_3 := LAST_INSERT_ID();
 
 -- =========================================================
--- 8.9 Speaking - Band 785-990 
+-- 8.9 Speaking - Band 785-990
 -- =========================================================
 -- Chương 1
 INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
@@ -652,7 +614,7 @@ INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
 SET @bh_sp_785_990_4_3 := LAST_INSERT_ID();
 
 -- =========================================================
--- 8.10 Writing - Band 785-990 
+-- 8.10 Writing - Band 785-990
 -- =========================================================
 -- Chương 1
 INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
@@ -692,19 +654,6 @@ SET @bh_wr_785_990_3_2 := LAST_INSERT_ID();
 INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
 (@ch_wr_785_990_3, 'Respond to Written Request 3', 'Thực hành viết email phản hồi cho các tình huống công việc cụ thể.', 3, 'video');
 SET @bh_wr_785_990_3_3 := LAST_INSERT_ID();
-
--- Chương 4
-INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
-(@ch_wr_785_990_4, 'Write an Opinion Essay 1', 'Hướng dẫn cách lên dàn ý chi tiết cho một bài luận trình bày quan điểm.', 1, 'video');
-SET @bh_wr_785_990_4_1 := LAST_INSERT_ID();
-
-INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
-(@ch_wr_785_990_4, 'Write an Opinion Essay 2', 'Phát triển luận điểm, đưa ra ví dụ và dẫn chứng để bài viết có sức thuyết phục.', 2, 'video');
-SET @bh_wr_785_990_4_2 := LAST_INSERT_ID();
-
-INSERT INTO BAIHOC (maChuong, tieuDe, moTa, thuTu, loai) VALUES
-(@ch_wr_785_990_4, 'Write an Opinion Essay 3', 'Thực hành viết một bài luận hoàn chỉnh và các tiêu chí tự đánh giá.', 3, 'video');
-SET @bh_wr_785_990_4_3 := LAST_INSERT_ID();
 
 -- =========================================================
 -- 8.11 Listening - Band 785-990
