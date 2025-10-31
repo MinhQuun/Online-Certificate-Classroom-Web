@@ -345,16 +345,15 @@
                             <textarea
                                 rows="3"
                                 data-discussion-input
-                                placeholder="Nhập câu hỏi cụ thể để được giải đáp nhanh hơn..."
-                                aria-label="Nội dung câu hỏi"
+                                placeholder="Nhập bình luận mới của bạn..."
                             ></textarea>
                         </div>
                         <div class="discussion-form__actions">
                             <button type="submit" class="btn btn--primary" data-discussion-submit>
-                                <span>Đăng câu hỏi</span>
+                                <span>Đăng bình luận</span>
                             </button>
                         </div>
-                        <p class="discussion-form__hint">Câu hỏi rõ ràng giúp giáo viên và bạn học hỗ trợ chính xác hơn.</p>
+                       
                     </form>
                 @else
                     <div class="discussion-form__placeholder">

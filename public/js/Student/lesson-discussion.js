@@ -299,12 +299,6 @@
         name.textContent = author.name || 'Người dùng';
         nameRow.appendChild(name);
 
-        if (author.role) {
-            const badge = document.createElement('span');
-            badge.className = 'badge';
-            badge.textContent = resolveRoleLabel(author.role);
-            nameRow.appendChild(badge);
-        }
 
         const timestamp = document.createElement('div');
         timestamp.className = 'discussion-card__timestamp';
