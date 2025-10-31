@@ -49,6 +49,7 @@ use App\Http\Controllers\Student\ActivationController;
 use App\Http\Controllers\Student\ProgressController as StudentProgressController;
 use App\Http\Controllers\Student\MiniTestController as StudentMiniTestController;
 use App\Http\Controllers\Student\CourseReviewController as StudentCourseReviewController;
+use App\Http\Controllers\Student\ContactController;
 
 // =====================
 // Public (Student-facing)
@@ -118,7 +119,7 @@ Route::middleware('auth')
         })->name('student.contact');
 
     // Xử lý form liên hệ
-    Route::post('/contact', [App\Http\Controllers\ContactController::class, 'submit'])
+    Route::post('/contact', [ContactController::class, 'submit'])
         ->name('contact.submit');
 
 /*
