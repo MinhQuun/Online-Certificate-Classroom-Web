@@ -49,7 +49,6 @@ use App\Http\Controllers\Student\ActivationController;
 use App\Http\Controllers\Student\ProgressController as StudentProgressController;
 use App\Http\Controllers\Student\MiniTestController as StudentMiniTestController;
 use App\Http\Controllers\Student\CourseReviewController as StudentCourseReviewController;
-use App\Http\Controllers\Student\ContactController;
 
 // =====================
 // Public (Student-facing)
@@ -119,8 +118,17 @@ Route::middleware('auth')
         })->name('student.contact');
 
     // Xử lý form liên hệ
-    Route::post('/contact', [ContactController::class, 'submit'])
+    Route::post('/contact', [App\Http\Controllers\ContactController::class, 'submit'])
         ->name('contact.submit');
+    // Profile routes (Student)
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/change-password', [App\Http\Controllers\ProfileController::class, 'changePassword'])->name('profile.changePassword');
+    
+    // My Courses
+    Route::get('/my-courses', [App\Http\Controllers\Student\MyCoursesController::class, 'index'])->name('student.my-courses');
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -238,5 +246,7 @@ Route::middleware(['auth', 'teacher'])
         Route::get('/results', [ResultController::class, 'index'])->name('results.index');
         Route::get('/results/{result}', [ResultController::class, 'show'])->name('results.show');
     });
+
+
 
 

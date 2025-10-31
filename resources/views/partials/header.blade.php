@@ -116,11 +116,11 @@
                         </div>
 
                         <nav class="header-profile__nav">
-                            <a href="#">
+                            <a href="{{ route('profile.show') }}">
                                 <i class="fa-solid fa-user"></i>
                                 <span> Trang cá nhân</span>
                             </a>
-                             <a href="#">
+                             <a href="{{ route('student.my-courses') }}">
                                 <i class="fa-solid fa-book-tanakh"></i>
                                 <span> Khóa học của tôi</span>
                             </a>
