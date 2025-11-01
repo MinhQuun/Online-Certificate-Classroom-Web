@@ -17,7 +17,7 @@
         $firstMiniTest = optional($firstChapter)->miniTests->sortBy('thuTu')->first();
 
         $freeLessonId = $firstLesson?->maBH;
-        $freeMiniTestId = $firstMiniTest?->maMT;
+        $freeMiniTestId = null;
 
         $teacher = $course->teacher;
         $teacherName = trim($teacher->hoTen ?? '') !== '' ? $teacher->hoTen : '(Chưa gán)';

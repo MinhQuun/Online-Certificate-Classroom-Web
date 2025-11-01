@@ -7,6 +7,7 @@ use App\Http\Controllers\Teacher\LoadsTeacherContext;
 use App\Models\Chapter;
 use App\Models\Course;
 use App\Models\Lesson;
+use App\Models\LessonDiscussion;
 use App\Models\Material;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
@@ -83,6 +84,69 @@ class LectureController extends Controller
             ? $courses->firstWhere('maKH', $selectedCourseId)
             : $courses->first();
 
+        $discussionConfigs = [];
+
+        if ($activeCourse) {
+            $lessonIds = $activeCourse->chapters
+                ->flatMap(fn ($chapter) => $chapter->lessons->pluck('maBH'))
+                ->filter()
+                ->values();
+
+            $discussionCounts = $lessonIds->isNotEmpty()
+                ? LessonDiscussion::visible()
+                    ->whereIn('maBH', $lessonIds)
+                    ->select('maBH', DB::raw('COUNT(*) as total'))
+                    ->groupBy('maBH')
+                    ->pluck('total', 'maBH')
+                : collect();
+
+            foreach ($activeCourse->chapters as $chapter) {
+                foreach ($chapter->lessons as $lesson) {
+                    $lessonId = $lesson->maBH;
+
+                    $discussionConfigs[$lessonId] = [
+                        'lessonId'     => $lessonId,
+                        'lessonTitle'  => $lesson->tieuDe,
+                        'lessonOrder'  => $lesson->thuTu,
+                        'chapterTitle' => $chapter->tenChuong,
+                        'courseId'     => $activeCourse->maKH,
+                        'total'        => (int) ($discussionCounts[$lessonId] ?? 0),
+                        'fetchUrl'     => route('student.lessons.discussions.index', ['lesson' => $lessonId]),
+                        'storeUrl'     => null,
+                        'replyUrlTemplate' => route('student.lessons.discussions.replies.store', [
+                            'lesson'     => $lessonId,
+                            'discussion' => '__DISCUSSION__',
+                        ]),
+                        'deleteUrlTemplate' => route('student.lessons.discussions.destroy', [
+                            'lesson'     => $lessonId,
+                            'discussion' => '__DISCUSSION__',
+                        ]),
+                        'deleteReplyUrlTemplate' => route('student.lessons.discussions.replies.destroy', [
+                            'lesson'     => $lessonId,
+                            'discussion' => '__DISCUSSION__',
+                            'reply'      => '__REPLY__',
+                        ]),
+                        'moderation' => [
+                            'pinUrlTemplate' => route('teacher.discussions.pin', ['discussion' => '__DISCUSSION__']),
+                            'lockUrlTemplate' => route('teacher.discussions.lock', ['discussion' => '__DISCUSSION__']),
+                            'statusUrlTemplate' => route('teacher.discussions.status', ['discussion' => '__DISCUSSION__']),
+                        ],
+                        'permissions' => [
+                            'can_post'     => false,
+                            'can_reply'    => true,
+                            'can_moderate' => true,
+                            'role'         => $teacher?->vaiTro,
+                        ],
+                        'user' => [
+                            'id'   => $teacher?->maND,
+                            'name' => $teacher?->hoTen,
+                            'role' => $teacher?->vaiTro,
+                        ],
+                    ];
+                }
+            }
+        }
+
         return view('Teacher.lectures', [
             'teacher' => $teacher,
             'courses' => $courses,
@@ -90,6 +154,7 @@ class LectureController extends Controller
             'lessonTypes' => $this->lessonTypes,
             'resourcePresets' => $this->resourcePresets,
             'badges' => $this->teacherSidebarBadges($teacherId),
+            'discussionConfigs' => $discussionConfigs,
         ]);
     }
 

@@ -128,6 +128,12 @@
                                                     @endif
                                                 </span>
                                                 <div class="flex-grow-1">
+                                                    @php
+                                                        $discussionConfig = $discussionConfigs[$lesson->maBH] ?? null;
+                                                        $discussionPayload = $discussionConfig
+                                                            ? base64_encode(json_encode($discussionConfig, JSON_UNESCAPED_UNICODE))
+                                                            : '';
+                                                    @endphp
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div>
                                                             <h6 class="mb-1">{{ $lesson->thuTu }}. {{ $lesson->tieuDe }}</h6>
@@ -157,6 +163,13 @@
                                                                     data-bs-toggle="modal" data-bs-target="#createMaterialModal"
                                                                     data-lesson="{{ $lesson->maBH }}">
                                                                 <i class="bi bi-paperclip me-1"></i> Thêm tài liệu
+                                                            </button>
+                                                            <button type="button" class="btn btn-info-soft btn-sm"
+                                                                    data-discussion-trigger
+                                                                    data-discussion-lesson="{{ $lesson->maBH }}"
+                                                                    data-discussion-config="{{ $discussionPayload }}">
+                                                                <i class="bi bi-chat-dots me-1"></i> Hỏi đáp
+                                                                <span class="discussion-count-badge">{{ $discussionConfig['total'] ?? 0 }}</span>
                                                             </button>
                                                         </div>
                                                     </div>
@@ -382,6 +395,41 @@
          data-update-route="{{ route('teacher.lectures.update', ['lesson' => '__ID__']) }}"
          data-material-route="{{ route('teacher.lectures.materials.store', ['lesson' => '__ID__']) }}"
          data-presets="{{ base64_encode(json_encode($resourcePresets)) }}">
+    </div>
+
+    <div class="lesson-discussion" data-discussion-root id="teacherDiscussionPanel">
+        <div class="lesson-discussion__overlay" data-discussion-close aria-hidden="true"></div>
+        <aside class="lesson-discussion__panel" role="dialog" aria-modal="true" aria-labelledby="teacherDiscussionTitle">
+            <header class="lesson-discussion__header">
+                <div class="lesson-discussion__header-info">
+                    <h2 id="teacherDiscussionTitle">Hỏi đáp bài học</h2>
+                    <p class="lesson-discussion__subtitle" data-discussion-subtitle>
+                        Trao đổi trực tiếp với học viên để giải đáp kịp thời.
+                    </p>
+                </div>
+                <button class="lesson-discussion__close" type="button" data-discussion-close aria-label="Đóng hỏi đáp">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </header>
+
+            <section class="lesson-discussion__composer" data-discussion-composer>
+                <div class="discussion-form__placeholder">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Giảng viên có thể phản hồi mọi bình luận tại đây. Chọn một câu hỏi và trả lời ngay bên dưới.
+                </div>
+            </section>
+
+            <section class="lesson-discussion__list" data-discussion-list>
+                <div class="discussion-empty" data-discussion-empty>
+                    <i class="bi bi-emoji-smile" aria-hidden="true"></i>
+                    <p>Chưa có thảo luận nào cho bài giảng này.</p>
+                </div>
+            </section>
+
+            <footer class="lesson-discussion__footer">
+                <button type="button" class="btn btn-outline-secondary" data-discussion-load-more hidden>Tải thêm</button>
+            </footer>
+        </aside>
     </div>
 @endsection
 
