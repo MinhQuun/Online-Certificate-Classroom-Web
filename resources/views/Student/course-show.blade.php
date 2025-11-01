@@ -129,9 +129,14 @@
                                         @foreach ($chapter->lessons as $lesson)
                                             @php
                                                 $isFreeLesson = $freeLessonId && $lesson->maBH == $freeLessonId;
-                                                $isLocked = !$isEnrolled && !$isFreeLesson;
-                                                $labelClass = $isLocked ? 'label--paid' : 'label--free';
-                                                $labelText = $isLocked ? 'Paid' : 'Free';
+                                                
+                                                if ($isEnrolled) {
+                                                    $labelClass = 'label--unlocked';
+                                                    $labelText = 'Unlocked';
+                                                } else {
+                                                    $labelClass = $isFreeLesson ? 'label--free' : 'label--paid';
+                                                    $labelText = $isFreeLesson ? 'Free' : 'Paid';
+                                                }
                                             @endphp
                                             <li class="lesson-item">
                                                 <span class="label {{ $labelClass }}">{{ $labelText }}</span>
@@ -167,14 +172,19 @@
                                                     @foreach ($chapter->miniTests->sortBy('thuTu') as $miniTest)
                                                         @php
                                                             $isFreeMiniTest = $freeMiniTestId && $miniTest->maMT == $freeMiniTestId;
-                                                            $isLocked = !$isEnrolled && !$isFreeMiniTest;
-                                                            $labelClass = $isLocked ? 'label--paid' : 'label--free';
-                                                            $labelText = $isLocked ? 'Paid' : 'Free';
+
+                                                            if ($isEnrolled) {
+                                                                $labelClass = 'label--unlocked';
+                                                                $labelText = 'Unlocked';
+                                                            } else {
+                                                                $labelClass = $isFreeMiniTest ? 'label--free' : 'label--paid';
+                                                                $labelText = $isFreeMiniTest ? 'Free' : 'Paid';
+                                                            }
 
                                                             $scoreData = $miniTestScores[$miniTest->maMT] ?? null;
                                                             $bestScore = $scoreData['best_score'] ?? null;
                                                             $isGraded = $scoreData['is_fully_graded'] ?? false;
-                                                        @endphp
+                                                        @endphp                                                        
                                                         <li class="mini-test-item" data-mini-test-id="{{ $miniTest->maMT }}">
                                                             <span class="label {{ $labelClass }}">{{ $labelText }}</span>
                                                             @if($isEnrolled || $isFreeMiniTest)

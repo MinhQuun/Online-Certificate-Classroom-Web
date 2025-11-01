@@ -81,7 +81,7 @@
                                             </div>
                                         @endif
 
-                                        @if($question->pdf_url)
+                                        @if($question->pdf_url && $result->miniTest->skill_type !== MiniTest::SKILL_SPEAKING)
                                             <div class="mb-3">
                                                 <a href="{{ $question->pdf_url }}" target="_blank" class="btn btn-outline-secondary btn-sm">
                                                     <i class="bi bi-file-earmark-pdf me-1"></i>Xem tài liệu PDF
@@ -126,12 +126,14 @@
                                             </div>
                                         @else
                                             <div class="essay-answer" data-essay>
-                                                <textarea
-                                                    name="answer-text-{{ $question->maCauHoi }}"
-                                                    class="form-control answer-text"
-                                                    rows="{{ $isSpeaking ? 3 : 6 }}"
-                                                    data-question-id="{{ $question->maCauHoi }}"
-                                                    placeholder="Nhập câu trả lời tại đây..." {{ $isSpeaking ? 'disabled' : '' }}>{{ $answer->answer_text ?? '' }}</textarea>
+                                                @if(!$isSpeaking)
+                                                    <textarea
+                                                        name="answer-text-{{ $question->maCauHoi }}"
+                                                        class="form-control answer-text"
+                                                        rows="6"
+                                                        data-question-id="{{ $question->maCauHoi }}"
+                                                        placeholder="Nhập câu trả lời tại đây...">{{ $answer->answer_text ?? '' }}</textarea>
+                                                @endif
                                                 @if($isSpeaking)
                                                     <div class="speaking-upload mt-3">
                                                         <label class="form-label">Tải lên file ghi âm (.mp3, tối đa 10MB)</label>
