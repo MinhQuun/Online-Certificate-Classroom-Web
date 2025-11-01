@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     initCourseAccordions();
     initLessonVideoProgress();
+    
 });
 
 function initCourseAccordions() {

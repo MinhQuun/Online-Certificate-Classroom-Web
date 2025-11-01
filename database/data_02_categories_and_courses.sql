@@ -160,4 +160,33 @@ INSERT INTO KHOAHOC
     '2025-01-01','2025-12-31','toeic-reading-785-990.png',365,'PUBLISHED');
     SET @kh_reading_785_990 := LAST_INSERT_ID();
 
+-- Lấy ID của các khóa học từ band 405-600 (giả định dữ liệu đã tồn tại từ script trước)
+SELECT maKH INTO @kh_speaking_405_600 FROM KHOAHOC WHERE slug = 'luyen-thi-toeic-speaking-405-600';
+SELECT maKH INTO @kh_writing_405_600 FROM KHOAHOC WHERE slug = 'luyen-thi-toeic-writing-405-600';
+SELECT maKH INTO @kh_listening_405_600 FROM KHOAHOC WHERE slug = 'luyen-thi-toeic-listening-405-600';
+SELECT maKH INTO @kh_reading_405_600 FROM KHOAHOC WHERE slug = 'luyen-thi-toeic-reading-405-600';
+
+-- Tạo combo cho band Foundation (405-600)
+INSERT INTO GOI_KHOA_HOC (tenGoi, slug, moTa, gia, giaGoc, hinhanh, ngayBatDau, ngayKetThuc, trangThai, created_by)
+VALUES (
+    'TOEIC Foundation Full Pack (405-600)',
+    'toeic-foundation-full-pack-405-600',
+    'Gói combo đầy đủ 4 kỹ năng TOEIC cho band 405-600: Speaking, Writing, Listening, Reading. Giá ưu đãi đặc biệt!',
+    3000000.00,  -- Giá bán ưu đãi
+    4200000.00,  -- Giá gốc (tổng học phí các khóa)
+    'toeic-foundation-pack.png',
+    '2025-11-01',
+    '2025-12-31',
+    'PUBLISHED',
+    1  -- Giả sử maND của Admin là 1
+);
+
+SET @maGoi = LAST_INSERT_ID();
+
+-- Liên kết các khóa học vào combo
+INSERT INTO GOI_KHOA_HOC_CHITIET (maGoi, maKH, thuTu) VALUES (@maGoi, @kh_speaking_405_600, 1);
+INSERT INTO GOI_KHOA_HOC_CHITIET (maGoi, maKH, thuTu) VALUES (@maGoi, @kh_writing_405_600, 2);
+INSERT INTO GOI_KHOA_HOC_CHITIET (maGoi, maKH, thuTu) VALUES (@maGoi, @kh_listening_405_600, 3);
+INSERT INTO GOI_KHOA_HOC_CHITIET (maGoi, maKH, thuTu) VALUES (@maGoi, @kh_reading_405_600, 4);
+
 COMMIT;

@@ -145,7 +145,151 @@ CREATE TABLE TAILIEUHOCTAP (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================
--- 3) GHI DANH HỌC VIÊN VÀ TIẾN ĐỘ HỌC TẬP
+-- 3) COMBO / KHUYẾN MÃI / THANH TOÁN
+-- =========================================================
+
+-- Bảng PHUONGTHUCTHANHTOAN: Các phương thức thanh toán (ví dụ: chuyển khoản, thẻ tín dụng).
+CREATE TABLE PHUONGTHUCTHANHTOAN (
+    maTT VARCHAR(10) NOT NULL,
+    tenPhuongThuc VARCHAR(100) NOT NULL,      -- Tên phương thức
+    PRIMARY KEY (maTT)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Bảng GOI_KHOA_HOC: Thông tin gói combo khóa học.
+CREATE TABLE GOI_KHOA_HOC (
+    maGoi INT NOT NULL AUTO_INCREMENT,
+    tenGoi VARCHAR(150) NOT NULL,
+    slug VARCHAR(150) NOT NULL UNIQUE,
+    moTa VARCHAR(2000),
+    gia DECIMAL(12,2) NOT NULL,  -- Giá bán (sau ưu đãi nếu có)
+    giaGoc DECIMAL(12,2) NULL,   -- Giá gốc (tổng hocPhi các khóa)
+    hinhanh VARCHAR(255),
+    ngayBatDau DATE,
+    ngayKetThuc DATE,
+    trangThai ENUM('DRAFT','PUBLISHED','ARCHIVED') DEFAULT 'PUBLISHED',
+    rating_avg DECIMAL(3,2) DEFAULT 0.00,
+    rating_count INT DEFAULT 0,
+    created_by INT NOT NULL,  -- Admin tạo
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (maGoi),
+    CONSTRAINT FK_GKH_ND FOREIGN KEY (created_by) REFERENCES NGUOIDUNG(maND) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE GOI_KHOA_HOC_CHITIET (
+    maGoi INT NOT NULL,
+    maKH INT NOT NULL,
+    thuTu INT DEFAULT 1,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (maGoi, maKH),
+    CONSTRAINT FK_GKHCT_GOI FOREIGN KEY (maGoi) REFERENCES GOI_KHOA_HOC(maGoi) ON DELETE CASCADE,
+    CONSTRAINT FK_GKHCT_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Bảng KHUYEN_MAI: Thông tin khuyến mãi theo dịp.
+CREATE TABLE KHUYEN_MAI (
+    maKM INT NOT NULL AUTO_INCREMENT,
+    tenKM VARCHAR(150) NOT NULL,
+    moTa VARCHAR(2000),
+    loaiUuDai ENUM('FIXED_DISCOUNT', 'PERCENT_DISCOUNT', 'GIFT') DEFAULT 'PERCENT_DISCOUNT',
+    giaTriUuDai DECIMAL(12,2) NOT NULL,
+    ngayBatDau DATE NOT NULL,
+    ngayKetThuc DATE NOT NULL,
+    soLuongGioiHan INT DEFAULT NULL,
+    trangThai ENUM('ACTIVE', 'INACTIVE', 'EXPIRED') DEFAULT 'ACTIVE',
+    created_by INT NOT NULL,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (maKM),
+    CONSTRAINT FK_KM_ND FOREIGN KEY (created_by) REFERENCES NGUOIDUNG(maND) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE GIAODICH_VNPAY (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    maHV INT NOT NULL,              -- Học viên mua (FK tới HOCVIEN.maHV)
+    maKH INT NOT NULL,              -- Khóa học được mua (FK tới KHOAHOC.maKH)
+    soTien DECIMAL(12,2) NOT NULL,  -- Số tiền VND bạn dự định thu cho khóa học tại thời điểm bấm thanh toán
+    txn_ref VARCHAR(64) NOT NULL,   -- Mã đơn gửi sang VNPay (vnp_TxnRef)
+    vnp_response_code VARCHAR(10) NULL,     -- Mã phản hồi VNPay (vnp_ResponseCode)
+    vnp_transaction_no VARCHAR(50) NULL,    -- Mã giao dịch tại VNPay/ngân hàng (vnp_TransactionNo)
+    trangThai ENUM('PENDING','PAID','FAILED') DEFAULT 'PENDING',
+    paid_at DATETIME NULL,          -- Thời điểm bạn xác nhận thanh toán thành công (sau IPN)
+    maGoi INT NULL,                 -- Liên kết với combo (nếu mua combo)
+    maKM INT NULL,                  -- Liên kết với khuyến mãi (nếu áp dụng)
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_txnref (txn_ref),
+    KEY IX_GDVNPAY_HVKH (maHV, maKH),
+    CONSTRAINT FK_GDVNPAY_HV FOREIGN KEY (maHV) REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
+    CONSTRAINT FK_GDVNPAY_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE,
+    -- Các tham chiếu này giờ đã HỢP LỆ vì bảng đã được tạo ở Mục 2.5
+    CONSTRAINT FK_GDVNPAY_GOI FOREIGN KEY (maGoi) REFERENCES GOI_KHOA_HOC(maGoi) ON DELETE CASCADE,
+    CONSTRAINT FK_GDVNPAY_KM FOREIGN KEY (maKM) REFERENCES KHUYEN_MAI(maKM) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Bảng HOADON: Hóa đơn thanh toán.
+CREATE TABLE HOADON (
+    maHD INT NOT NULL AUTO_INCREMENT,
+    maHV INT NOT NULL,                        -- Học viên
+    maTT VARCHAR(10) NOT NULL,                -- Phương thức thanh toán
+    maND INT NULL,                            -- Người xử lý (giáo vụ hoặc admin)
+    ngayLap DATETIME DEFAULT CURRENT_TIMESTAMP,  -- Ngày lập hóa đơn
+    tongTien DECIMAL(12,2) NOT NULL,          -- Tổng tiền
+    trangThai ENUM('PENDING','PAID','CANCELLED') DEFAULT 'PENDING',  -- Trạng thái hóa đơn
+    loai ENUM('SINGLE_COURSE', 'COMBO') DEFAULT 'SINGLE_COURSE',  -- Loại hóa đơn (khóa riêng hoặc combo)
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (maHD),
+    KEY IX_HD_MAHV (maHV),
+    KEY IX_HD_MATT (maTT),
+    KEY IX_HD_MAND (maND),
+    CONSTRAINT FK_HD_HV FOREIGN KEY (maHV) REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
+    CONSTRAINT FK_HD_ND FOREIGN KEY (maND) REFERENCES NGUOIDUNG(maND) ON DELETE SET NULL,
+    CONSTRAINT FK_HD_TT FOREIGN KEY (maTT) REFERENCES PHUONGTHUCTHANHTOAN(maTT) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Bảng CTHD: Chi tiết hóa đơn (các khóa học trong hóa đơn).
+CREATE TABLE CTHD (
+    maHD INT NOT NULL,
+    maKH INT NOT NULL,                        -- Khóa học mua
+    soLuong INT NOT NULL,                     -- Số lượng (thường là 1)
+    donGia DECIMAL(12,2) NOT NULL,            -- Đơn giá
+    thanhTien DECIMAL(12,2) AS (soLuong * donGia) STORED,  -- Thành tiền tính toán
+    PRIMARY KEY (maHD, maKH),
+    KEY IX_CTHD_MAHD (maHD),
+    KEY IX_CTHD_MAKH (maKH),
+    CONSTRAINT FK_CTHD_HD FOREIGN KEY (maHD) REFERENCES HOADON(maHD) ON DELETE CASCADE,
+    CONSTRAINT FK_CTHD_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Bảng CTHD_GOI: Chi tiết hóa đơn cho combo.
+CREATE TABLE CTHD_GOI (
+    maHD INT NOT NULL,
+    maGoi INT NOT NULL,
+    soLuong INT NOT NULL DEFAULT 1,
+    donGia DECIMAL(12,2) NOT NULL,
+    thanhTien DECIMAL(12,2) AS (soLuong * donGia) STORED,
+    maKM INT NULL,  -- Khuyến mãi áp dụng
+    PRIMARY KEY (maHD, maGoi),
+    CONSTRAINT FK_CTHDG_HD FOREIGN KEY (maHD) REFERENCES HOADON(maHD) ON DELETE CASCADE,
+    CONSTRAINT FK_CTHDG_GOI FOREIGN KEY (maGoi) REFERENCES GOI_KHOA_HOC(maGoi) ON DELETE CASCADE,
+    CONSTRAINT FK_CTHDG_KM FOREIGN KEY (maKM) REFERENCES KHUYEN_MAI(maKM) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Bảng KHUYEN_MAI_GOI: Liên kết khuyến mãi với combo.
+CREATE TABLE KHUYEN_MAI_GOI (
+    maKM INT NOT NULL,
+    maGoi INT NOT NULL,
+    giaUuDai DECIMAL(12,2) NULL,  -- Giá sau ưu đãi
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (maKM, maGoi),
+    CONSTRAINT FK_KMG_KM FOREIGN KEY (maKM) REFERENCES KHUYEN_MAI(maKM) ON DELETE CASCADE,
+    CONSTRAINT FK_KMG_GOI FOREIGN KEY (maGoi) REFERENCES GOI_KHOA_HOC(maGoi) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- =========================================================
+-- 4) GHI DANH HỌC VIÊN VÀ TIẾN ĐỘ HỌC TẬP
 -- =========================================================
 -- Bảng HOCVIEN_KHOAHOC: Ghi danh học viên vào khóa học.
 CREATE TABLE HOCVIEN_KHOAHOC (
@@ -159,6 +303,8 @@ CREATE TABLE HOCVIEN_KHOAHOC (
     video_progress_percent TINYINT DEFAULT 0, -- % hoàn thành video
     avg_minitest_score DECIMAL(5,2) DEFAULT NULL,  -- Điểm trung bình mini-test
     last_lesson_id INT NULL,                  -- Bài học gần nhất
+    maGoi INT NULL,                           -- Liên kết với combo (nếu ghi danh từ combo)
+    maKM INT NULL,                            -- Liên kết với khuyến mãi (nếu áp dụng)
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (maHV, maKH),
@@ -166,11 +312,14 @@ CREATE TABLE HOCVIEN_KHOAHOC (
     KEY IX_HVK_MAKH (maKH),
     CONSTRAINT FK_HVK_HV   FOREIGN KEY (maHV) REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
     CONSTRAINT FK_HVK_KH   FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE,
-    CONSTRAINT FK_HVK_LAST FOREIGN KEY (last_lesson_id) REFERENCES BAIHOC(maBH) ON DELETE SET NULL
+    CONSTRAINT FK_HVK_LAST FOREIGN KEY (last_lesson_id) REFERENCES BAIHOC(maBH) ON DELETE SET NULL,
+    -- Các tham chiếu này giờ đã HỢP LỆ vì bảng đã được tạo ở Mục 2.5
+    CONSTRAINT FK_HVK_GOI  FOREIGN KEY (maGoi) REFERENCES GOI_KHOA_HOC(maGoi) ON DELETE SET NULL,
+    CONSTRAINT FK_HVK_KM   FOREIGN KEY (maKM) REFERENCES KHUYEN_MAI(maKM) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================
--- 3.5) HỎI ĐÁP TRONG BÀI HỌC (HOIDAP_BAIHOC & PHANHOI)
+-- 5) HỎI ĐÁP TRONG BÀI HỌC (HOIDAP_BAIHOC & PHANHOI)
 -- =========================================================
 
 -- Bảng HOIDAP_BAIHOC: Câu hỏi / thảo luận trong bài học
@@ -250,78 +399,7 @@ CREATE TABLE TIENDO_HOCTAP (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================
--- 4) THANH TOÁN
--- =========================================================
--- Bảng PHUONGTHUCTHANHTOAN: Các phương thức thanh toán (ví dụ: chuyển khoản, thẻ tín dụng).
-CREATE TABLE PHUONGTHUCTHANHTOAN (
-    maTT VARCHAR(10) NOT NULL,
-    tenPhuongThuc VARCHAR(100) NOT NULL,      -- Tên phương thức
-    PRIMARY KEY (maTT)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE GIAODICH_VNPAY (
-    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    maHV INT NOT NULL,              -- Học viên mua (FK tới HOCVIEN.maHV)
-    maKH INT NOT NULL,              -- Khóa học được mua (FK tới KHOAHOC.maKH)
-    soTien DECIMAL(12,2) NOT NULL,  -- Số tiền VND bạn dự định thu cho khóa học tại thời điểm bấm thanh toán
-
-    txn_ref VARCHAR(64) NOT NULL,   -- Mã đơn gửi sang VNPay (vnp_TxnRef)
-    vnp_response_code VARCHAR(10) NULL,     -- Mã phản hồi VNPay (vnp_ResponseCode)
-    vnp_transaction_no VARCHAR(50) NULL,    -- Mã giao dịch tại VNPay/ngân hàng (vnp_TransactionNo)
-
-    trangThai ENUM('PENDING','PAID','FAILED') DEFAULT 'PENDING',
-    paid_at DATETIME NULL,          -- Thời điểm bạn xác nhận thanh toán thành công (sau IPN)
-
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-
-    PRIMARY KEY (id),
-    UNIQUE KEY uq_txnref (txn_ref),
-    KEY IX_GDVNPAY_HVKH (maHV, maKH),
-
-    CONSTRAINT FK_GDVNPAY_HV FOREIGN KEY (maHV)
-        REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
-
-    CONSTRAINT FK_GDVNPAY_KH FOREIGN KEY (maKH)
-        REFERENCES KHOAHOC(maKH) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Bảng HOADON: Hóa đơn thanh toán.
-CREATE TABLE HOADON (
-    maHD INT NOT NULL AUTO_INCREMENT,
-    maHV INT NOT NULL,                        -- Học viên thanh toán
-    maTT VARCHAR(10),                         -- Phương thức thanh toán
-    maND INT,                                 -- Người xử lý (giáo vụ/admin)
-    ngayLap DATETIME,                         -- Ngày lập hóa đơn
-    tongTien DECIMAL(12,2),                   -- Tổng tiền
-    ghiChu VARCHAR(255),                      -- Ghi chú
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (maHD),
-    KEY IX_HD_MAHV (maHV),
-    KEY IX_HD_MATT (maTT),
-    KEY IX_HD_MAND (maND),
-    CONSTRAINT FK_HD_HV FOREIGN KEY (maHV) REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
-    CONSTRAINT FK_HD_ND FOREIGN KEY (maND) REFERENCES NGUOIDUNG(maND) ON DELETE SET NULL,
-    CONSTRAINT FK_HD_TT FOREIGN KEY (maTT) REFERENCES PHUONGTHUCTHANHTOAN(maTT) ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Bảng CTHD: Chi tiết hóa đơn (các khóa học trong hóa đơn).
-CREATE TABLE CTHD (
-    maHD INT NOT NULL,
-    maKH INT NOT NULL,                        -- Khóa học mua
-    soLuong INT NOT NULL,                     -- Số lượng (thường là 1)
-    donGia DECIMAL(12,2) NOT NULL,            -- Đơn giá
-    thanhTien DECIMAL(12,2) AS (soLuong * donGia) STORED,  -- Thành tiền tính toán
-    PRIMARY KEY (maHD, maKH),
-    KEY IX_CTHD_MAHD (maHD),
-    KEY IX_CTHD_MAKH (maKH),
-    CONSTRAINT FK_CTHD_HD FOREIGN KEY (maHD) REFERENCES HOADON(maHD) ON DELETE CASCADE,
-    CONSTRAINT FK_CTHD_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- =========================================================
--- 5) MÃ KÍCH HOẠT & MINI-TEST (THEO CHƯƠNG) & KẾT QUẢ
+-- 6) MÃ KÍCH HOẠT & MINI-TEST (THEO CHƯƠNG) & KẾT QUẢ
 -- =========================================================
 -- Bảng MA_KICH_HOAT: Mã kích hoạt ghi danh khóa học.
 CREATE TABLE MA_KICH_HOAT (
@@ -335,6 +413,7 @@ CREATE TABLE MA_KICH_HOAT (
     sent_at DATETIME NULL,
     used_at DATETIME NULL,
     expires_at DATETIME NULL,
+    maGoi INT NULL,                           -- Liên kết với combo (nếu áp dụng)
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
@@ -342,7 +421,8 @@ CREATE TABLE MA_KICH_HOAT (
     KEY IX_MAKH_ENROLL (maHV, maKH),
     KEY IX_MAKH_HD (maHD),
     CONSTRAINT FK_MAKH_ENROLL FOREIGN KEY (maHV, maKH) REFERENCES HOCVIEN_KHOAHOC(maHV, maKH) ON DELETE CASCADE,
-    CONSTRAINT FK_MAKH_HD FOREIGN KEY (maHD) REFERENCES HOADON(maHD) ON DELETE SET NULL
+    CONSTRAINT FK_MAKH_HD FOREIGN KEY (maHD) REFERENCES HOADON(maHD) ON DELETE SET NULL,
+    CONSTRAINT FK_MAKH_GOI FOREIGN KEY (maGoi) REFERENCES GOI_KHOA_HOC(maGoi) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Bảng CHUONG_MINITEST: Mini-test theo chương.
@@ -448,7 +528,6 @@ CREATE TABLE MINITEST_STUDENT_ANSWERS (
     maKQDG INT NOT NULL,
     maCauHoi INT NOT NULL,
     maHV INT NOT NULL,
-
     -- đáp án
     answer_choice VARCHAR(50) NULL,
     answer_text   TEXT NULL,                    -- dùng cho essay/writing
@@ -456,17 +535,14 @@ CREATE TABLE MINITEST_STUDENT_ANSWERS (
     audio_duration_sec INT NULL,
     audio_mime VARCHAR(50) DEFAULT 'audio/mpeg',
     audio_size_kb INT NULL,
-
     -- chấm điểm
     is_correct TINYINT(1) NULL,
     diem DECIMAL(5,2) NULL,
     teacher_feedback TEXT NULL,
     graded_at DATETIME NULL,
     graded_by INT NULL,
-
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-
     PRIMARY KEY (id),
     UNIQUE KEY uq_student_answer (maKQDG, maCauHoi, maHV),
     KEY IX_MSA_KQDG (maKQDG),
@@ -480,7 +556,7 @@ CREATE TABLE MINITEST_STUDENT_ANSWERS (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================
--- 6) ĐÁNH GIÁ KHÓA HỌC & YÊU THÍCH
+-- 7) ĐÁNH GIÁ KHÓA HỌC & YÊU THÍCH
 -- =========================================================
 -- Bảng DANHGIAKH: Đánh giá khóa học từ học viên.
 CREATE TABLE DANHGIAKH (
@@ -511,7 +587,7 @@ CREATE TABLE KHOAHOC_YEUTHICH (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================
--- 7) CHỨNG CHỈ
+-- 8) CHỨNG CHỈ
 -- =========================================================
 -- Bảng CHUNGCHI: Chứng chỉ cấp cho học viên sau khóa học.
 CREATE TABLE CHUNGCHI (
@@ -545,7 +621,7 @@ CREATE TABLE CHUNGCHI_DANHGIA (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================
--- 8) BẢNG HỆ THỐNG LARAVEL
+-- 9) BẢNG HỆ THỐNG LARAVEL
 -- =========================================================
 -- Bảng cache: Lưu trữ cache hệ thống.
 CREATE TABLE cache (
