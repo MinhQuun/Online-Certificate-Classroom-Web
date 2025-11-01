@@ -186,7 +186,7 @@
                     </div>
                 @endif
 
-                {{-- THÊM ID VÀO ĐÂY --}}
+                {{-- THÊM ID VÀO ĐÂY
                 @if ($chapterMiniTests->count())
                     <div class="lesson-card mini-tests" id="mini-tests">
                         <header class="lesson-card__header">
@@ -244,7 +244,7 @@
                             @endforeach
                         </div>
                     </div>
-                @endif
+                @endif --}}
             </div>
 
             <aside class="lesson-layout__aside">

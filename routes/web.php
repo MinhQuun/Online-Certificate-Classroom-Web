@@ -158,6 +158,8 @@ Route::middleware('auth')->prefix('student')->name('student.')->group(function (
         ->name('lessons.discussions.replies.destroy');
 
     // Mini-tests cho học viên
+    Route::get('/chapters/{chapter}/minitests', [StudentMiniTestController::class, 'index'])->name('minitests.index');
+    Route::get('/minitests/{miniTest}', [StudentMiniTestController::class, 'show'])->name('minitests.show'); // (giữ 1 route, bỏ lặp)
     Route::post('/minitests/{miniTest}/start', [StudentMiniTestController::class, 'start'])->name('minitests.start');
     Route::get('/minitests/attempts/{result}', [StudentMiniTestController::class, 'attempt'])->name('minitests.attempt');
     Route::post('/minitests/attempts/{result}/answers/{question}', [StudentMiniTestController::class, 'saveAnswer'])->name('minitests.answers.save');

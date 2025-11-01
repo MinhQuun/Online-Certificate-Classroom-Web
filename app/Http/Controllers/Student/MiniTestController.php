@@ -24,6 +24,42 @@ use Throwable;
 
 class MiniTestController extends Controller
 {
+    public function index(Chapter $chapter): View
+    {
+        $student = $this->currentStudent();
+        $chapter->loadMissing('course');
+        $this->ensureEnrolled($student, (int) $chapter->maKH);
+
+        [$miniTests, $resultsByTest] = $this->loadMiniTestsForChapter($chapter, $student);
+
+        return view('Student.minitests', [
+            'type' => 'index',
+            'chapter' => $chapter,
+            'miniTests' => $miniTests,
+            'resultsByTest' => $resultsByTest,
+            'student' => $student,
+        ]);
+    }
+
+    public function show(MiniTest $miniTest): View
+    {
+        $student = $this->currentStudent();
+        $miniTest->loadMissing(['chapter.course']);
+
+        $this->ensureMiniTestAvailable($student, $miniTest);
+
+        $chapter = $miniTest->chapter;
+        [$miniTests, $resultsByTest] = $this->loadMiniTestsForChapter($chapter, $student);
+
+        return view('Student.minitests', [
+            'type' => 'index',
+            'chapter' => $chapter,
+            'miniTests' => $miniTests,
+            'resultsByTest' => $resultsByTest,
+            'student' => $student,
+            'activeMiniTestId' => $miniTest->maMT,
+        ]);
+    }
 
     public function start(Request $request, MiniTest $miniTest): RedirectResponse
     {

@@ -1,26 +1,26 @@
 document.addEventListener("DOMContentLoaded", () => {
     const config = document.getElementById("studentMiniTestConfig");
-    if (config) {
-        initAttemptPage(config);
+    if (!config) {
+        return;
     }
+
+    initMiniTestAttempt(config);
 });
 
-function initAttemptPage(configEl) {
+function initMiniTestAttempt(configEl) {
     const resultId = configEl.dataset.resultId;
-    const countdownValue = parseInt(configEl.dataset.countdown ?? "", 10);
     const autosaveTemplate = configEl.dataset.autosaveTemplate;
     const uploadTemplate = configEl.dataset.uploadTemplate;
-    const submitUrl = configEl.dataset.submitUrl;
+    const countdownValue = Number.parseInt(configEl.dataset.countdown ?? "", 10);
 
     const form = document.getElementById("attemptForm");
     const submitBtn = document.getElementById("submitAttemptBtn");
-    const questionCards = document.querySelectorAll(".question-card");
-    const csrfToken = document
-        .querySelector('meta[name="csrf-token"]')
-        ?.getAttribute("content");
+    const questionCards = Array.from(document.querySelectorAll(".question-card"));
+    const csrfToken =
+        document.querySelector('meta[name="csrf-token"]')?.getAttribute("content") ?? "";
 
     if (!csrfToken) {
-        console.error("Không tìm thấy CSRF token.");
+        console.error("Missing CSRF token.");
         return;
     }
 
@@ -28,28 +28,63 @@ function initAttemptPage(configEl) {
         return;
     }
 
+    const autosaveTimeouts = new Map();
+    const progressLinks = new Map();
+
+    document.querySelectorAll("[data-question-link]").forEach((link) => {
+        const questionId = link.dataset.questionLink;
+        if (!questionId) {
+            return;
+        }
+        progressLinks.set(questionId, link);
+        link.addEventListener("click", (event) => {
+            event.preventDefault();
+            const target = document.getElementById(`question-${questionId}`);
+            target?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+    });
+
     const buildUrl = (template, questionId) =>
         template.replace("__QUESTION__", questionId);
 
-    const autosaveTimeouts = {};
-
-    const scheduleAutosave = (questionId, payload, statusEl) => {
-        if (autosaveTimeouts[questionId]) {
-            clearTimeout(autosaveTimeouts[questionId]);
+    const updateProgressIndicator = (questionId) => {
+        const card = questionCards.find(
+            (item) => item.dataset.questionId === questionId
+        );
+        const link = progressLinks.get(questionId);
+        if (!card || !link) {
+            return;
         }
 
-        autosaveTimeouts[questionId] = setTimeout(() => {
-            sendAutosave(questionId, payload, statusEl);
-        }, 500);
+        if (isCardAnswered(card)) {
+            link.classList.add("is-answered");
+        } else {
+            link.classList.remove("is-answered");
+        }
+    };
+
+    const handleAutosave = (questionId, payload, statusEl) => {
+        if (!questionId) {
+            return;
+        }
+
+        if (autosaveTimeouts.has(questionId)) {
+            clearTimeout(autosaveTimeouts.get(questionId));
+        }
+
+        autosaveTimeouts.set(
+            questionId,
+            window.setTimeout(() => {
+                sendAutosave(questionId, payload, statusEl);
+            }, 500)
+        );
     };
 
     const sendAutosave = async (questionId, payload, statusEl) => {
-        if (!questionId) return;
-
         const url = buildUrl(autosaveTemplate, questionId);
 
         try {
-            setStatus(statusEl, "Đang lưu...", "saving");
+            setStatus(statusEl, "Dang luu...", "saving");
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -64,10 +99,10 @@ function initAttemptPage(configEl) {
                 throw new Error(await response.text());
             }
 
-            setStatus(statusEl, "Đã lưu", "saved");
+            setStatus(statusEl, "Da luu", "saved");
         } catch (error) {
             console.error(error);
-            setStatus(statusEl, "Lỗi khi lưu", "error");
+            setStatus(statusEl, "Luu that bai", "error");
         }
     };
 
@@ -77,7 +112,7 @@ function initAttemptPage(configEl) {
         formData.append("audio", file);
 
         try {
-            setStatus(statusEl, "Đang tải lên...", "saving");
+            setStatus(statusEl, "Dang tai len...", "saving");
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -91,10 +126,11 @@ function initAttemptPage(configEl) {
                 throw new Error(await response.text());
             }
 
-            setStatus(statusEl, "Tải lên thành công", "saved");
+            setStatus(statusEl, "Tai len thanh cong", "saved");
+            updateProgressIndicator(questionId);
         } catch (error) {
             console.error(error);
-            setStatus(statusEl, "Tải lên thất bại", "error");
+            setStatus(statusEl, "Tai len that bai", "error");
         }
     };
 
@@ -103,9 +139,11 @@ function initAttemptPage(configEl) {
         const type = card.dataset.questionType;
         const statusEl = card.querySelector("[data-status]");
 
-        if (!questionId) return;
+        if (!questionId) {
+            return;
+        }
 
-        if (type === "multiple_choice" || type === "single_choice") {
+        if (type === "multiple_choice" || type === "single_choice" || type === "true_false") {
             const inputs = card.querySelectorAll(".answer-input");
             inputs.forEach((input) => {
                 input.addEventListener("change", () => {
@@ -113,24 +151,17 @@ function initAttemptPage(configEl) {
                         card.querySelectorAll(".answer-input:checked")
                     ).map((el) => el.value);
                     const payload =
-                        type === "multiple_choice"
-                            ? selected
-                            : selected[0] ?? null;
-                    scheduleAutosave(questionId, payload, statusEl);
+                        type === "multiple_choice" ? selected : selected[0] ?? null;
+                    handleAutosave(questionId, payload, statusEl);
+                    updateProgressIndicator(questionId);
                 });
             });
-        } else if (type === "true_false") {
-            const inputs = card.querySelectorAll(".answer-input");
-            inputs.forEach((input) =>
-                input.addEventListener("change", () => {
-                    scheduleAutosave(questionId, input.value, statusEl);
-                })
-            );
         } else {
             const textarea = card.querySelector(".answer-text");
-            if (textarea && textarea.disabled === false) {
+            if (textarea) {
                 textarea.addEventListener("input", () => {
-                    scheduleAutosave(questionId, textarea.value, statusEl);
+                    handleAutosave(questionId, textarea.value, statusEl);
+                    updateProgressIndicator(questionId);
                 });
             }
 
@@ -144,32 +175,83 @@ function initAttemptPage(configEl) {
                 });
             }
         }
+
+        updateProgressIndicator(questionId);
     });
+
+    if ("IntersectionObserver" in window && progressLinks.size > 0) {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    const id = entry.target.dataset.questionId;
+                    const link = id ? progressLinks.get(id) : undefined;
+                    if (!link) {
+                        return;
+                    }
+
+                    if (entry.isIntersecting) {
+                        link.classList.add("is-active");
+                    } else {
+                        link.classList.remove("is-active");
+                    }
+                });
+            },
+            {
+                rootMargin: "-45% 0px -45% 0px",
+                threshold: 0.15,
+            }
+        );
+
+        questionCards.forEach((card) => observer.observe(card));
+    }
 
     form?.addEventListener("submit", (event) => {
         event.preventDefault();
-        if (!confirm("Bạn chắc chắn muốn nộp bài?")) {
+        if (!confirm("Ban chac chan muon nop bai?")) {
             return;
         }
 
-        submitBtn.disabled = true;
-        submitBtn.innerHTML =
-            '<span class="spinner-border spinner-border-sm me-2"></span>Đang nộp...';
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML =
+                '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Dang nop...';
+        }
+
         form.submit();
     });
 
-    if (!isNaN(countdownValue) && countdownValue > 0) {
+    if (!Number.isNaN(countdownValue) && countdownValue > 0) {
         startCountdown(countdownValue, document.getElementById("countdown"), () => {
-            setTimeout(() => form?.submit(), 500);
+            setTimeout(() => form?.submit(), 400);
         });
     }
+}
+
+function isCardAnswered(card) {
+    const type = card.dataset.questionType;
+
+    if (type === "multiple_choice" || type === "single_choice" || type === "true_false") {
+        return card.querySelectorAll(".answer-input:checked").length > 0;
+    }
+
+    if (card.dataset.speaking === "1") {
+        const hasLocalFile =
+            card.querySelector(".speaking-file-input")?.files?.length ?? 0;
+        const hasUploadedAudio = Boolean(card.querySelector(".current-audio audio"));
+        return hasLocalFile > 0 || hasUploadedAudio;
+    }
+
+    const textareaValue = card.querySelector(".answer-text")?.value ?? "";
+    return textareaValue.trim().length > 0;
 }
 
 function startCountdown(seconds, displayEl, onExpire) {
     let remaining = seconds;
 
     const updateDisplay = () => {
-        if (!displayEl) return;
+        if (!displayEl) {
+            return;
+        }
         const minutes = Math.floor(remaining / 60)
             .toString()
             .padStart(2, "0");
@@ -179,10 +261,10 @@ function startCountdown(seconds, displayEl, onExpire) {
 
     updateDisplay();
 
-    const interval = setInterval(() => {
+    const interval = window.setInterval(() => {
         remaining -= 1;
         if (remaining <= 0) {
-            clearInterval(interval);
+            window.clearInterval(interval);
             updateDisplay();
             onExpire?.();
         } else {
@@ -192,7 +274,9 @@ function startCountdown(seconds, displayEl, onExpire) {
 }
 
 function setStatus(el, message, state) {
-    if (!el) return;
+    if (!el) {
+        return;
+    }
     el.textContent = message;
     el.dataset.state = state;
 }
