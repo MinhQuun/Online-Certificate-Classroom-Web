@@ -13,9 +13,7 @@
 @extends('layouts.student')
 
 @section('title')
-    @if($type === 'index')
-        Mini-Test - {{ $chapter->tenChuong ?? 'Chương học' }}
-    @elseif($type === 'attempt')
+    @if($type === 'attempt')
         Làm bài - {{ $result->miniTest->title }}
     @elseif($type === 'result')
         Kết quả - {{ $result->miniTest->title }}
@@ -27,98 +25,7 @@
 @endpush
 
 @section('content')
-    @if($type === 'index')
-        <div class="minitests-index">
-            <div class="chapter-header">
-                <div class="container">
-                    <nav aria-label="breadcrumb" class="mb-3">
-                        <ol class="breadcrumb mb-0 text-white">
-                            <li class="breadcrumb-item"><a class="text-white" href="{{ route('student.courses.index') }}">Khóa học</a></li>
-                            <li class="breadcrumb-item"><a class="text-white" href="{{ route('student.courses.show', $chapter->course->slug) }}">{{ $chapter->course->tenKH }}</a></li>
-                            <li class="breadcrumb-item active text-white" aria-current="page">{{ $chapter->tenChuong }}</li>
-                        </ol>
-                    </nav>
-                    <h1 class="mb-2">Mini-Test - {{ $chapter->tenChuong }}</h1>
-                    <p class="mb-0">Ôn luyện theo từng kỹ năng và theo dõi tiến độ ngay sau mỗi lần làm.</p>
-                </div>
-            </div>
-
-            <div class="container">
-                @forelse($miniTests as $miniTest)
-                    @php
-                        $skillClass = 'skill-' . $miniTest->skill_type;
-                        $results = $resultsByTest[$miniTest->maMT] ?? collect();
-                        $latestResult = $results->sortByDesc('created_at')->first();
-                        $inProgress = $results->firstWhere('status', App\Models\MiniTestResult::STATUS_IN_PROGRESS);
-                        $attemptsUsed = $results->count();
-                        $attemptsAllowed = $miniTest->attempts_allowed;
-                        $attemptsLeft = max(0, $attemptsAllowed - $attemptsUsed);
-                    @endphp
-                    <div class="minitest-card {{ $skillClass }}">
-                        <div class="row align-items-center">
-                            <div class="col-md-8">
-                                <div class="d-flex align-items-start gap-3 mb-3">
-                                    <div class="skill-icon">
-                                        <i class="bi {{ match($miniTest->skill_type) {
-                                            MiniTest::SKILL_LISTENING => 'bi-ear',
-                                            MiniTest::SKILL_SPEAKING => 'bi-mic',
-                                            MiniTest::SKILL_READING => 'bi-book',
-                                            MiniTest::SKILL_WRITING => 'bi-pencil',
-                                            default => 'bi-lightning'
-                                        } }}"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <h4 class="mb-1">{{ $miniTest->title }}</h4>
-                                        <span class="skill-badge {{ $skillClass }}">{{ $skillClass === 'skill-' . MiniTest::SKILL_LISTENING ? 'Listening' : ($skillClass === 'skill-' . MiniTest::SKILL_READING ? 'Reading' : ($skillClass === 'skill-' . MiniTest::SKILL_SPEAKING ? 'Speaking' : 'Writing')) }}</span>
-                                    </div>
-                                </div>
-                                <div class="row g-2 text-muted small">
-                                    <div class="col-6 col-lg-3"><i class="bi bi-question-circle me-1"></i>{{ $miniTest->questions->count() }} câu hỏi</div>
-                                    <div class="col-6 col-lg-3"><i class="bi bi-clock me-1"></i>{{ $miniTest->time_limit_min ?: 'Không giới hạn' }} phút</div>
-                                    <div class="col-6 col-lg-3"><i class="bi bi-graph-up me-1"></i>Lượt làm: {{ $attemptsUsed }}/{{ $attemptsAllowed }}</div>
-                                    <div class="col-6 col-lg-3"><i class="bi bi-star me-1"></i>Điểm tối đa: {{ number_format($miniTest->max_score, 1) }}</div>
-                                </div>
-                            </div>
-                            <div class="col-md-4 d-flex flex-column gap-2 justify-content-center align-items-md-end">
-                                @if($inProgress)
-                                    <a href="{{ route('student.minitests.attempt', $inProgress->maKQDG) }}" class="btn btn-primary w-100">
-                                        <i class="bi bi-play-circle me-2"></i>Tiếp tục làm dở
-                                    </a>
-                                @elseif($attemptsLeft > 0)
-                                    <form method="POST" action="{{ route('student.minitests.start', $miniTest->maMT) }}" class="w-100">
-                                        @csrf
-                                        <button type="submit" class="btn btn-primary w-100">
-                                            <i class="bi bi-play-circle me-2"></i>Bắt đầu mini-test
-                                        </button>
-                                    </form>
-                                @else
-                                    <button class="btn btn-secondary w-100" disabled>
-                                        <i class="bi bi-lock me-2"></i>Hết lượt làm
-                                    </button>
-                                @endif
-
-                                @if($latestResult && $latestResult->status !== App\Models\MiniTestResult::STATUS_IN_PROGRESS)
-                                    <a href="{{ route('student.minitests.result', $latestResult->maKQDG) }}" class="btn btn-outline-primary w-100">
-                                        <i class="bi bi-clipboard-data me-2"></i>Xem kết quả gần nhất
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                @empty
-                    <div class="alert alert-info border-0 shadow-sm">
-                        <div class="d-flex align-items-center gap-3">
-                            <i class="bi bi-info-circle fs-3"></i>
-                            <div>
-                                <h5 class="mb-1">Chưa có mini-test</h5>
-                                <p class="mb-0">Giảng viên sẽ sớm cập nhật bài luyện tập cho chương này.</p>
-                            </div>
-                        </div>
-                    </div>
-                @endforelse
-            </div>
-        </div>
-    @elseif($type === 'attempt')
+    @if($type === 'attempt')
         <div id="studentMiniTestConfig"
              data-result-id="{{ $result->maKQDG }}"
              data-submit-url="{{ route('student.minitests.submit', $result->maKQDG) }}"

@@ -178,13 +178,16 @@
                                                         <li class="mini-test-item" data-mini-test-id="{{ $miniTest->maMT }}">
                                                             <span class="label {{ $labelClass }}">{{ $labelText }}</span>
                                                             @if($isEnrolled || $isFreeMiniTest)
-                                                                <a href="{{ route('student.minitests.show', $miniTest->maMT) }}" class="mini-test-link">
-                                                                    <div class="lesson-list__meta">
-                                                                        <span class="lesson-list__eyebrow">MiniTest {{ $miniTest->thuTu }}</span>
-                                                                        <span class="lesson-list__title">{{ $miniTest->title }}</span>
-                                                                    </div>
-                                                                    <span class="badge badge--minitest">MINI TEST</span>
-                                                                </a>
+                                                                <form method="POST" action="{{ route('student.minitests.start', $miniTest->maMT) }}" class="mini-test-start-form" style="display:inline;">
+                                                                    @csrf
+                                                                    <button type="submit" class="mini-test-link" style="background:transparent;border:0;padding:0;text-align:left;width:100%;">
+                                                                        <div class="lesson-list__meta">
+                                                                            <span class="lesson-list__eyebrow">MiniTest {{ $miniTest->thuTu }}</span>
+                                                                            <span class="lesson-list__title">{{ $miniTest->title }}</span>
+                                                                        </div>
+                                                                        <span class="badge badge--minitest">MINI TEST</span>
+                                                                    </button>
+                                                                </form>
                                                             @else
                                                                 <a href="#" class="mini-test-link" >
                                                                     <div class="lesson-list__meta">
