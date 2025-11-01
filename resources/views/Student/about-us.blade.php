@@ -25,16 +25,16 @@
         {{-- Số liệu nhanh --}}
         <div class="stats">
             <div class="stat">
-                <span class="n">3</span>
-                <span class="t">Vai trò: Học viên • Giảng viên • Quản trị</span>
+                <span class="n">100%</span>
+                <span class="t">Học Online • Linh hoạt thời gian</span>
             </div>
             <div class="stat">
                 <span class="n">Đa dạng</span>
                 <span class="t">Video • Audio • PDF • Mini-test</span>
             </div>
             <div class="stat">
-                <span class="n">Theo dõi</span>
-                <span class="t">Tiến độ học tập & Chứng chỉ</span>
+                <span class="n">Chứng chỉ</span>
+                <span class="t">Được xác thực sau khi hoàn thành</span>
             </div>
         </div>
     </section>
@@ -62,31 +62,54 @@
                 <li><strong>Giao diện responsive</strong>: Tối ưu trên mọi thiết bị, dễ sử dụng.</li>
             </ul>
 
-            <h2 style="margin-top:18px;">Đối Tượng Sử Dụng</h2>
+            <h2 style="margin-top:18px;">Quy Trình Học Tập</h2>
             <div class="divider"></div>
             <ul class="about-list">
-                <li><strong>Học viên</strong>: Đăng ký khóa học, học tập theo lộ trình, làm bài tập và nhận chứng chỉ.</li>
-                <li><strong>Giảng viên</strong>: Quản lý nội dung khóa học, tài liệu và theo dõi tiến độ học viên.</li>
-                <li><strong>Quản trị viên</strong>: Quản lý toàn bộ hệ thống, người dùng, khóa học và thanh toán.</li>
+                <li><strong>Bước 1 - Đăng ký</strong>: Chọn khóa học phù hợp và đăng ký qua thanh toán trực tuyến hoặc mã kích hoạt.</li>
+                <li><strong>Bước 2 - Học tập</strong>: Theo dõi lộ trình học, xem video, nghe audio, đọc tài liệu PDF.</li>
+                <li><strong>Bước 3 - Thực hành</strong>: Làm mini-test sau mỗi chương để củng cố kiến thức.</li>
+                <li><strong>Bước 4 - Hoàn thành</strong>: Đạt đủ tiêu chuẩn và nhận chứng chỉ số có mã xác thực.</li>
             </ul>
 
-            <h2 style="margin-top:18px;">Công Nghệ Sử Dụng</h2>
+            <h2 style="margin-top:18px;">Giá Trị Cốt Lõi</h2>
             <div class="divider"></div>
-            <ul class="tech-chips">
-                <li>Laravel 11</li>
-                <li>PHP 8.2+</li>
-                <li>MySQL</li>
-                <li>Blade Template</li>
-                <li>JavaScript</li>
-                <li>Bootstrap 5</li>
-                <li>Font Awesome</li>
-                <li>VNPay API</li>
+            <ul class="team-list">
+                <li><strong>Chất lượng</strong>: Nội dung khóa học được biên soạn bởi chuyên gia</li>
+                <li><strong>Linh hoạt</strong>: Học mọi lúc, mọi nơi theo tiến độ cá nhân</li>
+                <li><strong>Hiệu quả</strong>: Phương pháp học tập khoa học, đo lường được</li>
+                <li><strong>Tận tâm</strong>: Hỗ trợ học viên nhiệt tình, chu đáo</li>
             </ul>
         </article>
 
         {{-- Cột phải --}}
         <aside class="about-card">
-            <h2>Sứ Mệnh</h2>
+            <h2>Lợi Ích Khi Học Tại OCC</h2>
+            <div class="divider"></div>
+            <div class="user-roles">
+                <div class="role-item">
+                    <div class="role-icon">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <h3>Học linh hoạt</h3>
+                    <p>Học mọi lúc, mọi nơi theo lịch trình riêng. Không bị ràng buộc thời gian cố định.</p>
+                </div>
+                <div class="role-item">
+                    <div class="role-icon">
+                        <i class="fa-solid fa-certificate"></i>
+                    </div>
+                    <h3>Chứng chỉ uy tín</h3>
+                    <p>Nhận chứng chỉ số có mã xác thực sau khi hoàn thành khóa học, được công nhận rộng rãi.</p>
+                </div>
+                <div class="role-item">
+                    <div class="role-icon">
+                        <i class="fa-solid fa-chalkboard-user"></i>
+                    </div>
+                    <h3>Giảng viên chất lượng</h3>
+                    <p>Đội ngũ giảng viên giàu kinh nghiệm, nhiệt tình hỗ trợ và giải đáp thắc mắc.</p>
+                </div>
+            </div>
+
+            <h2 style="margin-top:32px;">Sứ Mệnh</h2>
             <div class="divider"></div>
             <p>
                 Chúng tôi tin rằng giáo dục trực tuyến là tương lai, và mỗi học viên đều xứng đáng có một nền tảng 
@@ -99,23 +122,14 @@
                 <li>Tạo môi trường học tập tương tác và thân thiện</li>
             </ul>
 
-            <h2 style="margin-top:18px;">Giá Trị Cốt Lõi</h2>
+            <h2 style="margin-top:18px;">Cam Kết Chất Lượng</h2>
             <div class="divider"></div>
             <ul class="team-list">
-                <li><strong>Chất lượng</strong>: Nội dung khóa học được biên soạn bởi chuyên gia</li>
-                <li><strong>Linh hoạt</strong>: Học mọi lúc, mọi nơi theo tiến độ cá nhân</li>
-                <li><strong>Hiệu quả</strong>: Phương pháp học tập khoa học, đo lường được</li>
-                <li><strong>Tận tâm</strong>: Hỗ trợ học viên nhiệt tình, chu đáo</li>
-            </ul>
-
-            <h2 style="margin-top:18px;">Thành Tựu</h2>
-            <div class="divider"></div>
-            <ul class="team-list">
-                <li>Hệ thống quản lý khóa học đa cấp độ</li>
-                <li>Tích hợp thanh toán trực tuyến VNPay</li>
-                <li>Hệ thống mini-test và đánh giá tự động</li>
-                <li>Cấp chứng chỉ số có xác thực</li>
-                <li>Dashboard quản lý tiến độ chi tiết</li>
+                <li><strong>Nội dung chuẩn mực</strong>: Khóa học được biên soạn kỹ lưỡng, cập nhật thường xuyên</li>
+                <li><strong>Hỗ trợ tận tình</strong>: Giải đáp thắc mắc nhanh chóng qua nhiều kênh</li>
+                <li><strong>Theo dõi tiến độ</strong>: Hệ thống ghi nhận chi tiết quá trình học tập của bạn</li>
+                <li><strong>Bài tập thực hành</strong>: Mini-test sau mỗi chương giúp củng cố kiến thức</li>
+                <li><strong>Chứng chỉ có giá trị</strong>: Được xác thực và có thể chia sẻ dễ dàng</li>
             </ul>
 
             <h2 style="margin-top:18px;">Liên Hệ</h2>
