@@ -50,7 +50,7 @@
                 </div>
             </div>
         @else
-            <div class="card border-0 shadow-sm mb-4">
+            <div class="card border-0 shadow-sm mb-4 selector-card">
                 <div class="card-body d-flex flex-wrap align-items-center gap-3">
                     <div class="flex-grow-1">
                         <label for="courseSelector" class="form-label text-uppercase small text-muted mb-1">Khóa học</label>
@@ -64,10 +64,10 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <span class="badge bg-light text-dark border">
+                            <span class="badge">
                                 <i class="bi bi-people-fill me-1"></i>{{ number_format($activeCourse?->students_count ?? 0) }} học viên
                             </span>
-                            <span class="badge bg-light text-dark border">
+                            <span class="badge">
                                 <i class="bi bi-list-task me-1"></i>{{ number_format($activeCourse?->chapters->count() ?? 0) }} chương
                             </span>
                         </div>
@@ -86,7 +86,7 @@
 
                 <div class="row g-3 mb-4">
                     <div class="col-md-6">
-                        <div class="metric-pill">
+                        <div class="metric-pill summary-card">
                             <div class="icon"><i class="bi bi-file-earmark-text"></i></div>
                             <div>
                                 <div class="value">{{ $totalTests }}</div>
@@ -95,7 +95,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="metric-pill">
+                        <div class="metric-pill summary-card">
                             <div class="icon"><i class="bi bi-megaphone"></i></div>
                             <div>
                                 <div class="value">{{ $publishedTests }}</div>
@@ -248,7 +248,7 @@
                                             </div>
                                         </div>
                                     @empty
-                                        <div class="text-muted text-center py-4">
+                                        <div class="minitest-empty text-muted text-center py-4">
                                             <i class="bi bi-folder2-open fs-3 d-block mb-2"></i>
                                             Chưa có mini-test trong chương này.
                                         </div>
@@ -263,24 +263,25 @@
             @include('Teacher.partials.minitest-modals', ['courses' => $courses, 'activeCourse' => $activeCourse ?? null])
         @endif
     @elseif($type === 'questions' && isset($miniTest))
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
+        <section class="page-header page-header--has-action page-header--split">
+            <div class="page-header-bar">
                 <a href="{{ route('teacher.minitests.index', ['course' => $miniTest->maKH, '_fragment' => 'minitest-' . $miniTest->maMT]) }}"
-                   class="btn btn-link px-0 text-decoration-none">
+                   class="btn btn-ghost back-link">
                     <i class="bi bi-arrow-left-circle me-2"></i>Quay lại danh sách mini-test
                 </a>
-                <h1 class="h3 mt-2 mb-1">{{ $miniTest->title }}</h1>
-                <div class="text-muted small">
-                    <i class="bi bi-bookmark me-1"></i>{{ $miniTest->chapter->tenChuong ?? 'Chưa xác định' }}
-                    <span class="ms-3"><i class="bi bi-list-check me-1"></i>{{ $miniTest->questions->count() }} câu hỏi</span>
-                    <span class="ms-3"><i class="bi bi-clock-history me-1"></i>{{ $miniTest->time_limit_min ?: 'Không giới hạn' }} phút</span>
-                </div>
+                <span class="skill-chip {{ $skillBadges[$miniTest->skill_type]['class'] ?? 'bg-primary' }}">
+                    <i class="bi {{ $skillBadges[$miniTest->skill_type]['icon'] ?? 'bi-puzzle' }}"></i>
+                    {{ $skillBadges[$miniTest->skill_type]['label'] ?? $miniTest->skill_type }}
+                </span>
             </div>
-            <span class="badge {{ $skillBadges[$miniTest->skill_type]['class'] ?? 'bg-primary' }}">
-                <i class="bi {{ $skillBadges[$miniTest->skill_type]['icon'] ?? 'bi-puzzle' }}"></i>
-                {{ $skillBadges[$miniTest->skill_type]['label'] ?? $miniTest->skill_type }}
-            </span>
-        </div>
+            <span class="kicker">Mini-test</span>
+            <h1 class="title">{{ $miniTest->title }}</h1>
+            <div class="page-header-meta text-muted small d-flex flex-wrap gap-3 align-items-center">
+                <span><i class="bi bi-bookmark me-1"></i>{{ $miniTest->chapter->tenChuong ?? 'Chưa xác định' }}</span>
+                <span><i class="bi bi-list-check me-1"></i>{{ $miniTest->questions->count() }} câu hỏi</span>
+                <span><i class="bi bi-clock-history me-1"></i>{{ $miniTest->time_limit_min ?: 'Không giới hạn' }} phút</span>
+            </div>
+        </section>
 
         <div class="alert alert-secondary border-0 shadow-sm">
             <strong>Lưu ý:</strong>

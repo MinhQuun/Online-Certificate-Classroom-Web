@@ -186,6 +186,38 @@
 }
 
 /* ===================== PAGE HEADER ===================== */
+.page-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 1.75rem;
+    position: relative;
+}
+.page-header--has-action {
+    padding-top: 0.5rem;
+}
+.page-header-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+.page-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+.page-header--split .page-header-bar {
+    margin-bottom: 1.25rem;
+}
+.page-header-meta {
+    color: var(--muted);
+}
 .page-header .kicker {
     display: inline-block;
     font-size: 0.72rem;
@@ -209,6 +241,10 @@
 }
 .page-header .muted {
     color: var(--muted);
+}
+.page-header .title i {
+    font-size: 0.9em;
+    vertical-align: middle;
 }
 
 /* ===================== DASHBOARD STATS ===================== */
@@ -278,6 +314,90 @@
     text-align: center;
     padding: 8px 16px;
     justify-self: end;
+}
+
+/* ===================== Summary Cards ===================== */
+.summary-card {
+    border-radius: 16px;
+    border: 1px solid var(--card-brd);
+    background: var(--card);
+    box-shadow: var(--shadow);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    transition: transform 0.25s ease, box-shadow 0.25s ease,
+        border-color 0.25s ease, background 0.25s ease;
+}
+.summary-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(58, 134, 255, 0.12);
+    border-color: var(--blue);
+    background: linear-gradient(180deg, #ffffff, #f5fbff);
+}
+.summary-card .value {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 700;
+    color: var(--text);
+    background: linear-gradient(90deg, var(--blue), var(--teal));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.summary-card .label {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+/* ===================== Selector & Skill Chip ===================== */
+.selector-card {
+    border-radius: 16px;
+    border: 1px solid var(--card-brd);
+    background: var(--card);
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.selector-card .form-label {
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+.selector-card .form-select,
+.selector-card .form-control {
+    border-radius: 12px;
+    border-color: var(--card-brd);
+    min-width: 220px;
+}
+.selector-card .badge {
+    border-radius: 999px;
+    border: 1px solid var(--card-brd);
+    background: #f4f9fc;
+    color: var(--text);
+    font-weight: 600;
+    padding: 0.4rem 0.85rem;
+}
+.skill-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    padding: 0.45rem 1.15rem;
+    border: 1px solid rgba(94, 96, 206, 0.25);
+    background: linear-gradient(135deg, rgba(94, 96, 206, 0.12), rgba(26, 163, 163, 0.12));
+    color: var(--text);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+}
+.skill-chip i {
+    font-size: 1rem;
+    color: var(--blue);
 }
 
 /* ===================== Pagination ===================== */

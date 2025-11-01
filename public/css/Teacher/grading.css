@@ -1,156 +1,163 @@
-/* =================================================================
-   Unified Teacher Grading CSS - Modern Blue Theme
-   ================================================================= */
-
-:root {
-    --primary-blue: #2563eb;
-    --primary-blue-light: #3b82f6;
-    --secondary-blue: #60a5fa;
-    --bg-blue: #eff6ff;
+/* ================== Filter ================== */
+.grading-filter {
+    border-radius: 18px;
+    border: 1px solid var(--card-brd);
+    box-shadow: var(--shadow);
+    overflow: hidden;
 }
-
-/* =================================================================
-   Index Styles
-   ================================================================= */
-
-.grading-card {
-    background: white;
+.grading-filter .card-body {
+    padding: 1.5rem 1.75rem;
+    background: linear-gradient(180deg, #f9feff, #f4fbfd);
+}
+.grading-filter .form-select {
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
-    padding: 20px;
-    margin-bottom: 20px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-left: 5px solid var(--primary-blue);
+    border-color: var(--card-brd);
+}
+.metric-box {
+    border-radius: 14px;
+    border: 1px solid rgba(58, 134, 255, 0.25);
+    background: rgba(58, 134, 255, 0.08);
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 8px 18px rgba(58, 134, 255, 0.12);
+}
+.metric-value {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 800;
+    color: var(--blue);
+}
+.metric-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
 }
 
+/* ================== Grading List ================== */
+.grading-card {
+    border-radius: 18px;
+    border: 1px solid var(--card-brd);
+    background: #ffffff;
+    box-shadow: 0 16px 32px rgba(58, 134, 255, 0.12);
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+    transition: transform 0.25s ease, box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
 .grading-card:hover {
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
-    transform: translateY(-2px);
+    transform: translateY(-4px);
+    box-shadow: 0 22px 40px rgba(26, 163, 163, 0.18);
+    border-color: var(--blue);
 }
-
 .student-info {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 15px;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
 }
-
 .student-avatar {
-    width: 50px;
-    height: 50px;
+    width: 54px;
+    height: 54px;
     border-radius: 50%;
-    background: linear-gradient(
-        135deg,
-        var(--primary-blue),
-        var(--secondary-blue)
-    );
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    font-weight: bold;
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
-}
-
-.pending-badge {
-    background: linear-gradient(135deg, #fef3c7, #fde68a);
-    color: #92400e;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.metric-box {
-    background: linear-gradient(135deg, var(--bg-blue), #dbeafe);
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-    border: 2px solid var(--secondary-blue);
-}
-
-.metric-value {
-    font-size: 24px;
+    background: linear-gradient(135deg, rgba(58, 134, 255, 0.18), rgba(26, 163, 163, 0.18));
+    color: var(--blue);
+    display: grid;
+    place-items: center;
     font-weight: 800;
-    color: var(--primary-blue);
+    font-size: 1.35rem;
+    box-shadow: 0 8px 16px rgba(58, 134, 255, 0.18);
 }
-
-.metric-label {
-    font-size: 12px;
-    color: #6b7280;
-    text-transform: uppercase;
+.pending-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(250, 176, 5, 0.14);
+    color: #a56807;
     font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }
 
-/* =================================================================
-   Show Styles
-   ================================================================= */
-
-.answer-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
-    padding: 25px;
-    margin-bottom: 25px;
-    border-left: 5px solid var(--primary-blue);
-}
-
-.question-header {
-    background: linear-gradient(135deg, var(--bg-blue), #dbeafe);
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    border: 2px solid var(--secondary-blue);
-}
-
-.student-answer {
-    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-    padding: 15px;
-    border-radius: 8px;
-    border-left: 4px solid var(--primary-blue);
-    margin: 15px 0;
-}
-
-.scoring-section {
-    background: linear-gradient(135deg, #fef3c7, #fde68a);
-    padding: 20px;
-    border-radius: 8px;
-    margin-top: 15px;
-    border: 2px solid #f59e0b;
-}
-
+/* ================== Detail View ================== */
 .info-box {
-    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
-    padding: 20px;
+    border-radius: 18px;
+    border: 1px solid var(--card-brd);
+    background: linear-gradient(180deg, #ffffff, #f8fcff);
+    box-shadow: var(--shadow);
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.5rem;
+}
+.answer-card {
+    border-radius: 18px;
+    border: 1px solid var(--card-brd);
+    background: #ffffff;
+    box-shadow: 0 16px 30px rgba(94, 96, 206, 0.14);
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.answer-card:hover {
+    border-color: var(--blue);
+    box-shadow: 0 22px 40px rgba(58, 134, 255, 0.18);
+}
+.question-header {
+    border-bottom: 1px dashed rgba(94, 96, 206, 0.3);
+    padding-bottom: 1rem;
+    margin-bottom: 1.1rem;
+}
+.question-header .badge {
+    border-radius: 999px;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+}
+.student-answer {
     border-radius: 12px;
-    margin-bottom: 20px;
-    border: 2px solid #d1d5db;
+    border: 1px solid rgba(214, 233, 243, 0.8);
+    background: #f4f9fc;
+    padding: 1rem 1.1rem;
+    margin-bottom: 1.2rem;
 }
-
+.student-answer h6 {
+    font-weight: 700;
+    color: var(--muted);
+}
+.scoring-section {
+    border-radius: 14px;
+    border: 1px solid rgba(94, 96, 206, 0.25);
+    background: rgba(94, 96, 206, 0.08);
+    padding: 1.25rem 1.4rem;
+}
 .score-input {
-    font-size: 20px;
-    font-weight: bold;
+    border-radius: 12px;
+    border: 1px solid rgba(58, 134, 255, 0.35);
+    font-weight: 700;
+    font-size: 1.1rem;
     text-align: center;
-    border: 2px solid var(--primary-blue);
-    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(58, 134, 255, 0.12);
 }
-
 .score-input:focus {
-    outline: none;
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    border-color: var(--blue);
+    box-shadow: 0 0 0 0.25rem rgba(58, 134, 255, 0.15);
 }
 
-/* =================================================================
-   Media Queries
-   ================================================================= */
+/* ================== Responsive ================== */
+@media (max-width: 992px) {
+    .grading-filter .card-body {
+        padding: 1.25rem;
+    }
+}
 
 @media (max-width: 768px) {
     .grading-card {
-        padding: 15px;
+        padding: 1.35rem;
     }
-
     .answer-card {
-        padding: 20px;
+        padding: 1.25rem;
+    }
+    .scoring-section {
+        padding: 1rem;
     }
 }

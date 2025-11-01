@@ -8,38 +8,39 @@
 
 @section('content')
     <!-- Header -->
-    <div class="page-header">
-        <h3 class="mb-2">
+    <section class="page-header">
+        <span class="kicker">Giảng viên</span>
+        <h1 class="title">
             <i class="bi bi-clipboard-data me-2"></i>Điểm học viên
-        </h3>
-        <p class="mb-0 opacity-90">Theo dõi kết quả làm bài Mini-Test của học viên</p>
-    </div>
+        </h1>
+        <p class="muted">Theo dõi kết quả làm bài Mini-Test của học viên</p>
+    </section>
 
     <!-- Statistics -->
     <div class="row mb-4">
         <div class="col-md-3">
-            <div class="stats-card text-center">
+            <div class="stats-card summary-card text-center">
                 <i class="bi bi-file-earmark-text text-primary fs-1 mb-2"></i>
                 <div class="stats-value">{{ $stats['total_submissions'] }}</div>
                 <div class="text-muted">Tổng bài nộp</div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="stats-card text-center">
+            <div class="stats-card summary-card text-center">
                 <i class="bi bi-check-circle text-success fs-1 mb-2"></i>
                 <div class="stats-value text-success">{{ $stats['fully_graded'] }}</div>
                 <div class="text-muted">Đã chấm xong</div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="stats-card text-center">
+            <div class="stats-card summary-card text-center">
                 <i class="bi bi-hourglass-split text-warning fs-1 mb-2"></i>
                 <div class="stats-value text-warning">{{ $stats['pending_grading'] }}</div>
                 <div class="text-muted">Chờ chấm</div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="stats-card text-center">
+            <div class="stats-card summary-card text-center">
                 <i class="bi bi-graph-up text-info fs-1 mb-2"></i>
                 <div class="stats-value text-info">{{ number_format($stats['avg_score'], 1) }}</div>
                 <div class="text-muted">Điểm trung bình</div>
@@ -48,7 +49,7 @@
     </div>
 
     <!-- Filters -->
-    <div class="filter-card">
+    <div class="card border-0 shadow-sm filter-card">
         <form method="GET" action="{{ route('teacher.results.index') }}" class="row g-3">
             <div class="col-md-3">
                 <label class="form-label fw-bold">Khóa học</label>
@@ -98,10 +99,10 @@
     </div>
 
     <!-- Results Table -->
-    <div class="result-table">
+    <div class="card border-0 shadow-sm result-table">
         <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead class="table-light">
+            <table class="table table-hover mb-0 results-table">
+                <thead>
                     <tr>
                         <th>Học viên</th>
                         <th>Khóa học</th>

@@ -1,45 +1,136 @@
-.progress-card {
-    border-radius: 16px;
-    border: 1px solid rgba(58, 134, 255, 0.18);
-    background: linear-gradient(135deg, rgba(58, 134, 255, 0.06), rgba(26, 163, 163, 0.08));
-    padding: 20px;
-    box-shadow: 0 16px 32px rgba(26, 163, 163, 0.08);
+.progress-filter {
+    border-radius: 18px;
+    border: 1px solid var(--card-brd);
+    background: var(--card);
+    box-shadow: var(--shadow);
+    overflow: hidden;
 }
-
-.progress-card .value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--blue);
+.progress-filter .card-body {
+    padding: 1.5rem 1.75rem;
+    background: linear-gradient(180deg, #f9feff, #f4fbfd);
+    border-radius: inherit;
 }
-
-.progress-card .label {
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+.progress-filter .form-select,
+.progress-filter .form-control {
+    border-radius: 12px;
+    border-color: var(--card-brd);
+    box-shadow: none;
+}
+.progress-filter .input-group-text {
+    background: #f2f8fd;
+    border-color: var(--card-brd);
     color: var(--muted);
+}
+.progress-filter .btn.btn-primary {
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--indigo), var(--blue));
+    border: none;
+    box-shadow: 0 12px 20px rgba(58, 134, 255, 0.22);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.progress-filter .btn.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 26px rgba(26, 163, 163, 0.18);
+}
+
+.progress-card {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, #ffffff, #f7fcff);
+}
+.progress-card::after {
+    content: '';
+    position: absolute;
+    inset: 18px 18px auto auto;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(90, 132, 255, 0.25), transparent 60%);
+    pointer-events: none;
+}
+.progress-card .value {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 800;
+    line-height: 1.1;
+}
+.progress-card .label {
+    font-weight: 600;
+}
+
+.progress-table-card {
+    border-radius: 18px;
+    border: 1px solid var(--card-brd);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+.progress-table thead th {
+    background: linear-gradient(180deg, #f7fbff, #f2f8fd);
+    border-bottom: 1px solid var(--card-brd);
+    color: var(--muted);
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+}
+.progress-table td,
+.progress-table th {
+    vertical-align: middle;
+    border-color: #e6eff5;
+}
+.progress-table tbody tr {
+    transition: background 0.2s ease;
+}
+.progress-table tbody tr:hover {
+    background: #f9feff;
+}
+.progress-table .progress {
+    background: rgba(58, 134, 255, 0.08);
+    border-radius: 999px;
+}
+.progress-table .progress-bar {
+    background: linear-gradient(135deg, var(--blue), var(--teal));
 }
 
 .status-badge {
     font-size: 0.75rem;
     border-radius: 999px;
-    padding: 4px 10px;
+    padding: 4px 12px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
+    border: 1px solid transparent;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
-
 .status-badge.PENDING {
-    background: rgba(255, 193, 7, 0.18);
-    color: #a76a03;
+    background: rgba(255, 193, 7, 0.12);
+    border-color: rgba(255, 193, 7, 0.28);
+    color: #8c6204;
 }
-
 .status-badge.ACTIVE {
-    background: rgba(25, 135, 84, 0.15);
-    color: #17643f;
+    background: rgba(25, 135, 84, 0.12);
+    border-color: rgba(25, 135, 84, 0.24);
+    color: #0f603a;
+}
+.status-badge.EXPIRED {
+    background: rgba(220, 53, 69, 0.12);
+    border-color: rgba(220, 53, 69, 0.28);
+    color: #8c2f3c;
 }
 
-.status-badge.EXPIRED {
-    background: rgba(220, 53, 69, 0.15);
-    color: #93343f;
+@media (max-width: 992px) {
+    .progress-filter .card-body {
+        padding: 1.25rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .progress-filter .card-body {
+        padding: 1rem 1.1rem;
+    }
+    .progress-table-card {
+        border-radius: 14px;
+    }
 }

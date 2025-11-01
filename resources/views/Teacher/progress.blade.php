@@ -7,13 +7,11 @@
 @endpush
 
 @section('content')
-    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-        <div>
-            <span class="kicker">Giảng viên</span>
-            <h1 class="title mb-0">Tiến độ học tập</h1>
-            <p class="muted mb-0">Theo dõi quá trình học của học viên và cập nhật trạng thái kịp thời.</p>
-        </div>
-    </div>
+    <section class="page-header">
+        <span class="kicker">Giảng viên</span>
+        <h1 class="title">Tiến độ học tập</h1>
+        <p class="muted">Theo dõi quá trình học của học viên và cập nhật trạng thái kịp thời.</p>
+    </section>
 
     @if($courses->isEmpty())
         <div class="alert alert-info border-0 shadow-sm">
@@ -21,7 +19,7 @@
             Bạn chưa được phân công vào khóa học nào. Khi có học viên ghi danh, dữ liệu sẽ hiển thị ở đây.
         </div>
     @else
-        <form class="card border-0 shadow-sm mb-4" method="GET" id="progressFilterForm">
+        <form class="card border-0 shadow-sm mb-4 progress-filter" method="GET" id="progressFilterForm">
             <div class="card-body row g-3 align-items-end">
                 <div class="col-md-4">
                     <label class="form-label text-muted text-uppercase small mb-1">Khóa học</label>
@@ -61,26 +59,26 @@
 
         @if($activeCourse)
             <div class="row g-3 mb-4">
-                <div class="col-md-3">
-                    <div class="progress-card h-100">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="progress-card summary-card h-100">
                         <div class="value">{{ $metrics['average'] }}%</div>
                         <div class="label">Tiến độ trung bình</div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="progress-card h-100">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="progress-card summary-card h-100">
                         <div class="value">{{ $metrics['completed'] }}</div>
                         <div class="label">Đã hoàn thành</div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="progress-card h-100">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="progress-card summary-card h-100">
                         <div class="value">{{ $metrics['active'] }}</div>
                         <div class="label">Đang học</div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="progress-card h-100">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="progress-card summary-card h-100">
                         <div class="value">{{ $metrics['at_risk'] }}</div>
                         <div class="label">Cần hỗ trợ</div>
                     </div>
@@ -98,11 +96,11 @@
                     </div>
                 </div>
             @else
-                <div class="card border-0 shadow-sm">
+                <div class="card border-0 shadow-sm progress-table-card">
                     <div class="card-body p-0">
                         <div class="table-responsive">
-                            <table class="table align-middle mb-0">
-                                <thead class="table-light">
+                            <table class="table align-middle mb-0 progress-table">
+                                <thead>
                                     <tr>
                                         <th>Học viên</th>
                                         <th>Email</th>

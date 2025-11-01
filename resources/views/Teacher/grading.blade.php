@@ -24,7 +24,7 @@
         </section>
 
         <!-- Course Selector -->
-        <div class="card border-0 shadow-sm mb-4">
+        <div class="card border-0 shadow-sm mb-4 grading-filter">
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-md-6">
@@ -136,17 +136,15 @@
         @endif
     @elseif($type == 'show')
         <!-- Header -->
-        <section class="page-header">
-            <div class="d-flex align-items-center gap-3 mb-3">
-                <a href="{{ route('teacher.grading.index') }}" class="btn btn-outline-secondary">
+        <section class="page-header page-header--has-action">
+            <div class="page-header-actions">
+                <a href="{{ route('teacher.grading.index') }}" class="btn btn-ghost back-link">
                     <i class="bi bi-arrow-left me-2"></i> Quay lại
                 </a>
-                <div>
-                    <span class="kicker">Chấm điểm</span>
-                    <h1 class="title mb-0">{{ $result->miniTest->title }}</h1>
-                    <p class="text-muted mb-0">{{ $result->miniTest->course->tenKH }} / {{ $result->miniTest->chapter->tenChuong }}</p>
-                </div>
             </div>
+            <span class="kicker">Chấm điểm</span>
+            <h1 class="title">{{ $result->miniTest->title }}</h1>
+            <p class="muted">{{ $result->miniTest->course->tenKH }} / {{ $result->miniTest->chapter->tenChuong }}</p>
         </section>
 
         <!-- Student Info -->

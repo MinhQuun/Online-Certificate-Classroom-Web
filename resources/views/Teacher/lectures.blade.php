@@ -26,7 +26,7 @@
         </div>
     @else
         <!-- Course Selector -->
-        <div class="card border-0 shadow-sm mb-4">
+        <div class="card border-0 shadow-sm mb-4 selector-card">
             <div class="card-body d-flex flex-wrap align-items-center gap-3">
                 <div class="flex-grow-1">
                     <label for="courseSelector" class="form-label text-muted text-uppercase small mb-1">Khóa học</label>
@@ -39,10 +39,10 @@
                                 </option>
                             @endforeach
                         </select>
-                        <span class="badge bg-light text-dark border">
+                        <span class="badge">
                             <i class="bi bi-people-fill me-1"></i> {{ number_format($activeCourse?->students_count ?? 0) }} học viên
                         </span>
-                        <span class="badge bg-light text-dark border">
+                        <span class="badge">
                             <i class="bi bi-list-nested me-1"></i> {{ number_format($activeCourse?->chapters->count() ?? 0) }} chương
                         </span>
                     </div>
@@ -60,7 +60,7 @@
             <!-- Metrics -->
             <div class="row g-3 mb-4">
                 <div class="col-md-4">
-                    <div class="metric-pill">
+                    <div class="metric-pill summary-card">
                         <div class="icon"><i class="bi bi-collection-play"></i></div>
                         <div>
                             <div class="value">{{ $totalLessons }}</div>
@@ -69,7 +69,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="metric-pill">
+                    <div class="metric-pill summary-card">
                         <div class="icon"><i class="bi bi-pencil-square"></i></div>
                         <div>
                             <div class="value">{{ $assignmentCount }}</div>
@@ -78,7 +78,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="metric-pill">
+                    <div class="metric-pill summary-card">
                         <div class="icon"><i class="bi bi-paperclip"></i></div>
                         <div>
                             <div class="value">{{ $resourceCount }}</div>
