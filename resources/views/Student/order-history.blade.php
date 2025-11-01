@@ -39,7 +39,7 @@
                     <i class="fa-solid fa-wallet"></i>
                 </div>
                 <div class="stat-info">
-                    <span class="stat-label">Tổng chi tiêu</span>
+                    <span class="stat-label">Tổng chi tiêu (Đã kích hoạt)</span>
                     <span class="stat-value">{{ number_format($totalAmount, 0, ',', '.') }}₫</span>
                 </div>
             </div>
@@ -48,8 +48,8 @@
                     <i class="fa-solid fa-book"></i>
                 </div>
                 <div class="stat-info">
-                    <span class="stat-label">Khóa học đã mua</span>
-                    <span class="stat-value">{{ $invoices->sum(fn($invoice) => $invoice->items->count()) }}</span>
+                    <span class="stat-label">Khóa học đã kích hoạt</span>
+                    <span class="stat-value">{{ $activatedCoursesCount }}</span>
                 </div>
             </div>
         </div>
@@ -104,6 +104,29 @@
                                                         <a href="{{ route('student.courses.show', $item->course->slug) }}">
                                                             {{ $item->course->tenKH }}
                                                         </a>
+                                                        @if(isset($item->enrollment))
+                                                            @if($item->enrollment->trangThai === 'ACTIVE')
+                                                                <span class="status-badge status-active">
+                                                                    <i class="fa-solid fa-circle-check"></i>
+                                                                    Đã kích hoạt
+                                                                </span>
+                                                            @elseif($item->enrollment->trangThai === 'PENDING')
+                                                                <span class="status-badge status-pending">
+                                                                    <i class="fa-solid fa-clock"></i>
+                                                                    Chờ kích hoạt
+                                                                </span>
+                                                            @elseif($item->enrollment->trangThai === 'EXPIRED')
+                                                                <span class="status-badge status-expired">
+                                                                    <i class="fa-solid fa-circle-xmark"></i>
+                                                                    Đã hết hạn
+                                                                </span>
+                                                            @endif
+                                                        @else
+                                                            <span class="status-badge status-not-enrolled">
+                                                                <i class="fa-solid fa-exclamation-circle"></i>
+                                                                Chưa đăng ký
+                                                            </span>
+                                                        @endif
                                                     </h4>
                                                     @if($item->course->category)
                                                         <p class="item-category">

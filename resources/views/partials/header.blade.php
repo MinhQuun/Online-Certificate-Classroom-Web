@@ -116,7 +116,7 @@
                         </div>
 
                         <nav class="header-profile__nav">
-                            <a href="{{ route('profile.show') }}">
+                            <a href="{{ route('student.profile.show') }}">
                                 <i class="fa-solid fa-user"></i>
                                 <span> Trang cá nhân</span>
                             </a>

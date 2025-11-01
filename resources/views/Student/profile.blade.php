@@ -31,7 +31,7 @@
                 <h2><i class="fa-solid fa-user"></i> Thông tin cá nhân</h2>
             </div>
             <div class="profile-card__body">
-                <form action="{{ route('profile.update') }}" method="POST" class="profile-form">
+                <form action="{{ route('student.profile.update') }}" method="POST" class="profile-form">
                     @csrf
                     @method('PUT')
 
@@ -127,7 +127,7 @@
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <form action="{{ route('profile.changePassword') }}" method="POST" class="modal-form">
+            <form action="{{ route('student.profile.changePassword') }}" method="POST" class="modal-form">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
