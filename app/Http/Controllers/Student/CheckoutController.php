@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use App\Mail\ActivationCodeMail;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
@@ -195,14 +196,19 @@ class CheckoutController extends Controller
         $alreadyActiveCourses = [];
 
         DB::transaction(function () use ($courses, $method, $total, $student, $now, &$invoice, &$activationPackages, &$pendingCourses, &$alreadyActiveCourses) {
-            $invoice = Invoice::create([
+            $invoiceData = [
                 'maHV'     => $student->maHV,
                 'maTT'     => $this->mapPaymentMethodToCode($method),
                 'maND'     => null,
                 'ngayLap'  => $now,
                 'tongTien' => $total,
-                'ghiChu'   => 'Thanh toan qua website - ' . strtoupper($method),
-            ]);
+            ];
+
+            if ($this->invoiceSupportsNotes()) {
+                $invoiceData['ghiChu'] = 'Thanh toan qua website - ' . strtoupper($method);
+            }
+
+            $invoice = Invoice::create($invoiceData);
 
             foreach ($courses as $course) {
                 if (!$course) {
@@ -389,5 +395,22 @@ class CheckoutController extends Controller
         $allowed = ['qr', 'bank', 'visa'];
 
         return in_array($method, $allowed, true) ? $method : 'qr';
+    }
+
+    private function invoiceSupportsNotes(): bool
+    {
+        static $supportsNotes;
+
+        if ($supportsNotes !== null) {
+            return $supportsNotes;
+        }
+
+        try {
+            $supportsNotes = Schema::hasColumn('HOADON', 'ghiChu');
+        } catch (Throwable $e) {
+            $supportsNotes = false;
+        }
+
+        return $supportsNotes;
     }
 }
