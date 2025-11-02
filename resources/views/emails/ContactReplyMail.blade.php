@@ -11,7 +11,7 @@
             }
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(120deg, #2563eb 0%, #60a5fa 100%);
                 padding: 40px 20px;
                 line-height: 1.6;
             }
@@ -26,7 +26,7 @@
                 overflow: hidden;
             }
             .email-header {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(120deg, #2563eb 0%, #60a5fa 100%);
                 color: #ffffff;
                 padding: 40px 30px;
                 text-align: center;
@@ -51,12 +51,12 @@
             .greeting {
                 font-size: 18px;
                 font-weight: 600;
-                color: #667eea;
+                color: #2563eb;
                 margin-bottom: 20px;
             }
             .original-message {
                 background: #f8f9fa;
-                border-left: 4px solid #667eea;
+                border-left: 4px solid #2563eb;
                 padding: 20px;
                 margin: 24px 0;
                 border-radius: 8px;
@@ -64,7 +64,7 @@
             .original-message h3 {
                 font-size: 14px;
                 font-weight: 600;
-                color: #667eea;
+                color: #2563eb;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
                 margin-bottom: 12px;
@@ -78,16 +78,16 @@
                 margin: 0;
             }
             .reply-message {
-                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
                 border-radius: 12px;
                 padding: 24px;
                 margin: 24px 0;
-                border: 2px solid #667eea;
+                border: 2px solid #2563eb;
             }
             .reply-message h3 {
                 font-size: 16px;
                 font-weight: 700;
-                color: #667eea;
+                color: #2563eb;
                 margin-bottom: 12px;
                 display: flex;
                 align-items: center;
@@ -114,7 +114,7 @@
             }
             .contact-button {
                 display: inline-block;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(120deg, #2563eb 0%, #60a5fa 100%);
                 color: #ffffff;
                 text-decoration: none;
                 padding: 14px 32px;
@@ -126,7 +126,7 @@
             }
             .contact-button:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+                box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
             }
             .email-note {
                 background: #fff3cd;
