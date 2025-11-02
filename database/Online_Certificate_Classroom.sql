@@ -684,3 +684,23 @@ CREATE TABLE job_batches (
     `finished_at` int DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- BẢNG CONTACT_REPLIES: Quản lý liên hệ & phản hồi từ học viên
+CREATE TABLE CONTACT_REPLIES (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(120) NOT NULL,                      
+    email VARCHAR(255) NOT NULL,                       
+    message VARCHAR(5000) NOT NULL,                    
+    status ENUM('NEW','READ','REPLIED') NOT NULL DEFAULT 'NEW',  
+    reply_message VARCHAR(5000) NULL,                  
+    reply_by INT NULL,                                 -- ID admin phản hồi
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,  
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  
+    replied_at TIMESTAMP NULL,                         
+    PRIMARY KEY (id),
+    KEY idx_contact_status (status),
+    KEY idx_contact_email (email),
+    KEY idx_contact_created (created_at),
+    CONSTRAINT fk_contact_reply_by FOREIGN KEY (reply_by) REFERENCES NGUOIDUNG(maND) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

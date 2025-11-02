@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\CourseAdminController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\Admin\InvoiceController;
+use App\Http\Controllers\Admin\ContactReplyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -215,6 +216,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/invoices/export',          [InvoiceController::class, 'exportExcel'])->name('invoices.export');
     Route::get('/invoices/{invoice}/pdf',   [InvoiceController::class, 'exportPdf'])->name('invoices.pdf');
     Route::get('/invoices/{invoice}',       [InvoiceController::class, 'show'])->name('invoices.show');
+
+    // Quản lý liên hệ & phản hồi
+    Route::get('/contact-replies',          [ContactReplyController::class, 'index'])->name('contact-replies.index');
+    Route::put('/contact-replies/{id}',     [ContactReplyController::class, 'update'])->name('contact-replies.update');
+    Route::delete('/contact-replies/{id}',  [ContactReplyController::class, 'destroy'])->name('contact-replies.destroy');
 });
 
 /*

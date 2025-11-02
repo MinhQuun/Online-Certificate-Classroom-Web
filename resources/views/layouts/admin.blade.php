@@ -127,6 +127,26 @@
                 <i class="bi bi-receipt-cutoff me-2"></i> Hóa đơn
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.contact-replies.*') ? 'active' : '' }}"
+                    href="{{ route('admin.contact-replies.index') }}"
+                    title="Quản lý liên hệ từ học viên">
+                <i class="bi bi-chat-left-text me-2"></i> Liên hệ
+                @php
+                    $newContactCount = 0;
+                    try {
+                        if (DB::getSchemaBuilder()->hasTable('CONTACT_REPLIES')) {
+                            $newContactCount = DB::table('CONTACT_REPLIES')->where('status', 'NEW')->count();
+                        }
+                    } catch (\Exception $e) {
+                        // Bỏ qua lỗi nếu chưa có bảng
+                    }
+                @endphp
+                @if($newContactCount > 0)
+                    <span class="badge bg-danger rounded-pill ms-auto">{{ $newContactCount }}</span>
+                @endif
+                </a>
+            </li>
             {{-- Chứng chỉ --}}
             <li class="nav-item mt-3 text-muted small">Chứng chỉ</li>
             <li class="nav-item">
