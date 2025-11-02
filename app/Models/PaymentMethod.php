@@ -14,6 +14,11 @@ class PaymentMethod extends Model
     protected $fillable = [
         'maTT',
         'tenPhuongThuc',
+        'maGoi',
     ];
+    public function combo()
+    {
+        return $this->belongsTo('App\Models\Combo', 'maGoi', 'maGoi');
+    }
 }
 

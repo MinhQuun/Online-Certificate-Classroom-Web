@@ -19,7 +19,9 @@ class PaymentTransaction extends Model
     protected $fillable = [
         'maHV',                 // ID học viên
         'maKH',                 // ID khóa học
+        'maGoi',                // ID gói khóa học
         'soTien',               // số tiền VND
+        'maKM',
         'txn_ref',              // mã giao dịch gửi sang VNPay
         'trangThai',            // PENDING / PAID / FAILED
         'vnp_response_code',    // mã phản hồi VNPay
@@ -51,5 +53,14 @@ class PaymentTransaction extends Model
     public function course()
     {
         return $this->belongsTo(Course::class, 'maKH', 'maKH');
+    }
+    public function combo()
+    {
+        return $this->belongsTo('App\Models\Combo', 'maGoi', 'maGoi');
+    }
+
+    public function promotion()
+    {
+        return $this->belongsTo('App\Models\Promotion', 'maKM', 'maKM');
     }
 }
