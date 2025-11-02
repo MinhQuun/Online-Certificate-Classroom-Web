@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\MiniTest;
+use App\Models\MiniTestQuestion;
 use App\Models\MiniTestResult;
 use App\Models\MiniTestStudentAnswer;
 use Illuminate\Http\RedirectResponse;
@@ -11,120 +13,263 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Throwable;
 
 class GradingController extends Controller
 {
     use LoadsTeacherContext;
 
-    public function index(Request $request): View
+    public function writingIndex(Request $request): View
+    {
+        return $this->buildIndex($request, MiniTest::SKILL_WRITING, 'Teacher.grading-writing', 'writing');
+    }
+
+    public function speakingIndex(Request $request): View
+    {
+        return $this->buildIndex($request, MiniTest::SKILL_SPEAKING, 'Teacher.grading-speaking', 'speaking');
+    }
+
+    public function writingShow(MiniTestResult $result): View
+    {
+        return $this->buildShow($result, MiniTest::SKILL_WRITING, 'Teacher.grading-writing', 'writing');
+    }
+
+    public function speakingShow(MiniTestResult $result): View
+    {
+        return $this->buildShow($result, MiniTest::SKILL_SPEAKING, 'Teacher.grading-speaking', 'speaking');
+    }
+
+    public function writingGrade(Request $request, MiniTestResult $result): RedirectResponse
+    {
+        return $this->gradeResult($request, $result, MiniTest::SKILL_WRITING, 'Graded writing submission successfully.');
+    }
+
+    public function speakingGrade(Request $request, MiniTestResult $result): RedirectResponse
+    {
+        return $this->gradeResult($request, $result, MiniTest::SKILL_SPEAKING, 'Graded speaking submission successfully.');
+    }
+
+    public function writingBulkGrade(Request $request): RedirectResponse
+    {
+        return $this->bulkGrade($request, MiniTest::SKILL_WRITING, 'Graded {count} writing submissions.');
+    }
+
+    public function speakingBulkGrade(Request $request): RedirectResponse
+    {
+        return $this->bulkGrade($request, MiniTest::SKILL_SPEAKING, 'Graded {count} speaking submissions.');
+    }
+
+    protected function buildIndex(Request $request, string $skillType, string $view, string $mode): View
     {
         $teacher = Auth::user();
         $teacherId = $teacher?->getKey() ?? 0;
 
-        $courses = Course::where('maND', $teacherId)->get();
+        $courses = Course::where('maND', $teacherId)
+            ->orderBy('tenKH')
+            ->get();
 
         $selectedCourseId = (int) $request->query('course');
         if ($selectedCourseId && !$courses->contains('maKH', $selectedCourseId)) {
             $selectedCourseId = 0;
         }
 
+        $answersRelation = function ($query) use ($mode) {
+            $query->whereNull('graded_at')
+                ->whereHas('question', fn ($q) => $q->where('loai', MiniTestQuestion::TYPE_ESSAY))
+                ->with('question');
+
+            if ($mode === 'speaking') {
+                $query->whereNotNull('answer_audio_url');
+            }
+        };
+
         $pendingResults = MiniTestResult::query()
             ->where('is_fully_graded', false)
             ->whereIn('status', [MiniTestResult::STATUS_SUBMITTED, MiniTestResult::STATUS_EXPIRED])
-            ->whereHas('miniTest.course', fn ($query) => $query->where('maND', $teacherId))
+            ->whereHas('miniTest', function ($query) use ($teacherId, $skillType) {
+                $query->where('skill_type', $skillType)
+                    ->whereHas('course', fn ($courseQuery) => $courseQuery->where('maND', $teacherId));
+            })
             ->when($selectedCourseId, fn ($query) => $query->where('maKH', $selectedCourseId))
             ->with([
                 'miniTest.chapter',
                 'miniTest.course',
                 'student.user',
-                'studentAnswers' => fn ($query) => $query
-                    ->whereNull('graded_at')
-                    ->whereHas('question', fn ($q) => $q->where('loai', 'essay'))
-                    ->with('question'),
+                'studentAnswers' => $answersRelation,
             ])
             ->orderByDesc('nop_luc')
-            ->paginate(20);
+            ->paginate(20)
+            ->withQueryString();
 
-        return view('Teacher.grading', [
+        return view($view, [
             'type' => 'index',
+            'mode' => $mode,
             'teacher' => $teacher,
             'courses' => $courses,
             'selectedCourseId' => $selectedCourseId,
             'results' => $pendingResults,
+            'routePrefix' => $this->routePrefix($skillType),
             'badges' => $this->teacherSidebarBadges($teacherId),
         ]);
     }
 
-    public function show(MiniTestResult $result): View
+    protected function buildShow(MiniTestResult $result, string $skillType, string $view, string $mode): View
     {
         $teacherId = Auth::id() ?? 0;
 
-        abort_if($result->miniTest->course->maND !== $teacherId, 403, 'Bạn không có quyền chấm bài này.');
-        abort_if($result->status === MiniTestResult::STATUS_IN_PROGRESS, 403, 'Bài làm vẫn đang trong quá trình thực hiện.');
+        $this->guardResultOwnership($result, $teacherId, $skillType);
 
         $result->load([
             'miniTest.chapter',
             'miniTest.course',
             'student.user',
-            'studentAnswers.question',
+            'studentAnswers' => function ($query) use ($mode) {
+                $query->whereHas('question', fn ($q) => $q->where('loai', MiniTestQuestion::TYPE_ESSAY))
+                    ->with('question')
+                    ->orderBy('maCauHoi');
+
+                if ($mode === 'speaking') {
+                    $query->whereNotNull('answer_audio_url');
+                }
+            },
         ]);
 
-        return view('Teacher.grading', [
+        return view($view, [
             'type' => 'show',
+            'mode' => $mode,
             'teacher' => Auth::user(),
             'result' => $result,
+            'routePrefix' => $this->routePrefix($skillType),
             'badges' => $this->teacherSidebarBadges($teacherId),
         ]);
     }
 
-    public function grade(Request $request, MiniTestResult $result): RedirectResponse
+    protected function gradeResult(Request $request, MiniTestResult $result, string $skillType, string $message): RedirectResponse
     {
         $teacherId = Auth::id() ?? 0;
 
-        abort_if($result->miniTest->course->maND !== $teacherId, 403);
-        abort_if($result->status === MiniTestResult::STATUS_IN_PROGRESS, 403);
+        $this->guardResultOwnership($result, $teacherId, $skillType);
 
-        $validated = $request->validate([
-            'grades' => ['required', 'array'],
-            'grades.*.answer_id' => ['required', 'integer'],
-            'grades.*.score' => ['required', 'numeric', 'min:0'],
-            'grades.*.feedback' => ['nullable', 'string', 'max:1000'],
-        ]);
+        $validated = $this->validateGrades($request);
 
         try {
             DB::beginTransaction();
 
-            $essayScore = $this->gradeAnswers($validated['grades'], $result, $teacherId);
+            $manualScore = $this->gradeAnswers($validated['grades'], $result, $teacherId);
 
             $result->refresh();
             $autoScore = $result->auto_graded_score ?? 0;
-            $totalScore = $autoScore + $essayScore;
+            $totalScore = $autoScore + $manualScore;
 
             $result->update([
-                'essay_score' => $essayScore,
+                'essay_score' => $manualScore,
                 'diem' => $totalScore,
                 'is_fully_graded' => true,
                 'graded_at' => now(),
             ]);
 
             DB::commit();
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             DB::rollBack();
             report($throwable);
 
-            return back()->with('error', 'Có lỗi xảy ra khi chấm bài. Vui lòng thử lại.');
+            return back()->with('error', 'Unable to grade submission. Please try again.');
         }
 
         return redirect()
-            ->route('teacher.grading.index')
-            ->with('success', 'Đã chấm bài thành công. Tổng điểm: ' . number_format($totalScore, 2));
+            ->route($this->routePrefix($skillType) . '.index')
+            ->with('success', $message);
     }
 
-    public function bulkGrade(Request $request): RedirectResponse
+    protected function bulkGrade(Request $request, string $skillType, string $messageTemplate): RedirectResponse
     {
         $teacherId = Auth::id() ?? 0;
 
-        $validated = $request->validate([
+        $validated = $this->validateBulkGrades($request);
+        $gradedCount = 0;
+
+        try {
+            DB::beginTransaction();
+
+            foreach ($validated['results'] as $payload) {
+                $result = MiniTestResult::find($payload['result_id']);
+
+                if (!$result) {
+                    continue;
+                }
+
+                if (!$this->guardResultOwnership($result, $teacherId, $skillType, true)) {
+                    continue;
+                }
+
+                $manualScore = $this->gradeAnswers($payload['answers'], $result, $teacherId);
+                $autoScore = $result->auto_graded_score ?? 0;
+                $totalScore = $autoScore + $manualScore;
+
+                $result->update([
+                    'essay_score' => $manualScore,
+                    'diem' => $totalScore,
+                    'is_fully_graded' => true,
+                    'graded_at' => now(),
+                ]);
+
+                $gradedCount++;
+            }
+
+            DB::commit();
+        } catch (Throwable $throwable) {
+            DB::rollBack();
+            report($throwable);
+
+            return back()->with('error', 'Unable to grade submissions in bulk. Please try again.');
+        }
+
+        $message = str_replace('{count}', (string) $gradedCount, $messageTemplate);
+
+        return redirect()
+            ->route($this->routePrefix($skillType) . '.index')
+            ->with('success', $message);
+    }
+
+    protected function guardResultOwnership(MiniTestResult $result, int $teacherId, string $skillType, bool $suppress = false): bool
+    {
+        $result->loadMissing('miniTest.course');
+
+        $unauthorised = $result->miniTest->course->maND !== $teacherId
+            || $result->miniTest->skill_type !== $skillType
+            || $result->status === MiniTestResult::STATUS_IN_PROGRESS;
+
+        if ($unauthorised) {
+            if ($suppress) {
+                return false;
+            }
+
+            abort(403, 'You are not authorised to grade this submission.');
+        }
+
+        return true;
+    }
+
+    protected function routePrefix(string $skillType): string
+    {
+        return $skillType === MiniTest::SKILL_SPEAKING
+            ? 'teacher.grading.speaking'
+            : 'teacher.grading.writing';
+    }
+
+    protected function validateGrades(Request $request): array
+    {
+        return $request->validate([
+            'grades' => ['required', 'array'],
+            'grades.*.answer_id' => ['required', 'integer'],
+            'grades.*.score' => ['required', 'numeric', 'min:0'],
+            'grades.*.feedback' => ['nullable', 'string', 'max:1000'],
+        ]);
+    }
+
+    protected function validateBulkGrades(Request $request): array
+    {
+        return $request->validate([
             'results' => ['required', 'array'],
             'results.*.result_id' => ['required', 'integer'],
             'results.*.answers' => ['required', 'array'],
@@ -132,46 +277,11 @@ class GradingController extends Controller
             'results.*.answers.*.score' => ['required', 'numeric', 'min:0'],
             'results.*.answers.*.feedback' => ['nullable', 'string', 'max:500'],
         ]);
-
-        try {
-            DB::beginTransaction();
-
-            foreach ($validated['results'] as $payload) {
-                $result = MiniTestResult::findOrFail($payload['result_id']);
-
-                if ($result->miniTest->course->maND !== $teacherId || $result->status === MiniTestResult::STATUS_IN_PROGRESS) {
-                    continue;
-                }
-
-                $essayScore = $this->gradeAnswers($payload['answers'], $result, $teacherId);
-
-                $autoScore = $result->auto_graded_score ?? 0;
-                $totalScore = $autoScore + $essayScore;
-
-                $result->update([
-                    'essay_score' => $essayScore,
-                    'diem' => $totalScore,
-                    'is_fully_graded' => true,
-                    'graded_at' => now(),
-                ]);
-            }
-
-            DB::commit();
-        } catch (\Throwable $throwable) {
-            DB::rollBack();
-            report($throwable);
-
-            return back()->with('error', 'Không thể chấm hàng loạt. Vui lòng thử lại.');
-        }
-
-        return redirect()
-            ->route('teacher.grading.index')
-            ->with('success', 'Đã chấm ' . count($validated['results']) . ' bài.');
     }
 
     protected function gradeAnswers(array $items, MiniTestResult $result, int $teacherId): float
     {
-        $essayScore = 0;
+        $manualScore = 0;
         $now = now();
 
         foreach ($items as $gradeData) {
@@ -184,7 +294,11 @@ class GradingController extends Controller
             }
 
             $question = $answer->question;
-            if (!$question || $question->loai !== 'essay') {
+            if (!$question || $question->loai !== MiniTestQuestion::TYPE_ESSAY) {
+                continue;
+            }
+
+            if ($answer->isGraded()) {
                 continue;
             }
 
@@ -199,9 +313,9 @@ class GradingController extends Controller
                 'is_correct' => $score > 0,
             ]);
 
-            $essayScore += $score;
+            $manualScore += $score;
         }
 
-        return $essayScore;
+        return $manualScore;
     }
 }

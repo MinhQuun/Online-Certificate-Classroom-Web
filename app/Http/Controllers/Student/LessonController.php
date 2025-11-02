@@ -19,14 +19,14 @@ class LessonController extends Controller
             'chapter' => function ($chapterQuery) {
                 $chapterQuery->with([
                     'miniTests' => fn($miniTestQuery) => $miniTestQuery
-                        ->where('is_active', 1)
+                        ->visibleToStudents()
                         ->orderBy('thuTu')
                         ->with('materials'),
                     'course' => fn($courseQuery) => $courseQuery->with([
                         'chapters' => fn($chaptersQuery) => $chaptersQuery->with([
                             'lessons' => fn($lessonsQuery) => $lessonsQuery->orderBy('thuTu'),
                             'miniTests' => fn($nestedMiniTestQuery) => $nestedMiniTestQuery
-                                ->where('is_active', 1)
+                                ->visibleToStudents()
                                 ->orderBy('thuTu')
                                 ->with('materials'),
                         ])->orderBy('thuTu'),

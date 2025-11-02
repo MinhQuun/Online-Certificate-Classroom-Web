@@ -26,7 +26,12 @@
                             <select name="course_id" class="form-select" required>
                                 <option value="" disabled selected>Chọn khóa học</option>
                                 @foreach($courses as $course)
-                                    <option value="{{ $course->maKH }}" @selected(optional($activeCourse)->maKH === $course->maKH)>{{ $course->tenKH }}</option>
+                                    <option value="{{ $course->maKH }}"
+                                            data-skill-default="{{ $course->default_skill_type ?? '' }}"
+                                            data-skill-label="{{ $course->default_skill_type ? ($skillOptions[$course->default_skill_type] ?? $course->default_skill_type) : '' }}"
+                                            @selected(optional($activeCourse)->maKH === $course->maKH)>
+                                        {{ $course->tenKH }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -49,11 +54,14 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Kỹ năng <span class="text-danger">*</span></label>
-                            <select name="skill_type" class="form-select" required>
-                                @foreach($skillOptions as $value => $label)
-                                    <option value="{{ $value }}">{{ $label }}</option>
-                                @endforeach
-                            </select>
+                            <div data-skill-field>
+                                <div class="form-control-plaintext px-3 py-2 border rounded d-none" data-skill-static></div>
+                                <select name="skill_type" class="form-select" required data-skill-select>
+                                    @foreach($skillOptions as $value => $label)
+                                        <option value="{{ $value }}">{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Thứ tự</label>
@@ -70,13 +78,7 @@
                         <div class="col-md-4">
                             <label class="form-label">Lượt làm</label>
                             <input type="number" name="attempts" class="form-control" min="1" value="1">
-                        </div>
-                        <div class="col-md-4 d-flex align-items-center">
-                            <div class="form-check mt-4">
-                                <input class="form-check-input" type="checkbox" name="is_active" id="create_is_active" checked>
-                                <label class="form-check-label" for="create_is_active">Kích hoạt ngay</label>
-                            </div>
-                        </div>
+                        </div>                
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -105,7 +107,11 @@
                             <label class="form-label">Khóa học</label>
                             <select name="course_id" id="edit_course_id" class="form-select" required>
                                 @foreach($courses as $course)
-                                    <option value="{{ $course->maKH }}">{{ $course->tenKH }}</option>
+                                    <option value="{{ $course->maKH }}"
+                                            data-skill-default="{{ $course->default_skill_type ?? '' }}"
+                                            data-skill-label="{{ $course->default_skill_type ? ($skillOptions[$course->default_skill_type] ?? $course->default_skill_type) : '' }}">
+                                        {{ $course->tenKH }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -125,11 +131,14 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Kỹ năng</label>
-                            <select name="skill_type" id="edit_skill_type" class="form-select" required>
-                                @foreach($skillOptions as $value => $label)
-                                    <option value="{{ $value }}">{{ $label }}</option>
-                                @endforeach
-                            </select>
+                            <div data-skill-field>
+                                <div class="form-control-plaintext px-3 py-2 border rounded d-none" data-skill-static></div>
+                                <select name="skill_type" id="edit_skill_type" class="form-select" required data-skill-select>
+                                    @foreach($skillOptions as $value => $label)
+                                        <option value="{{ $value }}">{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Thứ tự</label>
@@ -226,3 +235,4 @@
         </div>
     </div>
 </div>
+

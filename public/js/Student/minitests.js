@@ -84,7 +84,7 @@ function initMiniTestAttempt(configEl) {
         const url = buildUrl(autosaveTemplate, questionId);
 
         try {
-            setStatus(statusEl, "Dang luu...", "saving");
+            setStatus(statusEl, "Đang lưu...", "saving");
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -99,10 +99,10 @@ function initMiniTestAttempt(configEl) {
                 throw new Error(await response.text());
             }
 
-            setStatus(statusEl, "Da luu", "saved");
+            setStatus(statusEl, "Đã lưu", "saved");
         } catch (error) {
             console.error(error);
-            setStatus(statusEl, "Luu that bai", "error");
+            setStatus(statusEl, "Lưu thất bại", "error");
         }
     };
 
@@ -112,7 +112,7 @@ function initMiniTestAttempt(configEl) {
         formData.append("audio", file);
 
         try {
-            setStatus(statusEl, "Dang tai len...", "saving");
+            setStatus(statusEl, "Đang tải lên...", "saving");
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -126,11 +126,11 @@ function initMiniTestAttempt(configEl) {
                 throw new Error(await response.text());
             }
 
-            setStatus(statusEl, "Tai len thanh cong", "saved");
+            setStatus(statusEl, "Tải lên thành công", "saved");
             updateProgressIndicator(questionId);
         } catch (error) {
             console.error(error);
-            setStatus(statusEl, "Tai len that bai", "error");
+            setStatus(statusEl, "Tải lên thất bại", "error");
         }
     };
 
@@ -207,14 +207,14 @@ function initMiniTestAttempt(configEl) {
 
     form?.addEventListener("submit", (event) => {
         event.preventDefault();
-        if (!confirm("Ban chac chan muon nop bai?")) {
+        if (!confirm("Bạn chắc chắn muốn nộp bài? Sau khi nộp, bạn sẽ không thể thay đổi câu trả lời.")) {
             return;
         }
 
         if (submitBtn) {
             submitBtn.disabled = true;
             submitBtn.innerHTML =
-                '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Dang nop...';
+                '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Đang nộp...';
         }
 
         form.submit();

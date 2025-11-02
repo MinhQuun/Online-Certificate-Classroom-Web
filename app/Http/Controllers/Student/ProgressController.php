@@ -42,7 +42,7 @@ class ProgressController extends Controller
                         $chapterQuery->orderBy('thuTu')->with([
                             'lessons' => fn($lessonQuery) => $lessonQuery->orderBy('thuTu'),
                             'miniTests' => fn($miniTestQuery) => $miniTestQuery
-                                ->where('is_active', 1)
+                                ->visibleToStudents()
                                 ->orderBy('thuTu'),
                         ]);
                     },
@@ -176,6 +176,7 @@ class ProgressController extends Controller
             ->select('mt.maKH')
             ->selectRaw('COUNT(DISTINCT mt.maMT) as total_minitests')
             ->where('mt.is_active', 1)
+            ->where('mt.is_published', 1)
             ->whereIn('mt.maKH', $courseIds)
             ->groupBy('mt.maKH')
             ->get()
@@ -444,3 +445,4 @@ class ProgressController extends Controller
         return $value instanceof Carbon ? $value : Carbon::parse($value);
     }
 }
+

@@ -138,4 +138,29 @@ class Course extends Model
 
         return $date->format('d/m/Y');
     }
+
+    public function getDefaultSkillTypeAttribute(): ?string
+    {
+        return $this->inferDefaultSkillType();
+    }
+
+    protected function inferDefaultSkillType(): ?string
+    {
+        $haystack = strtolower(trim(($this->slug ?? '') . ' ' . ($this->tenKH ?? '')));
+
+        $map = [
+            'listening' => MiniTest::SKILL_LISTENING,
+            'speaking' => MiniTest::SKILL_SPEAKING,
+            'reading' => MiniTest::SKILL_READING,
+            'writing' => MiniTest::SKILL_WRITING,
+        ];
+
+        foreach ($map as $keyword => $skillType) {
+            if ($keyword !== '' && str_contains($haystack, $keyword)) {
+                return $skillType;
+            }
+        }
+
+        return null;
+    }
 }

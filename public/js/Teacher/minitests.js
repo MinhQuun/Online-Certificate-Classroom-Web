@@ -21,6 +21,72 @@ function initCourseSelector() {
     });
 }
 
+function getSelectedOption(select) {
+    if (!select) {
+        return null;
+    }
+
+    if (typeof select.selectedIndex === "number" && select.selectedIndex >= 0) {
+        return select.options[select.selectedIndex] ?? null;
+    }
+
+    return null;
+}
+
+function resolveSkillMeta(option) {
+    if (!option) {
+        return { value: "", label: "" };
+    }
+
+    const value = option.dataset.skillDefault || "";
+    const label = option.dataset.skillLabel || option.textContent?.trim() || "";
+
+    return { value, label };
+}
+
+function syncSkillField(skillSelect, skillStatic, meta) {
+    if (!skillSelect || !skillStatic) {
+        return;
+    }
+
+    const isLocked = Boolean(meta.value);
+
+    if (isLocked) {
+        const match = Array.from(skillSelect.options).find((opt) => opt.value === meta.value);
+        if (match) {
+            match.selected = true;
+        } else if (skillSelect.options.length > 0) {
+            skillSelect.options[0].selected = true;
+        }
+
+        const currentOption = skillSelect.options[skillSelect.selectedIndex] ?? null;
+        const displayLabel = meta.label || currentOption?.textContent?.trim() || meta.value;
+        skillStatic.textContent = displayLabel;
+    } else {
+        skillStatic.textContent = "";
+    }
+
+    skillSelect.classList.toggle("d-none", isLocked);
+    skillStatic.classList.toggle("d-none", !isLocked);
+    if (isLocked) {
+        skillSelect.dataset.skillLocked = "1";
+    } else {
+        delete skillSelect.dataset.skillLocked;
+    }
+}
+
+function applyCourseSkill(courseSelect, skillSelect, skillStatic) {
+    if (!courseSelect || !skillSelect || !skillStatic) {
+        return false;
+    }
+
+    const option = getSelectedOption(courseSelect);
+    const meta = resolveSkillMeta(option);
+    syncSkillField(skillSelect, skillStatic, meta);
+
+    return Boolean(meta.value);
+}
+
 function initCreateMiniTestModal() {
     const modal = document.getElementById("createMiniTestModal");
     if (!modal) {
@@ -29,8 +95,15 @@ function initCreateMiniTestModal() {
 
     const courseSelect = modal.querySelector("select[name='course_id']");
     const chapterSelect = modal.querySelector("select[name='chapter_id']");
+    const skillField = modal.querySelector("[data-skill-field]");
+    const skillSelect = skillField?.querySelector("[data-skill-select]");
+    const skillStatic = skillField?.querySelector("[data-skill-static]");
 
     const filterChapters = (courseId) => {
+        if (!chapterSelect) {
+            return;
+        }
+
         Array.from(chapterSelect.options).forEach((option) => {
             const belongs = option.dataset.course === courseId;
             option.hidden = !belongs && option.value !== "";
@@ -40,11 +113,20 @@ function initCreateMiniTestModal() {
         });
     };
 
-    courseSelect?.addEventListener("change", () => filterChapters(courseSelect.value));
+    const handleCourseChange = () => {
+        if (courseSelect) {
+            filterChapters(courseSelect.value);
+        }
+        applyCourseSkill(courseSelect, skillSelect, skillStatic);
+    };
+
+    courseSelect?.addEventListener("change", handleCourseChange);
 
     if (courseSelect?.value) {
         filterChapters(courseSelect.value);
     }
+
+    applyCourseSkill(courseSelect, skillSelect, skillStatic);
 }
 
 function initEditMiniTestModal() {
@@ -61,8 +143,14 @@ function initEditMiniTestModal() {
     const updateTemplate = configEl.dataset.updateRoute || "";
     const courseSelect = modal.querySelector("#edit_course_id");
     const chapterSelect = modal.querySelector("#edit_chapter_id");
+    const skillSelect = modal.querySelector("#edit_skill_type");
+    const skillStatic = skillSelect?.closest("[data-skill-field]")?.querySelector("[data-skill-static]");
 
     const filterChapters = (courseId) => {
+        if (!chapterSelect) {
+            return;
+        }
+
         Array.from(chapterSelect.options).forEach((option) => {
             const belongs = option.dataset.course === courseId;
             option.hidden = !belongs && option.value !== "";
@@ -72,7 +160,14 @@ function initEditMiniTestModal() {
         });
     };
 
-    courseSelect?.addEventListener("change", () => filterChapters(courseSelect.value));
+    const refreshSkill = () => applyCourseSkill(courseSelect, skillSelect, skillStatic);
+
+    courseSelect?.addEventListener("change", () => {
+        if (courseSelect) {
+            filterChapters(courseSelect.value);
+        }
+        refreshSkill();
+    });
 
     document.querySelectorAll(".edit-minitest-btn").forEach((button) => {
         button.addEventListener("click", () => {
@@ -89,7 +184,11 @@ function initEditMiniTestModal() {
             setSelectValue(chapterSelect, button.dataset.chapterId);
 
             modal.querySelector("#edit_title").value = button.dataset.title || "";
-            setSelectValue(modal.querySelector("#edit_skill_type"), button.dataset.skillType);
+            const locked = refreshSkill();
+            if (!locked) {
+                setSelectValue(skillSelect, button.dataset.skillType);
+            }
+            refreshSkill();
             modal.querySelector("#edit_order").value = button.dataset.order || "";
             modal.querySelector("#edit_weight").value = button.dataset.weight || "";
             modal.querySelector("#edit_time_limit").value = button.dataset.timeLimit || "";
@@ -97,6 +196,8 @@ function initEditMiniTestModal() {
             modal.querySelector("#edit_is_active").checked = button.dataset.isActive === "1";
         });
     });
+
+    refreshSkill();
 }
 
 function initMaterialModal() {
@@ -250,18 +351,61 @@ function initQuestionBuilder() {
         });
 
         container.appendChild(clone);
-        const newCard = container.querySelectorAll(".question-card")[container.querySelectorAll(".question-card").length - 1];
+        const newCard = container.lastElementChild;
         bindCardEvents(newCard);
         renumberQuestions();
         newCard.scrollIntoView({ behavior: "smooth", block: "start" });
     });
 
-    form.addEventListener("submit", (event) => {
+    // ===== AJAX SUBMIT - ĐÃ SỬA HOÀN CHỈNH =====
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
         const cards = container.querySelectorAll(".question-card");
         if (cards.length === 0) {
-            event.preventDefault();
             alert("Vui lòng thêm ít nhất một câu hỏi trước khi lưu.");
             return;
+        }
+
+        const formData = new FormData(form);
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+        if (!csrfToken) {
+            alert("Lỗi: Không tìm thấy CSRF token. Vui lòng tải lại trang.");
+            return;
+        }
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Đang lưu...';
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                alert(data.message || 'Đã lưu câu hỏi thành công!');
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                }
+            } else {
+                alert('Lỗi: ' + (data.message || 'Không thể lưu câu hỏi. Vui lòng kiểm tra dữ liệu.'));
+            }
+        } catch (error) {
+            console.error('Lỗi AJAX:', error);
+            alert('Lỗi kết nối. Vui lòng kiểm tra mạng và thử lại.');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
         }
     });
 

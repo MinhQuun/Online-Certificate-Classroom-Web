@@ -111,7 +111,6 @@ class MiniTestController extends Controller
             'weight' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'time_limit' => ['nullable', 'integer', 'min:0', 'max:600'],
             'attempts' => ['nullable', 'integer', 'min:1', 'max:10'],
-            'is_active' => ['nullable', 'boolean'],
         ]);
 
         $course = Course::where('maKH', $validated['course_id'])
@@ -135,7 +134,7 @@ class MiniTestController extends Controller
             'trongSo' => $validated['weight'] ?? 0,
             'time_limit_min' => $validated['time_limit'] ?? 0,
             'attempts_allowed' => $validated['attempts'] ?? 1,
-            'is_active' => (bool) ($validated['is_active'] ?? true),
+            'is_active' => false,
             'is_published' => false,
         ]);
 

@@ -260,20 +260,32 @@ Route::middleware(['auth', 'teacher'])->prefix('teacher')->name('teacher.')->gro
     // Mini-tests (giáo viên)
     Route::get('/minitests',                         [TeacherMiniTestController::class, 'index'])->name('minitests.index');
     Route::post('/minitests',                        [TeacherMiniTestController::class, 'store'])->name('minitests.store');
+    
+    Route::post('/minitests/{miniTest}/questions',   [TeacherMiniTestController::class, 'storeQuestions'])->name('minitests.questions.store');
+
     Route::patch('/minitests/{miniTest}',            [TeacherMiniTestController::class, 'update'])->name('minitests.update');
     Route::delete('/minitests/{miniTest}',           [TeacherMiniTestController::class, 'destroy'])->name('minitests.destroy');
     Route::get('/minitests/{miniTest}/questions',    [TeacherMiniTestController::class, 'showQuestionForm'])->name('minitests.questions.form');
-    Route::post('/minitests/{miniTest}/questions',   [TeacherMiniTestController::class, 'storeQuestions'])->name('minitests.questions.store');
+    
     Route::post('/minitests/{miniTest}/materials',   [TeacherMiniTestController::class, 'storeMaterial'])->name('minitests.materials.store');
     Route::delete('/minitests/materials/{material}', [TeacherMiniTestController::class, 'destroyMaterial'])->name('minitests.materials.destroy');
     Route::post('/minitests/{miniTest}/publish',     [TeacherMiniTestController::class, 'publish'])->name('minitests.publish');
     Route::post('/minitests/{miniTest}/unpublish',   [TeacherMiniTestController::class, 'unpublish'])->name('minitests.unpublish');
 
     // Chấm điểm & xem điểm
-    Route::get('/grading',            [GradingController::class, 'index'])->name('grading.index');
-    Route::get('/grading/{result}',   [GradingController::class, 'show'])->name('grading.show');
-    Route::post('/grading/{result}',  [GradingController::class, 'grade'])->name('grading.grade');
-    Route::post('/grading/bulk',      [GradingController::class, 'bulkGrade'])->name('grading.bulk');
+    Route::get('/grading', fn () => redirect()->route('teacher.grading.writing.index'))->name('grading.index');
+
+    Route::prefix('grading')->name('grading.')->group(function () {
+        Route::get('/writing', [GradingController::class, 'writingIndex'])->name('writing.index');
+        Route::get('/writing/{result}', [GradingController::class, 'writingShow'])->name('writing.show');
+        Route::post('/writing/{result}', [GradingController::class, 'writingGrade'])->name('writing.grade');
+        Route::post('/writing/bulk', [GradingController::class, 'writingBulkGrade'])->name('writing.bulk');
+
+        Route::get('/speaking', [GradingController::class, 'speakingIndex'])->name('speaking.index');
+        Route::get('/speaking/{result}', [GradingController::class, 'speakingShow'])->name('speaking.show');
+        Route::post('/speaking/{result}', [GradingController::class, 'speakingGrade'])->name('speaking.grade');
+        Route::post('/speaking/bulk', [GradingController::class, 'speakingBulkGrade'])->name('speaking.bulk');
+    });
 
     Route::get('/results',            [ResultController::class, 'index'])->name('results.index');
     Route::get('/results/{result}',   [ResultController::class, 'show'])->name('results.show');

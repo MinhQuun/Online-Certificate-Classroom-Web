@@ -41,6 +41,21 @@ class MiniTest extends Model
         'trongSo' => 'decimal:2',
     ];
 
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopePublished($query)
+    {
+        return $query->where('is_published', true);
+    }
+
+    public function scopeVisibleToStudents($query)
+    {
+        return $query->published()->active();
+    }
+
     public function chapter(): BelongsTo
     {
         return $this->belongsTo(Chapter::class, 'maChuong', 'maChuong');

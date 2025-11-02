@@ -112,31 +112,22 @@
                 </a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('teacher.grading.*') ? 'active' : '' }}"
-                    href="{{ route('teacher.grading.index') }}">
+                <a class="nav-link {{ request()->routeIs('teacher.grading.writing.*') ? 'active' : '' }}"
+                    href="{{ route('teacher.grading.writing.index') }}">
                     <i class="bi bi-pencil-square me-2"></i> Chấm bài Writing
-                    @if(($badges['essays_pending'] ?? 0) > 0)
-                    <span class="badge text-bg-warning ms-2">{{ $badges['essays_pending'] }}</span>
+                    @if(($badges['writing_pending'] ?? 0) > 0)
+                    <span class="badge text-bg-warning ms-2">{{ $badges['writing_pending'] }}</span>
                     @endif
                 </a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('teacher..*') ? 'active' : '' }}"
-                    href="{{ route('teacher.') }}">
-                    <i class="bi bi-pencil-square me-2"></i> Chấm bài Speaking
-                    @if(($badges['essays_pending'] ?? 0) > 0)
-                    <span class="badge text-bg-warning ms-2">{{ $badges['essays_pending'] }}</span>
+                <a class="nav-link {{ request()->routeIs('teacher.grading.speaking.*') ? 'active' : '' }}"
+                    href="{{ route('teacher.grading.speaking.index') }}">
+                    <i class="bi bi-mic me-2"></i> Chấm bài Speaking
+                    @if(($badges['speaking_pending'] ?? 0) > 0)
+                    <span class="badge text-bg-warning ms-2">{{ $badges['speaking_pending'] }}</span>
                     @endif
                 </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('teacher..*') ? 'active' : '' }}"
-                        href="{{ route('teacher.') }}">
-                        <i class="bi bi-pencil-square me-2"></i> Hỏi đáp 
-                        @if(($badges['essays_pending'] ?? 0) > 0)
-                        <span class="badge text-bg-warning ms-2">{{ $badges['essays_pending'] }}</span>
-                        @endif
-                    </a>
                 </li>
                 <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('teacher.results.*') ? 'active' : '' }}"
@@ -167,3 +158,5 @@
         @stack('scripts')
     </body>
 </html>
+
+

@@ -287,8 +287,7 @@ class MiniTestController extends Controller
     protected function loadMiniTestsForChapter(Chapter $chapter, Student $student): array
     {
         $miniTests = $chapter->miniTests()
-            ->where('is_published', true)
-            ->where('is_active', true)
+            ->visibleToStudents()
             ->with([
                 'questions' => fn ($query) => $query->orderBy('thuTu'),
                 'results' => fn ($query) => $query->where('maHV', $student->maHV),

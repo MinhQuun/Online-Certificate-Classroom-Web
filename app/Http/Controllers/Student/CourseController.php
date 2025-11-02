@@ -58,7 +58,7 @@ class CourseController extends Controller
                     $chapterQuery->with([
                         'lessons' => fn($lessonQuery) => $lessonQuery->orderBy('thuTu'),
                         'miniTests' => fn($miniTestQuery) => $miniTestQuery
-                            ->where('is_active', 1)
+                            ->visibleToStudents()
                             ->orderBy('thuTu')
                             ->with('materials'),
                     ]);

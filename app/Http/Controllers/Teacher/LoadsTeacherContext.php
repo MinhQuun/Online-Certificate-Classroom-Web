@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Teacher;
 
+use App\Models\MiniTest;
+use App\Models\MiniTestResult;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -20,12 +22,13 @@ trait LoadsTeacherContext
         $courseIds = $this->teacherCourseIds($teacherId);
 
         if ($courseIds->isEmpty()) {
-            return [
-                'assignments_pending' => 0,
-                'exams_pending'       => 0,
-                'low_progress'        => 0,
-                'minitests_active'    => 0,
-            ];
+        return [
+            'assignments_pending' => 0,
+            'low_progress' => 0,
+            'minitests_active' => 0,
+            'writing_pending' => 0,
+            'speaking_pending' => 0,
+        ];
         }
 
         $assignments = (int) DB::table('BAIHOC as lessons')
@@ -44,11 +47,30 @@ trait LoadsTeacherContext
             ->where('is_active', 1)
             ->count();
 
+        $writingPending = MiniTestResult::query()
+            ->where('is_fully_graded', false)
+            ->whereIn('status', [MiniTestResult::STATUS_SUBMITTED, MiniTestResult::STATUS_EXPIRED])
+            ->whereHas('miniTest', function ($query) use ($courseIds) {
+                $query->where('skill_type', MiniTest::SKILL_WRITING)
+                    ->whereIn('maKH', $courseIds);
+            })
+            ->count();
+
+        $speakingPending = MiniTestResult::query()
+            ->where('is_fully_graded', false)
+            ->whereIn('status', [MiniTestResult::STATUS_SUBMITTED, MiniTestResult::STATUS_EXPIRED])
+            ->whereHas('miniTest', function ($query) use ($courseIds) {
+                $query->where('skill_type', MiniTest::SKILL_SPEAKING)
+                    ->whereIn('maKH', $courseIds);
+            })
+            ->count();
+
         return [
             'assignments_pending' => $assignments,
-            'low_progress'        => $lowProgress,
-            'minitests_active'    => $minitestsActive,
+            'low_progress' => $lowProgress,
+            'minitests_active' => $minitestsActive,
+            'writing_pending' => $writingPending,
+            'speaking_pending' => $speakingPending,
         ];
     }
 }
-
