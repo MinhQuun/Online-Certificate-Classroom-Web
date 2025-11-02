@@ -73,14 +73,18 @@ class GradingController extends Controller
             $selectedCourseId = 0;
         }
 
-        $answersRelation = function ($query) use ($mode) {
+        $answersConstraint = function ($query) use ($mode) {
             $query->whereNull('graded_at')
-                ->whereHas('question', fn ($q) => $q->where('loai', MiniTestQuestion::TYPE_ESSAY))
-                ->with('question');
+                ->whereHas('question', fn ($q) => $q->where('loai', MiniTestQuestion::TYPE_ESSAY));
 
             if ($mode === 'speaking') {
                 $query->whereNotNull('answer_audio_url');
             }
+        };
+
+        $answersRelation = function ($query) use ($answersConstraint) {
+            $answersConstraint($query);
+            $query->with('question');
         };
 
         $pendingResults = MiniTestResult::query()
@@ -91,6 +95,7 @@ class GradingController extends Controller
                     ->whereHas('course', fn ($courseQuery) => $courseQuery->where('maND', $teacherId));
             })
             ->when($selectedCourseId, fn ($query) => $query->where('maKH', $selectedCourseId))
+            ->whereHas('studentAnswers', $answersConstraint)
             ->with([
                 'miniTest.chapter',
                 'miniTest.course',
@@ -119,19 +124,21 @@ class GradingController extends Controller
 
         $this->guardResultOwnership($result, $teacherId, $skillType);
 
+        $answersScope = function ($query) use ($mode) {
+            $query->whereHas('question', fn ($q) => $q->where('loai', MiniTestQuestion::TYPE_ESSAY))
+                ->with('question')
+                ->orderBy('maCauHoi');
+
+            if ($mode === 'speaking') {
+                $query->whereNotNull('answer_audio_url');
+            }
+        };
+
         $result->load([
             'miniTest.chapter',
             'miniTest.course',
             'student.user',
-            'studentAnswers' => function ($query) use ($mode) {
-                $query->whereHas('question', fn ($q) => $q->where('loai', MiniTestQuestion::TYPE_ESSAY))
-                    ->with('question')
-                    ->orderBy('maCauHoi');
-
-                if ($mode === 'speaking') {
-                    $query->whereNotNull('answer_audio_url');
-                }
-            },
+            'studentAnswers' => $answersScope,
         ]);
 
         return view($view, [
@@ -150,7 +157,8 @@ class GradingController extends Controller
 
         $this->guardResultOwnership($result, $teacherId, $skillType);
 
-        $validated = $this->validateGrades($request);
+        $requiresListening = $skillType === MiniTest::SKILL_SPEAKING;
+        $validated = $this->validateGrades($request, $requiresListening);
 
         try {
             DB::beginTransaction();
@@ -185,7 +193,8 @@ class GradingController extends Controller
     {
         $teacherId = Auth::id() ?? 0;
 
-        $validated = $this->validateBulkGrades($request);
+        $requiresListening = $skillType === MiniTest::SKILL_SPEAKING;
+        $validated = $this->validateBulkGrades($request, $requiresListening);
         $gradedCount = 0;
 
         try {
@@ -257,26 +266,38 @@ class GradingController extends Controller
             : 'teacher.grading.writing';
     }
 
-    protected function validateGrades(Request $request): array
+    protected function validateGrades(Request $request, bool $requireListening = false): array
     {
-        return $request->validate([
+        $rules = [
             'grades' => ['required', 'array'],
             'grades.*.answer_id' => ['required', 'integer'],
             'grades.*.score' => ['required', 'numeric', 'min:0'],
             'grades.*.feedback' => ['nullable', 'string', 'max:1000'],
-        ]);
+        ];
+
+        if ($requireListening) {
+            $rules['grades.*.listened'] = ['required', 'in:1'];
+        }
+
+        return $request->validate($rules);
     }
 
-    protected function validateBulkGrades(Request $request): array
+    protected function validateBulkGrades(Request $request, bool $requireListening = false): array
     {
-        return $request->validate([
+        $rules = [
             'results' => ['required', 'array'],
             'results.*.result_id' => ['required', 'integer'],
             'results.*.answers' => ['required', 'array'],
             'results.*.answers.*.answer_id' => ['required', 'integer'],
             'results.*.answers.*.score' => ['required', 'numeric', 'min:0'],
             'results.*.answers.*.feedback' => ['nullable', 'string', 'max:500'],
-        ]);
+        ];
+
+        if ($requireListening) {
+            $rules['results.*.answers.*.listened'] = ['required', 'in:1'];
+        }
+
+        return $request->validate($rules);
     }
 
     protected function gradeAnswers(array $items, MiniTestResult $result, int $teacherId): float

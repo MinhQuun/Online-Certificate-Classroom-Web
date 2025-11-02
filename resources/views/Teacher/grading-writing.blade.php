@@ -22,10 +22,8 @@
             <h1 class="title">Chấm điểm Writing</h1>
             <p class="muted">Chấm điểm các câu trả lời tự luận Writing của học viên.</p>
         </section>
-        <div class="btn-group btn-group-sm mb-4">
-            <a href="{{ route('teacher.grading.writing.index') }}" class="btn btn-primary">Writing</a>
-            <a href="{{ route('teacher.grading.speaking.index') }}" class="btn btn-outline-secondary">Speaking</a>
-        </div>
+
+
 
         <!-- Course Selector -->
         <div class="card border-0 shadow-sm mb-4 grading-filter">

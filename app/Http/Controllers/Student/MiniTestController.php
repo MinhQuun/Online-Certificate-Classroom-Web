@@ -208,17 +208,17 @@ class MiniTestController extends Controller
             's3'
         );
 
-        $url = Storage::disk('s3')->url($path);
+        $publicUrl = env('PUBLIC_R2_URL') . '/' . $path;
 
         $studentAnswer->update([
-            'answer_audio_url' => $url,
+            'answer_audio_url' => $publicUrl,
             'audio_mime' => $file->getMimeType(),
             'audio_size_kb' => (int) ceil($file->getSize() / 1024),
         ]);
 
         return response()->json([
             'success' => true,
-            'audio_url' => $url,
+            'audio_url' => $publicUrl,
         ]);
     }
 

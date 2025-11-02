@@ -63,6 +63,10 @@ trait LoadsTeacherContext
                 $query->where('skill_type', MiniTest::SKILL_SPEAKING)
                     ->whereIn('maKH', $courseIds);
             })
+            ->whereHas('studentAnswers', function ($query) {
+                $query->whereNotNull('answer_audio_url')
+                    ->whereNull('graded_at');
+            })
             ->count();
 
         return [
