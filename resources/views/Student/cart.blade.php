@@ -1,6 +1,6 @@
-﻿@extends('layouts.student')
+@extends('layouts.student')
 
-@section('title', 'Giỏ hàng của bạn')
+@section('title', 'Giỏ hàng combo & khóa học')
 
 @push('styles')
     @php
@@ -9,27 +9,36 @@
     <link rel="stylesheet" href="{{ asset($pageStyle) }}?v={{ student_asset_version($pageStyle) }}">
 @endpush
 
+@php
+    $courseCount = $courses->count();
+    $comboCount = $combos->count();
+    $isEmpty = $courseCount === 0 && $comboCount === 0;
+@endphp
+
 @section('content')
     <section class="page-hero page-hero--soft">
         <div class="oc-container">
             <p class="page-hero__breadcrumb">
                 <a href="{{ route('student.courses.index') }}">Trang chủ</a>
-                <span aria-hidden="true">›</span>
+                <span aria-hidden="true">></span>
                 <span>Giỏ hàng</span>
             </p>
-            <h1>Giỏ hàng ({{ $courses->count() }})</h1>
-            <p>Chọn những khóa học bạn muốn thanh toán. Hệ thống sẽ giữ nguyên trạng thái giỏ hàng và nhắc đăng nhập ở bước tiếp theo.</p>
+            <h1>Giỏ hàng của bạn ({{ $courseCount + $comboCount }})</h1>
+            <p>Chọn combo hoặc khóa học để thanh toán. Hệ thống sẽ giữ nguyên trạng thái giỏ hàng khi bạn đăng nhập.</p>
         </div>
     </section>
 
     <section class="cart-section">
         <div class="oc-container">
-            @if($courses->isEmpty())
+            @if($isEmpty)
                 <div class="cart-empty">
                     <div class="cart-empty__icon" aria-hidden="true">🛒</div>
                     <h2>Giỏ hàng đang trống</h2>
-                    <p>Bạn chưa thêm khóa học nào. Khám phá thư viện khóa học để bắt đầu hành trình học tập nhé!</p>
-                    <a class="btn btn--primary" href="{{ route('student.courses.index') }}">Khám phá khóa học</a>
+                    <p>Khám phá các combo ưu đãi hoặc khóa học để bắt đầu hành trình học tập ngay hôm nay.</p>
+                    <div class="cart-empty__actions">
+                        <a class="btn btn--primary" href="{{ route('student.combos.index') }}">Combo ưu đãi</a>
+                        <a class="btn btn--ghost" href="{{ route('student.courses.index') }}">Thư viện khóa học</a>
+                    </div>
                 </div>
             @else
                 <form method="post" action="{{ route('student.checkout.start') }}" id="cart-form" hidden>
@@ -37,127 +46,169 @@
                 </form>
                 <div class="cart-layout" data-cart-form-scope>
                     <div class="cart-board">
-                            <div class="cart-board__header">
-                                <div class="cart-board__header-main">
-                                    <label class="cart-checkbox">
-                                        <input type="checkbox" data-cart-select-all>
-                                        <span>Chọn tất cả ({{ $courses->count() }})</span>
-                                    </label>
-                                    <span class="cart-board__meta">Đang có {{ $courses->count() }} khóa học</span>
-                                </div>
-                                <div class="cart-board__actions">
-                                    <form
-                                        method="post"
-                                        action="{{ route('student.cart.destroy-selected') }}"
-                                        class="cart-board__remove-form"
-                                        data-cart-remove-form
-                                        data-confirm="Bạn có chắc chắn muốn xoá các khóa học đã chọn?"
-                                    >
-                                        @csrf
-                                        @method('delete')
-                                        <div data-cart-remove-inputs hidden></div>
-                                        <button
-                                            type="submit"
-                                            class="cart-board__remove"
-                                            data-cart-remove-selected
-                                            disabled
-                                            aria-disabled="true"
-                                        >
-                                            <i class="fa-solid fa-minus-circle" aria-hidden="true"></i>
-                                            <span data-cart-remove-label>Xoá đã chọn</span>
-                                        </button>
-                                    </form>
-                                    <form
-                                        method="post"
-                                        action="{{ route('student.cart.destroy-all') }}"
-                                        class="cart-board__clear-form"
-                                        data-cart-clear-form
-                                        data-confirm="Bạn có chắc chắn muốn xoá toàn bộ giỏ hàng?"
-                                    >
-                                        @csrf
-                                        @method('delete')
-                                        <button type="submit" class="cart-board__clear">
-                                            <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
-                                            <span>Xoá toàn bộ</span>
-                                        </button>
-                                    </form>
-                                </div>
+                        <div class="cart-board__header">
+                            <div class="cart-board__header-main">
+                                <label class="cart-checkbox">
+                                    <input type="checkbox" data-cart-select-all>
+                                    <span>Chọn tất cả ({{ $courseCount + $comboCount }})</span>
+                                </label>
+                                <span class="cart-board__meta">
+                                    {{ $comboCount }} combo · {{ $courseCount }} khóa học
+                                </span>
                             </div>
+                            <div class="cart-board__actions">
+                                <form
+                                    method="post"
+                                    action="{{ route('student.cart.destroy-selected') }}"
+                                    class="cart-board__remove-form"
+                                    data-cart-remove-form
+                                    data-confirm="Bạn chắc chắn muốn xoá các mục đã chọn?"
+                                >
+                                    @csrf
+                                    @method('delete')
+                                    <div data-cart-remove-inputs hidden></div>
+                                    <button
+                                        type="submit"
+                                        class="cart-board__remove"
+                                        data-cart-remove-selected
+                                        disabled
+                                        aria-disabled="true"
+                                    >
+                                        <i class="fa-solid fa-minus-circle" aria-hidden="true"></i>
+                                        <span data-cart-remove-label>Xoá đã chọn</span>
+                                    </button>
+                                </form>
+                                <form
+                                    method="post"
+                                    action="{{ route('student.cart.destroy-all') }}"
+                                    class="cart-board__clear-form"
+                                    data-cart-clear-form
+                                    data-confirm="Bạn có chắc chắn muốn xoá toàn bộ giỏ hàng?"
+                                >
+                                    @csrf
+                                    @method('delete')
+                                    <button type="submit" class="cart-board__clear">
+                                        <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
+                                        <span>Xoá toàn bộ</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
 
-                            @error('items')
-                                <p class="cart-error" role="alert">{{ $message }}</p>
-                            @enderror
+                        @error('items')
+                            <p class="cart-error" role="alert">{{ $message }}</p>
+                        @enderror
 
-                            <ul class="cart-list">
-                                @foreach($courses as $course)
-                                    @php
-                                        $price = (int) ($course->hocPhi ?? 0);
-                                        $teacherName = optional($course->teacher)->hoTen ?? 'Đội ngũ OCC';
-                                        $endDate = $course->end_date_label ?? 'Đang cập nhật';
-                                    @endphp
-                                    <li class="cart-item" data-cart-item data-price="{{ $price }}">
-                                        <label class="cart-checkbox cart-checkbox--item">
-                                            <input type="checkbox" name="items[]" value="{{ $course->maKH }}" data-cart-item-checkbox form="cart-form">
-                                            <span class="sr-only">Chọn {{ $course->tenKH }}</span>
-                                        </label>
-                                        <div class="cart-item__media">
-                                            <img src="{{ $course->cover_image_url }}" alt="{{ $course->tenKH }}" loading="lazy">
+                        <ul class="cart-list">
+                            @foreach($combos as $combo)
+                                <li class="cart-item cart-item--combo" data-cart-item data-price="{{ $combo->sale_price }}">
+                                    <label class="cart-item__select">
+                                        <input type="checkbox" name="items[]" value="combo:{{ $combo->maGoi }}" form="cart-form" data-cart-item-checkbox>
+                                        <span class="cart-item__indicator"></span>
+                                    </label>
+                                    <div class="cart-item__body">
+                                        <div class="cart-item__thumb">
+                                            <img src="{{ $combo->cover_image_url }}" alt="">
                                         </div>
-                                        <div class="cart-item__body">
-                                            <div class="cart-item__top">
-                                                <div>
-                                                    <h3>{{ $course->tenKH }}</h3>
-                                                    <div class="cart-item__meta">
-                                                        <span>Giảng viên: {{ $teacherName }}</span>
-                                                        <span>Kết thúc: {{ $endDate }}</span>
-                                                    </div>
-                                                </div>
-                                                <span class="cart-item__price">{{ number_format($price, 0, ',', '.') }} VNĐ</span>
+                                        <div class="cart-item__info">
+                                            <div class="cart-item__info-head">
+                                                <h3>{{ $combo->tenGoi }}</h3>
+                                                <span class="badge badge--combo">Combo</span>
                                             </div>
-                                            <div class="cart-item__foot">
-                                                <div class="cart-item__rating" aria-label="Đánh giá 5 sao">
-                                                    @for($i = 0; $i < 5; $i++)
-                                                        <i class="fa-solid fa-star" aria-hidden="true"></i>
-                                                    @endfor
-                                                    <span>5.0</span>
-                                                </div>
-                                                <div class="cart-item__actions">
-                                                    <a href="{{ route('student.courses.show', $course->slug) }}">Xem chi tiết</a>
-                                                    <form method="post" action="{{ route('student.cart.destroy', $course->maKH) }}">
-                                                        @csrf
-                                                        @method('delete')
-                                                        <button type="submit" class="cart-item__remove">Xóa</button>
-                                                    </form>
-                                                </div>
+                                            <p class="cart-item__description">{{ Str::limit($combo->moTa, 140) }}</p>
+                                            <ul class="cart-item__meta">
+                                                <li><i class="fa-solid fa-layer-group"></i> {{ $combo->courses->count() }} khóa học</li>
+                                                <li><i class="fa-solid fa-calendar-check"></i>
+                                                    {{ $combo->ngayBatDau ? 'Bắt đầu ' . optional($combo->ngayBatDau)->format('d/m/Y') : 'Kích hoạt ngay' }}
+                                                </li>
+                                            </ul>
+                                            <div class="cart-item__pricing">
+                                                <strong>{{ number_format($combo->sale_price, 0, ',', '.') }} VND</strong>
+                                                <span>{{ number_format($combo->original_price, 0, ',', '.') }} VND</span>
                                             </div>
                                         </div>
-                                    </li>
-                                @endforeach
-                            </ul>
+                                        <div class="cart-item__actions">
+                                            <form method="post" action="{{ route('student.cart.destroy-combo', $combo->maGoi) }}">
+                                                @csrf
+                                                @method('delete')
+                                                <button type="submit" class="cart-item__remove">Xoá combo</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="cart-item__combo-courses">
+                                        <p class="title">Bao gồm:</p>
+                                        <ul>
+                                            @foreach($combo->courses as $course)
+                                                <li>
+                                                    <i class="fa-solid fa-check"></i>
+                                                    {{ $course->tenKH }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </li>
+                            @endforeach
+
+                            @foreach($courses as $course)
+                                <li class="cart-item" data-cart-item data-price="{{ $course->hocPhi }}">
+                                    <label class="cart-item__select">
+                                        <input type="checkbox" name="items[]" value="course:{{ $course->maKH }}" form="cart-form" data-cart-item-checkbox>
+                                        <span class="cart-item__indicator"></span>
+                                    </label>
+                                    <div class="cart-item__body">
+                                        <div class="cart-item__thumb">
+                                            <img src="{{ $course->cover_image_url }}" alt="">
+                                        </div>
+                                        <div class="cart-item__info">
+                                            <div class="cart-item__info-head">
+                                                <h3>{{ $course->tenKH }}</h3>
+                                            </div>
+                                            <ul class="cart-item__meta">
+                                                <li><i class="fa-solid fa-user-tie"></i> {{ $course->teacher->hoTen ?? $course->teacher->name ?? 'Giảng viên OCC' }}</li>
+                                                <li><i class="fa-solid fa-clock"></i> {{ $course->thoiHanNgay ?? 90 }} ngày học</li>
+                                            </ul>
+                                            <div class="cart-item__pricing">
+                                                <strong>{{ number_format($course->hocPhi, 0, ',', '.') }} VND</strong>
+                                            </div>
+                                        </div>
+                                        <div class="cart-item__actions">
+                                            <form method="post" action="{{ route('student.cart.destroy', $course->maKH) }}">
+                                                @csrf
+                                                @method('delete')
+                                                <button type="submit" class="cart-item__remove">Xoá</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
                     </div>
 
                     <aside class="cart-summary">
                         <div class="summary-card">
                             <div class="summary-card__head">
                                 <h2>Thông tin đơn hàng</h2>
-                                <p>Tổng hợp nhanh khóa học bạn đã chọn</p>
+                                <p>Tổng hợp combo và khóa học đã chọn</p>
+                            </div>
+
+                            <div class="summary-row">
+                                <span>Combo</span>
+                                <strong>{{ number_format($comboTotal, 0, ',', '.') }} VND</strong>
                             </div>
                             <div class="summary-row">
-                                <span>Đã chọn</span>
-                                <strong data-cart-selected-count>0 khóa học</strong>
+                                <span>Khóa học lẻ</span>
+                                <strong>{{ number_format($courseTotal, 0, ',', '.') }} VND</strong>
                             </div>
-                            <div class="summary-row">
-                                <span>Tạm tính</span>
-                                <strong data-cart-subtotal>0 VNĐ</strong>
-                            </div>
+
                             <div class="summary-total">
                                 <span>Tổng thanh toán</span>
-                                <strong data-cart-total>0 VNĐ</strong>
+                                <strong data-cart-total>{{ number_format($total, 0, ',', '.') }} VND</strong>
                             </div>
+
                             <button
                                 type="submit"
                                 form="cart-form"
-                                class="summary-btn" form="cart-form"
+                                class="summary-btn"
                                 data-cart-submit
                                 disabled
                                 aria-disabled="true"
@@ -165,7 +216,8 @@
                                 Xác nhận thanh toán
                             </button>
                             <p class="summary-note">
-                                Bạn sẽ được yêu cầu đăng nhập/đăng ký trước khi sang bước thanh toán. Mọi thông tin đơn hàng sẽ được lưu lại.
+                                Bạn sẽ được yêu cầu đăng nhập trước khi thanh toán.
+                                Giỏ hàng được đồng bộ với tài khoản của bạn.
                             </p>
                         </div>
                     </aside>
@@ -178,4 +230,3 @@
 @push('scripts')
     <script src="{{ asset('js/Student/cart.js') }}" defer></script>
 @endpush
-

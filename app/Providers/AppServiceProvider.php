@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Category;
 use App\Support\Cart\StudentCart;
+use App\Support\Cart\StudentComboCart;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -36,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
 
             $view->with([
                 'studentNavCategories' => $categories,
-                'studentCartCount' => StudentCart::count(),
+                'studentCartCount' => StudentCart::count() + StudentComboCart::count(),
             ]);
         });
     }

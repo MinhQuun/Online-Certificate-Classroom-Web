@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\ContactReplyController;
+use App\Http\Controllers\Admin\ComboAdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,7 @@ use App\Http\Controllers\Teacher\LessonDiscussionController as TeacherLessonDisc
 |--------------------------------------------------------------------------
 */
 use App\Http\Controllers\Student\CourseController as StudentCourseController;
+use App\Http\Controllers\Student\ComboController as StudentComboController;
 use App\Http\Controllers\Student\ForgotPasswordController;
 use App\Http\Controllers\Student\LessonController as StudentLessonController;
 use App\Http\Controllers\Student\LessonProgressController as StudentLessonProgressController;
@@ -71,6 +73,8 @@ Route::get('/home', fn () => redirect()->route('student.courses.index'))->name('
 
 // Khóa học & bài học (public)
 Route::get('/courses/{slug}', [StudentCourseController::class, 'show'])->name('student.courses.show');
+Route::get('/combos', [StudentComboController::class, 'index'])->name('student.combos.index');
+Route::get('/combos/{slug}', [StudentComboController::class, 'show'])->name('student.combos.show');
 Route::get('/lessons/{maBH}', [StudentLessonController::class, 'show'])->name('student.lessons.show');
 
 // Xem danh sách thảo luận bài học (public, không yêu cầu đăng nhập)
@@ -88,9 +92,11 @@ Route::get('/student/lessons/{maBH}', fn ($maBH) => redirect()->route('student.l
 Route::prefix('cart')->name('student.cart.')->group(function () {
     Route::get('/', [StudentCartController::class, 'index'])->name('index');
     Route::post('/', [StudentCartController::class, 'store'])->name('store');
+    Route::post('/combos', [StudentCartController::class, 'storeCombo'])->name('store-combo');
     Route::delete('/items', [StudentCartController::class, 'destroySelected'])->name('destroy-selected');
     Route::delete('/', [StudentCartController::class, 'destroyAll'])->name('destroy-all');
     Route::delete('/{course}', [StudentCartController::class, 'destroy'])->name('destroy');
+    Route::delete('/combos/{combo}', [StudentCartController::class, 'destroyCombo'])->name('destroy-combo');
 });
 Route::post('/cart/checkout', [CheckoutController::class, 'start'])->name('student.checkout.start');
 Route::get('/checkout', [CheckoutController::class, 'index'])->middleware('auth')->name('student.checkout.index');
@@ -212,6 +218,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/courses',              [CourseAdminController::class, 'store'])->name('courses.store');
     Route::put('/courses/{course}',      [CourseAdminController::class, 'update'])->name('courses.update');
     Route::delete('/courses/{course}',   [CourseAdminController::class, 'destroy'])->name('courses.destroy');
+
+    // Quản lý combo khóa học
+    Route::get('/combos',               [ComboAdminController::class, 'index'])->name('combos.index');
+    Route::post('/combos',              [ComboAdminController::class, 'store'])->name('combos.store');
+    Route::put('/combos/{combo}',       [ComboAdminController::class, 'update'])->name('combos.update');
+    Route::delete('/combos/{combo}',    [ComboAdminController::class, 'destroy'])->name('combos.destroy');
 
     // Quản lý hoá đơn
     Route::get('/invoices',                 [InvoiceController::class, 'index'])->name('invoices.index');

@@ -3,52 +3,53 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
-
-use App\Models\Course;
-use App\Models\Invoice;
-use App\Models\InvoiceItem;
-use App\Models\Enrollment;
+use App\Mail\ActivationCodeMail;
 use App\Models\ActivationCode;
-
+use App\Models\Combo;
+use App\Models\Course;
+use App\Models\Enrollment;
+use App\Models\Invoice;
+use App\Models\InvoiceComboItem;
+use App\Models\InvoiceItem;
 use App\Support\Cart\StudentCart;
+use App\Support\Cart\StudentComboCart;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Schema;
-use App\Mail\ActivationCodeMail;
-use Illuminate\View\View;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 use Throwable;
 
 class CheckoutController extends Controller
 {
     private const SESSION_SELECTION = 'checkout.selection';
-    private const SESSION_SUCCESS   = 'checkout.success';
+    private const SESSION_SUCCESS = 'checkout.success';
 
     public function start(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'items'   => ['required', 'array', 'min:1'],
-            'items.*' => ['integer'],
+            'items' => ['required', 'array', 'min:1'],
+            'items.*' => ['string'],
         ], [
-            'items.required' => 'Vui lòng chọn ít nhất 1 khóa học.',
-            'items.min'      => 'Vui lòng chọn ít nhất 1 khóa học.',
+            'items.required' => 'Vui lòng chọn ít nhất một mục để thanh toán.',
+            'items.min' => 'Vui lòng chọn ít nhất một mục để thanh toán.',
         ]);
 
-        $selected = $this->sanitizeSelection($validated['items']);
+        $selection = $this->sanitizeSelection($validated['items']);
 
-        if (empty($selected)) {
+        if (empty($selection['courses']) && empty($selection['combos'])) {
             return redirect()
                 ->route('student.cart.index')
-                ->with('info', 'Khóa học chọn không hợp lệ.');
+                ->with('info', 'Các mục đã chọn không còn tồn tại trong giỏ hàng.');
         }
 
-        session()->put(self::SESSION_SELECTION, $selected);
+        session()->put(self::SESSION_SELECTION, $selection);
 
         if (!Auth::check()) {
             $target = route('student.checkout.index');
@@ -63,87 +64,117 @@ class CheckoutController extends Controller
 
     public function index(Request $request): View|RedirectResponse
     {
-        $selection      = session(self::SESSION_SELECTION, []);
+        $selection = session(self::SESSION_SELECTION, ['courses' => [], 'combos' => []]);
         $successPayload = session(self::SESSION_SUCCESS);
 
-        if (empty($selection) && !$successPayload) {
-            return redirect()
-                ->route('student.cart.index')
-                ->with('info', 'Giỏ hàng không có khóa học để thanh toán.');
+        if (is_array($selection) && array_is_list($selection)) {
+            $selection = [
+                'courses' => array_map('intval', $selection),
+                'combos' => [],
+            ];
+            session()->put(self::SESSION_SELECTION, $selection);
         }
 
-        $stage   = max(1, min(3, (int) $request->query('stage', 1)));
+        if ((empty($selection['courses']) && empty($selection['combos'])) && !$successPayload) {
+            return redirect()
+                ->route('student.cart.index')
+                ->with('info', 'Giỏ hàng không có mục nào để thanh toán.');
+        }
+
+        $stage = max(1, min(3, (int) $request->query('stage', 1)));
         $courses = collect();
-        $total   = 0;
+        $combos = collect();
+        $courseTotal = 0;
+        $comboTotal = 0;
 
         if ($successPayload) {
-            $stage   = 3;
+            $stage = 3;
             $courses = collect($successPayload['courses'] ?? []);
-            $total   = (int) ($successPayload['total'] ?? 0);
+            $combos = collect($successPayload['combos'] ?? []);
+            $courseTotal = (int) ($successPayload['course_total'] ?? 0);
+            $comboTotal = (int) ($successPayload['combo_total'] ?? 0);
             session()->forget(self::SESSION_SUCCESS);
             session()->forget(self::SESSION_SELECTION);
         } else {
-            $courses = $this->loadCourses($selection);
+            $courseIds = $selection['courses'] ?? [];
+            $comboIds = $selection['combos'] ?? [];
 
-            if ($courses->isEmpty()) {
+            $courses = $this->loadCourses($courseIds);
+            $combos = $this->loadCombos($comboIds);
+
+            if ($courses->isEmpty() && $combos->isEmpty()) {
                 session()->forget(self::SESSION_SELECTION);
 
                 return redirect()
                     ->route('student.cart.index')
-                    ->with('info', 'Khóa học không hợp lệ hoặc đã bị xoá.');
+                    ->with('info', 'Các mục đã chọn không còn hợp lệ hoặc đã bị xoá.');
             }
 
-            $total = (int) $courses->sum('hocPhi');
+            $courseTotal = (int) $courses->sum('hocPhi');
+            $comboTotal = (int) $combos->sum(fn (Combo $combo) => $combo->sale_price);
         }
 
         return view('Student.checkout', [
-            'courses'          => $courses,
-            'total'            => $total,
-            'stage'            => $stage,
-            'hasSuccessPayload'=> (bool) $successPayload,
+            'courses' => $courses,
+            'combos' => $combos,
+            'courseTotal' => $courseTotal,
+            'comboTotal' => $comboTotal,
+            'total' => $courseTotal + $comboTotal,
+            'stage' => $stage,
+            'hasSuccessPayload' => (bool) $successPayload,
             'successPayload' => $successPayload,
         ]);
     }
 
     public function complete(Request $request): RedirectResponse
     {
-        $selection = session(self::SESSION_SELECTION, []);
+        $selection = session(self::SESSION_SELECTION, ['courses' => [], 'combos' => []]);
         $method = $this->normalizePaymentMethod($request->input('payment_method', 'qr'));
 
-        if (empty($selection)) {
-            return redirect()
-                ->route('student.cart.index')
-                ->with('info', 'Giỏ hàng không có khóa học để thanh toán.');
+        if (is_array($selection) && array_is_list($selection)) {
+            $selection = [
+                'courses' => array_map('intval', $selection),
+                'combos' => [],
+            ];
         }
 
-        $courses = $this->loadCourses($selection);
+        if (empty($selection['courses']) && empty($selection['combos'])) {
+            return redirect()
+                ->route('student.cart.index')
+                ->with('info', 'Giỏ hàng không có mục nào để thanh toán.');
+        }
 
-        if ($courses->isEmpty()) {
+        $courses = $this->loadCourses($selection['courses'] ?? []);
+        $combos = $this->loadCombos($selection['combos'] ?? []);
+
+        if ($courses->isEmpty() && $combos->isEmpty()) {
             session()->forget(self::SESSION_SELECTION);
 
             return redirect()
                 ->route('student.cart.index')
-                ->with('info', 'Khóa học không hợp lệ hoặc đã bị xoá.');
+                ->with('info', 'Các mục đã chọn không còn hợp lệ hoặc đã bị xoá.');
         }
 
-        $total        = (int) $courses->sum('hocPhi');
-        $purchasedIds = $courses->pluck('maKH')->all();
-        $remaining    = array_values(array_diff(StudentCart::ids(), $purchasedIds));
-        StudentCart::sync($remaining);
+        $courseIdsPurchased = $courses->pluck('maKH')->all();
+        $comboIdsPurchased = $combos->pluck('maGoi')->all();
+
+        StudentCart::sync(array_values(array_diff(StudentCart::ids(), $courseIdsPurchased)));
+        StudentComboCart::sync(array_values(array_diff(StudentComboCart::ids(), $comboIdsPurchased)));
 
         try {
-            $finalized = $this->finalizeOrder($courses, $method, $total);
+            $finalized = $this->finalizeOrder($courses, $combos, $method);
         } catch (Throwable $exception) {
             Log::error('Checkout finalizeOrder failed', [
-                'user_id'    => Auth::id(),
-                'course_ids' => $courses->pluck('maKH')->all(),
-                'message'    => $exception->getMessage(),
+                'user_id' => Auth::id(),
+                'courses' => $courseIdsPurchased,
+                'combos' => $comboIdsPurchased,
+                'message' => $exception->getMessage(),
             ]);
             report($exception);
 
             return redirect()
                 ->route('student.checkout.index')
-                ->with('error', 'Hệ thống đang bận, vui lòng thử lại sau vài phút.');
+                ->with('error', 'Hệ thống đang bận, vui lòng thử lại sau ít phút.');
         }
 
         if (!empty($finalized['activation_packages'])) {
@@ -154,16 +185,29 @@ class CheckoutController extends Controller
             );
         }
 
+        $courseTotal = (int) $courses->sum('hocPhi');
+        $comboTotal = (int) $combos->sum(fn (Combo $combo) => $combo->sale_price);
+
         session()->put(self::SESSION_SUCCESS, [
             'courses' => $courses->map(fn ($course) => [
-                'maKH'           => $course->maKH,
-                'tenKH'          => $course->tenKH,
-                'slug'           => $course->slug,
-                'hocPhi'         => $course->hocPhi,
-                'cover_image_url'=> $course->cover_image_url,
+                'maKH' => $course->maKH,
+                'tenKH' => $course->tenKH,
+                'slug' => $course->slug,
+                'hocPhi' => $course->hocPhi,
+                'cover_image_url' => $course->cover_image_url,
                 'end_date_label' => $course->end_date_label,
             ])->all(),
-            'total' => $total,
+            'combos' => $combos->map(fn (Combo $combo) => [
+                'maGoi' => $combo->maGoi,
+                'tenGoi' => $combo->tenGoi,
+                'slug' => $combo->slug,
+                'sale_price' => $combo->sale_price,
+                'original_price' => $combo->original_price,
+                'cover_image_url' => $combo->cover_image_url,
+            ])->all(),
+            'course_total' => $courseTotal,
+            'combo_total' => $comboTotal,
+            'total' => $courseTotal + $comboTotal,
             'payment_method' => $method,
             'invoice_id' => $finalized['invoice']->maHD ?? null,
             'pending_activation_courses' => $finalized['pending_activation_courses'],
@@ -172,10 +216,10 @@ class CheckoutController extends Controller
 
         return redirect()
             ->route('student.checkout.index', ['stage' => 3])
-            ->with('success', 'Đơn hàng của bạn đã được ghi nhận. Vui lòng kiểm tra email để nhận mã kích hoạt cho từng khóa học.');
+            ->with('success', 'Đơn hàng đã được ghi nhận. Vui lòng kiểm tra email để nhận mã kích hoạt.');
     }
 
-    private function finalizeOrder(Collection $courses, string $method, int $total): array
+    private function finalizeOrder(Collection $courses, Collection $combos, string $method): array
     {
         $user = Auth::user();
 
@@ -195,32 +239,85 @@ class CheckoutController extends Controller
         $pendingCourses = [];
         $alreadyActiveCourses = [];
 
-        DB::transaction(function () use ($courses, $method, $total, $student, $now, &$invoice, &$activationPackages, &$pendingCourses, &$alreadyActiveCourses) {
+        $coursePayloads = [];
+
+        foreach ($courses as $course) {
+            $coursePayloads[$course->maKH] = [
+                'course' => $course,
+                'combo_id' => null,
+                'promotion_id' => null,
+            ];
+        }
+
+        foreach ($combos as $combo) {
+            $activePromotion = $combo->active_promotion;
+            $promotionId = $activePromotion?->maKM;
+
+            foreach ($combo->courses as $course) {
+                $coursePayloads[$course->maKH] = [
+                    'course' => $course,
+                    'combo_id' => $combo->maGoi,
+                    'promotion_id' => $promotionId,
+                ];
+            }
+        }
+
+        $totalCoursePrice = (int) $courses->sum('hocPhi');
+        $totalComboPrice = (int) $combos->sum(fn (Combo $combo) => $combo->sale_price);
+
+        DB::transaction(function () use (
+            $student,
+            $courses,
+            $combos,
+            $method,
+            $coursePayloads,
+            $totalCoursePrice,
+            $totalComboPrice,
+            $now,
+            &$invoice,
+            &$activationPackages,
+            &$pendingCourses,
+            &$alreadyActiveCourses
+        ) {
             $invoiceData = [
-                'maHV'     => $student->maHV,
-                'maTT'     => $this->mapPaymentMethodToCode($method),
-                'maND'     => null,
-                'ngayLap'  => $now,
-                'tongTien' => $total,
+                'maHV' => $student->maHV,
+                'maTT' => $this->mapPaymentMethodToCode($method),
+                'maND' => null,
+                'ngayLap' => $now,
+                'tongTien' => $totalCoursePrice + $totalComboPrice,
+                'loai' => $combos->isNotEmpty() ? 'COMBO' : 'SINGLE_COURSE',
             ];
 
             if ($this->invoiceSupportsNotes()) {
-                $invoiceData['ghiChu'] = 'Thanh toan qua website - ' . strtoupper($method);
+                $invoiceData['ghiChu'] = 'Thanh toán qua website - ' . strtoupper($method);
             }
 
             $invoice = Invoice::create($invoiceData);
 
             foreach ($courses as $course) {
-                if (!$course) {
-                    continue;
-                }
-
                 InvoiceItem::create([
-                    'maHD'    => $invoice->maHD,
-                    'maKH'    => $course->maKH,
+                    'maHD' => $invoice->maHD,
+                    'maKH' => $course->maKH,
                     'soLuong' => 1,
-                    'donGia'  => (int) $course->hocPhi,
+                    'donGia' => (int) $course->hocPhi,
                 ]);
+            }
+
+            foreach ($combos as $combo) {
+                $promotion = $combo->active_promotion;
+
+                InvoiceComboItem::create([
+                    'maHD' => $invoice->maHD,
+                    'maGoi' => $combo->maGoi,
+                    'soLuong' => 1,
+                    'donGia' => (int) $combo->sale_price,
+                    'maKM' => $promotion?->maKM,
+                ]);
+            }
+
+            foreach ($coursePayloads as $payload) {
+                /** @var Course $course */
+                $course = $payload['course'];
 
                 $enrollment = Enrollment::firstOrNew([
                     'maHV' => $student->maHV,
@@ -249,6 +346,8 @@ class CheckoutController extends Controller
                 $enrollment->trangThai = 'PENDING';
                 $enrollment->activated_at = null;
                 $enrollment->expires_at = null;
+                $enrollment->maGoi = $payload['combo_id'];
+                $enrollment->maKM = $payload['promotion_id'];
                 $enrollment->updated_at = $now;
                 $enrollment->save();
 
@@ -264,18 +363,18 @@ class CheckoutController extends Controller
                 $codeValue = $this->generateActivationCode($student->maHV, $course->maKH);
 
                 $activation = ActivationCode::create([
-                    'maHV'        => $student->maHV,
-                    'maKH'        => $course->maKH,
-                    'maHD'        => $invoice->maHD,
-                    'code'        => $codeValue,
-                    'trangThai'   => 'CREATED',
-                    'generated_at'=> $now,
+                    'maHV' => $student->maHV,
+                    'maKH' => $course->maKH,
+                    'maHD' => $invoice->maHD,
+                    'code' => $codeValue,
+                    'trangThai' => 'CREATED',
+                    'generated_at' => $now,
                 ]);
 
                 $activationPackages[] = [
-                    'model'  => $activation,
+                    'model' => $activation,
                     'course' => $course,
-                    'code'   => $codeValue,
+                    'code' => $codeValue,
                 ];
 
                 $pendingCourses[$course->maKH] = [
@@ -330,8 +429,8 @@ class CheckoutController extends Controller
             $timestamp = Carbon::now();
             ActivationCode::whereIn('id', $ids)->update([
                 'trangThai' => 'SENT',
-                'sent_at'   => $timestamp,
-                'updated_at'=> $timestamp,
+                'sent_at' => $timestamp,
+                'updated_at' => $timestamp,
             ]);
         }
     }
@@ -353,7 +452,7 @@ class CheckoutController extends Controller
     private function mapPaymentMethodToCode(string $method): ?string
     {
         $map = [
-            'qr'   => 'TT02',
+            'qr' => 'TT02',
             'bank' => 'TT01',
             'visa' => 'TT03',
         ];
@@ -361,32 +460,70 @@ class CheckoutController extends Controller
         return $map[$method] ?? 'TT01';
     }
 
-    private function sanitizeSelection(array $ids): array
+    private function sanitizeSelection(array $items): array
     {
-        $cartIds = StudentCart::ids();
+        $courseIds = [];
+        $comboIds = [];
 
-        return array_values(array_unique(
-            array_intersect(
-                array_map('intval', $ids),
-                $cartIds
-            )
-        ));
+        foreach ($items as $value) {
+            if (!is_string($value)) {
+                continue;
+            }
+
+            if (str_starts_with($value, 'combo:')) {
+                $comboIds[] = (int) substr($value, 6);
+                continue;
+            }
+
+            if (str_starts_with($value, 'course:')) {
+                $courseIds[] = (int) substr($value, 7);
+                continue;
+            }
+
+            if (is_numeric($value)) {
+                $courseIds[] = (int) $value;
+            }
+        }
+
+        $courseIds = array_values(array_intersect(StudentCart::ids(), $courseIds));
+        $comboIds = array_values(array_intersect(StudentComboCart::ids(), $comboIds));
+
+        return [
+            'courses' => $courseIds,
+            'combos' => $comboIds,
+        ];
     }
 
-    private function loadCourses(array $selection): Collection
+    private function loadCourses(array $ids): Collection
     {
-        if (empty($selection)) {
+        if (empty($ids)) {
             return collect();
         }
 
         $courses = Course::published()
-            ->whereIn('maKH', $selection)
+            ->whereIn('maKH', $ids)
             ->with(['teacher'])
             ->get()
             ->keyBy('maKH');
 
-        return collect($selection)
+        return collect($ids)
             ->map(fn (int $id) => $courses->get($id))
+            ->filter();
+    }
+
+    private function loadCombos(array $ids): Collection
+    {
+        if (empty($ids)) {
+            return collect();
+        }
+
+        $combos = Combo::with(['courses', 'promotions'])
+            ->whereIn('maGoi', $ids)
+            ->get()
+            ->keyBy('maGoi');
+
+        return collect($ids)
+            ->map(fn (int $id) => $combos->get($id))
             ->filter();
     }
 
@@ -414,3 +551,4 @@ class CheckoutController extends Controller
         return $supportsNotes;
     }
 }
+

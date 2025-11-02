@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="vi">
 <head>
     <meta charset="utf-8">
@@ -97,6 +97,13 @@
                 </a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.combos.*') ? 'active' : '' }}"
+                href="{{ route('admin.combos.index') }}"
+                title="Quản lý combo khóa học">
+                <i class="bi bi-layers me-2"></i> Combo khóa học
+                </a>
+            </li>
             <li class="nav-item mt-3 text-muted small">Quản trị</li>
             <li class="nav-item">
                 <a class="nav-link {{ $usersBaseActive ? 'active' : '' }}"

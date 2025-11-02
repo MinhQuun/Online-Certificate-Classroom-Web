@@ -10,6 +10,7 @@
     const stageElements = Array.from(root.querySelectorAll("[data-stage]"));
     const stepElements = Array.from(root.querySelectorAll("[data-checkout-step]"));
     const nextButtons = root.querySelectorAll("[data-checkout-next]");
+    const prevButtons = root.querySelectorAll("[data-checkout-prev]");
     const isLocked = root.dataset.locked === "true";
 
     const clampStage = (stage) => Math.min(3, Math.max(1, stage));
@@ -39,6 +40,15 @@
                 return;
             }
             applyStage(currentStage + 1);
+        });
+    });
+
+    prevButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            if (isLocked) {
+                return;
+            }
+            applyStage(currentStage - 1);
         });
     });
 

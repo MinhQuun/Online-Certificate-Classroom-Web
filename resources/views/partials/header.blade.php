@@ -1,4 +1,4 @@
-@php
+﻿@php
     $categories = $studentNavCategories ?? collect();
 @endphp
 
@@ -69,6 +69,7 @@
                 {{-- @auth
                     <li class="nav-item"><a class="nav-link" href="{{ route('student.progress.index') }}">Tiến độ học tập</a></li>
                 @endauth --}}
+                <li class="nav-item"><a class="nav-link" href="{{ route('student.combos.index') }}">Combo ưu đãi</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('student.services') }}">Dịch vụ</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('student.about') }}">Về chúng tôi</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('student.contact') }}">Liên hệ</a></li>
@@ -187,3 +188,4 @@
 @push('scripts')
     <script src="{{ asset('js/Student/dropdown.js') }}" defer></script>
 @endpush
+

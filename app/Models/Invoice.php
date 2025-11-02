@@ -11,8 +11,14 @@ class Invoice extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'maHV', 'maTT', 'maND',
-        'ngayLap', 'tongTien', 'ghiChu',
+        'maHV',
+        'maTT',
+        'maND',
+        'ngayLap',
+        'tongTien',
+        'ghiChu',
+        'trangThai',
+        'loai',
     ];
 
     public function student()

@@ -11,7 +11,6 @@
     const selectAll = cartScope.querySelector("[data-cart-select-all]");
     const itemCheckboxes = Array.from(cartScope.querySelectorAll("[data-cart-item-checkbox]"));
     const selectedCountEl = document.querySelector("[data-cart-selected-count]");
-    const subtotalEl = document.querySelector("[data-cart-subtotal]");
     const totalEl = document.querySelector("[data-cart-total]");
     const submitButton = document.querySelector("[data-cart-submit]");
     const clearForm = cartScope.querySelector("[data-cart-clear-form]");
@@ -21,7 +20,7 @@
     const removeLabel = removeButton?.querySelector("[data-cart-remove-label]") || null;
 
     const formatCurrency = (value) =>
-        new Intl.NumberFormat("vi-VN", { maximumFractionDigits: 0 }).format(value) + " VNĐ";
+        new Intl.NumberFormat("vi-VN", { maximumFractionDigits: 0 }).format(value) + " VND";
 
     function updateState() {
         let selected = 0;
@@ -38,11 +37,7 @@
         });
 
         if (selectedCountEl) {
-            selectedCountEl.textContent = `${selected} khóa học`;
-        }
-
-        if (subtotalEl) {
-            subtotalEl.textContent = formatCurrency(subtotal);
+            selectedCountEl.textContent = `${selected} mục`;
         }
 
         if (totalEl) {
@@ -57,14 +52,15 @@
 
         if (removeButton) {
             const disabled = selected === 0;
+            removeButton.disabled = disabled;
+            removeButton.setAttribute("aria-disabled", String(disabled));
+
             if (disabled) {
-                removeButton.disabled = true;
                 removeButton.setAttribute("disabled", "");
             } else {
-                removeButton.disabled = false;
                 removeButton.removeAttribute("disabled");
             }
-            removeButton.setAttribute("aria-disabled", String(disabled));
+
             if (removeLabel) {
                 removeLabel.textContent = disabled
                     ? "Xoá đã chọn"
@@ -151,7 +147,7 @@
 
             const message =
                 removeForm.getAttribute("data-confirm") ||
-                "Bạn có chắc chắn muốn xoá các khóa học đã chọn?";
+                "Bạn có chắc chắn muốn xoá các mục đã chọn?";
 
             if (!window.confirm(message)) {
                 event.preventDefault();

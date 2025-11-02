@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Combo extends Model
 {
@@ -13,8 +17,18 @@ class Combo extends Model
     protected $keyType = 'int';
 
     protected $fillable = [
-        'tenGoi','slug','moTa','gia','giaGoc','hinhanh',
-        'ngayBatDau','ngayKetThuc','trangThai','rating_avg','rating_count','created_by'
+        'tenGoi',
+        'slug',
+        'moTa',
+        'gia',
+        'giaGoc',
+        'hinhanh',
+        'ngayBatDau',
+        'ngayKetThuc',
+        'trangThai',
+        'rating_avg',
+        'rating_count',
+        'created_by',
     ];
 
     protected $casts = [
@@ -25,26 +39,212 @@ class Combo extends Model
         'rating_avg' => 'decimal:2',
     ];
 
-    // Admin tạo gói
-    public function creator() { return $this->belongsTo(User::class, 'created_by', 'maND'); }
+    /* -------------------------------------------------
+    | Scopes
+    | -------------------------------------------------
+    */
 
-    // Danh sách khóa học trong combo (qua bảng GOI_KHOA_HOC_CHITIET)
+    public function scopePublished($query)
+    {
+        return $query->where('trangThai', 'PUBLISHED');
+    }
+
+    public function scopeAvailable($query)
+    {
+        $today = Carbon::today();
+
+        return $query
+            ->where('trangThai', 'PUBLISHED')
+            ->where(function ($q) use ($today) {
+                $q->whereNull('ngayBatDau')
+                    ->orWhere('ngayBatDau', '<=', $today);
+            })
+            ->where(function ($q) use ($today) {
+                $q->whereNull('ngayKetThuc')
+                    ->orWhere('ngayKetThuc', '>=', $today);
+            });
+    }
+
+    /* -------------------------------------------------
+    | Relations
+    | -------------------------------------------------
+    */
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by', 'maND');
+    }
+
     public function courses(): BelongsToMany
     {
         return $this->belongsToMany(Course::class, 'GOI_KHOA_HOC_CHITIET', 'maGoi', 'maKH')
-                    ->withPivot(['thuTu','created_at']);
+            ->withPivot(['thuTu', 'created_at'])
+            ->orderByPivot('thuTu');
     }
 
-    // Liên kết khuyến mãi áp dụng cho combo (KHUYEN_MAI_GOI)
     public function promotions(): BelongsToMany
     {
         return $this->belongsToMany(Promotion::class, 'KHUYEN_MAI_GOI', 'maGoi', 'maKM')
-                    ->withPivot(['giaUuDai','created_at']);
+            ->withPivot(['giaUuDai', 'created_at']);
     }
 
-    // Dòng hóa đơn combo (CTHD_GOI)
-    public function invoiceItems() { return $this->hasMany(InvoiceComboItem::class, 'maGoi', 'maGoi'); }
+    public function invoiceItems(): HasMany
+    {
+        return $this->hasMany(InvoiceComboItem::class, 'maGoi', 'maGoi');
+    }
 
-    // Giao dịch VNPay (nếu mua gói)
-    public function vnpayTransactions() { return $this->hasMany(PaymentTransaction::class, 'maGoi', 'maGoi'); }
+    public function vnpayTransactions(): HasMany
+    {
+        return $this->hasMany(PaymentTransaction::class, 'maGoi', 'maGoi');
+    }
+
+    /* -------------------------------------------------
+    | Accessors & helpers
+    | -------------------------------------------------
+    */
+
+    public function getCoverImageUrlAttribute(): string
+    {
+        if (!$this->hinhanh) {
+            return asset('Assets/logo.png');
+        }
+
+        if (Str::startsWith($this->hinhanh, ['http://', 'https://'])) {
+            return $this->hinhanh;
+        }
+
+        $normalized = ltrim($this->hinhanh, '/');
+        $candidatePaths = [
+            'Assets/Images/Combos/' . $normalized,
+            'Assets/Images/' . $normalized,
+            'Assets/' . $normalized,
+            $normalized,
+        ];
+
+        foreach (array_unique($candidatePaths) as $relativePath) {
+            if (file_exists(public_path($relativePath))) {
+                return asset($relativePath);
+            }
+        }
+
+        return asset('Assets/' . $normalized);
+    }
+
+    public function getIsActiveAttribute(): bool
+    {
+        return $this->isCurrentlyAvailable();
+    }
+
+    public function getSalePriceAttribute(): int
+    {
+        $promotion = $this->active_promotion;
+        $base = $this->castToInteger($this->gia);
+
+        if (!$promotion || !$this->promotionIsApplicable($promotion)) {
+            return max(0, $base);
+        }
+
+        if ($promotion->pivot && $promotion->pivot->giaUuDai) {
+            return max(0, $this->castToInteger($promotion->pivot->giaUuDai));
+        }
+
+        $promotionValue = $this->castToInteger($promotion->giaTriUuDai);
+
+        if ($promotion->loaiUuDai === Promotion::TYPE_FIXED) {
+            return max(0, $base - $promotionValue);
+        }
+
+        if ($promotion->loaiUuDai === Promotion::TYPE_PERCENT) {
+            $discount = round($base * ($promotionValue / 100));
+
+            return max(0, $base - (int) $discount);
+        }
+
+        return max(0, $base);
+    }
+
+    public function getOriginalPriceAttribute(): int
+    {
+        $reference = $this->giaGoc ?: $this->gia;
+
+        if (!$reference && $this->relationLoaded('courses')) {
+            $reference = $this->courses->sum('hocPhi');
+        }
+
+        return max(0, $this->castToInteger($reference));
+    }
+
+    public function getSavingAmountAttribute(): int
+    {
+        return max(0, $this->original_price - $this->sale_price);
+    }
+
+    public function getSavingPercentAttribute(): int
+    {
+        if ($this->original_price <= 0) {
+            return 0;
+        }
+
+        return (int) round(($this->saving_amount / $this->original_price) * 100);
+    }
+
+    public function getActivePromotionAttribute(): ?Promotion
+    {
+        if (!$this->relationLoaded('promotions')) {
+            $this->load('promotions');
+        }
+
+        $today = Carbon::today();
+
+        return $this->promotions
+            ->filter(fn (Promotion $promotion) => $this->promotionIsApplicable($promotion, $today))
+            ->sortByDesc(fn (Promotion $promotion) => $promotion->pivot?->created_at ?? $promotion->created_at)
+            ->first();
+    }
+
+    public function isCurrentlyAvailable(): bool
+    {
+        if ($this->trangThai !== 'PUBLISHED') {
+            return false;
+        }
+
+        $today = Carbon::today();
+
+        $started = !$this->ngayBatDau || $this->ngayBatDau->lte($today);
+        $notEnded = !$this->ngayKetThuc || $this->ngayKetThuc->gte($today);
+
+        return $started && $notEnded;
+    }
+
+    protected function promotionIsApplicable(Promotion $promotion, ?Carbon $today = null): bool
+    {
+        $today ??= Carbon::today();
+
+        if ($promotion->trangThai !== 'ACTIVE') {
+            return false;
+        }
+
+        if ($promotion->ngayBatDau && Carbon::parse($promotion->ngayBatDau)->gt($today)) {
+            return false;
+        }
+
+        if ($promotion->ngayKetThuc && Carbon::parse($promotion->ngayKetThuc)->lt($today)) {
+            return false;
+        }
+
+        if ($promotion->soLuongGioiHan !== null && $promotion->soLuongGioiHan <= 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function castToInteger($value): int
+    {
+        if ($value === null) {
+            return 0;
+        }
+
+        return (int) round((float) $value);
+    }
 }
