@@ -36,6 +36,7 @@ class ResultController extends Controller
 
         // Query results - chỉ lấy lần làm bài gần nhất của mỗi học viên
         $query = MiniTestResult::query()
+            ->where('is_fully_graded', true)
             ->whereHas('miniTest', function ($q) use ($teacherId, $selectedCourseId) {
                 $q->whereHas('course', fn($query) => $query->where('maND', $teacherId));
                 if ($selectedCourseId) {

@@ -39,13 +39,7 @@
                 <div class="text-muted">Chờ chấm</div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="stats-card summary-card text-center">
-                <i class="bi bi-graph-up text-info fs-1 mb-2"></i>
-                <div class="stats-value text-info">{{ number_format($stats['avg_score'], 1) }}</div>
-                <div class="text-muted">Điểm trung bình</div>
-            </div>
-        </div>
+
     </div>
 
     <!-- Filters -->
@@ -77,8 +71,8 @@
 
             <div class="col-md-4">
                 <label class="form-label fw-bold">Tìm học viên</label>
-                <input type="text" name="student" class="form-control" 
-                       placeholder="Nhập tên học viên..." 
+                <input type="text" name="student" class="form-control"
+                       placeholder="Nhập tên học viên..."
                        value="{{ $searchStudent }}">
             </div>
 
@@ -160,29 +154,27 @@
                                 </span>
                             </td>
                             <td class="text-center">
-                                @if($result->is_fully_graded)
-                                    <span class="badge badge-graded">
-                                        <i class="bi bi-check-circle-fill me-1"></i>Đã chấm
-                                    </span>
-                                @else
-                                    <span class="badge badge-pending">
-                                        <i class="bi bi-hourglass-split me-1"></i>Chờ chấm
-                                    </span>
-                                @endif
+                                <span class="badge badge-graded">
+                                    <i class="bi bi-check-circle-fill me-1"></i>Đã chấm
+                                </span>
                             </td>
                             <td class="text-center">
                                 <small>{{ $result->nop_luc->format('d/m/Y H:i') }}</small>
                             </td>
                             <td class="text-center">
-                                <a href="{{ route('teacher.results.show', $result->maKQDG) }}" 
+                                <a href="{{ route('teacher.results.show', $result->maKQDG) }}"
                                    class="btn btn-sm btn-outline-primary"
                                    title="Xem chi tiết">
                                     <i class="bi bi-eye"></i>
                                 </a>
-                                @if(!$result->is_fully_graded)
-                                    <a href="{{ route('teacher.grading.show', $result->maKQDG) }}" 
-                                       class="btn btn-sm btn-outline-warning ms-1"
-                                       title="Chấm điểm">
+                                @if(!$result->is_fully_graded && in_array($result->miniTest->skill_type, ['WRITING', 'SPEAKING']))
+                                    @php
+                                        // Xác định route đúng dựa trên skill_type (giả sử constant là uppercase như 'WRITING', 'SPEAKING')
+                                        $gradingRoute = $result->miniTest->skill_type === 'SPEAKING'
+                                            ? 'teacher.grading.speaking.show'
+                                            : 'teacher.grading.writing.show';
+                                    @endphp
+                                    <a href="{{ route($gradingRoute, $result->maKQDG) }}" class="btn btn-sm btn-outline-warning ms-1" title="Chấm điểm">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
                                 @endif
