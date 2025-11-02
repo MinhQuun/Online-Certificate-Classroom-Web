@@ -88,6 +88,8 @@ Route::get('/student/lessons/{maBH}', fn ($maBH) => redirect()->route('student.l
 Route::prefix('cart')->name('student.cart.')->group(function () {
     Route::get('/', [StudentCartController::class, 'index'])->name('index');
     Route::post('/', [StudentCartController::class, 'store'])->name('store');
+    Route::delete('/items', [StudentCartController::class, 'destroySelected'])->name('destroy-selected');
+    Route::delete('/', [StudentCartController::class, 'destroyAll'])->name('destroy-all');
     Route::delete('/{course}', [StudentCartController::class, 'destroy'])->name('destroy');
 });
 Route::post('/cart/checkout', [CheckoutController::class, 'start'])->name('student.checkout.start');

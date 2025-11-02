@@ -46,6 +46,21 @@ class StudentCart
         session()->put(self::SESSION_KEY, array_values($ids));
     }
 
+    public static function removeMany(array $courseIds): void
+    {
+        if (empty($courseIds)) {
+            return;
+        }
+
+        $removeSet = array_flip(array_map('intval', $courseIds));
+        $ids = array_filter(
+            self::ids(),
+            fn (int $id) => !array_key_exists($id, $removeSet)
+        );
+
+        session()->put(self::SESSION_KEY, array_values($ids));
+    }
+
     public static function clear(): void
     {
         session()->forget(self::SESSION_KEY);

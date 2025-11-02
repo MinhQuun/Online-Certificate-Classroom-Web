@@ -38,11 +38,50 @@
                 <div class="cart-layout" data-cart-form-scope>
                     <div class="cart-board">
                             <div class="cart-board__header">
-                                <label class="cart-checkbox">
-                                    <input type="checkbox" data-cart-select-all>
-                                    <span>Chọn tất cả ({{ $courses->count() }})</span>
-                                </label>
-                                <span class="cart-board__meta">Đang có {{ $courses->count() }} khóa học</span>
+                                <div class="cart-board__header-main">
+                                    <label class="cart-checkbox">
+                                        <input type="checkbox" data-cart-select-all>
+                                        <span>Chọn tất cả ({{ $courses->count() }})</span>
+                                    </label>
+                                    <span class="cart-board__meta">Đang có {{ $courses->count() }} khóa học</span>
+                                </div>
+                                <div class="cart-board__actions">
+                                    <form
+                                        method="post"
+                                        action="{{ route('student.cart.destroy-selected') }}"
+                                        class="cart-board__remove-form"
+                                        data-cart-remove-form
+                                        data-confirm="Bạn có chắc chắn muốn xoá các khóa học đã chọn?"
+                                    >
+                                        @csrf
+                                        @method('delete')
+                                        <div data-cart-remove-inputs hidden></div>
+                                        <button
+                                            type="submit"
+                                            class="cart-board__remove"
+                                            data-cart-remove-selected
+                                            disabled
+                                            aria-disabled="true"
+                                        >
+                                            <i class="fa-solid fa-minus-circle" aria-hidden="true"></i>
+                                            <span data-cart-remove-label>Xoá đã chọn</span>
+                                        </button>
+                                    </form>
+                                    <form
+                                        method="post"
+                                        action="{{ route('student.cart.destroy-all') }}"
+                                        class="cart-board__clear-form"
+                                        data-cart-clear-form
+                                        data-confirm="Bạn có chắc chắn muốn xoá toàn bộ giỏ hàng?"
+                                    >
+                                        @csrf
+                                        @method('delete')
+                                        <button type="submit" class="cart-board__clear">
+                                            <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
+                                            <span>Xoá toàn bộ</span>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
 
                             @error('items')

@@ -51,4 +51,41 @@ class CartController extends Controller
 
         return back()->with('success', 'Đã xoá khóa học khỏi giỏ hàng.');
     }
+
+    public function destroySelected(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'items' => ['required', 'array', 'min:1'],
+            'items.*' => ['integer'],
+        ], [
+            'items.required' => 'Vui lòng chọn ít nhất 1 khóa học để xoá.',
+            'items.array' => 'Danh sách khóa học không hợp lệ.',
+            'items.min' => 'Vui lòng chọn ít nhất 1 khóa học để xoá.',
+            'items.*.integer' => 'Khóa học không hợp lệ.',
+        ]);
+
+        $selectedIds = array_map('intval', $validated['items']);
+        $existingIds = StudentCart::ids();
+        $toRemove = array_values(array_intersect($existingIds, $selectedIds));
+
+        if (empty($toRemove)) {
+            return back()->with('info', 'Các khóa học đã được xoá khỏi giỏ hàng trước đó.');
+        }
+
+        StudentCart::removeMany($toRemove);
+
+        $removedCount = count($toRemove);
+        $message = $removedCount === 1
+            ? 'Đã xoá 1 khóa học khỏi giỏ hàng.'
+            : "Đã xoá {$removedCount} khóa học khỏi giỏ hàng.";
+
+        return back()->with('success', $message);
+    }
+
+    public function destroyAll(): RedirectResponse
+    {
+        StudentCart::clear();
+
+        return back()->with('success', 'Đã xoá tất cả khóa học khỏi giỏ hàng.');
+    }
 }

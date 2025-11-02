@@ -14,6 +14,11 @@
     const subtotalEl = document.querySelector("[data-cart-subtotal]");
     const totalEl = document.querySelector("[data-cart-total]");
     const submitButton = document.querySelector("[data-cart-submit]");
+    const clearForm = cartScope.querySelector("[data-cart-clear-form]");
+    const removeForm = cartScope.querySelector("[data-cart-remove-form]");
+    const removeInputsContainer = removeForm?.querySelector("[data-cart-remove-inputs]") || null;
+    const removeButton = removeForm?.querySelector("[data-cart-remove-selected]") || null;
+    const removeLabel = removeButton?.querySelector("[data-cart-remove-label]") || null;
 
     const formatCurrency = (value) =>
         new Intl.NumberFormat("vi-VN", { maximumFractionDigits: 0 }).format(value) + " VNĐ";
@@ -50,6 +55,23 @@
             submitButton.setAttribute("aria-disabled", String(disabled));
         }
 
+        if (removeButton) {
+            const disabled = selected === 0;
+            if (disabled) {
+                removeButton.disabled = true;
+                removeButton.setAttribute("disabled", "");
+            } else {
+                removeButton.disabled = false;
+                removeButton.removeAttribute("disabled");
+            }
+            removeButton.setAttribute("aria-disabled", String(disabled));
+            if (removeLabel) {
+                removeLabel.textContent = disabled
+                    ? "Xoá đã chọn"
+                    : `Xoá (${selected})`;
+            }
+        }
+
         if (selectAll) {
             const totalItems = itemCheckboxes.length;
             selectAll.checked = selected > 0 && selected === totalItems;
@@ -82,6 +104,56 @@
 
             if (typeof cartForm.requestSubmit === "function") {
                 cartForm.requestSubmit();
+                event.preventDefault();
+            }
+        });
+    }
+
+    if (clearForm) {
+        clearForm.addEventListener("submit", (event) => {
+            const message =
+                clearForm.getAttribute("data-confirm") ||
+                "Bạn có chắc chắn muốn xoá toàn bộ giỏ hàng?";
+
+            if (!window.confirm(message)) {
+                event.preventDefault();
+            }
+        });
+    }
+
+    if (removeForm && removeInputsContainer && removeButton) {
+        removeForm.addEventListener("submit", (event) => {
+            if (removeButton.disabled) {
+                event.preventDefault();
+                return;
+            }
+
+            const selectedItems = itemCheckboxes
+                .filter((checkbox) => checkbox.checked)
+                .map((checkbox) => checkbox.value);
+
+            if (selectedItems.length === 0) {
+                event.preventDefault();
+                return;
+            }
+
+            while (removeInputsContainer.firstChild) {
+                removeInputsContainer.firstChild.remove();
+            }
+
+            selectedItems.forEach((value) => {
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "items[]";
+                input.value = value;
+                removeInputsContainer.appendChild(input);
+            });
+
+            const message =
+                removeForm.getAttribute("data-confirm") ||
+                "Bạn có chắc chắn muốn xoá các khóa học đã chọn?";
+
+            if (!window.confirm(message)) {
                 event.preventDefault();
             }
         });
