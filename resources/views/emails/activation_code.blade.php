@@ -3,18 +3,179 @@
     <head>
         <meta charset="UTF-8">
         <title>Mã kích hoạt khóa học</title>
-        @php
-            $styles = file_exists(public_path('css/Student/email-activation-code.css'))
-                ? file_get_contents(public_path('css/Student/email-activation-code.css'))
-                : '';
-        @endphp
-        <style>{{ $styles }}</style>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(120deg, #2563eb 0%, #60a5fa 100%);
+                padding: 40px 20px;
+                line-height: 1.6;
+            }
+            .email-wrapper {
+                max-width: 640px;
+                margin: 0 auto;
+            }
+            .email-container {
+                background: #ffffff;
+                border-radius: 16px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                overflow: hidden;
+            }
+            .email-header {
+                background: linear-gradient(120deg, #2563eb 0%, #60a5fa 100%);
+                color: #ffffff;
+                padding: 40px 30px;
+                text-align: center;
+            }
+            .email-header h1 {
+                font-size: 28px;
+                font-weight: 700;
+                margin-bottom: 8px;
+            }
+            .email-header p {
+                font-size: 16px;
+                opacity: 0.95;
+            }
+            .email-body {
+                padding: 40px 30px;
+                color: #333333;
+            }
+            .email-body p {
+                margin-bottom: 16px;
+                font-size: 15px;
+            }
+            .activation-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 24px 0;
+                background: #f8f9fa;
+                border-radius: 12px;
+                overflow: hidden;
+            }
+            .activation-table thead {
+                background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            }
+            .activation-table th {
+                padding: 16px;
+                text-align: left;
+                font-weight: 700;
+                color: #2563eb;
+                font-size: 14px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                border-bottom: 2px solid #2563eb;
+            }
+            .activation-table td {
+                padding: 16px;
+                border-bottom: 1px solid #e5e7eb;
+                font-size: 15px;
+            }
+            .activation-table tbody tr:last-child td {
+                border-bottom: none;
+            }
+            .activation-table tbody tr:hover {
+                background: #f9fafb;
+            }
+            .activation-code {
+                display: inline-block;
+                background: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
+                color: #ffffff !important;
+                padding: 8px 16px;
+                border-radius: 8px;
+                font-weight: 700;
+                font-family: 'Courier New', monospace;
+                font-size: 16px;
+                letter-spacing: 1px;
+            }
+            .activation-steps {
+                background: #eff6ff;
+                border-left: 4px solid #2563eb;
+                padding: 20px 20px 20px 40px;
+                margin: 24px 0;
+                border-radius: 8px;
+            }
+            .activation-steps li {
+                margin-bottom: 12px;
+                font-size: 15px;
+                color: #333333;
+            }
+            .activation-steps li:last-child {
+                margin-bottom: 0;
+            }
+            .activation-button {
+                display: inline-block;
+                background: linear-gradient(120deg, #2563eb 0%, #60a5fa 100%);
+                color: #ffffff !important;
+                text-decoration: none;
+                padding: 14px 32px;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: 15px;
+                margin-top: 20px;
+                transition: transform 0.2s, box-shadow 0.2s;
+            }
+            .activation-button:hover {
+                color: #ffffff !important;
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+            }
+            .email-note {
+                background: #fff3cd;
+                border-left: 4px solid #ffc107;
+                padding: 16px;
+                margin: 24px 0;
+                border-radius: 8px;
+                font-size: 14px;
+                color: #856404;
+            }
+            .email-footer {
+                background: #f8f9fa;
+                padding: 30px;
+                text-align: center;
+                color: #6c757d;
+                font-size: 13px;
+                border-top: 1px solid #e9ecef;
+            }
+            .email-footer p {
+                margin-bottom: 8px;
+            }
+            .email-footer strong {
+                color: #495057;
+            }
+            @media (max-width: 600px) {
+                body {
+                    padding: 20px 10px;
+                }
+                .email-header {
+                    padding: 30px 20px;
+                }
+                .email-header h1 {
+                    font-size: 24px;
+                }
+                .email-body {
+                    padding: 30px 20px;
+                }
+                .activation-table th,
+                .activation-table td {
+                    padding: 12px;
+                    font-size: 14px;
+                }
+                .activation-code {
+                    font-size: 14px;
+                    padding: 6px 12px;
+                }
+            }
+        </style>
     </head>
     <body>
         <div class="email-wrapper">
             <div class="email-container">
                 <header class="email-header">
-                    <h1>Online Certificate Classroom</h1>
+                    <h1>🎓 Online Certificate Classroom</h1>
                     <p>Mã kích hoạt cho đơn hàng mới của bạn</p>
                 </header>
 
@@ -58,13 +219,17 @@
 
                     <a href="{{ url('/student/activation-codes') }}" class="activation-button">Nhập mã kích hoạt</a>
 
-                    <p class="email-note">Lưu ý: Mỗi mã chỉ sử dụng được một lần cho tài khoản của bạn. Vui lòng không chia sẻ mã kích hoạt cho người khác.</p>
+                    <div class="email-note">
+                        <strong>⚠️ Lưu ý:</strong> Mỗi mã chỉ sử dụng được một lần cho tài khoản của bạn. Vui lòng không chia sẻ mã kích hoạt cho người khác.
+                    </div>
                 </div>
 
                 <footer class="email-footer">
-                    <p><strong>Online Certificate Classroom</strong><br>
-                    Hotline: 0999.999.999 · Email: support@occ.edu.vn</p>
-                    <p>Đây là email tự động, vui lòng không trả lời trực tiếp.</p>
+                    <p><strong>Online Certificate Classroom</strong></p>
+                    <p>Địa chỉ: 140 Lê Trọng Tấn, Tây Thạnh, Tân Phú, TP.HCM</p>
+                    <p>Hotline: +84 901 234 567 · Email: support@occ.edu.vn</p>
+                    <p style="margin-top: 16px;">© {{ date('Y') }} Online Certificate Classroom. All rights reserved.</p>
+                    <p style="margin-top: 8px; font-size: 12px; font-style: italic;">Đây là email tự động, vui lòng không trả lời trực tiếp.</p>
                 </footer>
             </div>
         </div>
