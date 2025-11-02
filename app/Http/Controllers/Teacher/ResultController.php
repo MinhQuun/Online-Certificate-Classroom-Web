@@ -137,7 +137,7 @@ class ResultController extends Controller
             ->orderBy('attempt_no', 'asc')
             ->get();
 
-        return view('Teacher.results.show', [
+        return view('Teacher.show_results_student', [
             'teacher' => Auth::user(),
             'result' => $result,
             'allAttempts' => $allAttempts,
