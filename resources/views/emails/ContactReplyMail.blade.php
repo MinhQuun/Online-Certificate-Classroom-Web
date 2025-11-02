@@ -115,7 +115,7 @@
             .contact-button {
                 display: inline-block;
                 background: linear-gradient(120deg, #2563eb 0%, #60a5fa 100%);
-                color: #ffffff;
+                color: #ffffff !important;
                 text-decoration: none;
                 padding: 14px 32px;
                 border-radius: 8px;
@@ -125,6 +125,7 @@
                 transition: transform 0.2s, box-shadow 0.2s;
             }
             .contact-button:hover {
+                color: #ffffff !important;
                 transform: translateY(-2px);
                 box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
             }
