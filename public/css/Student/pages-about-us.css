@@ -66,7 +66,12 @@
     font-size: clamp(30px, 5vw, 44px);
     font-weight: 800;
     line-height: 1.1;
-    background: linear-gradient(135deg, #1e293b, var(--about-accent), var(--about-accent-light));
+    background: linear-gradient(
+        135deg,
+        #1e293b,
+        var(--about-accent),
+        var(--about-accent-light)
+    );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -121,7 +126,11 @@
 }
 
 .stat:hover {
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(59, 130, 246, 0.05));
+    background: linear-gradient(
+        135deg,
+        rgba(37, 99, 235, 0.05),
+        rgba(59, 130, 246, 0.05)
+    );
     border-color: var(--about-accent);
     transform: translateY(-3px);
     box-shadow: 0 14px 28px rgba(37, 99, 235, 0.18);
@@ -165,9 +174,13 @@
 .divider {
     height: 4px;
     width: 72px;
-    background: linear-gradient(90deg, var(--about-accent), var(--about-accent-light));
+    background: linear-gradient(
+        90deg,
+        var(--about-accent),
+        var(--about-accent-light)
+    );
     border-radius: 999px;
-    margin: 10px 0 18px;
+    margin: 0 0 18px;
 }
 
 /* ===== Lists ===== */
@@ -217,13 +230,17 @@
 }
 
 .role-item::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 4px;
     height: 100%;
-    background: linear-gradient(180deg, var(--about-accent), var(--about-accent-light));
+    background: linear-gradient(
+        180deg,
+        var(--about-accent),
+        var(--about-accent-light)
+    );
     transform: scaleY(0);
     transition: transform 0.3s ease;
 }
@@ -245,13 +262,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(59, 130, 246, 0.15));
+    background: linear-gradient(
+        135deg,
+        rgba(37, 99, 235, 0.1),
+        rgba(59, 130, 246, 0.15)
+    );
     margin-bottom: 14px;
     transition: all 0.3s ease;
 }
 
 .role-item:hover .role-icon {
-    background: linear-gradient(135deg, var(--about-accent), var(--about-accent-light));
+    background: linear-gradient(
+        135deg,
+        var(--about-accent),
+        var(--about-accent-light)
+    );
     transform: scale(1.1) rotate(5deg);
 }
 
@@ -397,4 +422,42 @@
         font-size: 12px;
         padding: 7px 12px;
     }
+}
+
+.about-card .section__header {
+    text-align: left !important;
+    max-width: none !important;
+    margin: 0 !important;
+}
+
+.about-card .section__header h2 {
+    margin: 0 0 8px !important;
+    padding: 0 !important;
+    width: auto !important;
+    display: inline-block;
+    font-size: 22px !important;
+    color: var(--about-accent) !important;
+}
+
+.about-card .section__header h2::before,
+.about-card .section__header h2::after {
+    bottom: -4px;
+    background: linear-gradient(
+        90deg,
+        var(--about-accent),
+        var(--about-accent-light)
+    );
+}
+
+.about-card .section__header h2:hover::before,
+.about-card .section__header h2:hover::after {
+    width: 40px;
+}
+
+.about-card .section__header h2:hover {
+    color: var(--about-accent-light);
+}
+
+.about-card .section__header p {
+    display: none;
 }

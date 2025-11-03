@@ -16,9 +16,9 @@
         <span class="kicker">Online Certificate Classroom • OCC Platform</span>
         <h1>Về Chúng Tôi</h1>
         <p>
-            <strong>Online Certificate Classroom (OCC)</strong> là nền tảng học tập trực tuyến chuyên về 
-            <strong>các khóa học chứng chỉ</strong> với lộ trình rõ ràng, tài nguyên đa dạng và hệ thống theo dõi 
-            tiến độ thông minh. Mục tiêu của chúng tôi là mang đến trải nghiệm học tập hiệu quả, giúp học viên 
+            <strong>Online Certificate Classroom (OCC)</strong> là nền tảng học tập trực tuyến chuyên về
+            <strong>các khóa học chứng chỉ</strong> với lộ trình rõ ràng, tài nguyên đa dạng và hệ thống theo dõi
+            tiến độ thông minh. Mục tiêu của chúng tôi là mang đến trải nghiệm học tập hiệu quả, giúp học viên
             đạt được chứng chỉ mong muốn một cách tối ưu nhất.
         </p>
 
@@ -43,15 +43,18 @@
     <section class="about-grid">
         {{-- Cột trái --}}
         <article class="about-card">
-            <h2>Về Dự Án</h2>
+            <div class="section__header">
+                <h2>Về Dự Án</h2>
+            </div>
             <div class="divider"></div>
             <p>
-                <strong>Online Certificate Classroom</strong> là nền tảng e-learning được xây dựng với mục đích 
-                cung cấp giải pháp học tập trực tuyến toàn diện cho các khóa học chứng chỉ. Hệ thống cho phép 
+                <strong>Online Certificate Classroom</strong> là nền tảng e-learning được xây dựng với mục đích
+                cung cấp giải pháp học tập trực tuyến toàn diện cho các khóa học chứng chỉ. Hệ thống cho phép
                 tổ chức khóa học theo chương - bài học, tích hợp tài nguyên đa dạng và đánh giá định kỳ qua mini-test.
             </p>
-
-            <h2 style="margin-top:18px;">Tính Năng Nổi Bật</h2>
+            <div class="section__header">
+                <h2>Tính Năng Nổi Bật</h2>
+            </div>
             <div class="divider"></div>
             <ul class="about-list">
                 <li><strong>Lộ trình học tập rõ ràng</strong>: Khóa học được cấu trúc theo chương và bài học tuần tự.</li>
@@ -61,8 +64,9 @@
                 <li><strong>Thanh toán linh hoạt</strong>: Tích hợp VNPay và hỗ trợ mã kích hoạt.</li>
                 <li><strong>Giao diện responsive</strong>: Tối ưu trên mọi thiết bị, dễ sử dụng.</li>
             </ul>
-
-            <h2 style="margin-top:18px;">Quy Trình Học Tập</h2>
+            <div class="section__header">
+                <h2>Quy Trình Học Tập</h2>
+            </div>
             <div class="divider"></div>
             <ul class="about-list">
                 <li><strong>Bước 1 - Đăng ký</strong>: Chọn khóa học phù hợp và đăng ký qua thanh toán trực tuyến hoặc mã kích hoạt.</li>
@@ -70,8 +74,9 @@
                 <li><strong>Bước 3 - Thực hành</strong>: Làm mini-test sau mỗi chương để củng cố kiến thức.</li>
                 <li><strong>Bước 4 - Hoàn thành</strong>: Đạt đủ tiêu chuẩn và nhận chứng chỉ số có mã xác thực.</li>
             </ul>
-
-            <h2 style="margin-top:18px;">Giá Trị Cốt Lõi</h2>
+            <div class="section__header">
+                <h2>Giá Trị Cốt Lõi</h2>
+            </div>
             <div class="divider"></div>
             <ul class="team-list">
                 <li><strong>Chất lượng</strong>: Nội dung khóa học được biên soạn bởi chuyên gia</li>
@@ -83,7 +88,9 @@
 
         {{-- Cột phải --}}
         <aside class="about-card">
-            <h2>Lợi Ích Khi Học Tại OCC</h2>
+            <div class="section__header">
+                <h2>Đội Ngũ Phát Triển</h2>
+            </div>
             <div class="divider"></div>
             <div class="user-roles">
                 <div class="role-item">
@@ -109,10 +116,12 @@
                 </div>
             </div>
 
-            <h2 style="margin-top:32px;">Sứ Mệnh</h2>
+            <div class="section__header">
+                <h2>Sứ Mệnh</h2>
+            </div>
             <div class="divider"></div>
             <p>
-                Chúng tôi tin rằng giáo dục trực tuyến là tương lai, và mỗi học viên đều xứng đáng có một nền tảng 
+                Chúng tôi tin rằng giáo dục trực tuyến là tương lai, và mỗi học viên đều xứng đáng có một nền tảng
                 học tập chất lượng, dễ tiếp cận và hiệu quả. OCC cam kết:
             </p>
             <ul class="about-list">
@@ -121,8 +130,9 @@
                 <li>Cập nhật nội dung liên tục theo xu hướng mới</li>
                 <li>Tạo môi trường học tập tương tác và thân thiện</li>
             </ul>
-
-            <h2 style="margin-top:18px;">Cam Kết Chất Lượng</h2>
+            <div class="section__header">
+                <h2>Cam Kết Chất Lượng</h2>
+            </div>
             <div class="divider"></div>
             <ul class="team-list">
                 <li><strong>Nội dung chuẩn mực</strong>: Khóa học được biên soạn kỹ lưỡng, cập nhật thường xuyên</li>
@@ -131,13 +141,14 @@
                 <li><strong>Bài tập thực hành</strong>: Mini-test sau mỗi chương giúp củng cố kiến thức</li>
                 <li><strong>Chứng chỉ có giá trị</strong>: Được xác thực và có thể chia sẻ dễ dàng</li>
             </ul>
-
-            <h2 style="margin-top:18px;">Liên Hệ</h2>
+            <div class="section__header">
+                <h2>Liên Hệ</h2>
+            </div>
             <div class="divider"></div>
             <p class="contact-note">
-                Mọi thắc mắc và góp ý xin vui lòng liên hệ qua email: 
-                <a href="mailto:support@occ.edu.vn">support@occ.edu.vn</a> hoặc hotline: 
-                <a href="tel:+84901234567">+84 901 234 567</a>. Chúng tôi luôn sẵn sàng lắng nghe 
+                Mọi thắc mắc và góp ý xin vui lòng liên hệ qua email:
+                <a href="mailto:support@occ.edu.vn">support@occ.edu.vn</a> hoặc hotline:
+                <a href="tel:+84901234567">+84 901 234 567</a>. Chúng tôi luôn sẵn sàng lắng nghe
                 và hỗ trợ bạn!
             </p>
         </aside>

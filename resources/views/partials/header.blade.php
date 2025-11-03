@@ -4,79 +4,80 @@
 
 <header class="site-header" data-site-header>
     <div class="site-header__inner oc-container">
-        <a href="{{ route('student.courses.index') }}" class="brand">
-            <img src="{{ asset('Assets/logo.png') }}" alt="Logo Online Certificate Classroom">
-            <div class="brand__text">
-                <span class="brand__name">Online Certificate Classroom</span>
-                <span class="brand__tagline">Học chứng chỉ hiệu quả</span>
-            </div>
-        </a>
+        <div class="header-left">
+            <a href="{{ route('student.courses.index') }}" class="brand">
+                <img src="{{ asset('Assets/logo.png') }}" alt="Logo Online Certificate Classroom">
+                <div class="brand__text">
+                    <span class="brand__name">Online Certificate Classroom</span>
+                    <span class="brand__tagline">Học chứng chỉ hiệu quả</span>
+                </div>
+            </a>
 
-        <nav class="main-nav" aria-label="Thanh điều hướng chính">
-            <ul class="nav-list">
+            <nav class="main-nav" aria-label="Thanh điều hướng chính">
+                <ul class="nav-list">
+                    <!-- DROPDOWN: Danh mục khóa học -->
+                    <li class="nav-item nav-item--mega" data-dropdown>
+                        <button class="nav-link" data-dropdown-trigger aria-expanded="false" aria-haspopup="true" aria-controls="menu-categories">
+                            <span>Danh mục khóa học</span>
+                            <i class="fa-solid fa-angle-down" aria-hidden="true"></i>
+                        </button>
 
-                <!-- DROPDOWN: Danh mục khóa học -->
-                <li class="nav-item nav-item--mega" data-dropdown>
-                    <button class="nav-link" data-dropdown-trigger aria-expanded="false" aria-haspopup="true" aria-controls="menu-categories">
-                        <span>Danh mục khóa học</span>
-                        <i class="fa-solid fa-angle-down" aria-hidden="true"></i>
-                    </button>
-
-                    <div id="menu-categories" class="dropdown-panel" data-dropdown-panel role="menu" aria-label="Danh mục">
-                        <ul class="dropdown-categories">
-                            <li class="dropdown-category-item">
-                                <a href="{{ route('student.courses.index') }}" class="dropdown-category-trigger">
-                                    <span>Tất cả khóa học</span>
-                                </a>
-                            </li>
-                            @foreach($categories as $cat)
-                                <li class="dropdown-category-item" data-subdropdown>
-                                    <a href="{{ route('student.courses.index', ['category' => $cat->slug]) }}"
-                                        class="dropdown-category-trigger"
-                                        data-subdropdown-trigger
-                                        aria-expanded="false"
-                                        aria-haspopup="true"
-                                        role="button"
-                                    >
-                                        <span>{{ $cat->tenDanhMuc }}</span>
-                                        <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
+                        <div id="menu-categories" class="dropdown-panel" data-dropdown-panel role="menu" aria-label="Danh mục">
+                            <ul class="dropdown-categories">
+                                <li class="dropdown-category-item">
+                                    <a href="{{ route('student.courses.index') }}" class="dropdown-category-trigger">
+                                        <span>Tất cả khóa học</span>
                                     </a>
-
-                                    <div class="subdropdown-panel" data-subdropdown-panel role="menu" aria-label="Khóa học {{ $cat->tenDanhMuc }}">
-                                        <h4 class="subdropdown-title">{{ $cat->tenDanhMuc }}</h4>
-
-                                        @if($cat->courses->isNotEmpty())
-                                            <ul class="subdropdown-courses">
-                                                @foreach($cat->courses as $course)
-                                                    <li>
-                                                        <a href="{{ route('student.courses.show', $course->slug) }}" role="menuitem">
-                                                            {{ $course->tenKH }}
-                                                        </a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        @else
-                                            <div class="dropdown-empty-state">Chưa có khóa học</div>
-                                        @endif
-                                    </div>
                                 </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </li>
+                                @foreach($categories as $cat)
+                                    <li class="dropdown-category-item" data-subdropdown>
+                                        <a href="{{ route('student.courses.index', ['category' => $cat->slug]) }}"
+                                            class="dropdown-category-trigger"
+                                            data-subdropdown-trigger
+                                            aria-expanded="false"
+                                            aria-haspopup="true"
+                                            role="button"
+                                        >
+                                            <span>{{ $cat->tenDanhMuc }}</span>
+                                            <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
+                                        </a>
 
-                <!-- Các mục menu khác -->
-                {{-- @auth
-                    <li class="nav-item"><a class="nav-link" href="{{ route('student.progress.index') }}">Tiến độ học tập</a></li>
-                @endauth --}}
-                <li class="nav-item"><a class="nav-link" href="{{ route('student.combos.index') }}">Combo ưu đãi</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('student.services') }}">Dịch vụ</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('student.about') }}">Về chúng tôi</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('student.contact') }}">Liên hệ</a></li>
-            </ul>
-        </nav>
+                                        <div class="subdropdown-panel" data-subdropdown-panel role="menu" aria-label="Khóa học {{ $cat->tenDanhMuc }}">
+                                            <h4 class="subdropdown-title">{{ $cat->tenDanhMuc }}</h4>
 
-        <div class="header-actions">
+                                            @if($cat->courses->isNotEmpty())
+                                                <ul class="subdropdown-courses">
+                                                    @foreach($cat->courses as $course)
+                                                        <li>
+                                                            <a href="{{ route('student.courses.show', $course->slug) }}" role="menuitem">
+                                                                {{ $course->tenKH }}
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            @else
+                                                <div class="dropdown-empty-state">Chưa có khóa học</div>
+                                            @endif
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Các mục menu khác -->
+                    {{-- @auth
+                        <li class="nav-item"><a class="nav-link" href="{{ route('student.progress.index') }}">Tiến độ học tập</a></li>
+                    @endauth --}}
+                    <li class="nav-item"><a class="nav-link" href="{{ route('student.combos.index') }}">Combo ưu đãi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('student.services') }}">Dịch vụ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('student.about') }}">Về chúng tôi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('student.contact') }}">Liên hệ</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="header-center">
             <form action="{{ route('student.courses.index') }}" method="get" class="header-search" role="search">
                 <label for="header-search" class="sr-only">Tìm khóa học</label>
                 <input id="header-search" type="text" name="q" placeholder="Tìm khóa học..." value="{{ request('q') }}">
@@ -84,7 +85,9 @@
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.94 15.12a8 8 0 1 0-1.82 1.82l4.65 4.65a1.28 1.28 0 0 0 1.81-1.81Zm-6.44.88a5.5 5.5 0 1 1 5.5-5.5a5.5 5.5 0 0 1-5.5 5.5Z"/></svg>
                 </button>
             </form>
+        </div>
 
+        <div class="header-right">
             @auth
                 @php
                     $fullName = Auth::user()->name ?? 'User';
@@ -121,26 +124,26 @@
                                 <i class="fa-solid fa-user"></i>
                                 <span> Trang cá nhân</span>
                             </a>
-                             <a href="{{ route('student.my-courses') }}">
+                            <a href="{{ route('student.my-courses') }}">
                                 <i class="fa-solid fa-book-tanakh"></i>
                                 <span> Khóa học của tôi</span>
                             </a>
                             <a href="{{ route('student.progress.index') }}">
                                 <i class="fa-solid fa-chart-line"></i>
-                        <span> Tiến độ học tập</span>
-                    </a>
-                    <a href="{{ route('student.activations.form') }}">
-                        <i class="fa-solid fa-key"></i>
-                        <span> Mã kích hoạt</span>
-                    </a>
-                    <a href="{{ route('student.order-history') }}">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        <span> Lịch sử đơn hàng</span>
-                    </a>
-                    <a href="#">
-                        <i class="fa-solid fa-download"></i>
-                        <span> Bảo lưu</span>
-                    </a>
+                                <span> Tiến độ học tập</span>
+                            </a>
+                            <a href="{{ route('student.activations.form') }}">
+                                <i class="fa-solid fa-key"></i>
+                                <span> Mã kích hoạt</span>
+                            </a>
+                            <a href="{{ route('student.order-history') }}">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                <span> Lịch sử đơn hàng</span>
+                            </a>
+                            <a href="#">
+                                <i class="fa-solid fa-download"></i>
+                                <span> Bảo lưu</span>
+                            </a>
                         </nav>
 
                         <form action="{{ route('logout') }}" method="post" class="header-profile__logout">
@@ -188,4 +191,3 @@
 @push('scripts')
     <script src="{{ asset('js/Student/dropdown.js') }}" defer></script>
 @endpush
-

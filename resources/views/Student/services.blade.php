@@ -93,7 +93,11 @@
 
     <!-- PROCESS -->
     <section class="sv-process oc-container">
-        <h2 class="sec-title">Quy trình học tập</h2>
+        <div class="section__header">
+            <h2>Quy trình dịch vụ</h2>
+            <p>Chúng tôi cam kết đồng hành cùng bạn từ bước đầu tiên đến khi đạt được chứng chỉ mong muốn.</p>
+        </div>
+        {{-- <h2 class="sec-title">Quy trình học tập</h2> --}}
         <div class="steps">
             <div class="step">
                 <span class="dot">1</span>
@@ -140,7 +144,11 @@
 
     <!-- FAQ -->
     <section class="sv-faq oc-container">
-        <h2 class="sec-title">Câu hỏi thường gặp</h2>
+        <div class="section__header">
+            <h2>Câu hỏi thường gặp</h2>
+            <p>Những thắc mắc phổ biến về dịch vụ học tập và chứng chỉ tại OCC.</p>
+        </div>
+        {{-- <h2 class="sec-title">Câu hỏi thường gặp</h2> --}}
         <div class="faq-list">
             <details class="faq">
                 <summary>Thời gian hoàn thành một khóa học là bao lâu?</summary>
