@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Combo;
+use App\Support\Cart\StudentComboCart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\View\View;
@@ -53,6 +54,7 @@ class ComboController extends Controller
             'availableCombos' => $availableCombos,
             'upcomingCombos' => $upcomingCombos,
             'spotlightCombos' => $spotlightCombos,
+            'comboCartIds' => StudentComboCart::ids(),
         ]);
     }
 
@@ -81,4 +83,3 @@ class ComboController extends Controller
         ]);
     }
 }
-

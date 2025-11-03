@@ -105,29 +105,27 @@ class Combo extends Model
 
     public function getCoverImageUrlAttribute(): string
     {
-        if (!$this->hinhanh) {
-            return asset('Assets/logo.png');
-        }
+        if ($this->hinhanh) {
+            if (Str::startsWith($this->hinhanh, ['http://', 'https://'])) {
+                return $this->hinhanh;
+            }
 
-        if (Str::startsWith($this->hinhanh, ['http://', 'https://'])) {
-            return $this->hinhanh;
-        }
-
-        $normalized = ltrim($this->hinhanh, '/');
-        $candidatePaths = [
-            'Assets/Images/Combos/' . $normalized,
-            'Assets/Images/' . $normalized,
-            'Assets/' . $normalized,
-            $normalized,
-        ];
-
-        foreach (array_unique($candidatePaths) as $relativePath) {
-            if (file_exists(public_path($relativePath))) {
-                return asset($relativePath);
+            if ($resolved = $this->resolveCoverAssetPath($this->hinhanh)) {
+                return $resolved;
             }
         }
 
-        return asset('Assets/' . $normalized);
+        if ($slugBanner = $this->resolveSlugBanner($this->slug)) {
+            if ($resolved = $this->resolveCoverAssetPath($slugBanner)) {
+                return $resolved;
+            }
+        }
+
+        if ($resolved = $this->resolveCoverAssetPath('combo_khoahoc.png')) {
+            return $resolved;
+        }
+
+        return asset('Assets/logo.png');
     }
 
     public function getIsActiveAttribute(): bool
@@ -246,5 +244,53 @@ class Combo extends Model
         }
 
         return (int) round((float) $value);
+    }
+
+    protected function resolveCoverAssetPath(?string $path): ?string
+    {
+        if (!$path) {
+            return null;
+        }
+
+        $normalized = ltrim($path, '/');
+        $directories = [
+            '',
+            'Assets/Combos/',
+            'Assets/Combo/',
+            'Assets/Images/Combos/',
+            'Assets/Images/',
+            'Assets/',
+        ];
+
+        foreach ($directories as $directory) {
+            $relativePath = $directory
+                ? rtrim($directory, '/') . '/' . $normalized
+                : $normalized;
+            $relativePath = str_replace('//', '/', $relativePath);
+
+            if (file_exists(public_path($relativePath))) {
+                return asset($relativePath);
+            }
+        }
+
+        return null;
+    }
+
+    protected function resolveSlugBanner(?string $slug): ?string
+    {
+        if (!$slug) {
+            return null;
+        }
+
+        $map = [
+            'toeic-foundation-full-pack-405-600' => 'combo_toeic_foundation_405-600.jpg',
+            'toeic-intermediate-full-pack-605-780' => 'combo_toeic_intermediate_605-780.jpg',
+            'toeic-advanced-full-pack-785-990' => 'combo_toeic_advanced_785-990.jpg',
+            'toeic-foundation-405-600' => 'combo_toeic_foundation_405-600.jpg',
+            'toeic-intermediate-605-780' => 'combo_toeic_intermediate_605-780.jpg',
+            'toeic-advanced-785-990' => 'combo_toeic_advanced_785-990.jpg',
+        ];
+
+        return $map[$slug] ?? null;
     }
 }
