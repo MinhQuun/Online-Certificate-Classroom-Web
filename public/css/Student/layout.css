@@ -338,7 +338,7 @@
     background: rgba(37, 99, 235, 0.12);
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     cursor: pointer;
     transition: var(--transition);
     padding: 0;
@@ -372,7 +372,7 @@
     border-radius: 50%;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     font-weight: 600;
     font-size: 15px;
     color: #fff;
