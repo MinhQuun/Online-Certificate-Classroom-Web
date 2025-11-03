@@ -18,10 +18,10 @@
     $targetLabel = $targetNumeric
         ? $targetNumeric . '+'
         : ($combo->courses->pluck('mucTieu')->filter()->first() ?? 'TOEIC');
+    $comboInCart = $comboInCart ?? false;
 @endphp
-
 @section('content')
-    <section class="combo-detail-hero">
+    <section class="combo-detail-hero" data-combo-detail>
         <div class="oc-container combo-detail-hero__inner">
             <div class="combo-detail-hero__text">
                 <span class="combo-detail-hero__badge">{{ $statusLabel }}</span>
@@ -54,16 +54,28 @@
                 </div>
 
                 <div class="combo-detail-actions">
-                    <form method="post" action="{{ route('student.cart.store-combo') }}">
-                        @csrf
-                        <input type="hidden" name="combo_id" value="{{ $combo->maGoi }}">
-                        <button type="submit" class="btn btn--primary btn--lg" {{ $isAvailable ? '' : 'disabled' }}>
-                            <i class="fa-solid fa-cart-plus"></i>
-                            {{ $isAvailable ? 'Thêm vào giỏ hàng' : 'Combo sắp mở bán' }}
+                    @if($comboInCart)
+                        <a class="btn btn--success btn--lg" href="{{ route('student.cart.index') }}">
+                            <i class="fa-solid fa-check"></i>
+                            Đã trong giỏ hàng
+                        </a>
+                    @elseif($isAvailable)
+                        <form method="post" action="{{ route('student.cart.store-combo') }}">
+                            @csrf
+                            <input type="hidden" name="combo_id" value="{{ $combo->maGoi }}">
+                            <button type="submit" class="btn btn--primary btn--lg">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                Thêm vào giỏ hàng
+                            </button>
+                        </form>
+                    @else
+                        <button type="button" class="btn btn--ghost btn--lg" disabled>
+                            <i class="fa-solid fa-clock"></i>
+                            Combo sắp mở bán
                         </button>
-                    </form>
-                    <a class="btn btn--ghost btn--lg" href="{{ route('student.cart.index') }}">
-                        Xem giỏ hàng
+                    @endif
+                    <a class="btn btn--ghost btn--lg" href="{{ route('student.combos.index') }}">
+                        Khám phá combo khác
                     </a>
                 </div>
 
@@ -98,7 +110,7 @@
 
                 <div class="combo-course-timeline">
                     @foreach($combo->courses as $index => $course)
-                        <article class="combo-course-card">
+                        <article class="combo-course-card" data-reveal-on-scroll>
                             <div class="combo-course-card__order">
                                 <span>{{ $index + 1 }}</span>
                             </div>
@@ -150,14 +162,18 @@
                         </li>
                     </ul>
 
-                    <form method="post" action="{{ route('student.cart.store-combo') }}" class="combo-summary-action">
-                        @csrf
-                        <input type="hidden" name="combo_id" value="{{ $combo->maGoi }}">
-                        <button type="submit" class="btn btn--primary btn--block" {{ $isAvailable ? '' : 'disabled' }}>
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            {{ $isAvailable ? 'Thêm combo vào giỏ' : 'Combo sắp mở bán' }}
-                        </button>
-                    </form>
+                    <div class="combo-summary-status {{ $comboInCart ? 'combo-summary-status--success' : '' }}">
+                        <i class="fa-solid {{ $comboInCart ? 'fa-circle-check' : 'fa-lightbulb' }}"></i>
+                        <span>
+                            @if(!$isAvailable)
+                                Combo sẽ mở bán vào {{ $startDate }}. Đăng ký nhắc nhở để không bỏ lỡ ưu đãi.
+                            @elseif($comboInCart)
+                                Combo đã nằm trong giỏ hàng, bạn có thể tiến hành thanh toán bất kỳ lúc nào.
+                            @else
+                                Nhấn “Thêm vào giỏ hàng” để giữ ưu đãi combo và kích hoạt toàn bộ khóa học.
+                            @endif
+                        </span>
+                    </div>
                 </div>
 
                 <div class="combo-includes-card">
@@ -189,3 +205,7 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/Student/combo-detail.js') }}" defer></script>
+@endpush

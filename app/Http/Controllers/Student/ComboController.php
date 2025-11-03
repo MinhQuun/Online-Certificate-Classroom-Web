@@ -80,6 +80,7 @@ class ComboController extends Controller
             'combo' => $combo,
             'isAvailable' => $isAvailable,
             'relatedCombos' => $relatedCombos,
+            'comboInCart' => StudentComboCart::has($combo->maGoi),
         ]);
     }
 }

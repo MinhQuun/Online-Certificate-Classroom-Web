@@ -12,6 +12,8 @@
     const nextButtons = root.querySelectorAll("[data-checkout-next]");
     const prevButtons = root.querySelectorAll("[data-checkout-prev]");
     const isLocked = root.dataset.locked === "true";
+    const methodLabelTarget = root.querySelector("[data-checkout-method-label]");
+    const methodRadios = root.querySelectorAll('input[name="payment_method"]');
 
     const clampStage = (stage) => Math.min(3, Math.max(1, stage));
 
@@ -51,6 +53,21 @@
             applyStage(currentStage - 1);
         });
     });
+
+    if (methodLabelTarget && methodRadios.length) {
+        methodRadios.forEach((radio) => {
+            radio.addEventListener("change", () => {
+                if (!radio.checked) {
+                    return;
+                }
+                const method = radio.closest(".checkout-method");
+                const heading = method ? method.querySelector("h3") : null;
+                if (heading) {
+                    methodLabelTarget.textContent = heading.textContent.trim();
+                }
+            });
+        });
+    }
 
     applyStage(currentStage);
 })();
