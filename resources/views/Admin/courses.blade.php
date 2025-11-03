@@ -85,7 +85,10 @@
                         @endphp
                         <tr>
                             <td><strong>{{ $course->maKH }}</strong></td>
-                            <td class="text-truncate" title="{{ $course->tenKH }}">{{ $course->tenKH }}</td>
+                            <td class="course-cell">
+                                <div class="course-name" title="{{ $course->tenKH }}">{{ $course->tenKH }}</div>
+                                <div class="course-slug"><code>{{ $course->slug }}</code></div>
+                            </td>
                             <td class="text-truncate" title="{{ $course->category->tenDanhMuc }}">{{ $course->category->tenDanhMuc }}</td>
                             <td class="text-truncate" title="{{ $course->teacher->hoTen }}">{{ $course->teacher->hoTen }}</td>
                             <td class="text-end fw-bold text-primary">{{ number_format($course->hocPhi) }}đ</td>
@@ -98,6 +101,7 @@
                                         data-bs-target="#modalEdit"
                                         data-id="{{ $course->maKH }}"
                                         data-name="{{ $course->tenKH }}"
+                                        data-slug="{{ $course->slug }}"
                                         data-category="{{ $course->maDanhMuc }}"
                                         data-teacher="{{ $course->maND }}"
                                         data-fee="{{ $course->hocPhi }}"
@@ -137,7 +141,7 @@
     {{-- Modal: Thêm khóa học --}}
     <div class="modal fade" id="modalCreate" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
-            <form class="modal-content" action="{{ route('admin.courses.store') }}" method="post" enctype="multipart/form-data">
+            <form class="modal-content" action="{{ route('admin.courses.store') }}" method="post" enctype="multipart/form-data" data-slug-form>
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title">Thêm khóa học mới</h5>
@@ -156,7 +160,20 @@
 
                     <div class="col-12">
                         <label class="form-label">Tên khóa học <span class="text-danger">*</span></label>
-                        <input name="tenKH" class="form-control" value="{{ old('tenKH') }}" required>
+                        <input name="tenKH" class="form-control" value="{{ old('tenKH') }}" required data-slug-source>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Slug</label>
+                        <input
+                            type="text"
+                            name="slug"
+                            class="form-control"
+                            value="{{ old('slug') }}"
+                            placeholder="vi-du-khoa-hoc-online"
+                            data-slug-target
+                            autocomplete="off"
+                        >
+                        <div class="form-text">Để trống nếu muốn sinh slug tự động.</div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Danh mục <span class="text-danger">*</span></label>
@@ -206,8 +223,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button class="btn btn-primary">Thêm mới</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button class="btn btn-primary">Lưu khóa học</button>
                 </div>
             </form>
         </div>
@@ -216,7 +233,7 @@
     {{-- Modal: Sửa khóa học --}}
     <div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
-            <form id="formEdit" class="modal-content" method="post" enctype="multipart/form-data">
+            <form id="formEdit" class="modal-content" method="post" enctype="multipart/form-data" data-slug-form>
                 @csrf @method('PUT')
                 <div class="modal-header">
                     <h5 class="modal-title">Sửa khóa học</h5>
@@ -235,8 +252,21 @@
 
                     <div class="col-12">
                         <label class="form-label">Tên khóa học <span class="text-danger">*</span></label>
-                        <input id="e_name" name="tenKH" class="form-control" required>
+                        <input id="e_name" name="tenKH" class="form-control" required data-slug-source>
                     </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Slug</label>
+                        <input
+                            id="e_slug"
+                            name="slug"
+                            class="form-control"
+                            placeholder="vi-du-khoa-hoc-online"
+                            data-slug-target
+                            autocomplete="off"
+                        >
+                        <div class="form-text">Điều chỉnh slug nếu bạn cần giữ URL ổn định.</div>
+                    </div>
+
                     <div class="col-md-6">
                         <label class="form-label">Danh mục <span class="text-danger">*</span></label>
                         <select id="e_category" name="maDanhMuc" class="form-select" required>
@@ -290,7 +320,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button class="btn btn-primary">Cập nhật</button>
+                    <button class="btn btn-primary">Lưu thay đổi</button>
                 </div>
             </form>
         </div>
@@ -298,5 +328,8 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/Admin/admin-courses.js') }}"></script>
+    <script src="{{ asset('js/Admin/slug-helper.js') }}" defer></script>
+    <script src="{{ asset('js/Admin/admin-courses.js') }}" defer></script>
 @endpush
+
+

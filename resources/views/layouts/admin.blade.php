@@ -5,6 +5,8 @@
     <title>@yield('title','Admin')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <link rel="icon" href="{{ asset('assets/favicon_io/favicon.ico') }}" type="image/x-icon">
+    
     {{-- SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

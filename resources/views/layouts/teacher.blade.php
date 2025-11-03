@@ -4,6 +4,9 @@
         <meta charset="utf-8">
         <title>@yield('title','Teacher')</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" href="{{ asset('assets/favicon_io/favicon.ico') }}" type="image/x-icon">
+        
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         {{-- SweetAlert2 + Bootstrap --}}

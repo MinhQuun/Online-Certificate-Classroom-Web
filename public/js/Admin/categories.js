@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+﻿document.addEventListener("DOMContentLoaded", () => {
     const hasSweetAlert = typeof Swal !== "undefined";
 
     (function showFlash() {
@@ -48,63 +48,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     })();
 
-    const slugify = (value) => {
-        return String(value || "")
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/[^a-z0-9\s-]/g, "")
-            .trim()
-            .replace(/\s+/g, "-")
-            .replace(/-+/g, "-");
-    };
-
-    const attachSlugHelper = (form) => {
-        if (!form) return;
-
-        const nameField = form.querySelector("[data-slug-source]");
-        const slugField = form.querySelector("[data-slug-target]");
-
-        if (!nameField || !slugField) return;
-
-        const syncManualFlag = () => {
-            slugField.dataset.manual =
-                slugField.value.trim() !== "" ? "true" : "false";
-        };
-
-        const updateSlug = () => {
-            if (slugField.dataset.manual === "true") return;
-            slugField.value = slugify(nameField.value);
-        };
-
-        syncManualFlag();
-
-        if (slugField.value.trim() === "") {
-            slugField.dataset.manual = "false";
-            slugField.value = slugify(nameField.value);
-        }
-
-        nameField.addEventListener("input", () => {
-            if (slugField.dataset.manual === "true") return;
-            slugField.value = slugify(nameField.value);
-        });
-
-        slugField.addEventListener("input", syncManualFlag);
-
-        slugField.addEventListener("blur", () => {
-            if (slugField.value.trim() === "") {
-                slugField.dataset.manual = "false";
-                slugField.value = slugify(nameField.value);
-            }
-        });
-
-        form.__slugAutoUpdate = updateSlug;
-        form.__slugTarget = slugField;
-    };
-
-    document
-        .querySelectorAll("[data-slug-form]")
-        .forEach((form) => attachSlugHelper(form));
+    if (globalThis.AdminSlug && typeof globalThis.AdminSlug.init === "function") {
+        globalThis.AdminSlug.init();
+    }
 
     const editModal = document.getElementById("modalEdit");
     if (editModal) {

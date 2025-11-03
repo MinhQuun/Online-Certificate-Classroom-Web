@@ -1,70 +1,155 @@
-.combo-stats .stat-card {
-    background: linear-gradient(
-        135deg,
-        rgba(37, 99, 235, 0.08),
-        rgba(59, 130, 246, 0.12)
-    );
-    border-radius: 16px;
-    padding: 18px 20px;
-    height: 100%;
-    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+﻿/* ================== Theme tokens (phối ton Danh mục) ================== */
+:root {
+    --bg-sky-1: #f1f7fb;
+    --bg-sky-2: #eef6f7;
+    --card: #ffffff;
+    --card-brd: #d7e6ee;
+    --text: #23323a;
+    --muted: #617481;
+    --teal: #1aa3a3;
+    --blue: #3a86ff;
+    --indigo: #5e60ce;
+    --shadow: 0 16px 32px rgba(37, 103, 131, 0.14);
 }
 
-.combo-stats .stat-label {
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #4c6ef5;
-}
-
-.combo-stats .stat-value {
-    font-size: 1.8rem;
-    font-weight: 700;
-    display: block;
-}
-
-.combo-stats .stat-meta {
-    font-size: 0.85rem;
-}
-
-.combo-table-wrapper {
+/* ================== Stats ================== */
+.combos-stats .stats-card {
     border-radius: 18px;
-    background-color: #ffffff;
-    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
-    overflow: hidden;
+    border: 1px solid var(--card-brd);
+    box-shadow: var(--shadow);
+    background: var(--card);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.combo-table th {
-    font-size: 0.9rem;
+.combos-stats .stats-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(37, 103, 131, 0.18);
+}
+
+.stats-card .stats-meta {
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+/* ================== Filter ================== */
+.combos-filter {
+    border: 1px solid var(--card-brd);
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+
+.combos-filter .form-control,
+.combos-filter .form-select {
+    border-radius: 10px;
+    border-color: var(--card-brd);
+}
+
+.combos-filter .btn-outline-primary {
+    border-radius: 999px;
+    border-color: #b9d2ff;
+    color: var(--blue);
+    background: #f0f6ff;
+    transition: all 0.25s ease;
+}
+
+.combos-filter .btn-outline-primary:hover {
+    background: linear-gradient(135deg, var(--blue), var(--teal));
+    color: #fff;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.combos-filter .btn-outline-secondary {
+    border-radius: 999px;
+    border-color: var(--card-brd);
+    background: #f7fbfd;
+    color: var(--text);
+    transition: all 0.25s ease;
+}
+
+.combos-filter .btn-outline-secondary:hover {
+    background: #eef5fb;
+    transform: translateY(-2px);
+}
+
+/* ================== Card ================== */
+.combos-card {
+    border-radius: 16px;
+    border: 1px solid var(--card-brd);
+    background: var(--card);
+    box-shadow: var(--shadow);
+}
+
+.combos-card .card-header {
+    border-bottom: 1px solid var(--card-brd);
+    background: linear-gradient(180deg, #f9feff, #f4fbfd);
+}
+
+.combos-card .card-header .muted {
+    color: var(--muted);
+}
+
+.combos-card .card-footer {
+    background: #f7fbff;
+    border-top: 1px solid var(--card-brd);
+}
+
+/* ================== Table ================== */
+.combos-table thead th {
+    background: linear-gradient(180deg, #f7fbff, #f2f8fd);
+    border-bottom: 1px solid var(--card-brd);
+    color: var(--muted);
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #6b7280;
-    background-color: #f8fafc;
-    border-bottom: 1px solid #e2e8f0;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
 }
 
-.combo-table td {
-    vertical-align: middle;
-    border-color: #f1f5f9;
+.combos-table td,
+.combos-table th {
+    vertical-align: top;
+    border-color: #e6eff5;
+}
+
+.combos-table tbody tr:hover {
+    background: #f9feff;
+}
+
+.table-fixed {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.table-fixed th,
+.table-fixed td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.combo-cell {
+    white-space: normal;
 }
 
 .combo-info {
     display: flex;
     gap: 16px;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .combo-thumb {
     width: 72px;
     height: 72px;
+    flex: none;
     border-radius: 16px;
     overflow: hidden;
-    flex: none;
-    background: radial-gradient(
-        circle at 30% 30%,
-        rgba(59, 130, 246, 0.35),
-        rgba(29, 78, 216, 0.15)
-    );
+    background: radial-gradient(circle at 30% 30%, rgba(58, 134, 255, 0.35), rgba(26, 163, 163, 0.12));
 }
 
 .combo-thumb img {
@@ -73,36 +158,58 @@
     object-fit: cover;
 }
 
+.combo-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.combo-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: var(--muted);
+}
+
+.combo-slug code {
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #f0f6ff;
+    border: 1px solid var(--card-brd);
+    display: inline-block;
+    font-size: 0.78rem;
+}
+
 .combo-promo-tag {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    margin-top: 6px;
+    margin-top: 4px;
     padding: 4px 10px;
     border-radius: 999px;
     background: rgba(250, 204, 21, 0.15);
     color: #b45309;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
 }
 
 .combo-course-list {
+    list-style: none;
     margin: 0;
     padding: 0;
-    list-style: none;
     display: grid;
-    gap: 6px;
+    gap: 8px;
 }
 
 .combo-course-list li {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 0;
-    border-bottom: 1px dashed rgba(148, 163, 184, 0.4);
-}
-
-.combo-course-list li:last-child {
-    border-bottom: none;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1px dashed rgba(97, 116, 129, 0.25);
+    border-radius: 12px;
+    background: rgba(58, 134, 255, 0.05);
 }
 
 .combo-course-list .order {
@@ -112,27 +219,38 @@
     width: 26px;
     height: 26px;
     border-radius: 50%;
-    background-color: rgba(37, 99, 235, 0.12);
-    color: #2563eb;
+    background: rgba(58, 134, 255, 0.12);
+    color: var(--blue);
     font-weight: 600;
     font-size: 0.85rem;
 }
 
 .combo-course-list .name {
-    flex: 1;
-    font-weight: 500;
-    color: #1f2937;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.combo-course-list .meta {
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.price-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
 }
 
 .price-stack .price-sale {
-    font-weight: 700;
-    color: #0ea5e9;
+    font-weight: 800;
     font-size: 1.05rem;
+    color: var(--blue);
 }
 
 .price-stack .price-origin {
-    font-size: 0.85rem;
-    color: #9ca3af;
+    font-size: 0.82rem;
+    color: var(--muted);
     text-decoration: line-through;
 }
 
@@ -140,103 +258,94 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    font-size: 0.8rem;
-    color: #059669;
-    margin-top: 4px;
+    font-size: 0.78rem;
+    color: #0f9d58;
 }
 
-.empty-state {
-    padding: 60px 0;
-    text-align: center;
-    background: linear-gradient(
-        180deg,
-        rgba(59, 130, 246, 0.04),
-        rgba(37, 99, 235, 0.02)
-    );
-    border-radius: 24px;
-    border: 1px dashed rgba(59, 130, 246, 0.25);
+.td-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
-.empty-state .empty-icon {
-    font-size: 2.5rem;
-    color: #2563eb;
-    margin-bottom: 12px;
+.btn-primary-soft {
+    background: rgba(58, 134, 255, 0.1);
+    border: 1px solid rgba(58, 134, 255, 0.25);
+    color: var(--blue);
+    border-radius: 10px;
+    padding: 6px 12px;
+    transition: all 0.2s ease;
 }
 
-.combo-form .modal-content {
-    border-radius: 20px;
-    border: none;
-    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.18);
+.btn-primary-soft:hover {
+    background: linear-gradient(135deg, var(--blue), var(--teal));
+    color: #fff;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(58, 134, 255, 0.22);
 }
 
-.combo-course-picker {
-    border: 1px solid #e2e8f0;
+.btn-danger-soft {
+    background: rgba(237, 66, 69, 0.08);
+    border: 1px solid rgba(237, 66, 69, 0.22);
+    color: #d64545;
+    border-radius: 10px;
+    padding: 6px 12px;
+    transition: all 0.2s ease;
+}
+
+.btn-danger-soft:hover {
+    background: #ffeded;
+    border-color: rgba(237, 66, 69, 0.35);
+    transform: translateY(-2px);
+}
+
+.combos-empty {
+    padding: 48px 16px;
     border-radius: 16px;
+    border: 1px dashed rgba(58, 134, 255, 0.25);
+    background: linear-gradient(180deg, rgba(58, 134, 255, 0.06), rgba(26, 163, 163, 0.05));
 }
 
-.combo-course-selected {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 12px;
-}
-
-.combo-course-selected li {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 14px;
-    border: 1px solid rgba(59, 130, 246, 0.12);
-    border-radius: 12px;
-    background: rgba(59, 130, 246, 0.04);
-}
-
-.combo-course-selected .name {
-    font-weight: 600;
-    color: #1f2937;
-}
-
-.combo-course-selected .meta {
-    font-size: 0.85rem;
-    color: #6b7280;
-}
-
-.combo-course-selected .order-input {
-    width: 64px;
-}
-
-.combo-course-empty {
-    padding: 18px;
-    font-size: 0.9rem;
-    color: #64748b;
-    background: rgba(148, 163, 184, 0.1);
-    border-radius: 12px;
-    text-align: center;
+.combos-empty .empty-icon {
+    font-size: 2.5rem;
+    color: var(--blue);
 }
 
 .combo-price-summary {
     display: grid;
-    gap: 8px;
-    background: rgba(37, 99, 235, 0.08);
-    padding: 16px;
+    gap: 6px;
+    background: rgba(26, 163, 163, 0.08);
+    border: 1px solid rgba(26, 163, 163, 0.24);
     border-radius: 14px;
-    font-size: 0.9rem;
+    padding: 16px;
+    font-size: 0.88rem;
 }
 
 .combo-price-summary strong {
     font-weight: 700;
-    color: #1d4ed8;
+    color: var(--blue);
 }
 
-@media (max-width: 768px) {
+/* ================== Responsive ================== */
+@media (max-width: 992px) {
     .combo-info {
+        flex-direction: column;
         align-items: flex-start;
     }
 
-    .combo-course-selected li {
-        grid-template-columns: 1fr;
+    .combo-course-list {
         gap: 6px;
+    }
+}
+
+@media (max-width: 768px) {
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .combos-filter {
+        margin-bottom: 1.5rem;
     }
 }

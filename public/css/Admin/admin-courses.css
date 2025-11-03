@@ -1,4 +1,4 @@
-/* ================== Theme tokens (đồng bộ admin-users) ================== */
+﻿/* ================== Theme tokens (đồng bộ admin-users) ================== */
 :root {
     --bg-sky-1: #f1f7fb;
     --bg-sky-2: #eef6f7;
@@ -108,6 +108,29 @@
 .courses-table tbody tr:hover {
     background: #f9feff;
 }
+
+.course-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    white-space: normal;
+}
+
+.course-cell .course-name {
+    font-weight: 600;
+    color: var(--text);
+}
+
+.course-slug code {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #f0f6ff;
+    border: 1px solid var(--card-brd);
+    font-size: 0.75rem;
+    display: inline-block;
+    color: var(--muted);
+}
+
 .table-fixed {
     table-layout: fixed;
     width: 100%;
@@ -241,4 +264,6 @@
         visibility: hidden;
     }
 }
+
+
 

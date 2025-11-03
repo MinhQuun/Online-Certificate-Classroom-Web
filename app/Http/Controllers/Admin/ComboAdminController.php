@@ -59,7 +59,8 @@ class ComboAdminController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        $courses = Course::orderBy('tenKH')
+        $courses = Course::where('trangThai', 'PUBLISHED')
+            ->orderBy('tenKH')
             ->get(['maKH', 'tenKH', 'hocPhi', 'slug']);
 
         $promotions = Promotion::orderByDesc('ngayBatDau')
@@ -94,9 +95,14 @@ class ComboAdminController extends Controller
             ]);
         }
 
+        $name = $validated['tenGoi'];
+        $slugInput = $validated['slug'] ?? '';
+
         $combo = new Combo();
-        $combo->tenGoi = $validated['tenGoi'];
-        $combo->slug = $this->generateUniqueSlug($validated['tenGoi']);
+        $combo->tenGoi = $name;
+        $combo->slug = $this->generateUniqueSlug(
+            $slugInput !== '' ? $slugInput : $name
+        );
         $combo->moTa = $validated['moTa'] ?? null;
         $combo->gia = $validated['gia'];
         $combo->giaGoc = $coursePayload['total'];
@@ -139,8 +145,14 @@ class ComboAdminController extends Controller
             ]);
         }
 
-        $combo->tenGoi = $validated['tenGoi'];
-        $combo->slug = $this->generateUniqueSlug($validated['tenGoi'], $combo->maGoi);
+        $name = $validated['tenGoi'];
+        $slugInput = $validated['slug'] ?? '';
+
+        $combo->tenGoi = $name;
+        $combo->slug = $this->generateUniqueSlug(
+            $slugInput !== '' ? $slugInput : $name,
+            $combo->maGoi
+        );
         $combo->moTa = $validated['moTa'] ?? null;
         $combo->gia = $validated['gia'];
         $combo->giaGoc = $coursePayload['total'];
@@ -183,6 +195,7 @@ class ComboAdminController extends Controller
     {
         $rules = [
             'tenGoi' => ['required', 'string', 'max:150'],
+            'slug'   => ['nullable', 'string', 'max:160'],
             'moTa' => ['nullable', 'string', 'max:2000'],
             'gia' => ['required', 'numeric', 'min:0'],
             'ngayBatDau' => ['nullable', 'date'],
@@ -198,6 +211,7 @@ class ComboAdminController extends Controller
             'tenGoi.required' => 'Vui lòng nhập tên combo.',
             'gia.required' => 'Vui lòng nhập giá bán combo.',
             'gia.min' => 'Giá bán combo không được âm.',
+            'slug.max' => 'Slug tối đa 160 ký tự.',
             'courses.required' => 'Hãy chọn tối thiểu 2 khóa học cho combo.',
             'courses.min' => 'Combo cần ít nhất 2 khóa học.',
             'courses.*.integer' => 'Thứ tự khóa học không hợp lệ.',
@@ -211,6 +225,9 @@ class ComboAdminController extends Controller
         }
 
         $validated = $request->validate($rules, $messages);
+
+        $validated['tenGoi'] = trim((string) $validated['tenGoi']);
+        $validated['slug'] = trim((string) $request->input('slug', ''));
 
         $validated['courses'] = $request->input('courses', []);
         $validated['promotion_id'] = $request->input('promotion_id');

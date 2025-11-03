@@ -1,4 +1,4 @@
-// =============================================================
+﻿// =============================================================
 // Admin Courses JS (full)
 // - Flash message (SweetAlert)
 // - Modal Edit: đổ dữ liệu
@@ -32,6 +32,10 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
     })();
+
+    if (globalThis.AdminSlug && typeof globalThis.AdminSlug.init === "function") {
+        globalThis.AdminSlug.init();
+    }
 
     // ---------------- Helpers cho ngày & thời hạn ----------------
     const DAY_MS = 24 * 60 * 60 * 1000;
@@ -112,6 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const fields = {
                 e_name: "data-name",
                 e_category: "data-category",
+                e_slug: "data-slug",
                 e_teacher: "data-teacher",
                 e_fee: "data-fee",
                 e_duration: "data-duration",
@@ -121,10 +126,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 e_status: "data-status",
             };
 
-            Object.keys(fields).forEach((fid) => {
-                const val = btn?.getAttribute(fields[fid]) || "";
-                const el = modalEdit.querySelector(`#${fid}`);
-                if (!el) return;
+        Object.keys(fields).forEach((fid) => {
+            const val = btn?.getAttribute(fields[fid]) || "";
+            const el = modalEdit.querySelector(`#${fid}`);
+            if (!el) return;
 
                 if (el.tagName === "SELECT") {
                     if (fid === "e_status") {
@@ -134,10 +139,22 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 } else {
                     el.value = val;
-                }
-            });
+            }
+        });
 
-            const fileInput = modalEdit.querySelector('input[name="hinhanh"]');
+        const slugField = modalEdit.querySelector("#e_slug");
+        if (slugField) {
+            if (slugField.value.trim() === "") {
+                slugField.dataset.manual = "false";
+                if (typeof form.__slugAutoUpdate === "function") {
+                    form.__slugAutoUpdate();
+                }
+            } else {
+                slugField.dataset.manual = "true";
+            }
+        }
+
+        const fileInput = modalEdit.querySelector('input[name="hinhanh"]');
             let previewWrapper = modalEdit.querySelector(
                 "[data-current-image-wrapper]"
             );
@@ -394,3 +411,4 @@ document.addEventListener("DOMContentLoaded", () => {
         durationEl: eDurStatic,
     });
 });
+

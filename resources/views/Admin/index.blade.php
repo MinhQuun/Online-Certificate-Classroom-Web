@@ -224,8 +224,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button class="btn btn-primary">Lưu</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button class="btn btn-primary">Lưu người dùng</button>
                 </div>
             </form>
         </div>

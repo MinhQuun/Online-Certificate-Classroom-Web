@@ -34,9 +34,9 @@
     </section>
 
     @if ($errors->any())
-        <div class="alert alert-danger">
-            <strong>Thông tin chưa hợp lệ.</strong> Vui lòng kiểm tra lại:
-            <ul class="mb-0 mt-2">
+        <div class="alert alert-danger validation-errors" role="alert" id="validation-errors">
+            <h6 class="mb-2">Thông tin chưa hợp lệ, vui lòng kiểm tra:</h6>
+            <ul class="mb-0">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -44,37 +44,29 @@
         </div>
     @endif
 
-    <div class="row g-3 combo-stats mb-4">
-        <div class="col-md-3">
-            <div class="stat-card">
-                <span class="stat-label">Tổng combo</span>
-                <strong class="stat-value">{{ $stats['total'] ?? 0 }}</strong>
-                <span class="stat-meta text-muted">Toàn bộ gói đã tạo</span>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card">
-                <span class="stat-label">Đang mở bán</span>
-                <strong class="stat-value text-success">{{ $stats['published'] ?? 0 }}</strong>
-                <span class="stat-meta text-muted">Combo hiển thị cho học viên</span>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card">
-                <span class="stat-label">Bản nháp</span>
-                <strong class="stat-value text-warning">{{ $stats['draft'] ?? 0 }}</strong>
-                <span class="stat-meta text-muted">Chưa công khai</span>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card">
-                <span class="stat-label">Lưu trữ</span>
-                <strong class="stat-value text-muted">{{ $stats['archived'] ?? 0 }}</strong>
-                <span class="stat-meta text-muted">Combo không còn bán</span>
-            </div>
-        </div>
-    </div>
-    <div class="card mb-4">
+    <section class="stats-grid combos-stats mb-4">
+        <article class="stats-card">
+            <span class="stats-label">Tổng combo</span>
+            <span class="stats-value">{{ number_format($stats['total'] ?? 0) }}</span>
+            <span class="stats-meta">Toàn bộ gói đã tạo</span>
+        </article>
+        <article class="stats-card">
+            <span class="stats-label">Đang mở bán</span>
+            <span class="stats-value">{{ number_format($stats['published'] ?? 0) }}</span>
+            <span class="stats-meta">Hiển thị cho học viên</span>
+        </article>
+        <article class="stats-card">
+            <span class="stats-label">Bản nháp</span>
+            <span class="stats-value">{{ number_format($stats['draft'] ?? 0) }}</span>
+            <span class="stats-meta">Chưa công khai</span>
+        </article>
+        <article class="stats-card">
+            <span class="stats-label">Lưu trữ</span>
+            <span class="stats-value">{{ number_format($stats['archived'] ?? 0) }}</span>
+            <span class="stats-meta">Không còn mở bán</span>
+        </article>
+    </section>
+    <div class="card combos-filter mb-4">
         <div class="card-body">
             <form method="get" action="{{ route('admin.combos.index') }}" class="row g-3 align-items-end">
                 <div class="col-lg-4">
@@ -108,37 +100,39 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-lg-2 d-flex gap-2">
-                    <button type="submit" class="btn btn-primary flex-grow-1">
+                <div class="col-lg-2 d-flex gap-2 justify-content-lg-end">
+                    <button type="submit" class="btn btn-outline-primary flex-grow-1">
                         <i class="bi bi-funnel me-1"></i> Lọc
                     </button>
-                    <a href="{{ route('admin.combos.index') }}" class="btn btn-outline-secondary" title="Xóa bộ lọc">
-                        <i class="bi bi-arrow-counterclockwise"></i>
+                    <a href="{{ route('admin.combos.index') }}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i> Xóa lọc
                     </a>
                 </div>
             </form>
         </div>
     </div>
 
-    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-3">
-        <div>
-            <h2 class="section-title mb-0">Danh sách combo</h2>
-            <p class="text-muted small mb-0">
-                Mỗi combo nên có tối thiểu hai khóa học kèm giá ưu đãi so với mua lẻ.
-            </p>
+    <div class="card combos-card">
+        <div class="card-header d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+            <div>
+                <h5 class="m-0">Danh sách combo</h5>
+                <p class="muted small mb-0">
+                    Mỗi combo nên có tối thiểu hai khóa học kèm giá ưu đãi so với mua lẻ.
+                </p>
+            </div>
+            <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#comboCreateModal"
+            >
+                <i class="bi bi-plus-circle me-1"></i> Tạo combo mới
+            </button>
         </div>
-        <button
-            type="button"
-            class="btn btn-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#comboCreateModal"
-        >
-            <i class="bi bi-plus-circle me-1"></i> Tạo combo mới
-        </button>
-    </div>
 
     @if ($combos->isEmpty())
-        <div class="empty-state">
+        <div class="card-body">
+            <div class="empty-state combos-empty">
             <div class="empty-icon" aria-hidden="true">
                 <i class="bi bi-box-seam"></i>
             </div>
@@ -150,9 +144,18 @@
                 Bắt đầu tạo combo
             </button>
         </div>
+        </div>
     @else
-        <div class="table-responsive combo-table-wrapper">
-            <table class="table table-hover align-middle combo-table">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0 table-hover combos-table table-fixed">
+                <colgroup>
+                    <col style="width:28%;">
+                    <col style="width:24%;">
+                    <col style="width:16%;">
+                    <col style="width:14%;">
+                    <col style="width:10%;">
+                    <col style="width:8%;">
+                </colgroup>
                 <thead>
                     <tr>
                         <th scope="col">Combo</th>
@@ -170,6 +173,7 @@
                             $comboPayload = [
                                 'id' => $combo->maGoi,
                                 'name' => $combo->tenGoi,
+                                'slug' => $combo->slug,
                                 'description' => $combo->moTa,
                                 'price' => (int) round($combo->gia),
                                 'start_date' => optional($combo->ngayBatDau)->format('Y-m-d'),
@@ -214,6 +218,9 @@
                                             Mã combo: #{{ $combo->maGoi }} &middot;
                                             Cập nhật: {{ optional($combo->updated_at)->format('d/m/Y H:i') }}
                                         </div>
+                                        <div class="combo-slug">
+                                            <code>{{ $combo->slug }}</code>
+                                        </div>
                                         @if ($activePromotion)
                                             <div class="combo-promo-tag">
                                                 <i class="bi bi-gift me-1"></i>
@@ -237,7 +244,7 @@
                                     @endforeach
                                 </ul>
                             </td>
-                            <td class="text-end">
+                            <td class="text-end td-actions">
                                 <div class="price-stack">
                                     <div class="price-sale">{{ $formatCurrency($combo->sale_price) }}</div>
                                     <div class="price-origin">{{ $formatCurrency($combo->original_price) }}</div>
@@ -262,16 +269,25 @@
                                 </div>
                             </td>
                             <td>
-                                <span class="badge bg-light text-dark">{{ $combo->trangThai }}</span>
-                                <div class="text-muted small">
+                                @php
+                                    $statusMap = [
+                                        'PUBLISHED' => ['class' => 'text-bg-success', 'label' => 'Đã công bố'],
+                                        'DRAFT' => ['class' => 'text-bg-warning', 'label' => 'Bản nháp'],
+                                        'ARCHIVED' => ['class' => 'text-bg-secondary', 'label' => 'Đã lưu trữ'],
+                                    ];
+                                    $statusMeta = $statusMap[$combo->trangThai] ?? ['class' => 'text-bg-secondary', 'label' => $combo->trangThai];
+                                @endphp
+                                <span class="badge rounded-pill {{ $statusMeta['class'] }}">
+                                    {{ $statusMeta['label'] }}
+                                </span>
+                                <div class="text-muted small mt-1">
                                     Tạo bởi: {{ $combo->creator->hoTen ?? $combo->creator->name ?? 'N/A' }}
                                 </div>
                             </td>
                             <td class="text-end">
-                                <div class="btn-group btn-group-sm">
                                     <button
                                         type="button"
-                                        class="btn btn-outline-primary"
+                                        class="btn btn-primary-soft action-btn"
                                         data-bs-toggle="modal"
                                         data-bs-target="#comboEditModal"
                                         data-combo='@json($comboPayload, JSON_UNESCAPED_UNICODE)'
@@ -285,11 +301,10 @@
                                     >
                                         @csrf
                                         @method('delete')
-                                        <button type="submit" class="btn btn-outline-danger">
+                                        <button type="submit" class="btn btn-danger-soft action-btn">
                                             <i class="bi bi-trash me-1"></i> Xoá
                                         </button>
                                     </form>
-                                </div>
                             </td>
                         </tr>
                     @endforeach
@@ -297,10 +312,11 @@
             </table>
         </div>
 
-        <div class="d-flex justify-content-end">
+        <div class="card-footer d-flex justify-content-end">
             {{ $combos->links() }}
         </div>
     @endif
+    </div>
 
     {{-- Create combo modal --}}
     <div class="modal fade" id="comboCreateModal" tabindex="-1" aria-hidden="true">
@@ -311,9 +327,11 @@
                     method="post"
                     enctype="multipart/form-data"
                     data-combo-form="create"
-                    action="{{ route('admin.combos.store', request()->query()) }}"
-                >
-                    @csrf
+                action="{{ route('admin.combos.store', request()->query()) }}"
+                data-slug-form
+            >
+                @csrf
+                <input type="hidden" name="_action" value="save_close" data-action-field="combo-create">
                     <div class="modal-header">
                         <h5 class="modal-title">
                             <i class="bi bi-layers me-2 text-primary"></i> Tạo combo mới
@@ -332,7 +350,23 @@
                                         value="{{ old('tenGoi') }}"
                                         maxlength="150"
                                         required
+                                        data-slug-source
                                     >
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Slug</label>
+                                    <input
+                                        type="text"
+                                        name="slug"
+                                        class="form-control"
+                                        value="{{ old('slug') }}"
+                                        placeholder="vi-du-combo-ielts-tu-a-den-z"
+                                        data-slug-target
+                                        autocomplete="off"
+                                    >
+                                    <div class="form-text">
+                                        Để trống để hệ thống tự tạo slug từ tên combo.
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Mô tả</label>
@@ -475,10 +509,15 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-check-lg me-1"></i> Lưu combo
-                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button type="submit" class="btn btn-outline-primary" data-form-action="save_stay">
+                                <i class="bi bi-save2 me-1"></i> Lưu & tiếp tục
+                            </button>
+                            <button type="submit" class="btn btn-primary" data-form-action="save_close">
+                                <i class="bi bi-check-lg me-1"></i> Lưu & đóng
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -494,9 +533,12 @@
                     method="post"
                     enctype="multipart/form-data"
                     data-combo-form="edit"
-                >
-                    @csrf
-                    @method('put')
+                action=""
+                data-slug-form
+            >
+                @csrf
+                @method('put')
+                <input type="hidden" name="_action" value="save_close" data-action-field="combo-edit">
                     <div class="modal-header">
                         <h5 class="modal-title">
                             <i class="bi bi-pencil-square me-2 text-primary"></i> Chỉnh sửa combo
@@ -509,7 +551,19 @@
                                 <input type="hidden" name="combo_id" data-combo-id>
                                 <div class="mb-3">
                                     <label class="form-label">Tên combo <span class="text-danger">*</span></label>
-                                    <input type="text" name="tenGoi" class="form-control" maxlength="150" required>
+                                    <input type="text" name="tenGoi" class="form-control" maxlength="150" required data-slug-source>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Slug</label>
+                                    <input
+                                        type="text"
+                                        name="slug"
+                                        class="form-control"
+                                        placeholder="vi-du-combo-ielts"
+                                        data-slug-target
+                                        autocomplete="off"
+                                    >
+                                    <div class="form-text">Giữ nguyên nếu muốn bảo toàn đường dẫn hiện tại.</div>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Mô tả</label>
@@ -638,10 +692,15 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-save me-1"></i> Cập nhật
-                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button type="submit" class="btn btn-outline-primary" data-form-action="save_stay">
+                                <i class="bi bi-save me-1"></i> Lưu & tiếp tục
+                            </button>
+                            <button type="submit" class="btn btn-primary" data-form-action="save_close">
+                                <i class="bi bi-check-lg me-1"></i> Lưu & đóng
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -674,5 +733,10 @@
     <script id="combo-form-dataset" type="application/json">
         {!! json_encode($dataset, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
     </script>
+    <script src="{{ asset('js/Admin/slug-helper.js') }}" defer></script>
     <script src="{{ asset('js/Admin/combos.js') }}" defer></script>
 @endpush
+
+
+
+

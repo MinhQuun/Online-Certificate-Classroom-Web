@@ -65,6 +65,7 @@ class CourseAdminController extends Controller
 
         $request->validate([
             'tenKH'       => 'required|string|max:150',
+            'slug'        => 'nullable|string|max:160',
             'maDanhMuc'   => 'required|exists:danhmuc,maDanhMuc',
             'maND'        => ['required','exists:nguoidung,maND','in:'.implode(',', $teacherIds)],
             'hocPhi'      => 'required|numeric|min:0',
@@ -75,8 +76,12 @@ class CourseAdminController extends Controller
             'thoiHanNgay' => 'required|integer|min:1',
         ]);
 
-        $data = $request->except('hinhanh');
-        $data['slug'] = Str::slug($request->tenKH);
+        $data = $request->except('hinhanh', 'slug');
+        $data['tenKH'] = trim((string) $data['tenKH']);
+        $slugInput = trim((string) $request->input('slug', ''));
+        $data['slug'] = $this->generateUniqueSlug(
+            $slugInput !== '' ? $slugInput : $data['tenKH']
+        );
         $data['trangThai'] = 'DRAFT';
 
         // Upload ảnh -> public/Assets (viết hoa A để khớp accessor)
@@ -116,6 +121,7 @@ class CourseAdminController extends Controller
 
         $request->validate([
             'tenKH'       => 'required|string|max:150',
+            'slug'        => 'nullable|string|max:160',
             'maDanhMuc'   => 'required|exists:danhmuc,maDanhMuc',
             'maND'        => ['required','exists:nguoidung,maND','in:'.implode(',', $teacherIds)],
             'hocPhi'      => 'required|numeric|min:0',
@@ -127,7 +133,14 @@ class CourseAdminController extends Controller
             'trangThai'   => 'required|in:DRAFT,PUBLISHED,ARCHIVED',
         ]);
 
-        $data = $request->except('hinhanh');
+        $data = $request->except('hinhanh', 'slug');
+        $data['tenKH'] = trim((string) $data['tenKH']);
+
+        $slugInput = trim((string) $request->input('slug', ''));
+        $data['slug'] = $this->generateUniqueSlug(
+            $slugInput !== '' ? $slugInput : $data['tenKH'],
+            $course->maKH
+        );
 
         // Thay ảnh (nếu có)
         if ($request->hasFile('hinhanh')) {
@@ -176,4 +189,29 @@ class CourseAdminController extends Controller
         return redirect()->route('admin.courses.index')
             ->with('success', 'Xóa khóa học thành công');
     }
+
+    protected function generateUniqueSlug(string $value, ?int $ignoreId = null): string
+    {
+        $base = Str::slug($value);
+        if ($base === '') {
+            $base = 'khoa-hoc';
+        }
+
+        $slug = $base;
+        $index = 2;
+
+        while (
+            Course::where('slug', $slug)
+                ->when($ignoreId, fn ($query) => $query->where('maKH', '!=', $ignoreId))
+                ->exists()
+        ) {
+            $slug = $base . '-' . $index;
+            $index++;
+        }
+
+        return $slug;
+    }
 }
+
+
+

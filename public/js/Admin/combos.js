@@ -215,9 +215,49 @@
 
     const formControllers = new Map();
 
-    document
-        .querySelectorAll("[data-combo-form]")
-        .forEach((form) => formControllers.set(form, createFormController(form)));
+    document.querySelectorAll("[data-combo-form]").forEach((form) => {
+        formControllers.set(form, createFormController(form));
+
+        const actionField = form.querySelector("[data-action-field]");
+        if (actionField) {
+            const defaultValue =
+                actionField.value && actionField.value.trim() !== ""
+                    ? actionField.value
+                    : "save_close";
+
+            form.querySelectorAll("[data-form-action]").forEach((button) => {
+                button.addEventListener("click", () => {
+                    actionField.value =
+                        button.dataset.formAction || defaultValue;
+                });
+            });
+        }
+    });
+
+    const createModal = document.getElementById("comboCreateModal");
+    if (createModal) {
+        createModal.addEventListener("show.bs.modal", () => {
+            const form = createModal.querySelector(
+                'form[data-combo-form="create"]'
+            );
+            if (!form) {
+                return;
+            }
+
+            const actionField = form.querySelector("[data-action-field]");
+            if (actionField) {
+                actionField.value = "save_close";
+            }
+
+            if (typeof form.__slugAutoUpdate === "function") {
+                const slugTarget = form.__slugTarget;
+                if (slugTarget && slugTarget.value.trim() === "") {
+                    slugTarget.dataset.manual = "false";
+                    form.__slugAutoUpdate();
+                }
+            }
+        });
+    }
 
     const editModal = document.getElementById("comboEditModal");
     if (!editModal) {
@@ -249,6 +289,17 @@
 
         const nameField = form.querySelector('input[name="tenGoi"]');
         if (nameField) nameField.value = payload.name || "";
+
+        const slugField = form.querySelector('input[name="slug"]');
+        if (slugField) {
+            slugField.value = payload.slug || "";
+            slugField.dataset.manual =
+                slugField.value.trim() !== "" ? "true" : "false";
+
+            if (form.__slugAutoUpdate && slugField.dataset.manual === "false") {
+                form.__slugAutoUpdate();
+            }
+        }
 
         const descriptionField = form.querySelector('textarea[name="moTa"]');
         if (descriptionField) descriptionField.value = payload.description || "";
@@ -287,6 +338,11 @@
                 "show",
                 !!payload.promotion_id
             );
+        }
+
+        const actionField = form.querySelector("[data-action-field]");
+        if (actionField) {
+            actionField.value = "save_close";
         }
 
         const currentImage = form.querySelector("[data-current-image]");

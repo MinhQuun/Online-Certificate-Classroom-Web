@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+﻿@extends('layouts.admin')
 
 @section('title', 'Quản lý danh mục')
 
@@ -290,5 +290,7 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/Admin/categories.js') }}"></script>
+    <script src="{{ asset('js/Admin/slug-helper.js') }}" defer></script>
+    <script src="{{ asset('js/Admin/categories.js') }}" defer></script>
 @endpush
+
