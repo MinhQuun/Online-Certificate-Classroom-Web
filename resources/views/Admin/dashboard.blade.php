@@ -11,51 +11,51 @@
     <p class="muted">Tổng quan nhanh và lối tắt tới các khu vực chính.</p>
 </section>
 
-<div class="row g-3 mb-4 stat-row">
+<section class="stats-grid mb-4">
     {{-- Tổng người dùng --}}
-    <div class="col-md-6 col-lg-3">
-        <a class="stat-card" href="{{ route('admin.users.index') }}">
-        <div class="icon"><i class="bi bi-people"></i></div>
-        <div>
-            <div class="n">{{ $counts['total'] ?? 0 }}</div>
-            <div class="t">Người dùng</div>
+    <a class="stats-card stats-card--link" href="{{ route('admin.users.index') }}">
+        <div class="stats-icon"><i class="bi bi-people"></i></div>
+        <div class="stats-card__body">
+            <span class="stats-label">Tổng người dùng</span>
+            <span class="stats-value">{{ number_format($counts['total'] ?? 0) }}</span>
+            <span class="stats-meta">Bao gồm mọi vai trò</span>
         </div>
-        </a>
-    </div>
+        <i class="bi bi-chevron-right stats-chevron" aria-hidden="true"></i>
+    </a>
 
-    {{-- Admin (Giáo vụ) --}}
-    <div class="col-md-6 col-lg-3">
-        <a class="stat-card" href="{{ route('admin.users.index', ['role' => $filters['admin'] ?? 'admin']) }}">
-        <div class="icon"><i class="bi bi-shield-lock"></i></div>
-        <div>
-            <div class="n">{{ $counts['admin'] ?? 0 }}</div>
-            <div class="t">Admin </div>
+    {{-- Admin --}}
+    <a class="stats-card stats-card--link" href="{{ route('admin.users.index', ['role' => $filters['admin'] ?? 'admin']) }}">
+        <div class="stats-icon"><i class="bi bi-shield-lock"></i></div>
+        <div class="stats-card__body">
+            <span class="stats-label">Tài khoản Admin</span>
+            <span class="stats-value">{{ number_format($counts['admin'] ?? 0) }}</span>
+            <span class="stats-meta">Phân quyền toàn hệ thống</span>
         </div>
-        </a>
-    </div>
+        <i class="bi bi-chevron-right stats-chevron" aria-hidden="true"></i>
+    </a>
 
     {{-- Giảng viên --}}
-    <div class="col-md-6 col-lg-3">
-        <a class="stat-card" href="{{ route('admin.users.index', ['role' => $filters['teacher'] ?? 'teacher']) }}">
-        <div class="icon"><i class="bi bi-person-badge"></i></div>
-        <div>
-            <div class="n">{{ $counts['teacher'] ?? 0 }}</div>
-            <div class="t">Giảng viên</div>
+    <a class="stats-card stats-card--link" href="{{ route('admin.users.index', ['role' => $filters['teacher'] ?? 'teacher']) }}">
+        <div class="stats-icon"><i class="bi bi-person-badge"></i></div>
+        <div class="stats-card__body">
+            <span class="stats-label">Giảng viên</span>
+            <span class="stats-value">{{ number_format($counts['teacher'] ?? 0) }}</span>
+            <span class="stats-meta">Đang giảng dạy</span>
         </div>
-        </a>
-    </div>
+        <i class="bi bi-chevron-right stats-chevron" aria-hidden="true"></i>
+    </a>
 
     {{-- Học viên --}}
-    <div class="col-md-6 col-lg-3">
-        <a class="stat-card" href="{{ route('admin.users.index', ['role' => $filters['student'] ?? 'student']) }}">
-        <div class="icon"><i class="bi bi-person"></i></div>
-        <div>
-            <div class="n">{{ $counts['student'] ?? 0 }}</div>
-            <div class="t">Học viên</div>
+    <a class="stats-card stats-card--link" href="{{ route('admin.users.index', ['role' => $filters['student'] ?? 'student']) }}">
+        <div class="stats-icon"><i class="bi bi-person"></i></div>
+        <div class="stats-card__body">
+            <span class="stats-label">Học viên</span>
+            <span class="stats-value">{{ number_format($counts['student'] ?? 0) }}</span>
+            <span class="stats-meta">Đã đăng ký</span>
         </div>
-        </a>
-    </div>
-</div>
+        <i class="bi bi-chevron-right stats-chevron" aria-hidden="true"></i>
+    </a>
+</section>
 
 <div class="card quick-links">
     <div class="card-body">
@@ -68,4 +68,3 @@
     </div>
 </div>
 @endsection
-

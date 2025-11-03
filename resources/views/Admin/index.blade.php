@@ -13,7 +13,7 @@
     </section>
 
     {{-- Bộ lọc --}}
-    <div class="card users-filter mb-3">
+    <div class="card filter-card users-filter mb-3">
         <div class="card-body">
             <form class="row g-2 align-items-center" method="get" action="{{ route('admin.users.index') }}">
                 <div class="col-lg-5">

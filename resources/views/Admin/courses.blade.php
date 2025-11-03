@@ -14,7 +14,7 @@
     </section>
 
     <!-- Filter Card -->
-    <div class="card courses-filter mb-3">
+    <div class="card filter-card courses-filter mb-3">
         <div class="card-body">
             <form class="row g-2 align-items-center" method="get" action="{{ route('admin.courses.index') }}">
                 <div class="col-lg-4">
@@ -331,5 +331,4 @@
     <script src="{{ asset('js/Admin/slug-helper.js') }}" defer></script>
     <script src="{{ asset('js/Admin/admin-courses.js') }}" defer></script>
 @endpush
-
 

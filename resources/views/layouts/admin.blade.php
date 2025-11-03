@@ -204,7 +204,7 @@
         });
     </script>
 
-    <script src="{{ asset('js/Student/flash.js') }}" defer></script>
+    <script src="{{ asset('js/Admin/flash.js') }}" defer></script>
     @stack('scripts')
 </body>
 </html>

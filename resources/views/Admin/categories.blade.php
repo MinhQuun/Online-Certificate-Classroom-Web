@@ -45,7 +45,7 @@
         </article>
     </section>
 
-    <div class="card categories-filter mb-3">
+    <div class="card filter-card categories-filter mb-3">
         <div class="card-body">
             <form class="row g-2 align-items-center" method="get" action="{{ route('admin.categories.index') }}">
                 <div class="col-lg-6">
@@ -133,7 +133,7 @@
                                 data-icon="{{ $category->icon }}"
                                 data-action="{{ route('admin.categories.update', $category) }}"
                             >
-                                <i class="bi bi-pencil me-1"></i>
+                                <i class="bi bi-pencil"></i>
                             </button>
                             <form
                                 action="{{ route('admin.categories.destroy', $category) }}"
@@ -146,7 +146,7 @@
                                 @csrf
                                 @method('delete')
                                 <button type="submit" class="btn btn-danger-soft btn-sm action-btn">
-                                    <i class="bi bi-trash me-1"></i>
+                                    <i class="bi bi-trash"></i>
                                 </button>
                             </form>
                         </td>
@@ -293,4 +293,3 @@
     <script src="{{ asset('js/Admin/slug-helper.js') }}" defer></script>
     <script src="{{ asset('js/Admin/categories.js') }}" defer></script>
 @endpush
-

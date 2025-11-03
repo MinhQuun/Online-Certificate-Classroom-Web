@@ -1,18 +1,24 @@
 /* ===================== PALETTE ===================== */
 :root {
-    /* Staff palette */
-    --bg-ivory-1: #f1f7fb; /* = staff bg-sky-1 */
-    --bg-ivory-2: #eef6f7; /* = staff bg-sky-2 */
+    --bg-sky-1: #f1f7fb;
+    --bg-sky-2: #eef6f7;
+    --bg-ivory-1: var(--bg-sky-1);
+    --bg-ivory-2: var(--bg-sky-2);
     --card: #ffffff;
     --card-brd: #d7e6ee;
     --text: #23323a;
     --muted: #617481;
 
-    /* Map sang màu Staff */
-    --wood: #3a86ff; /* = staff blue */
-    --moss: #1aa3a3; /* = staff teal */
-    --wheat: #5e60ce; /* = staff indigo */
-    --indigo: #5e60ce; /* thêm để dùng cho title */
+    --blue: #3a86ff;
+    --teal: #1aa3a3;
+    --indigo: #5e60ce;
+    --wood: var(--blue);
+    --moss: var(--teal);
+    --wheat: var(--indigo);
+
+    --danger: #d64545;
+    --warning: #f59e0b;
+    --success: #20c997;
 
     --shadow: 0 16px 32px rgba(37, 103, 131, 0.14);
 }
@@ -143,106 +149,335 @@
     padding: 20px;
 }
 
-/* ===================== PAGE HEADER ===================== */
-.page-header .kicker {
+/* ===================== PAGE HEADER & ALERTS ===================== */
+.admin-main .page-header {
+    margin-bottom: 1.5rem;
+}
+.admin-main .page-header .kicker {
     display: inline-block;
     font-size: 0.72rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     padding: 6px 10px;
     border-radius: 999px;
-    background: rgba(200, 169, 126, 0.12);
+    background: rgba(26, 163, 163, 0.12);
     border: 1px solid var(--card-brd);
     color: var(--muted);
 }
-.page-header .title {
-    /* thêm kích thước để đậm nét hơn */
+.admin-main .page-header .title {
     margin: 10px 0 4px;
     font-weight: 800;
     line-height: 1.1;
     font-size: clamp(26px, 4.2vw, 34px);
-    background: linear-gradient(90deg, var(--indigo), var(--wood), var(--moss));
+    background: linear-gradient(90deg, var(--indigo), var(--blue), var(--teal));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
 }
-.page-header .muted {
+.admin-main .page-header .muted {
     color: var(--muted);
 }
+.admin-main .validation-errors {
+    border-radius: 14px;
+    border: 1px solid rgba(237, 66, 69, 0.25);
+    box-shadow: 0 12px 28px rgba(237, 66, 69, 0.18);
+}
 
-/* ===================== DASHBOARD STATS (giữ nguyên, thêm fix nhỏ) ===================== */
-.stat-card {
+/* ===================== METRIC / STATS GRID ===================== */
+.admin-main .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+}
+.admin-main .stats-card,
+.admin-main .stat-card {
     width: 100%;
-    min-height: 160px;
+    min-height: 140px;
     padding: 20px;
     border-radius: 18px;
     background: var(--card);
     border: 1px solid var(--card-brd);
     box-shadow: var(--shadow);
-    display: grid;
-    grid-template-columns: 60px 1fr 24px;
-    align-items: center;
-    gap: 16px;
-    transition: transform 0.25s, box-shadow 0.25s, background 0.25s,
-        border-color 0.25s;
-    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 8px;
     text-decoration: none;
     color: inherit;
+    transition: transform 0.25s, box-shadow 0.25s, background 0.25s,
+        border-color 0.25s;
 }
-.stat-card:hover {
+.admin-main .stats-card:hover,
+.admin-main .stat-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     background: linear-gradient(180deg, #fff, #fffaf5);
     border-color: var(--wheat);
 }
-.stat-card .icon {
+.admin-main .stats-card--link,
+.admin-main .stat-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+}
+.admin-main .stats-icon {
     width: 56px;
     height: 56px;
-    border-radius: 12px;
+    border-radius: 14px;
     display: grid;
     place-items: center;
     background: linear-gradient(
         135deg,
-        rgba(140, 109, 59, 0.15),
-        rgba(106, 143, 85, 0.15)
+        rgba(58, 134, 255, 0.1),
+        rgba(26, 163, 163, 0.1)
     );
-    color: var(--wood);
+    color: var(--blue);
     font-size: 26px;
     flex-shrink: 0;
 }
-.stat-card > div:nth-child(2) {
+.admin-main .stats-card__body {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
+    gap: 4px;
     min-width: 0;
 }
-.stat-card .n {
+.admin-main .stats-value {
     font-weight: 900;
-    font-size: clamp(2.2rem, 4vw, 3.25rem);
+    font-size: clamp(2rem, 3.5vw, 2.6rem);
     line-height: 1.2;
-    margin-bottom: 4px;
-    background: linear-gradient(90deg, var(--wood), var(--moss));
+    background: linear-gradient(90deg, var(--blue), var(--teal));
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
 }
-.stat-card .t {
-    color: var(--muted);
-    font-size: 1rem;
+.admin-main .stats-label {
+    font-size: 0.9rem;
     line-height: 1.3;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
 }
-.stat-card .chevron {
+.admin-main .stats-meta {
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+.admin-main .stats-chevron {
     font-size: 1.35rem;
     color: var(--muted);
-    justify-self: end;
+    margin-left: auto;
     transition: transform 0.2s ease, color 0.2s ease;
 }
-.stat-card:hover .chevron {
+.admin-main .stats-card--link:hover .stats-chevron,
+.admin-main .stat-card:hover .stats-chevron {
     transform: translateX(4px);
-    color: var(--wood);
+    color: var(--blue);
+}
+
+/* ===================== FILTER PANELS ===================== */
+.admin-main .filter-card {
+    border: 1px solid var(--card-brd);
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+.admin-main .filter-card .form-control,
+.admin-main .filter-card .form-select {
+    border-radius: 10px;
+    border-color: var(--card-brd);
+}
+.admin-main .filter-card .btn-outline-primary {
+    border-radius: 999px;
+    border-color: #b9d2ff;
+    color: var(--blue);
+    background: #f0f6ff;
+    transition: all 0.25s;
+}
+.admin-main .filter-card .btn-outline-primary:hover {
+    background: linear-gradient(135deg, var(--blue), var(--teal));
+    color: #fff;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+.admin-main .filter-card .btn-outline-secondary {
+    border-radius: 999px;
+    border-color: var(--card-brd);
+    background: #f7fbfd;
+    color: var(--text);
+    transition: all 0.25s;
+}
+.admin-main .filter-card .btn-outline-secondary:hover {
+    background: #eef6fb;
+    transform: translateY(-2px);
+}
+
+/* ===================== DATA CARDS & TABLE SHELL ===================== */
+.admin-body .card {
+    border-radius: 16px;
+    border: 1px solid var(--card-brd);
+    background: var(--card);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+.admin-body .card-header {
+    background: linear-gradient(180deg, #f9feff, #f4fbfd);
+    border-bottom: 1px solid var(--card-brd);
+}
+.admin-body .card-footer {
+    background: #f7fbff;
+    border-top: 1px solid var(--card-brd);
+}
+.admin-body .card .btn.btn-primary {
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--indigo), var(--blue));
+    border: none;
+    box-shadow: 0 10px 18px rgba(58, 134, 255, 0.22);
+    transition: transform 0.25s, box-shadow 0.25s, filter 0.25s;
+}
+.admin-body .card .btn.btn-primary:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.02);
+}
+.admin-main .table {
+    border-color: var(--card-brd);
+}
+.admin-main .table thead th {
+    background: linear-gradient(180deg, #f7fbff, #f2f8fd);
+    border-bottom: 1px solid var(--card-brd);
+    color: var(--muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+}
+.admin-main .table td,
+.admin-main .table th {
+    vertical-align: middle;
+    border-color: #e6eff5;
+}
+.admin-main .table-hover tbody tr {
+    transition: background 0.2s;
+}
+.admin-main .table-hover tbody tr:hover {
+    background: #f9feff;
+}
+.admin-main .table-fixed {
+    table-layout: fixed;
+    width: 100%;
+}
+
+/* ===================== TABLE ACTIONS & SOFT BUTTONS ===================== */
+.admin-main .td-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    white-space: nowrap;
+    align-items: center;
+}
+.admin-main .td-actions form {
+    margin: 0;
+    display: contents;
+}
+.admin-main .td-actions .action-btn {
+    padding: 0.25rem 0.5rem;
+    line-height: 1.1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+}
+.admin-main .btn-primary-soft {
+    background: rgba(58, 134, 255, 0.09);
+    border: 1px solid rgba(58, 134, 255, 0.2);
+    color: var(--blue);
+    border-radius: 10px;
+    padding: 6px 10px;
+    transition: all 0.2s;
+}
+.admin-main .btn-primary-soft:hover {
+    background: linear-gradient(135deg, var(--blue), var(--teal));
+    color: #fff;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(58, 134, 255, 0.22);
+}
+.admin-main .btn-danger-soft {
+    background: rgba(237, 66, 69, 0.08);
+    border: 1px solid rgba(237, 66, 69, 0.22);
+    color: var(--danger);
+    border-radius: 10px;
+    padding: 6px 10px;
+    transition: all 0.2s;
+}
+.admin-main .btn-danger-soft:hover {
+    background: #ffeded;
+    border-color: rgba(237, 66, 69, 0.35);
+    transform: translateY(-2px);
+}
+.admin-main .badge.text-bg-success {
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+    color: #fff !important;
+}
+.admin-main .badge.text-bg-warning {
+    background: linear-gradient(135deg, #ffc107, #fd7e14) !important;
+    color: #000 !important;
+}
+.admin-main .badge.text-bg-danger {
+    background: linear-gradient(135deg, #dc3545, #e55353) !important;
+    color: #fff !important;
+}
+
+/* ===================== MODALS ===================== */
+.admin-main .modal-content {
+    border-radius: 18px;
+    border: 1px solid var(--card-brd);
+    box-shadow: var(--shadow);
+}
+.admin-main .modal-header {
+    border-bottom: 1px solid var(--card-brd);
+    background: linear-gradient(180deg, #f9feff, #f4fbfd);
+}
+.admin-main .modal-title {
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--indigo), var(--blue));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.admin-main .modal-body .form-label {
+    font-weight: 600;
+    color: var(--muted);
+}
+.admin-main .modal-body .form-control,
+.admin-main .modal-body .form-select,
+.admin-main .modal-body textarea {
+    border-radius: 12px;
+    border-color: var(--card-brd);
+}
+.admin-main .modal-footer .btn-secondary {
+    border-radius: 999px;
+    background: #f2f8fd;
+    border: 1px solid var(--card-brd);
+    color: var(--text);
+}
+.admin-main .modal-footer .btn-primary {
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--indigo), var(--blue));
+    border: none;
+}
+
+/* ===================== RESPONSIVE HELPERS ===================== */
+@media (max-width: 1200px) {
+    .admin-main .td-actions {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+}
+@media (max-width: 768px) {
+    .admin-main .table-responsive {
+        overflow-x: auto;
+    }
 }
 
 /* ===================== PILL BUTTONS ===================== */
@@ -338,3 +573,5 @@
         display: block;
     }
 }
+
+

@@ -47,7 +47,7 @@
     {{-- Bộ lọc + Tóm tắt --}}
     <div class="row g-3 align-items-stretch mb-3">
         <div class="col-lg-9">
-            <div class="card invoices-filter">
+            <div class="card filter-card invoices-filter">
                 <div class="card-body">
                     <form class="row g-3" method="get" action="{{ route('admin.invoices.index') }}">
                         <div class="col-lg-4 col-md-6">
@@ -79,8 +79,8 @@
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <label class="form-label text-uppercase small text-muted mb-1">Tổng tiền từ</label>
-                            <input type="number" 
-                                   name="amount_min" 
+                            <input type="number"
+                                   name="amount_min"
                                    class="form-control"
                                    min="0"
                                    step="1000"
@@ -88,8 +88,8 @@
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <label class="form-label text-uppercase small text-muted mb-1">Tổng tiền đến</label>
-                            <input type="number" 
-                                   name="amount_max" 
+                            <input type="number"
+                                   name="amount_max"
                                    class="form-control"
                                    min="0"
                                    step="1000"
@@ -97,7 +97,7 @@
                         </div>
                         <div class="col-lg-6 d-flex align-items-end justify-content-end gap-2">
                             <button class="btn btn-outline-primary">
-                                <i class="bi bi-funnel me-1"></i> Lọc kết quả
+                                Lọc
                             </button>
                             <a class="btn btn-outline-secondary" href="{{ route('admin.invoices.index') }}">
                                 Xóa lọc

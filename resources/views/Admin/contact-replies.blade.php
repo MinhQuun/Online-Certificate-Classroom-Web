@@ -19,7 +19,7 @@
     data-warning="{{ session('warning') }}">
 </div>
 
-<div class="card contact-filter mb-3">
+<div class="card filter-card contact-filter mb-3">
     <div class="card-body">
         <form class="row g-2 align-items-center" method="get" action="{{ route('admin.contact-replies.index') }}">
         <div class="col-lg-6">

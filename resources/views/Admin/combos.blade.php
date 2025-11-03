@@ -66,7 +66,7 @@
             <span class="stats-meta">Không còn mở bán</span>
         </article>
     </section>
-    <div class="card combos-filter mb-4">
+    <div class="card filter-card combos-filter mb-4">
         <div class="card-body">
             <form method="get" action="{{ route('admin.combos.index') }}" class="row g-3 align-items-end">
                 <div class="col-lg-4">
@@ -102,10 +102,10 @@
                 </div>
                 <div class="col-lg-2 d-flex gap-2 justify-content-lg-end">
                     <button type="submit" class="btn btn-outline-primary flex-grow-1">
-                        <i class="bi bi-funnel me-1"></i> Lọc
+                        Lọc
                     </button>
                     <a href="{{ route('admin.combos.index') }}" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-counterclockwise me-1"></i> Xóa lọc
+                        Xóa lọc
                     </a>
                 </div>
             </form>
@@ -149,12 +149,12 @@
         <div class="table-responsive">
             <table class="table align-middle mb-0 table-hover combos-table table-fixed">
                 <colgroup>
-                    <col style="width:28%;">
-                    <col style="width:24%;">
+                    <col style="width:26%;">
+                    <col style="width:26%;">
                     <col style="width:16%;">
-                    <col style="width:14%;">
+                    <col style="width:12%;">
                     <col style="width:10%;">
-                    <col style="width:8%;">
+                    <col style="width:10%;">
                 </colgroup>
                 <thead>
                     <tr>
@@ -179,7 +179,7 @@
                                 'start_date' => optional($combo->ngayBatDau)->format('Y-m-d'),
                                 'end_date' => optional($combo->ngayKetThuc)->format('Y-m-d'),
                                 'status' => $combo->trangThai,
-                                'image' => $combo->hinhanh ? asset($combo->hinhanh) : null,
+                                'image' => $combo->cover_image_url,
                                 'promotion_id' => $activePromotion?->maKM,
                                 'promotion_price' => $activePromotion && $activePromotion->pivot
                                     ? (int) $activePromotion->pivot->giaUuDai
@@ -204,9 +204,6 @@
                         <tr>
                             <td>
                                 <div class="combo-info">
-                                    <div class="combo-thumb">
-                                        <img src="{{ $combo->cover_image_url }}" alt="" loading="lazy">
-                                    </div>
                                     <div>
                                         <div class="d-flex align-items-center gap-2 flex-wrap">
                                             <strong>{{ $combo->tenGoi }}</strong>
@@ -215,7 +212,6 @@
                                             </span>
                                         </div>
                                         <div class="text-muted small">
-                                            Mã combo: #{{ $combo->maGoi }} &middot;
                                             Cập nhật: {{ optional($combo->updated_at)->format('d/m/Y H:i') }}
                                         </div>
                                         <div class="combo-slug">
@@ -280,9 +276,6 @@
                                 <span class="badge rounded-pill {{ $statusMeta['class'] }}">
                                     {{ $statusMeta['label'] }}
                                 </span>
-                                <div class="text-muted small mt-1">
-                                    Tạo bởi: {{ $combo->creator->hoTen ?? $combo->creator->name ?? 'N/A' }}
-                                </div>
                             </td>
                             <td class="text-end">
                                     <button
@@ -292,7 +285,7 @@
                                         data-bs-target="#comboEditModal"
                                         data-combo='@json($comboPayload, JSON_UNESCAPED_UNICODE)'
                                     >
-                                        <i class="bi bi-pencil-square me-1"></i> Sửa
+                                        <i class="bi bi-pencil me-1"></i>
                                     </button>
                                     <form
                                         method="post"
@@ -302,7 +295,7 @@
                                         @csrf
                                         @method('delete')
                                         <button type="submit" class="btn btn-danger-soft action-btn">
-                                            <i class="bi bi-trash me-1"></i> Xoá
+                                            <i class="bi bi-trash me-1"></i>
                                         </button>
                                     </form>
                             </td>
@@ -494,8 +487,8 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-4 d-grid">
-                                                <button type="button" class="btn btn-outline-primary" data-course-add>
-                                                    <i class="bi bi-plus-circle me-1"></i> Thêm khóa học
+                                                <button type="button" class="btn btn-primary" data-course-add>
+                                                    Thêm khóa học
                                                 </button>
                                             </div>
                                         </div>
@@ -511,11 +504,8 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                         <div class="d-flex flex-wrap gap-2">
-                            <button type="submit" class="btn btn-outline-primary" data-form-action="save_stay">
-                                <i class="bi bi-save2 me-1"></i> Lưu & tiếp tục
-                            </button>
                             <button type="submit" class="btn btn-primary" data-form-action="save_close">
-                                <i class="bi bi-check-lg me-1"></i> Lưu & đóng
+                                Lưu combo
                             </button>
                         </div>
                     </div>
@@ -677,8 +667,8 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-4 d-grid">
-                                                <button type="button" class="btn btn-outline-primary" data-course-add>
-                                                    <i class="bi bi-plus-circle me-1"></i> Thêm khóa học
+                                                <button type="button" class="btn btn-primary" data-course-add>
+                                                    Thêm khóa học
                                                 </button>
                                             </div>
                                         </div>
@@ -694,11 +684,8 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                         <div class="d-flex flex-wrap gap-2">
-                            <button type="submit" class="btn btn-outline-primary" data-form-action="save_stay">
-                                <i class="bi bi-save me-1"></i> Lưu & tiếp tục
-                            </button>
                             <button type="submit" class="btn btn-primary" data-form-action="save_close">
-                                <i class="bi bi-check-lg me-1"></i> Lưu & đóng
+                                Lưu combo
                             </button>
                         </div>
                     </div>
