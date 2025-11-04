@@ -20,7 +20,6 @@
             <span class="stats-value">{{ number_format($counts['total'] ?? 0) }}</span>
             <span class="stats-meta">Bao gồm mọi vai trò</span>
         </div>
-        <i class="bi bi-chevron-right stats-chevron" aria-hidden="true"></i>
     </a>
 
     {{-- Admin --}}
@@ -31,7 +30,6 @@
             <span class="stats-value">{{ number_format($counts['admin'] ?? 0) }}</span>
             <span class="stats-meta">Phân quyền toàn hệ thống</span>
         </div>
-        <i class="bi bi-chevron-right stats-chevron" aria-hidden="true"></i>
     </a>
 
     {{-- Giảng viên --}}
@@ -42,7 +40,6 @@
             <span class="stats-value">{{ number_format($counts['teacher'] ?? 0) }}</span>
             <span class="stats-meta">Đang giảng dạy</span>
         </div>
-        <i class="bi bi-chevron-right stats-chevron" aria-hidden="true"></i>
     </a>
 
     {{-- Học viên --}}
@@ -53,7 +50,6 @@
             <span class="stats-value">{{ number_format($counts['student'] ?? 0) }}</span>
             <span class="stats-meta">Đã đăng ký</span>
         </div>
-        <i class="bi bi-chevron-right stats-chevron" aria-hidden="true"></i>
     </a>
 </section>
 
@@ -61,9 +57,10 @@
     <div class="card-body">
         <h5 class="mb-3">Tác vụ nhanh</h5>
         <div class="d-flex flex-wrap gap-2">
-        <a href="{{ route('admin.users.index') }}" class="chip"><i class="bi bi-person-plus me-1"></i>Thêm người dùng</a>
-        <a href="{{ route('admin.users.index') }}" class="chip"><i class="bi bi-shield-check me-1"></i>Phân quyền</a>
-        <a href="{{ route('home') }}" class="chip"><i class="bi bi-window-sidebar me-1"></i>Trang khách</a>
+            <a href="{{ route('admin.users.index') }}" class="chip"><i class="bi bi-person-plus me-1"></i>Thêm người dùng</a>
+            <a href="{{ route('admin.users.index') }}" class="chip"><i class="bi bi-shield-check me-1"></i>Phân quyền</a>
+            <a href="{{ route('admin.courses.index') }}" class="chip"><i class="bi bi-journal-bookmark-fill me-1"></i>Quản lý khóa học</a>
+            <a href="{{ route('admin.promotions.index') }}" class="chip"><i class="bi bi-tag-fill me-1"></i>Quản lý khuyến mãi</a>
         </div>
     </div>
 </div>

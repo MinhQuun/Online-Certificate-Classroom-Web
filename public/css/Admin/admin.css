@@ -225,8 +225,9 @@
     width: 56px;
     height: 56px;
     border-radius: 14px;
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: linear-gradient(
         135deg,
         rgba(58, 134, 255, 0.1),
@@ -574,4 +575,23 @@
     }
 }
 
+/* ======================================================= */
+/* Tinh chỉnh Stats Card (Giải pháp 1: Đảo Value > Label) */
+/* ======================================================= */
 
+.admin-main .stats-card__body .stats-value {
+    order: 1;
+}
+.admin-main .stats-card__body .stats-label {
+    order: 2;
+}
+.admin-main .stats-card__body .stats-meta {
+    order: 3;
+}
+
+.admin-main .stats-card__body {
+    gap: 2px;
+}
+.admin-main .stats-card__body .stats-meta {
+    margin-top: 4px;
+}

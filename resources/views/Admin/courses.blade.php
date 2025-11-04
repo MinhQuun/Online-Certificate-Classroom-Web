@@ -145,7 +145,7 @@
                             <td class="text-end">
                                 <button
                                     type="button"
-                                    class="btn btn-sm btn-outline-primary action-btn"
+                                    class="btn btn-primary-soft btn-sm action-btn"
                                     data-bs-toggle="modal"
                                     data-bs-target="#modalEdit"
                                     data-id="{{ $course->maKH }}"
@@ -165,7 +165,7 @@
                                     data-image="{{ $course->hinhanh }}"
                                     data-image-url="{{ $course->cover_image_url }}"
                                 >
-                                    <i class="bi bi-pencil me-1"></i>
+                                    <i class="bi bi-pencil"></i>
                                 </button>
                                 <form
                                     action="{{ route('admin.courses.destroy', $course->maKH) }}"

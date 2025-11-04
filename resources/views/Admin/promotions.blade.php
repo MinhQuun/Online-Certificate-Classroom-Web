@@ -118,8 +118,8 @@
                     </select>
                 </div>
                 <div class="col-12 d-flex flex-wrap gap-2 justify-content-end">
-                    <a href="{{ route('admin.promotions.index') }}" class="btn btn-outline-secondary">Xóa bộ lọc</a>
                     <button type="submit" class="btn btn-outline-primary">Lọc</button>
+                    <a href="{{ route('admin.promotions.index') }}" class="btn btn-outline-secondary">Xóa lọc</a>
                 </div>
             </form>
         </div>
