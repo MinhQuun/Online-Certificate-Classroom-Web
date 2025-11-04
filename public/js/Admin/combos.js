@@ -61,81 +61,84 @@
         const defaultPromotionHelp = promotionHelp?.textContent || "";
 
         const selectedCourses = new Map();
-        let originalTotalCache = 0;
 
-        const updatePromotionHint = () => {
-            if (!promotionWrapper || !promotionSelect) {
-                return;
-            }
+        const calculateTotals = () => {
+            const basePrice = Array.from(selectedCourses.values()).reduce(
+                (sum, course) => sum + (Number(course.price) || 0),
+                0
+            );
 
-            const hasPromotion = promotionSelect.value !== "";
-            promotionWrapper.classList.toggle("show", hasPromotion);
-
-            if (!hasPromotion) {
-                if (promotionPriceInput) {
-                    promotionPriceInput.value = "";
-                    promotionPriceInput.placeholder = "Giá sau ưu đãi";
-                }
-                if (promotionHelp) {
-                    promotionHelp.textContent = defaultPromotionHelp;
-                }
-                return;
-            }
-
-            const promotion = promotionMap.get(Number(promotionSelect.value));
+            const hasPromotion = !!promotionSelect?.value;
+            let finalPrice = basePrice;
             let message = defaultPromotionHelp;
-            let suggested = null;
 
-            if (promotion && originalTotalCache > 0) {
-                if (promotion.type === "PERCENT") {
-                    const discount = Math.round(
-                        originalTotalCache * (Number(promotion.value) / 100)
-                    );
-                    suggested = Math.max(0, originalTotalCache - discount);
-                    message = `Giảm ${promotion.value}% · Giá đề xuất: ${formatCurrency(
-                        suggested
-                    )}.`;
-                } else if (promotion.type === "FIXED") {
-                    suggested = Math.max(
-                        0,
-                        originalTotalCache - Number(promotion.value)
-                    );
-                    message = `Giảm ${formatCurrency(
-                        promotion.value
-                    )} · Giá đề xuất: ${formatCurrency(suggested)}.`;
-                } else if (promotion.type === "GIFT") {
-                    message =
-                        "Khuyến mãi quà tặng · Nhập giá ưu đãi thủ công nếu cần.";
+            if (hasPromotion && basePrice > 0) {
+                const promotionId = Number(promotionSelect.value);
+                const promotion = promotionMap.get(promotionId);
+
+                if (promotion) {
+                    const rawValue = Number(promotion.value) || 0;
+
+                    if (promotion.type === "PERCENT") {
+                        const percent = Math.min(Math.max(rawValue, 0), 100);
+                        const discount = Math.round(basePrice * (percent / 100));
+                        finalPrice = Math.max(0, basePrice - discount);
+                        message = `Giảm ${percent}% · Giá sau ưu đãi: ${formatCurrency(
+                            finalPrice
+                        )}.`;
+                    } else if (promotion.type === "FIXED") {
+                        const discount = Math.max(0, rawValue);
+                        finalPrice = Math.max(0, basePrice - discount);
+                        message = `Giảm ${formatCurrency(
+                            discount
+                        )} · Giá sau ưu đãi: ${formatCurrency(finalPrice)}.`;
+                    } else {
+                        finalPrice = Math.max(0, basePrice);
+                        message = "Khuyến mãi quà tặng · Giá combo giữ nguyên.";
+                    }
+                }
+            }
+
+            return {
+                basePrice,
+                finalPrice,
+                saving: Math.max(0, basePrice - finalPrice),
+                hasPromotion,
+                message,
+            };
+        };
+
+        const applyTotals = (totals) => {
+            if (priceInput) {
+                priceInput.value = totals.basePrice > 0 ? totals.basePrice : 0;
+            }
+
+            if (promotionWrapper) {
+                promotionWrapper.classList.toggle("show", totals.hasPromotion);
+            }
+
+            if (promotionPriceInput) {
+                if (totals.hasPromotion) {
+                    promotionPriceInput.value = totals.finalPrice;
+                } else {
+                    promotionPriceInput.value = "";
                 }
             }
 
             if (promotionHelp) {
-                promotionHelp.textContent = message;
+                promotionHelp.textContent = totals.message;
             }
 
-            if (promotionPriceInput) {
-                promotionPriceInput.placeholder = suggested
-                    ? `Đề xuất: ${formatCurrency(suggested)}`
-                    : "Giá sau ưu đãi";
-            }
+            if (originalEl) originalEl.textContent = formatCurrency(totals.basePrice);
+            if (saleEl) saleEl.textContent = formatCurrency(totals.finalPrice);
+            if (savingEl) savingEl.textContent = formatCurrency(totals.saving);
         };
 
-        function refreshSummary() {
-            const totalOriginal = Array.from(selectedCourses.values()).reduce(
-                (sum, course) => sum + (Number(course.price) || 0),
-                0
-            );
-            const saleValue = Number(priceInput?.value || 0);
-            const saving = Math.max(0, totalOriginal - saleValue);
+        const refreshFinancials = () => {
+            const totals = calculateTotals();
+            applyTotals(totals);
+        };
 
-            originalTotalCache = totalOriginal;
-
-            if (originalEl) originalEl.textContent = formatCurrency(totalOriginal);
-            if (saleEl) saleEl.textContent = formatCurrency(saleValue);
-            if (savingEl) savingEl.textContent = formatCurrency(saving);
-
-            updatePromotionHint();
-        }
 
         function refreshState() {
             const hasItems = selectedCourses.size > 0;
@@ -164,7 +167,7 @@
                 picker.value = "";
             }
 
-            refreshSummary();
+            refreshFinancials();
         }
 
         function createCourseItem(course, order) {
@@ -262,16 +265,14 @@
             addCourse(value);
         });
 
-        priceInput?.addEventListener("input", refreshSummary);
-
-        promotionSelect?.addEventListener("change", updatePromotionHint);
+        promotionSelect?.addEventListener("change", refreshFinancials);
 
         refreshState();
 
         return {
             setCourses,
             refresh: refreshState,
-            refreshPromotion: updatePromotionHint,
+            refreshPromotion: refreshFinancials,
         };
     }
 

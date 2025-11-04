@@ -63,7 +63,7 @@ class PromotionAdminController extends Controller
 
         return redirect()
             ->route('admin.promotions.index')
-            ->with('success', '�?A� t���o khuy���n mA�i m��>i thA�nh cAng');
+            ->with('success', 'Đã tạo khuyến mãi mới thành công');
     }
 
     public function update(Request $request, Promotion $promotion): RedirectResponse
@@ -75,7 +75,7 @@ class PromotionAdminController extends Controller
 
         return redirect()
             ->route('admin.promotions.index')
-            ->with('success', '�?A� c��-p nh��-t khuy���n mA�i thA�nh cAng.');
+            ->with('success', 'Đã cập nhật khuyến mãi thành công.');
     }
 
     public function destroy(Promotion $promotion): RedirectResponse
@@ -86,7 +86,7 @@ class PromotionAdminController extends Controller
 
         return redirect()
             ->route('admin.promotions.index')
-            ->with('success', '�?A� xoA�a khuy���n mA�i.');
+            ->with('success', 'Đã xóa khuyến mãi.');
     }
 
     protected function validatePromotion(Request $request, ?int $ignoreId = null): array
@@ -114,14 +114,14 @@ class PromotionAdminController extends Controller
         if ($validated['loaiUuDai'] === Promotion::TYPE_PERCENT) {
             if ($validated['giaTriUuDai'] <= 0 || $validated['giaTriUuDai'] > 100) {
                 throw ValidationException::withMessages([
-                    'giaTriUuDai' => 'GiA� t��� ph���n trA?m ph���i trong khoA?ng 1 - 100.',
+                    'giaTriUuDai' => 'Giá trị phần trăm phải trong khoảng 1 - 100.',
                 ]);
             }
         }
 
         if ($validated['loaiUuDai'] === Promotion::TYPE_FIXED && $validated['giaTriUuDai'] <= 0) {
             throw ValidationException::withMessages([
-                'giaTriUuDai' => 'GiA� tiA�n khuy���n mA�i ph���i lA�n h��n 0.',
+                'giaTriUuDai' => 'Giá tiền khuyến mãi phải lớn hơn 0.',
             ]);
         }
 

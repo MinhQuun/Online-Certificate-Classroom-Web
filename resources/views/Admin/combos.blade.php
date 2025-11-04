@@ -387,7 +387,9 @@
                                             value="{{ old('gia', 0) }}"
                                             data-combo-price-input
                                             required
+                                            readonly
                                         >
+                                        <div class="form-text">Tự động bằng tổng học phí các khóa đã chọn.</div>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Trạng thái</label>
@@ -447,6 +449,7 @@
                                         value="{{ old('promotion_price') }}"
                                         placeholder="Giá sau ưu đãi"
                                         data-promotion-price-input
+                                        readonly
                                     >
                                     <div class="form-text" data-promotion-help>
                                         Có thể để trống để hệ thống tự tính từ loại ưu đãi.
@@ -580,7 +583,9 @@
                                             step="1000"
                                             data-combo-price-input
                                             required
+                                            readonly
                                         >
+                                        <div class="form-text">Tự động bằng tổng học phí các khóa đã chọn.</div>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Trạng thái</label>
@@ -629,6 +634,7 @@
                                         step="1000"
                                         placeholder="Giá sau ưu đãi"
                                         data-promotion-price-input
+                                        readonly
                                     >
                                     <div class="form-text" data-promotion-help>
                                         Có thể để trống để hệ thống tự tính từ loại ưu đãi.
@@ -728,4 +734,3 @@
     <script src="{{ asset('js/Admin/slug-helper.js') }}" defer></script>
     <script src="{{ asset('js/Admin/combos.js') }}" defer></script>
 @endpush
-
