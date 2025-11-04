@@ -62,6 +62,20 @@ function showToast(message, type = "success", duration = 4200, title) {
 
     card.style.animation = "toast-fade-in .22s ease-out both";
 }
+// ===================== Clear form errors =====================
+function clearFormErrors() {
+    // Clear all error messages
+    qsa('.auth-error').forEach(errorDiv => {
+        errorDiv.textContent = '';
+    });
+    
+    // Remove invalid class from inputs
+    qsa('.auth-input').forEach(input => {
+        input.classList.remove('is-invalid');
+        input.classList.remove('is-valid');
+    });
+}
+
 // ===================== Toggle đăng nhập / đăng ký =====================
 (() => {
     const signUpButton = qs("#signUp");
@@ -69,17 +83,21 @@ function showToast(message, type = "success", duration = 4200, title) {
     const container = qs("#authContainer");
     if (!signUpButton || !signInButton || !container) return;
 
-    signUpButton.addEventListener("click", () =>
-        container.classList.add("right-panel-active")
-    );
-    signInButton.addEventListener("click", () =>
-        container.classList.remove("right-panel-active")
-    );
+    signUpButton.addEventListener("click", () => {
+        clearFormErrors();
+        container.classList.add("right-panel-active");
+    });
+    
+    signInButton.addEventListener("click", () => {
+        clearFormErrors();
+        container.classList.remove("right-panel-active");
+    });
 })();
 
 function setPanel(panel) {
     const container = qs("#authContainer");
     if (!container) return;
+    clearFormErrors();
     container.classList.remove("forgot-password-mode");
     panel === "register"
         ? container.classList.add("right-panel-active")

@@ -23,7 +23,7 @@ CREATE TABLE NGUOIDUNG (
     maND INT NOT NULL AUTO_INCREMENT,
     hoTen VARCHAR(100) NOT NULL,              -- Họ tên đầy đủ
     email VARCHAR(255) NOT NULL UNIQUE,       -- Email duy nhất
-    sdt VARCHAR(20),                          -- Số điện thoại
+    sdt VARCHAR(20) UNIQUE,                   -- Số điện thoại duy nhất
     matKhau VARCHAR(255) NOT NULL,            -- Mật khẩu (hashed)
     chuyenMon VARCHAR(255),                   -- Chuyên môn (cho giảng viên)
     vaiTro ENUM('ADMIN','GIAO_VU','GIANG_VIEN','HOC_VIEN') DEFAULT 'HOC_VIEN',  -- Vai trò mặc định là học viên

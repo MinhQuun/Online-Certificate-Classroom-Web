@@ -18,10 +18,12 @@
 
 .site-header__inner {
     height: 100%;
-    display: grid;
-    grid-template-columns: auto minmax(260px, 1fr) auto;
+    display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 12px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
 }
 
 .header-left,
@@ -29,15 +31,24 @@
 .header-right {
     display: flex;
     align-items: center;
-    gap: 16px; /* Gap nội bộ nhỏ hơn */
+}
+
+.header-left {
+    flex: 1;
+    min-width: 0;
+    gap: 24px;
+    margin-right: auto;
 }
 
 .header-center {
-    justify-content: flex-start; /* Keep search aligned left to leave breathing room for the nav */
+    flex-shrink: 0;
+    margin: 0 20px;
 }
 
 .header-right {
-    justify-content: flex-end; /* Đẩy profile/cart về phải */
+    flex-shrink: 0;
+    gap: 12px;
+    margin-left: auto;
 }
 
 .header-group-left {
@@ -50,25 +61,27 @@
 .brand {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     flex-shrink: 0;
+    margin-right: 8px;
 }
 
 .brand img {
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
-    box-shadow: 0 16px 26px rgba(37, 99, 235, 0.25);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    box-shadow: 0 12px 20px rgba(37, 99, 235, 0.25);
 }
 
 .brand__text {
     display: flex;
     flex-direction: column;
-    line-height: 1.2;
+    line-height: 1.15;
 }
 
 .brand__name {
     font-weight: 700;
+    font-size: 15px;
     background: linear-gradient(
         120deg,
         var(--color-accent),
@@ -81,22 +94,25 @@
 }
 
 .brand__tagline {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--color-muted);
 }
 
 .main-nav {
     display: flex;
     align-items: center;
+    flex: 0 1 auto;
+    min-width: 0;
 }
 
 .nav-list {
     list-style: none;
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 2px;
     margin: 0;
     padding: 0;
+    flex-wrap: nowrap;
 }
 
 .nav-item {
@@ -106,9 +122,9 @@
 .nav-link {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 9px 14px;
-    border-radius: 12px;
+    gap: 4px;
+    padding: 8px 10px;
+    border-radius: 8px;
     font-weight: 500;
     color: var(--color-muted);
     background: transparent;
@@ -116,6 +132,7 @@
     cursor: pointer;
     transition: var(--transition);
     white-space: nowrap;
+    font-size: 13.5px;
 }
 
 .nav-link svg {
@@ -525,46 +542,57 @@
     align-items: center;
     border: 1px solid var(--color-border);
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.8);
-    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 6px 10px;
     transition: var(--transition);
-    max-width: 400px;
-    width: 100%;
-    min-width: 260px;
+    width: 240px;
 }
 
 .header-search:focus-within {
     border-color: var(--color-accent-soft);
     background: var(--color-surface);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
 }
 
 .header-search input {
     border: none;
     background: transparent;
     flex: 1;
-    padding: 6px 4px;
+    padding: 4px 8px;
     color: var(--color-text);
+    font-size: 13.5px;
+    min-width: 0;
 }
 
 .header-search input:focus {
     outline: none;
-    width: 100%;
+}
+
+.header-search input::placeholder {
+    color: var(--color-muted);
 }
 
 .header-search button {
     border: none;
     background: var(--color-accent);
     border-radius: 999px;
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
     display: grid;
     place-items: center;
     cursor: pointer;
+    flex-shrink: 0;
+    transition: var(--transition);
+}
+
+.header-search button:hover {
+    background: var(--color-accent-soft);
+    transform: scale(1.05);
 }
 
 .header-search button svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     fill: #fff;
 }
 
@@ -590,6 +618,7 @@
     border-radius: 12px;
     display: grid;
     place-items: center;
+    flex-shrink: 0;
     background: rgba(37, 99, 235, 0.12);
 }
 
@@ -743,6 +772,71 @@
 }
 
 /* Responsive */
+@media (max-width: 1400px) {
+    .site-header__inner {
+        max-width: 100%;
+        padding: 0 20px;
+        gap: 10px;
+    }
+    
+    .header-left {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 1280px) {
+    .site-header__inner {
+        padding: 0 16px;
+        gap: 8px;
+    }
+    
+    .header-search {
+        width: 200px;
+    }
+    
+    .header-center {
+        margin: 0 12px;
+    }
+    
+    .nav-list {
+        gap: 0;
+    }
+    
+    .nav-link {
+        padding: 7px 8px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 1150px) {
+    .header-search {
+        width: 180px;
+    }
+    
+    .nav-link {
+        padding: 7px 6px;
+        font-size: 12.5px;
+    }
+    
+    .brand__text {
+        display: none;
+    }
+    
+    .brand {
+        margin-right: 4px;
+    }
+}
+
+@media (max-width: 1100px) {
+    .header-search {
+        width: 160px;
+    }
+    
+    .header-center {
+        margin: 0 8px;
+    }
+}
+
 @media (max-width: 1024px) {
     .site-header__inner {
         grid-template-columns: auto auto;

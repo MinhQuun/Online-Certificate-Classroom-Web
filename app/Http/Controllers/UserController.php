@@ -32,18 +32,23 @@ class UserController extends Controller
         $validated = $request->validate([
             'name'     => ['required', 'string', 'min:2', 'max:255'],
             'email'    => ['required', 'email:rfc,dns', 'max:255', 'unique:nguoidung,email'],
-            'password' => ['required', 'confirmed', Password::min(6)],
-            'phone'    => ['nullable', 'regex:/^0\d{9}$/'],
+            'password' => ['required', 'confirmed', Password::min(6)->max(32)],
+            'phone'    => ['required', 'regex:/^0\d{9,10}$/', 'unique:nguoidung,sdt'],
         ], [
-            'name.required'     => 'Vui lòng nhập họ tên.',
-            'name.min'          => 'Họ tên phải có ít nhất :min ký tự.',
-            'email.required'    => 'Vui lòng nhập email.',
-            'email.email'       => 'Email không hợp lệ.',
-            'email.unique'      => 'Email đã được sử dụng.',
-            'password.required' => 'Vui lòng nhập mật khẩu.',
-            'password.confirmed'=> 'Xác nhận mật khẩu không khớp.',
-            'password.min'      => 'Mật khẩu phải có ít nhất :min ký tự.',
-            'phone.regex'       => 'Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 0.',
+            'name.required'      => 'Vui lòng nhập họ tên.',
+            'name.min'           => 'Họ tên phải có ít nhất :min ký tự.',
+            'name.max'           => 'Họ tên không được vượt quá :max ký tự.',
+            'email.required'     => 'Vui lòng nhập email.',
+            'email.email'        => 'Email không đúng định dạng.',
+            'email.max'          => 'Email không được vượt quá :max ký tự.',
+            'email.unique'       => 'Email đã được sử dụng.',
+            'password.required'  => 'Vui lòng nhập mật khẩu.',
+            'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
+            'password.min'       => 'Mật khẩu phải có ít nhất :min ký tự.',
+            'password.max'       => 'Mật khẩu không được vượt quá :max ký tự.',
+            'phone.required'     => 'Vui lòng nhập số điện thoại.',
+            'phone.regex'        => 'Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 0.',
+            'phone.unique'       => 'Số điện thoại đã được sử dụng.',
         ]);
 
         return DB::transaction(function () use ($validated, $request) {
@@ -104,12 +109,15 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email'    => ['required', 'email'],
-            'password' => ['required'],
+            'email'    => ['required', 'email', 'max:255'],
+            'password' => ['required', 'min:6', 'max:32'],
         ], [
             'email.required'    => 'Vui lòng nhập email.',
-            'email.email'       => 'Email không hợp lệ.',
+            'email.email'       => 'Email không đúng định dạng.',
+            'email.max'         => 'Email không được vượt quá :max ký tự.',
             'password.required' => 'Vui lòng nhập mật khẩu.',
+            'password.min'      => 'Mật khẩu phải có ít nhất :min ký tự.',
+            'password.max'      => 'Mật khẩu không được vượt quá :max ký tự.',
         ]);
 
         /** @var User|null $user */
@@ -190,14 +198,17 @@ class UserController extends Controller
         $validated = $request->validate([
             'name'  => ['required', 'string', 'min:2', 'max:255'],
             'email' => ['required', 'email:rfc,dns', 'max:255', 'unique:nguoidung,email,' . $user->getKey() . ',maND'],
-            'phone' => ['nullable', 'regex:/^0\d{9}$/'],
+            'phone' => ['nullable', 'regex:/^0\d{9,10}$/', 'unique:nguoidung,sdt,' . $user->getKey() . ',maND'],
         ], [
             'name.required'  => 'Vui lòng nhập họ tên.',
             'name.min'       => 'Họ tên phải có ít nhất :min ký tự.',
+            'name.max'       => 'Họ tên không được vượt quá :max ký tự.',
             'email.required' => 'Vui lòng nhập email.',
-            'email.email'    => 'Email không hợp lệ.',
+            'email.email'    => 'Email không đúng định dạng.',
+            'email.max'      => 'Email không được vượt quá :max ký tự.',
             'email.unique'   => 'Email đã được sử dụng.',
-            'phone.regex'    => 'Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 0.',
+            'phone.regex'    => 'Số điện thoại phải gồm 10 và bắt đầu bằng 0.',
+            'phone.unique'   => 'Số điện thoại đã được sử dụng.',
         ]);
 
         $data = [
@@ -208,10 +219,11 @@ class UserController extends Controller
 
         if ($request->filled('password')) {
             $request->validate([
-                'password' => ['confirmed', Password::min(6)],
+                'password' => ['confirmed', Password::min(6)->max(32)],
             ], [
                 'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
                 'password.min'       => 'Mật khẩu phải có ít nhất :min ký tự.',
+                'password.max'       => 'Mật khẩu không được vượt quá :max ký tự.',
             ]);
 
             $data['matKhau'] = Hash::make($request->password);
