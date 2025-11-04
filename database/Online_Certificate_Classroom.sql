@@ -204,30 +204,6 @@ CREATE TABLE KHUYEN_MAI (
     CONSTRAINT FK_KM_ND FOREIGN KEY (created_by) REFERENCES NGUOIDUNG(maND) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE GIAODICH_VNPAY (
-    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    maHV INT NOT NULL,              -- Học viên mua (FK tới HOCVIEN.maHV)
-    maKH INT NOT NULL,              -- Khóa học được mua (FK tới KHOAHOC.maKH)
-    soTien DECIMAL(12,2) NOT NULL,  -- Số tiền VND bạn dự định thu cho khóa học tại thời điểm bấm thanh toán
-    txn_ref VARCHAR(64) NOT NULL,   -- Mã đơn gửi sang VNPay (vnp_TxnRef)
-    vnp_response_code VARCHAR(10) NULL,     -- Mã phản hồi VNPay (vnp_ResponseCode)
-    vnp_transaction_no VARCHAR(50) NULL,    -- Mã giao dịch tại VNPay/ngân hàng (vnp_TransactionNo)
-    trangThai ENUM('PENDING','PAID','FAILED') DEFAULT 'PENDING',
-    paid_at DATETIME NULL,          -- Thời điểm bạn xác nhận thanh toán thành công (sau IPN)
-    maGoi INT NULL,                 -- Liên kết với combo (nếu mua combo)
-    maKM INT NULL,                  -- Liên kết với khuyến mãi (nếu áp dụng)
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
-    UNIQUE KEY uq_txnref (txn_ref),
-    KEY IX_GDVNPAY_HVKH (maHV, maKH),
-    CONSTRAINT FK_GDVNPAY_HV FOREIGN KEY (maHV) REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
-    CONSTRAINT FK_GDVNPAY_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE,
-    -- Các tham chiếu này giờ đã HỢP LỆ vì bảng đã được tạo ở Mục 2.5
-    CONSTRAINT FK_GDVNPAY_GOI FOREIGN KEY (maGoi) REFERENCES GOI_KHOA_HOC(maGoi) ON DELETE CASCADE,
-    CONSTRAINT FK_GDVNPAY_KM FOREIGN KEY (maKM) REFERENCES KHUYEN_MAI(maKM) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 -- Bảng HOADON: Hóa đơn thanh toán.
 CREATE TABLE HOADON (
     maHD INT NOT NULL AUTO_INCREMENT,
@@ -261,6 +237,36 @@ CREATE TABLE CTHD (
     KEY IX_CTHD_MAKH (maKH),
     CONSTRAINT FK_CTHD_HD FOREIGN KEY (maHD) REFERENCES HOADON(maHD) ON DELETE CASCADE,
     CONSTRAINT FK_CTHD_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE GIAODICH_VNPAY (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    maHV INT NOT NULL,              -- Học viên mua (FK tới HOCVIEN.maHV)
+    maKH INT NULL,                  -- Khóa học được mua (FK tới KHOAHOC.maKH) - có thể null nếu thanh toán combo
+    soTien DECIMAL(12,2) NOT NULL,  -- Số tiền VND bán để định thu cho khóa học tại thời điểm bấm thanh toán
+    txn_ref VARCHAR(64) NOT NULL,   -- Mã đơn gửi sang VNPay (vnp_TxnRef)
+    vnp_response_code VARCHAR(10) NULL,     -- Mã phản hồi VNPay (vnp_ResponseCode)
+    vnp_transaction_no VARCHAR(50) NULL,    -- Mã giao dịch tại VNPay/ngân hàng (vnp_TransactionNo)
+    trangThai ENUM('PENDING','PAID','FAILED') DEFAULT 'PENDING',
+    paid_at DATETIME NULL,          -- Thời điểm bản xác nhận thanh toán thành công (sau IPN)
+    maGoi INT NULL,                 -- Liên kết với combo (nếu mua combo)
+    maKM INT NULL,                  -- Liên kết với khuyến mãi (nếu áp dụng)
+    maHD INT NULL,                  -- Hóa đơn tương ứng
+    order_snapshot JSON NULL,       -- Ảnh chụp giỏ hàng tại thời điểm khởi tạo
+    payment_url VARCHAR(700) NULL,  -- URL redirect sang VNPay
+    client_ip VARCHAR(45) NULL,     -- IP của client gửi VNPay
+    user_agent VARCHAR(500) NULL,   -- User-Agent của client
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_txnref (txn_ref),
+    KEY IX_GDVNPAY_HVKH (maHV, maKH),
+    CONSTRAINT FK_GDVNPAY_HV FOREIGN KEY (maHV) REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
+    CONSTRAINT FK_GDVNPAY_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE,
+    -- Các tham chiếu này giờ đã HỢP LỆ vì bảng đã được tạo ở Mục 2.5
+    CONSTRAINT FK_GDVNPAY_GOI FOREIGN KEY (maGoi) REFERENCES GOI_KHOA_HOC(maGoi) ON DELETE CASCADE,
+    CONSTRAINT FK_GDVNPAY_KM FOREIGN KEY (maKM) REFERENCES KHUYEN_MAI(maKM) ON DELETE SET NULL,
+    CONSTRAINT FK_GDVNPAY_HD FOREIGN KEY (maHD) REFERENCES HOADON(maHD) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Bảng CTHD_GOI: Chi tiết hóa đơn cho combo.
@@ -689,15 +695,15 @@ CREATE TABLE job_batches (
 -- BẢNG CONTACT_REPLIES: Quản lý liên hệ & phản hồi từ học viên
 CREATE TABLE CONTACT_REPLIES (
     id INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(120) NOT NULL,                      
-    email VARCHAR(255) NOT NULL,                       
-    message VARCHAR(5000) NOT NULL,                    
-    status ENUM('NEW','READ','REPLIED') NOT NULL DEFAULT 'NEW',  
-    reply_message VARCHAR(5000) NULL,                  
+    name VARCHAR(120) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    message VARCHAR(5000) NOT NULL,
+    status ENUM('NEW','READ','REPLIED') NOT NULL DEFAULT 'NEW',
+    reply_message VARCHAR(5000) NULL,
     reply_by INT NULL,                                 -- ID admin phản hồi
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,  
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  
-    replied_at TIMESTAMP NULL,                         
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    replied_at TIMESTAMP NULL,
     PRIMARY KEY (id),
     KEY idx_contact_status (status),
     KEY idx_contact_email (email),

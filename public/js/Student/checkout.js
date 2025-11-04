@@ -14,6 +14,14 @@
     const isLocked = root.dataset.locked === "true";
     const methodLabelTarget = root.querySelector("[data-checkout-method-label]");
     const methodRadios = root.querySelectorAll('input[name="payment_method"]');
+    const methodPanels = root.querySelectorAll("[data-checkout-method-panel]");
+
+    const activateMethodPanel = (key) => {
+        methodPanels.forEach((panel) => {
+            const panelKey = panel.dataset.checkoutMethodPanel;
+            panel.classList.toggle("is-active", panelKey === key);
+        });
+    };
 
     const clampStage = (stage) => Math.min(3, Math.max(1, stage));
 
@@ -54,7 +62,18 @@
         });
     });
 
-    if (methodLabelTarget && methodRadios.length) {
+    if (methodRadios.length) {
+        const checkedRadio = root.querySelector('input[name="payment_method"]:checked');
+        if (checkedRadio) {
+            activateMethodPanel(checkedRadio.value);
+            if (methodLabelTarget) {
+                methodLabelTarget.textContent = checkedRadio
+                    .closest(".checkout-method")
+                    ?.querySelector("h3")
+                    ?.textContent.trim() ?? methodLabelTarget.textContent;
+            }
+        }
+
         methodRadios.forEach((radio) => {
             radio.addEventListener("change", () => {
                 if (!radio.checked) {
@@ -62,9 +81,10 @@
                 }
                 const method = radio.closest(".checkout-method");
                 const heading = method ? method.querySelector("h3") : null;
-                if (heading) {
+                if (heading && methodLabelTarget) {
                     methodLabelTarget.textContent = heading.textContent.trim();
                 }
+                activateMethodPanel(radio.value);
             });
         });
     }

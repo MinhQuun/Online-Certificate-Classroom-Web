@@ -3,33 +3,32 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
-use App\Mail\ActivationCodeMail;
-use App\Models\ActivationCode;
 use App\Models\Combo;
 use App\Models\Course;
-use App\Models\Enrollment;
-use App\Models\Invoice;
-use App\Models\InvoiceComboItem;
-use App\Models\InvoiceItem;
+use App\Models\PaymentTransaction;
+use App\Services\CheckoutOrderService;
+use App\Services\VNPayService;
 use App\Support\Cart\StudentCart;
 use App\Support\Cart\StudentComboCart;
-use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Throwable;
 
 class CheckoutController extends Controller
 {
-    private const SESSION_SELECTION = 'checkout.selection';
-    private const SESSION_SUCCESS = 'checkout.success';
+    public const SESSION_SELECTION = 'checkout.selection';
+    public const SESSION_SUCCESS = 'checkout.success';
+
+    public function __construct(
+        private readonly CheckoutOrderService $orderService,
+        private readonly VNPayService $vnPayService
+    ) {
+    }
 
     public function start(Request $request): RedirectResponse
     {
@@ -161,10 +160,28 @@ class CheckoutController extends Controller
         StudentCart::sync(array_values(array_diff(StudentCart::ids(), $courseIdsPurchased)));
         StudentComboCart::sync(array_values(array_diff(StudentComboCart::ids(), $comboIdsPurchased)));
 
+        if ($method === 'vnpay') {
+            try {
+                return $this->handleVnpayCheckout($request, $courses, $combos);
+            } catch (Throwable $exception) {
+                Log::error('Checkout VNPay init failed', [
+                    'user_id' => Auth::id(),
+                    'courses' => $courseIdsPurchased,
+                    'combos' => $comboIdsPurchased,
+                    'message' => $exception->getMessage(),
+                ]);
+                report($exception);
+
+                return redirect()
+                    ->route('student.checkout.index')
+                    ->with('error', 'Hệ thống đang bận, vui lòng thử lại sau ít phút.');
+            }
+        }
+
         try {
-            $finalized = $this->finalizeOrder($courses, $combos, $method);
+            $finalized = $this->orderService->finalize(Auth::user(), $courses, $combos, $method);
         } catch (Throwable $exception) {
-            Log::error('Checkout finalizeOrder failed', [
+            Log::error('Checkout finalize failed', [
                 'user_id' => Auth::id(),
                 'courses' => $courseIdsPurchased,
                 'combos' => $comboIdsPurchased,
@@ -178,288 +195,149 @@ class CheckoutController extends Controller
         }
 
         if (!empty($finalized['activation_packages'])) {
-            $this->dispatchActivationEmails(
+            $this->orderService->dispatchActivationEmails(
                 $finalized['user'],
                 $finalized['student'],
                 $finalized['activation_packages']
             );
         }
 
-        $courseTotal = (int) $courses->sum('hocPhi');
-        $comboTotal = (int) $combos->sum(fn (Combo $combo) => $combo->sale_price);
+        $courseTotal = (int) ($finalized['course_total'] ?? $courses->sum('hocPhi'));
+        $comboTotal = (int) ($finalized['combo_total'] ?? $combos->sum(fn (Combo $combo) => $combo->sale_price));
 
-        session()->put(self::SESSION_SUCCESS, [
-            'courses' => $courses->map(fn ($course) => [
-                'maKH' => $course->maKH,
-                'tenKH' => $course->tenKH,
-                'slug' => $course->slug,
-                'hocPhi' => $course->hocPhi,
-                'cover_image_url' => $course->cover_image_url,
-                'end_date_label' => $course->end_date_label,
-            ])->all(),
-            'combos' => $combos->map(fn (Combo $combo) => [
-                'maGoi' => $combo->maGoi,
-                'tenGoi' => $combo->tenGoi,
-                'slug' => $combo->slug,
-                'sale_price' => $combo->sale_price,
-                'original_price' => $combo->original_price,
-                'cover_image_url' => $combo->cover_image_url,
-            ])->all(),
-            'course_total' => $courseTotal,
-            'combo_total' => $comboTotal,
-            'total' => $courseTotal + $comboTotal,
-            'payment_method' => $method,
-            'invoice_id' => $finalized['invoice']->maHD ?? null,
-            'pending_activation_courses' => $finalized['pending_activation_courses'],
-            'already_active_courses' => $finalized['already_active_courses'],
-        ]);
+        $successPayload = self::createSuccessPayload(
+            $courses,
+            $combos,
+            $courseTotal,
+            $comboTotal,
+            $method,
+            $finalized
+        );
+
+        session()->put(self::SESSION_SUCCESS, $successPayload);
+        session()->forget(self::SESSION_SELECTION);
 
         return redirect()
             ->route('student.checkout.index', ['stage' => 3])
             ->with('success', 'Đơn hàng đã được ghi nhận. Vui lòng kiểm tra email để nhận mã kích hoạt.');
     }
-
-    private function finalizeOrder(Collection $courses, Collection $combos, string $method): array
+    private function handleVnpayCheckout(Request $request, Collection $courses, Collection $combos): RedirectResponse
     {
         $user = Auth::user();
 
-        if (!$user) {
-            throw new \RuntimeException('User must be authenticated to finalize checkout.');
+        if (!$user || !$user->student) {
+            throw new \RuntimeException('Người dùng cần đăng nhập để thanh toán.');
         }
 
-        $student = $user->student;
-
-        if (!$student) {
-            throw new \RuntimeException('Không tìm thấy hồ sơ học viên.');
+        if ($combos->isNotEmpty()) {
+            $combos->loadMissing('courses', 'promotions');
         }
 
-        $now = Carbon::now();
-        $invoice = null;
-        $activationPackages = [];
-        $pendingCourses = [];
-        $alreadyActiveCourses = [];
+        $courseTotal = (int) $courses->sum('hocPhi');
+        $comboTotal = (int) $combos->sum(fn (Combo $combo) => $combo->sale_price);
 
-        $coursePayloads = [];
+        $snapshot = $this->buildTransactionSnapshot($courses, $combos, $courseTotal, $comboTotal);
+        $txnRef = $this->generateTransactionReference();
 
-        foreach ($courses as $course) {
-            $coursePayloads[$course->maKH] = [
-                'course' => $course,
-                'combo_id' => null,
-                'promotion_id' => null,
-            ];
+        $transaction = PaymentTransaction::create([
+            'maHV' => $user->student->maHV,
+            'soTien' => $snapshot['total'],
+            'txn_ref' => $txnRef,
+            'trangThai' => PaymentTransaction::STATUS_PENDING,
+            'order_snapshot' => $snapshot,
+            'client_ip' => $request->ip(),
+            'user_agent' => (string) $request->userAgent(),
+        ]);
+
+        $paymentUrl = $this->vnPayService->buildPaymentUrl($transaction, [
+            'order_info' => 'Thanh toán giỏ hàng #' . $txnRef,
+            'ip_address' => $request->ip(),
+        ]);
+
+        $transaction->update(['payment_url' => $paymentUrl]);
+
+        session()->forget(self::SESSION_SELECTION);
+
+        return redirect()->away($paymentUrl);
+    }
+
+    private function buildTransactionSnapshot(Collection $courses, Collection $combos, int $courseTotal, int $comboTotal): array
+    {
+        if ($combos->isNotEmpty()) {
+            $combos->loadMissing('courses', 'promotions');
         }
-
-        foreach ($combos as $combo) {
-            $activePromotion = $combo->active_promotion;
-            $promotionId = $activePromotion?->maKM;
-
-            foreach ($combo->courses as $course) {
-                $coursePayloads[$course->maKH] = [
-                    'course' => $course,
-                    'combo_id' => $combo->maGoi,
-                    'promotion_id' => $promotionId,
-                ];
-            }
-        }
-
-        $totalCoursePrice = (int) $courses->sum('hocPhi');
-        $totalComboPrice = (int) $combos->sum(fn (Combo $combo) => $combo->sale_price);
-
-        DB::transaction(function () use (
-            $student,
-            $courses,
-            $combos,
-            $method,
-            $coursePayloads,
-            $totalCoursePrice,
-            $totalComboPrice,
-            $now,
-            &$invoice,
-            &$activationPackages,
-            &$pendingCourses,
-            &$alreadyActiveCourses
-        ) {
-            $invoiceData = [
-                'maHV' => $student->maHV,
-                'maTT' => $this->mapPaymentMethodToCode($method),
-                'maND' => null,
-                'ngayLap' => $now,
-                'tongTien' => $totalCoursePrice + $totalComboPrice,
-                'loai' => $combos->isNotEmpty() ? 'COMBO' : 'SINGLE_COURSE',
-            ];
-
-            if ($this->invoiceSupportsNotes()) {
-                $invoiceData['ghiChu'] = 'Thanh toán qua website - ' . strtoupper($method);
-            }
-
-            $invoice = Invoice::create($invoiceData);
-
-            foreach ($courses as $course) {
-                InvoiceItem::create([
-                    'maHD' => $invoice->maHD,
-                    'maKH' => $course->maKH,
-                    'soLuong' => 1,
-                    'donGia' => (int) $course->hocPhi,
-                ]);
-            }
-
-            foreach ($combos as $combo) {
-                $promotion = $combo->active_promotion;
-
-                InvoiceComboItem::create([
-                    'maHD' => $invoice->maHD,
-                    'maGoi' => $combo->maGoi,
-                    'soLuong' => 1,
-                    'donGia' => (int) $combo->sale_price,
-                    'maKM' => $promotion?->maKM,
-                ]);
-            }
-
-            foreach ($coursePayloads as $payload) {
-                /** @var Course $course */
-                $course = $payload['course'];
-
-                $enrollment = Enrollment::firstOrNew([
-                    'maHV' => $student->maHV,
-                    'maKH' => $course->maKH,
-                ]);
-
-                if ($enrollment->exists && $enrollment->trangThai === 'ACTIVE') {
-                    $alreadyActiveCourses[$course->maKH] = [
-                        'maKH' => $course->maKH,
-                        'tenKH' => $course->tenKH,
-                    ];
-                    continue;
-                }
-
-                if (!$enrollment->exists || empty($enrollment->ngayNhapHoc)) {
-                    $enrollment->ngayNhapHoc = $now->toDateString();
-                }
-
-                if (!$enrollment->exists) {
-                    $enrollment->progress_percent = 0;
-                    $enrollment->video_progress_percent = 0;
-                    $enrollment->avg_minitest_score = 0;
-                    $enrollment->last_lesson_id = null;
-                }
-
-                $enrollment->trangThai = 'PENDING';
-                $enrollment->activated_at = null;
-                $enrollment->expires_at = null;
-                $enrollment->maGoi = $payload['combo_id'];
-                $enrollment->maKM = $payload['promotion_id'];
-                $enrollment->updated_at = $now;
-                $enrollment->save();
-
-                ActivationCode::where('maHV', $student->maHV)
-                    ->where('maKH', $course->maKH)
-                    ->whereIn('trangThai', ['CREATED', 'SENT'])
-                    ->update([
-                        'trangThai' => 'EXPIRED',
-                        'expires_at' => $now,
-                        'updated_at' => $now,
-                    ]);
-
-                $codeValue = $this->generateActivationCode($student->maHV, $course->maKH);
-
-                $activation = ActivationCode::create([
-                    'maHV' => $student->maHV,
-                    'maKH' => $course->maKH,
-                    'maHD' => $invoice->maHD,
-                    'code' => $codeValue,
-                    'trangThai' => 'CREATED',
-                    'generated_at' => $now,
-                ]);
-
-                $activationPackages[] = [
-                    'model' => $activation,
-                    'course' => $course,
-                    'code' => $codeValue,
-                ];
-
-                $pendingCourses[$course->maKH] = [
-                    'maKH' => $course->maKH,
-                    'tenKH' => $course->tenKH,
-                ];
-            }
-        });
 
         return [
-            'invoice' => $invoice,
-            'student' => $student,
-            'user' => $user,
-            'activation_packages' => $activationPackages,
-            'pending_activation_courses' => array_values($pendingCourses),
-            'already_active_courses' => array_values($alreadyActiveCourses),
+            'courses' => $courses->map(fn (Course $course) => [
+                'maKH' => $course->maKH,
+                'tenKH' => $course->tenKH,
+                'slug' => $course->slug,
+                'hocPhi' => (int) $course->hocPhi,
+                'cover_image_url' => $course->cover_image_url,
+                'end_date_label' => $course->end_date_label,
+            ])->values()->all(),
+            'combos' => $combos->map(function (Combo $combo) {
+                return [
+                    'maGoi' => $combo->maGoi,
+                    'tenGoi' => $combo->tenGoi,
+                    'slug' => $combo->slug,
+                    'sale_price' => (int) $combo->sale_price,
+                    'original_price' => (int) $combo->original_price,
+                    'cover_image_url' => $combo->cover_image_url,
+                    'course_ids' => $combo->courses->pluck('maKH')->all(),
+                    'promotion_id' => $combo->active_promotion?->maKM,
+                ];
+            })->values()->all(),
+            'course_total' => $courseTotal,
+            'combo_total' => $comboTotal,
+            'total' => $courseTotal + $comboTotal,
+            'payment_method' => 'vnpay',
         ];
     }
 
-    private function dispatchActivationEmails(\App\Models\User $user, \App\Models\Student $student, array $packages): void
-    {
-        if (empty($packages)) {
-            return;
-        }
-
-        $courseCodes = [];
-        foreach ($packages as $package) {
-            $course = $package['course'];
-            $courseCodes[] = [
-                'course_name' => $course->tenKH,
-                'code' => $package['code'],
-                'course_slug' => $course->slug,
-            ];
-        }
-
-        try {
-            if (!empty($user->email)) {
-                Mail::to($user->email)->send(
-                    new ActivationCodeMail($student->hoTen ?? $user->hoTen ?? $user->name, $courseCodes)
-                );
-            }
-        } catch (Throwable $mailException) {
-            Log::error('Activation email dispatch failed', [
-                'user_id' => $user->maND ?? null,
-                'message' => $mailException->getMessage(),
-            ]);
-        }
-
-        $ids = array_filter(array_map(fn ($package) => $package['model']->id ?? null, $packages));
-
-        if (!empty($ids)) {
-            $timestamp = Carbon::now();
-            ActivationCode::whereIn('id', $ids)->update([
-                'trangThai' => 'SENT',
-                'sent_at' => $timestamp,
-                'updated_at' => $timestamp,
-            ]);
-        }
-    }
-
-    private function generateActivationCode(int $studentId, int $courseId): string
+    private function generateTransactionReference(): string
     {
         do {
-            $code = sprintf(
-                'OCC-%04d-%04d-%s',
-                $courseId % 10000,
-                $studentId % 10000,
-                Str::upper(Str::random(4))
-            );
-        } while (ActivationCode::where('code', $code)->exists());
+            $reference = Str::upper(Str::random(12));
+        } while (PaymentTransaction::where('txn_ref', $reference)->exists());
 
-        return $code;
+        return $reference;
     }
 
-    private function mapPaymentMethodToCode(string $method): ?string
-    {
-        $map = [
-            'qr' => 'TT02',
-            'bank' => 'TT01',
-            'visa' => 'TT03',
+    public static function createSuccessPayload(
+        Collection $courses,
+        Collection $combos,
+        int $courseTotal,
+        int $comboTotal,
+        string $method,
+        array $finalized
+    ): array {
+        return [
+            'courses' => $courses->map(fn (Course $course) => [
+                'maKH' => $course->maKH,
+                'tenKH' => $course->tenKH,
+                'slug' => $course->slug,
+                'hocPhi' => (int) $course->hocPhi,
+                'cover_image_url' => $course->cover_image_url,
+                'end_date_label' => $course->end_date_label,
+            ])->values()->all(),
+            'combos' => $combos->map(fn (Combo $combo) => [
+                'maGoi' => $combo->maGoi,
+                'tenGoi' => $combo->tenGoi,
+                'slug' => $combo->slug,
+                'sale_price' => (int) $combo->sale_price,
+                'original_price' => (int) $combo->original_price,
+                'cover_image_url' => $combo->cover_image_url,
+            ])->values()->all(),
+            'course_total' => $courseTotal,
+            'combo_total' => $comboTotal,
+            'total' => $courseTotal + $comboTotal,
+            'payment_method' => $method,
+            'invoice_id' => $finalized['invoice']->maHD ?? null,
+            'pending_activation_courses' => $finalized['pending_activation_courses'] ?? [],
+            'already_active_courses' => $finalized['already_active_courses'] ?? [],
         ];
-
-        return $map[$method] ?? 'TT01';
     }
-
     private function sanitizeSelection(array $items): array
     {
         $courseIds = [];
@@ -529,26 +407,9 @@ class CheckoutController extends Controller
 
     private function normalizePaymentMethod(string $method): string
     {
-        $allowed = ['qr', 'bank', 'visa'];
+        $allowed = ['qr', 'bank', 'visa', 'vnpay'];
 
         return in_array($method, $allowed, true) ? $method : 'qr';
     }
 
-    private function invoiceSupportsNotes(): bool
-    {
-        static $supportsNotes;
-
-        if ($supportsNotes !== null) {
-            return $supportsNotes;
-        }
-
-        try {
-            $supportsNotes = Schema::hasColumn('HOADON', 'ghiChu');
-        } catch (Throwable $e) {
-            $supportsNotes = false;
-        }
-
-        return $supportsNotes;
-    }
 }
-

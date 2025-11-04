@@ -13,7 +13,7 @@
     <section class="activation-hero">
         <div class="activation-hero__content">
             <h1>Kích hoạt khóa học</h1>
-            <p>Nhập mã kích hoạt mà OCC gửi tới email của bạn để mở khóa nội dung học tập. Các mã dưới đây sẽ giúp bạn theo dõi trạng thái đã gửi và lịch sử sử dụng.</p>
+            <p>Nhập mã kích hoạt mà OCC đã gửi tới email của bạn để mở khóa nội dung học tập. Phần lịch sử bên dưới sẽ giúp bạn theo dõi trạng thái của các mã đã được gửi và lịch sử sử dụng.</p>
         </div>
     </section>
 
@@ -21,7 +21,7 @@
         <div class="activation-column activation-column--primary">
             <div class="activation-card">
                 <h2>Nhập mã kích hoạt</h2>
-                <p class="description">Mỗi mã chỉ sử dụng được một lần cho đúng khóa học. Dán mã bạn nhận được từ email vào ô bên dưới.</p>
+                <p class="description">Mỗi mã chỉ sử dụng được một lần cho đúng khóa học. Vui lòng dán mã bạn nhận được từ email vào ô bên dưới.</p>
                 <form class="activation-form" method="post" action="{{ route('student.activations.redeem') }}">
                     @csrf
                     <label for="code">Mã kích hoạt</label>
@@ -89,10 +89,7 @@
                                     {{ $statusLabels[$status] ?? $status }}
                                 </span>
                             </div>
-                            <div class="history-body">
-                                <code>{{ $code->code }}</code>
-                                <button type="button" class="activation-copy">Sao chép</button>
-                            </div>
+
                             <ul class="history-meta">
                                 <li><i class="fa-regular fa-calendar-plus"></i> Phát hành: {{ optional($code->generated_at)->format('d/m/Y H:i') ?? '—' }}</li>
                                 <li><i class="fa-regular fa-paper-plane"></i> Gửi: {{ optional($code->sent_at)->format('d/m/Y H:i') ?? 'Chưa gửi' }}</li>
@@ -101,7 +98,7 @@
                         </li>
                     @empty
                         <li class="activation-empty">
-                            Chúng tôi sẽ hiển thị mã kích hoạt của bạn tại đây ngay khi có đơn hàng mới.
+                            Chúng tôi sẽ hiển thị lịch sử mã kích hoạt của bạn tại đây ngay khi có đơn hàng mới.
                         </li>
                     @endforelse
                 </ul>

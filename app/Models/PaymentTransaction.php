@@ -6,61 +6,69 @@ use Illuminate\Database\Eloquent\Model;
 
 class PaymentTransaction extends Model
 {
-    // Tên bảng thực tế trong MySQL
+    public const STATUS_PENDING = 'PENDING';
+    public const STATUS_PAID = 'PAID';
+    public const STATUS_FAILED = 'FAILED';
+
+    // T?n b?ng th?c t? trong MySQL
     protected $table = 'GIAODICH_VNPAY';
 
-    // Khóa chính
+    // Kh?a ch?nh
     protected $primaryKey = 'id';
 
-    // Laravel sẽ dùng created_at / updated_at có sẵn trong bảng
+    // Laravel s? d?ng created_at / updated_at c? s?n trong b?ng
     public $timestamps = true;
 
-    // Các cột được phép fill hàng loạt (mass assign)
+    // C?c c?t ???c ph?p fill h?ng lo?t (mass assign)
     protected $fillable = [
-        'maHV',                 // ID học viên
-        'maKH',                 // ID khóa học
-        'maGoi',                // ID gói khóa học
-        'soTien',               // số tiền VND
+        'maHV',                 // ID h?c vi?n
+        'maKH',                 // ID kh?a h?c
+        'maGoi',                // ID g?i kh?a h?c
+        'soTien',               // s? ti?n VND
         'maKM',
-        'txn_ref',              // mã giao dịch gửi sang VNPay
+        'txn_ref',              // M? giao d?ch g?i sang VNPay
         'trangThai',            // PENDING / PAID / FAILED
-        'vnp_response_code',    // mã phản hồi VNPay
-        'vnp_transaction_no',   // mã giao dịch VNPay/ngân hàng
-        'paid_at',              // thời điểm xác nhận thanh toán thành công
+        'vnp_response_code',    // M? ph?n h?i VNPay
+        'vnp_transaction_no',   // M? giao d?ch VNPay/ng?n h?ng
+        'paid_at',              // Th?i ?i?m x?c nh?n thanh to?n th?nh c?ng
+        'maHD',                 // H?a ?n li?n quan
+        'order_snapshot',
+        'payment_url',
+        'client_ip',
+        'user_agent',
     ];
 
-    // Ép kiểu (cast) cho một số cột
+    // ?p ki?u (cast) cho m?t s? c?t
     protected $casts = [
-        'soTien'   => 'decimal:2',
-        'paid_at'  => 'datetime',
+        'soTien' => 'decimal:2',
+        'paid_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'order_snapshot' => 'array',
     ];
 
-    /**
-     * Học viên liên quan tới giao dịch
-     * HOCVIEN có khóa chính maHV. :contentReference[oaicite:14]{index=14}
-     */
     public function student()
     {
         return $this->belongsTo(Student::class, 'maHV', 'maHV');
     }
 
-    /**
-     * Khóa học liên quan tới giao dịch
-     * KHOAHOC có khóa chính maKH. :contentReference[oaicite:15]{index=15}
-     */
     public function course()
     {
         return $this->belongsTo(Course::class, 'maKH', 'maKH');
     }
+
     public function combo()
     {
-        return $this->belongsTo('App\Models\Combo', 'maGoi', 'maGoi');
+        return $this->belongsTo(Combo::class, 'maGoi', 'maGoi');
     }
 
     public function promotion()
     {
-        return $this->belongsTo('App\Models\Promotion', 'maKM', 'maKM');
+        return $this->belongsTo(Promotion::class, 'maKM', 'maKM');
+    }
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class, 'maHD', 'maHD');
     }
 }

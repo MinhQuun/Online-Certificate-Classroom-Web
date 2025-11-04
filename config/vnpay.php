@@ -9,4 +9,7 @@ return [
     'version'       => env('VNP_VERSION', '2.1.0'),
     'command'       => env('VNP_COMMAND', 'pay'),
     'currency_code' => env('VNP_CURRENCY', 'VND'),
+    'order_type'    => env('VNP_ORDER_TYPE', 'billpayment'),
+    'locale'        => env('VNP_LOCALE', 'vn'),
+    'expire_minutes'=> env('VNP_EXPIRE_MINUTES', 15),
 ];

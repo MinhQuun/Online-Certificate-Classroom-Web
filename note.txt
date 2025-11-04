@@ -6,7 +6,7 @@
 3. Thực thi lệnh composer install (bước này hơi lâu nha, phải mạng mạnh chứ không tải lâu,
 nên phải làm cái này trước)
 
-    3.1. Mở: C:\xampp\php 
+    3.1. Mở: C:\xampp\php
     3.2. Kiếm các file có tên: php.ini-development, php.ini-production
     3.3. Mở bằng notepad
     3.4. Tìm và bỏ dấu ; các lệnh sau đây:
@@ -28,7 +28,7 @@ cũng không thấy được, nên buộc phải tự tạo)
 
 8. Chạy lệnh  npm install  để cài đặt
 
-9. Chạy lệnh để tạo user phân quyền mặc định: php artisan db:seed  
+9. Chạy lệnh để tạo user phân quyền mặc định: php artisan db:seed
 
 10. Khởi động server: php artisan serve
 
@@ -42,3 +42,10 @@ Các package cần cài đặt
 
 composer require barryvdh/laravel-dompdf
 composer require maatwebsite/excel:^3.1.55
+
+# Test VNPAY
+1. Ngân hàng: NCB
+2. Số thẻ: 9704198526191432198
+3. Tên chủ thẻ:NGUYEN VAN A
+4. Ngày phát hành:07/15
+5. Mật khẩu OTP:123456

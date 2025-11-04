@@ -21,11 +21,13 @@
         'qr'   => 'Quét mã QR',
         'bank' => 'Chuyển khoản ngân hàng',
         'visa' => 'Thẻ quốc tế / Ví điện tử',
+        'vnpay' => 'Cổng thanh toán VNPAY',
     ];
     $methodDescriptions = [
         'qr'   => 'Thanh toán ngay bằng mã QR nội địa.',
         'bank' => 'Chuyển khoản qua Internet Banking hoặc tại quầy.',
         'visa' => 'Thanh toán bằng thẻ Visa, Mastercard hoặc ví điện tử.',
+        'vnpay' => 'Thanh toán qua cổng VNPAY.',
     ];
     $methodLabel = $methodLabels[$successMethod] ?? null;
     $defaultMethodKey = array_key_first($methodLabels);
@@ -211,11 +213,108 @@
                                                         @case('qr')<i class="fa-solid fa-qrcode"></i>@break
                                                         @case('bank')<i class="fa-solid fa-building-columns"></i>@break
                                                         @case('visa')<i class="fa-solid fa-credit-card"></i>@break
+                                                        @case('vnpay')<i class="fa-solid fa-wallet"></i>@break
                                                     @endswitch
                                                 </span>
                                             </div>
                                         </label>
                                     @endforeach
+                                </div>
+
+                                <div class="checkout-method-panels">
+                                    <div
+                                        class="checkout-method-panel {{ $defaultMethodKey === 'vnpay' ? 'is-active' : '' }}"
+                                        data-checkout-method-panel="vnpay"
+                                    >
+                                        <div class="vnpay-hero">
+                                            <div class="vnpay-badge">
+                                                VN<span>PAY</span>
+                                            </div>
+                                            <div>
+                                                <p>Giao dịch được ký vnp_SecureHash chuẩn 2.1.0, mỗi đơn có vnp_TxnRef duy nhất và IPN xác thực tự động.</p>
+                                                <small>Mọi thông tin đều khớp với tài liệu sandbox tại sandbox.vnpayment.vn.</small>
+                                            </div>
+                                        </div>
+                                        <ul class="vnpay-steps">
+                                            <li>
+                                                <span>01</span>
+                                                <div>
+                                                    <strong>Rà soát đơn</strong>
+                                                    <p>Kiểm tra tổng tiền, mã đơn được nhúng vào trường vnp_OrderInfo.</p>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span>02</span>
+                                                <div>
+                                                    <strong>Chuyển hướng tới VNPay</strong>
+                                                    <p>Hệ thống tạo HMAC SHA512, truyền cả vnp_ReturnUrl và vnp_IpnUrl.</p>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span>03</span>
+                                                <div>
+                                                    <strong>Nhận kết quả</strong>
+                                                    <p>VNPay gọi IPN ngay khi ngân hàng xác nhận để kích hoạt khóa học tức thời.</p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <div class="vnpay-trust">
+                                            <div>
+                                                <i class="fa-solid fa-shield"></i>
+                                                <span>Mã hóa SHA512 &amp; kiểm tra chữ ký </span>
+                                            </div>
+                                            <div>
+                                                <i class="fa-solid fa-receipt"></i>
+                                                <span>Tự động khớp hóa đơn &amp; giao dịch</span>
+                                            </div>
+                                            <div>
+                                                <i class="fa-solid fa-bolt"></i>
+                                                <span>IPN xác nhận < 3s</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="checkout-method-panel {{ $defaultMethodKey === 'qr' ? 'is-active' : '' }}"
+                                        data-checkout-method-panel="qr"
+                                    >
+                                        <div class="method-tip">
+                                            <h4>Quét mã QR</h4>
+                                            <p>Ứng dụng ngân hàng nội địa hỗ trợ VietQR. Sau khi chuyển khoản, đội ngũ sẽ xác nhận trong giờ hành chính.</p>
+                                        </div>
+                                        <ul class="method-perks">
+                                            <li><i class="fa-solid fa-clock"></i>Không giới hạn giá trị giao dịch.</li>
+                                            <li><i class="fa-solid fa-mobile-screen"></i>Hỗ trợ tất cả app ngân hàng tại Việt Nam.</li>
+                                        </ul>
+                                    </div>
+
+                                    <div
+                                        class="checkout-method-panel {{ $defaultMethodKey === 'bank' ? 'is-active' : '' }}"
+                                        data-checkout-method-panel="bank"
+                                    >
+                                        <div class="method-tip">
+                                            <h4>Chuyển khoản ngân hàng</h4>
+                                            <p>Nhập nội dung theo cú pháp OCC-[MÃ ĐƠN]-[SĐT] để hệ thống tự động đối soát nhanh hơn.</p>
+                                        </div>
+                                        <ul class="method-perks">
+                                            <li><i class="fa-solid fa-clipboard-check"></i>Nhận email xác nhận trong vòng 15 phút.</li>
+                                            <li><i class="fa-solid fa-user-shield"></i>Phù hợp với doanh nghiệp cần chứng từ.</li>
+                                        </ul>
+                                    </div>
+
+                                    <div
+                                        class="checkout-method-panel {{ $defaultMethodKey === 'visa' ? 'is-active' : '' }}"
+                                        data-checkout-method-panel="visa"
+                                    >
+                                        <div class="method-tip">
+                                            <h4>Thẻ quốc tế / Ví điện tử</h4>
+                                            <p>Hỗ trợ Visa/Master/JCB và các ví nội địa như Momo, ZaloPay. Phí giao dịch có thể phát sinh theo từng đơn vị phát hành.</p>
+                                        </div>
+                                        <ul class="method-perks">
+                                            <li><i class="fa-solid fa-earth-asia"></i>Thanh toán từ nước ngoài dễ dàng.</li>
+                                            <li><i class="fa-solid fa-bell"></i>Thông báo kích hoạt ngay sau khi giao dịch được xác nhận.</li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
 

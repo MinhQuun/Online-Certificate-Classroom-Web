@@ -58,6 +58,7 @@ use App\Http\Controllers\Student\LessonDiscussionController as StudentLessonDisc
 use App\Http\Controllers\Student\ContactController;
 use App\Http\Controllers\Student\ProfileController;
 use App\Http\Controllers\Student\MyCoursesController;
+use App\Http\Controllers\Payment\VNPayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,6 +102,11 @@ Route::prefix('cart')->name('student.cart.')->group(function () {
 Route::post('/cart/checkout', [CheckoutController::class, 'start'])->name('student.checkout.start');
 Route::get('/checkout', [CheckoutController::class, 'index'])->middleware('auth')->name('student.checkout.index');
 Route::post('/checkout/complete', [CheckoutController::class, 'complete'])->middleware('auth')->name('student.checkout.complete');
+
+Route::prefix('payment/vnpay')->name('payment.vnpay.')->group(function () {
+    Route::get('/return', [VNPayController::class, 'return'])->name('return');
+    Route::post('/ipn', [VNPayController::class, 'ipn'])->name('ipn');
+});
 
 // Trang dịch vụ / giới thiệu / liên hệ
 Route::get('/services', fn () => view('Student.services'))->name('student.services');
