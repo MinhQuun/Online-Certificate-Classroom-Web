@@ -19,7 +19,7 @@
                     <span class="auth-subtitle">hoặc sử dụng email của bạn để đăng ký</span>
 
                     <div class="auth-field-group">
-                        <input class="auth-input @error('name') is-invalid @enderror" 
+                        <input class="auth-input" 
                                type="text" 
                                id="signup-name"
                                name="name" 
@@ -29,13 +29,11 @@
                                minlength="2" 
                                maxlength="255" 
                                autocomplete="name" />
-                        <div class="auth-error" id="name-error">
-                            @error('name'){{ $message }}@enderror
-                        </div>
+                        <div class="auth-error" id="name-error"></div>
                     </div>
 
                     <div class="auth-field-group">
-                        <input class="auth-input @error('email') is-invalid @enderror" 
+                        <input class="auth-input" 
                                type="email" 
                                id="signup-email"
                                name="email" 
@@ -45,13 +43,11 @@
                                maxlength="255" 
                                autocomplete="email" 
                                autocapitalize="off" />
-                        <div class="auth-error" id="email-error">
-                            @error('email'){{ $message }}@enderror
-                        </div>
+                        <div class="auth-error" id="email-error"></div>
                     </div>
 
                     <div class="auth-field-group">
-                        <input class="auth-input @error('phone') is-invalid @enderror" 
+                        <input class="auth-input" 
                                type="tel" 
                                id="signup-phone"
                                name="phone" 
@@ -63,14 +59,12 @@
                                maxlength="11" 
                                pattern="^0\d{9,10}$" 
                                autocomplete="tel" />
-                        <div class="auth-error" id="phone-error">
-                            @error('phone'){{ $message }}@enderror
-                        </div>
+                        <div class="auth-error" id="phone-error"></div>
                     </div>
 
                     <div class="auth-field-group">
                         <div class="auth-input-wrap">
-                            <input class="auth-input @error('password') is-invalid @enderror" 
+                            <input class="auth-input" 
                                    type="password" 
                                    id="signup-password"
                                    name="password" 
@@ -83,14 +77,12 @@
                                 <i class="far fa-eye"></i>
                             </button>
                         </div>
-                        <div class="auth-error" id="password-error">
-                            @error('password'){{ $message }}@enderror
-                        </div>
+                        <div class="auth-error" id="password-error"></div>
                     </div>
 
                     <div class="auth-field-group">
                         <div class="auth-input-wrap">
-                            <input class="auth-input @error('password_confirmation') is-invalid @enderror" 
+                            <input class="auth-input" 
                                    type="password" 
                                    id="signup-password-confirm"
                                    name="password_confirmation" 
@@ -103,9 +95,7 @@
                                 <i class="far fa-eye"></i>
                             </button>
                         </div>
-                        <div class="auth-error" id="password-confirm-error">
-                            @error('password_confirmation'){{ $message }}@enderror
-                        </div>
+                        <div class="auth-error" id="password-confirm-error"></div>
                     </div>
 
                     <button type="submit" class="auth-btn">Đăng Ký</button>
@@ -114,7 +104,7 @@
 
                 <!-- Sign In Form -->
                 <div class="auth-form-container sign-in-container">
-                    <form class="auth-form" action="{{ route('users.login') }}" method="post">
+                    <form class="auth-form" id="loginForm" action="{{ route('users.login') }}" method="post" novalidate>
                     @csrf
                     <input type="hidden" name="redirect" value="{{ request('redirect', url()->current()) }}">
                     <h1 class="auth-title">Đăng Nhập</h1>
@@ -125,14 +115,38 @@
                     </div>
                     <span class="auth-subtitle">hoặc sử dụng tài khoản của bạn</span>
 
-                    <input class="auth-input @error('email') is-invalid @enderror" type="email" name="email" placeholder="Email" value="{{ old('email') }}" required maxlength="255" autofocus autocomplete="email" autocapitalize="off" title="Vui lòng nhập email đúng định dạng" />
-                    @error('email') <div class="auth-error">{{ $message }}</div> @enderror
-
-                    <div class="auth-input-wrap">
-                        <input class="auth-input @error('password') is-invalid @enderror" type="password" name="password" placeholder="Mật Khẩu" required minlength="6" maxlength="32" autocomplete="current-password" title="Mật khẩu phải có từ 6-32 ký tự" />
-                        <button type="button" class="auth-toggle-pass" aria-label="Hiện/Ẩn mật khẩu"><i class="far fa-eye"></i></button>
+                    <div class="auth-field-group">
+                        <input class="auth-input" 
+                               type="email" 
+                               id="login-email"
+                               name="email" 
+                               placeholder="Email" 
+                               value="{{ old('email') }}" 
+                               required 
+                               maxlength="255" 
+                               autofocus 
+                               autocomplete="email" 
+                               autocapitalize="off" />
+                        <div class="auth-error" id="login-email-error"></div>
                     </div>
-                    @error('password') <div class="auth-error">{{ $message }}</div> @enderror
+
+                    <div class="auth-field-group">
+                        <div class="auth-input-wrap">
+                            <input class="auth-input" 
+                                   type="password" 
+                                   id="login-password"
+                                   name="password" 
+                                   placeholder="Mật Khẩu" 
+                                   required 
+                                   minlength="6" 
+                                   maxlength="32" 
+                                   autocomplete="current-password" />
+                            <button type="button" class="auth-toggle-pass" aria-label="Hiện/Ẩn mật khẩu">
+                                <i class="far fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="auth-error" id="login-password-error"></div>
+                    </div>
 
                     <a href="#" class="auth-link" id="toForgotPassword">Bạn quên mật khẩu?</a>
                     <button type="submit" class="auth-btn">Đăng Nhập</button>
@@ -208,14 +222,18 @@
     </div>
 </div>
 
-@if($errors->any())
+@if(session('error'))
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const authModal = new bootstrap.Modal(document.getElementById('authModal'));
         const authContainer = document.getElementById('authContainer');
         
-        @if($errors->has('name') || $errors->has('email') || $errors->has('phone') || $errors->has('password') || $errors->has('password_confirmation'))
+        // Nếu có old input từ form đăng ký (name, phone) thì mở form đăng ký
+        @if(old('name') || old('phone'))
             authContainer.classList.add('right-panel-active');
+        @else
+            // Ngược lại giữ form đăng nhập
+            authContainer.classList.remove('right-panel-active');
         @endif
         
         authModal.show();
@@ -410,7 +428,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Form submission validation
+    // Form submission validation - Signup
     if (signupForm) {
         signupForm.addEventListener('submit', function(e) {
             let hasError = false;
@@ -435,6 +453,59 @@ document.addEventListener('DOMContentLoaded', function() {
             const confirmError = validatePasswordConfirm(passwordConfirmInput.value, passwordInput.value);
             showError(passwordConfirmInput, document.getElementById('password-confirm-error'), confirmError);
             if (confirmError) hasError = true;
+
+            if (hasError) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    }
+
+    // ===================== LOGIN FORM VALIDATION =====================
+    const loginForm = document.getElementById('loginForm');
+    const loginEmailInput = document.getElementById('login-email');
+    const loginPasswordInput = document.getElementById('login-password');
+
+    // Real-time validation for login email
+    if (loginEmailInput) {
+        loginEmailInput.addEventListener('input', function() {
+            const error = validateEmail(this.value);
+            showError(this, document.getElementById('login-email-error'), error);
+        });
+
+        loginEmailInput.addEventListener('blur', function() {
+            const error = validateEmail(this.value);
+            showError(this, document.getElementById('login-email-error'), error);
+        });
+    }
+
+    // Real-time validation for login password
+    if (loginPasswordInput) {
+        loginPasswordInput.addEventListener('input', function() {
+            const error = validatePassword(this.value);
+            showError(this, document.getElementById('login-password-error'), error);
+        });
+
+        loginPasswordInput.addEventListener('blur', function() {
+            const error = validatePassword(this.value);
+            showError(this, document.getElementById('login-password-error'), error);
+        });
+    }
+
+    // Form submission validation - Login
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            let hasError = false;
+
+            // Validate email
+            const emailError = validateEmail(loginEmailInput.value);
+            showError(loginEmailInput, document.getElementById('login-email-error'), emailError);
+            if (emailError) hasError = true;
+
+            // Validate password
+            const passwordError = validatePassword(loginPasswordInput.value);
+            showError(loginPasswordInput, document.getElementById('login-password-error'), passwordError);
+            if (passwordError) hasError = true;
 
             if (hasError) {
                 e.preventDefault();
