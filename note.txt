@@ -26,11 +26,15 @@ cũng không thấy được, nên buộc phải tự tạo)
 
 7. Chạy lệnh composer require league/flysystem-aws-s3-v3:^3
 
-8. Chạy lệnh  npm install  để cài đặt
+8. Chạy lệnh composer require barryvdh/laravel-dompdf để cài pdf
 
-9. Chạy lệnh để tạo user phân quyền mặc định: php artisan db:seed
+9. Chạy lệnh composer require maatwebsite/excel:^3.1.55 để cài excel
 
-10. Khởi động server: php artisan serve
+10. Chạy lệnh composer require laravel/sanctum để cài xác thực (authentication) cho API và SPA
+
+11. Chạy lệnh  npm install  để cài đặt
+
+12. Khởi động server: php artisan serve
 
 # Clear cache (nếu lỗi view/config)
 php artisan cache:clear
@@ -38,14 +42,12 @@ php artisan config:clear
 php artisan route:clear
 php artisan view:clear
 
-Các package cần cài đặt
-
-composer require barryvdh/laravel-dompdf
-composer require maatwebsite/excel:^3.1.55
-
 # Test VNPAY
 1. Ngân hàng: NCB
 2. Số thẻ: 9704198526191432198
 3. Tên chủ thẻ:NGUYEN VAN A
 4. Ngày phát hành:07/15
 5. Mật khẩu OTP:123456
+
+# Kiểm tra API có tồn tại hay không
+php artisan route:list | findstr student
