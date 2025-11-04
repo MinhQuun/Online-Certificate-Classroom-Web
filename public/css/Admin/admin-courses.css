@@ -227,3 +227,17 @@
 
 
 
+.course-promo-cell {
+    min-width: 180px;
+    white-space: normal;
+}
+
+.course-promo-name {
+    font-weight: 600;
+    color: var(--blue);
+}
+
+.course-promo-meta {
+    font-size: 0.82rem;
+    color: var(--muted);
+}

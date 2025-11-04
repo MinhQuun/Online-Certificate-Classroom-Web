@@ -63,8 +63,9 @@ class ComboAdminController extends Controller
             ->orderBy('tenKH')
             ->get(['maKH', 'tenKH', 'hocPhi', 'slug']);
 
-        $promotions = Promotion::orderByDesc('ngayBatDau')
-            ->get(['maKM', 'tenKM', 'loaiUuDai', 'giaTriUuDai', 'ngayBatDau', 'ngayKetThuc', 'trangThai']);
+        $promotions = Promotion::whereIn('apDungCho', [Promotion::TARGET_COMBO, Promotion::TARGET_BOTH])
+            ->orderByDesc('ngayBatDau')
+            ->get(['maKM', 'tenKM', 'loaiUuDai', 'giaTriUuDai', 'ngayBatDau', 'ngayKetThuc', 'trangThai', 'apDungCho']);
 
         $stats = [
             'total' => Combo::count(),
@@ -304,6 +305,12 @@ class ComboAdminController extends Controller
         if (!$promotion) {
             throw ValidationException::withMessages([
                 'promotion_id' => 'Khuyến mãi không hợp lệ.',
+            ]);
+        }
+
+        if (!in_array($promotion->apDungCho, [Promotion::TARGET_COMBO, Promotion::TARGET_BOTH], true)) {
+            throw ValidationException::withMessages([
+                'promotion_id' => 'Khuy?n m?i kh?ng ?p d?ng cho combo.',
             ]);
         }
 

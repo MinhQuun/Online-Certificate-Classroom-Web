@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Str;
@@ -56,6 +57,11 @@ class Course extends Model
     public function reviews(): HasMany
     {
         return $this->hasMany(CourseReview::class, 'maKH', 'maKH');
+    }
+    public function promotions(): BelongsToMany
+    {
+        return $this->belongsToMany(Promotion::class, 'KHUYEN_MAI_KHOAHOC', 'maKH', 'maKM')
+                    ->withPivot(['giaUuDai','created_at']);
     }
 
     public function category(): BelongsTo
@@ -162,5 +168,97 @@ class Course extends Model
         }
 
         return null;
+    }
+
+    public function getSalePriceAttribute(): int
+    {
+        $promotion = $this->active_promotion;
+        $base = $this->castToInteger($this->hocPhi);
+
+        if (!$promotion || !$this->promotionIsApplicable($promotion)) {
+            return max(0, $base);
+        }
+
+        if ($promotion->pivot && $promotion->pivot->giaUuDai) {
+            return max(0, $this->castToInteger($promotion->pivot->giaUuDai));
+        }
+
+        $promotionValue = $this->castToInteger($promotion->giaTriUuDai);
+
+        if ($promotion->loaiUuDai === Promotion::TYPE_FIXED) {
+            return max(0, $base - $promotionValue);
+        }
+
+        if ($promotion->loaiUuDai === Promotion::TYPE_PERCENT) {
+            $discount = round($base * ($promotionValue / 100));
+
+            return max(0, $base - (int) $discount);
+        }
+
+        return max(0, $base);
+    }
+
+    public function getOriginalPriceAttribute(): int
+    {
+        return max(0, $this->castToInteger($this->hocPhi));
+    }
+
+    public function getSavingAmountAttribute(): int
+    {
+        return max(0, $this->original_price - $this->sale_price);
+    }
+
+    public function getActivePromotionAttribute(): ?Promotion
+    {
+        if (!$this->relationLoaded('promotions')) {
+            $this->load('promotions');
+        }
+
+        $today = Carbon::today();
+
+        return $this->promotions
+            ->filter(fn (Promotion $promotion) => $this->promotionIsApplicable($promotion, $today))
+            ->sortByDesc(fn (Promotion $promotion) => $promotion->pivot?->created_at ?? $promotion->created_at)
+            ->first();
+    }
+
+    protected function promotionIsApplicable(Promotion $promotion, ?Carbon $today = null): bool
+    {
+        $today ??= Carbon::today();
+
+        if (!in_array($promotion->apDungCho, [Promotion::TARGET_COURSE, Promotion::TARGET_BOTH], true)) {
+            return false;
+        }
+
+        if ($promotion->trangThai !== 'ACTIVE') {
+            return false;
+        }
+
+        if ($promotion->ngayBatDau && Carbon::parse($promotion->ngayBatDau)->gt($today)) {
+            return false;
+        }
+
+        if ($promotion->ngayKetThuc && Carbon::parse($promotion->ngayKetThuc)->lt($today)) {
+            return false;
+        }
+
+        if ($promotion->soLuongGioiHan !== null && $promotion->soLuongGioiHan <= 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function castToInteger($value): int
+    {
+        if ($value instanceof \Stringable) {
+            $value = (string) $value;
+        }
+
+        if (is_string($value)) {
+            $value = preg_replace('/[^\d\-]/', '', $value) ?: '0';
+        }
+
+        return (int) round((float) $value);
     }
 }

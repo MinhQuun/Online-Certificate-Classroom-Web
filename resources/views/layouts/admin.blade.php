@@ -106,6 +106,13 @@
                 <i class="bi bi-layers me-2"></i> Combo khóa học
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.promotions.*') ? 'active' : '' }}"
+                href="{{ route('admin.promotions.index') }}"
+                title="Quan lý khuyến mãi">
+                <i class="bi bi-gift me-2"></i> Khuyến mãi
+                </a>
+            </li>
             <li class="nav-item mt-3 text-muted small">Quản trị</li>
             <li class="nav-item">
                 <a class="nav-link {{ $usersBaseActive ? 'active' : '' }}"
@@ -132,7 +139,7 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('admin.invoices.*') ? 'active' : '' }}"
                     href="{{ route('admin.invoices.index') }}"
-                    title="Quan ly hoa don">
+                    title="Quản lý hóa đơn">
                 <i class="bi bi-receipt-cutoff me-2"></i> Hóa đơn
                 </a>
             </li>

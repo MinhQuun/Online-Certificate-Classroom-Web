@@ -5,17 +5,20 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Course;
+use App\Models\Promotion;
 use App\Models\User;
 use App\Support\RoleResolver;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class CourseAdminController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Course::query()->with(['category','teacher']);
+        $query = Course::query()->with(['category','teacher','promotions']);
 
         // Search theo tên/mã
         if ($request->filled('q')) {
@@ -50,7 +53,11 @@ class CourseAdminController extends Controller
 
         $categories = Category::orderBy('tenDanhMuc')->get(['maDanhMuc','tenDanhMuc']);
 
-        return view('admin.courses', compact('courses','teachers','categories'));
+        $promotions = Promotion::whereIn('apDungCho', [Promotion::TARGET_COURSE, Promotion::TARGET_BOTH])
+            ->orderByDesc('ngayBatDau')
+            ->get(['maKM','tenKM','loaiUuDai','giaTriUuDai','ngayBatDau','ngayKetThuc','trangThai','apDungCho']);
+
+        return view('admin.courses', compact('courses','teachers','categories','promotions'));
     }
 
     public function store(Request $request)
@@ -74,9 +81,14 @@ class CourseAdminController extends Controller
             'ngayKetThuc' => 'nullable|date|after:ngayBatDau',
             'hinhanh'     => 'nullable|image|max:2048',
             'thoiHanNgay' => 'required|integer|min:1',
+            'promotion_id' => ['nullable','integer','exists:KHUYEN_MAI,maKM'],
+            'promotion_price' => ['nullable','numeric','min:0'],
         ]);
 
-        $data = $request->except('hinhanh', 'slug');
+        $tuition = (float) $request->input('hocPhi');
+        [$promotionId, $promotionPrice] = $this->resolvePromotionInputs($request, $tuition);
+
+        $data = $request->except('hinhanh', 'slug', 'promotion_id', 'promotion_price');
         $data['tenKH'] = trim((string) $data['tenKH']);
         $slugInput = trim((string) $request->input('slug', ''));
         $data['slug'] = $this->generateUniqueSlug(
@@ -94,6 +106,7 @@ class CourseAdminController extends Controller
         }
 
         $course = Course::create($data);
+        $this->syncPromotion($course, $promotionId, $promotionPrice);
 
         // Tạo thư mục trên R2 theo slug tên khoá (không bắt buộc)
         try {
@@ -130,10 +143,14 @@ class CourseAdminController extends Controller
             'ngayKetThuc' => 'nullable|date|after:ngayBatDau',
             'hinhanh'     => 'nullable|image|max:2048',
             'thoiHanNgay' => 'required|integer|min:1',
+            'promotion_id' => ['nullable','integer','exists:KHUYEN_MAI,maKM'],
+            'promotion_price' => ['nullable','numeric','min:0'],
             'trangThai'   => 'required|in:DRAFT,PUBLISHED,ARCHIVED',
         ]);
+        $tuition = (float) $request->input('hocPhi');
+        [$promotionId, $promotionPrice] = $this->resolvePromotionInputs($request, $tuition);
 
-        $data = $request->except('hinhanh', 'slug');
+        $data = $request->except('hinhanh', 'slug', 'promotion_id', 'promotion_price');
         $data['tenKH'] = trim((string) $data['tenKH']);
 
         $slugInput = trim((string) $request->input('slug', ''));
@@ -144,15 +161,18 @@ class CourseAdminController extends Controller
 
         // Thay ảnh (nếu có)
         if ($request->hasFile('hinhanh')) {
-        if ($course->hinhanh) {
-            $old = public_path($course->hinhanh);
-            if (file_exists($old)) @unlink($old);
+            if ($course->hinhanh) {
+                $old = public_path($course->hinhanh);
+                if (file_exists($old)) {
+                    @unlink($old);
+                }
+            }
+
+            $file = $request->file('hinhanh');
+            $fileName = time().'_'.Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)).'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('Assets'), $fileName);
+            $data['hinhanh'] = 'Assets/'.$fileName;
         }
-        $file = $request->file('hinhanh');
-        $fileName = time().'_'.Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)).'.'.$file->getClientOriginalExtension();
-        $file->move(public_path('Assets'), $fileName);
-        $data['hinhanh'] = 'Assets/'.$fileName;
-    }
 
         // Cập nhật phần còn lại
         $course->fill($data);
@@ -161,6 +181,7 @@ class CourseAdminController extends Controller
         $course->trangThai = $request->input('trangThai', $course->trangThai);
 
         $course->save();
+        $this->syncPromotion($course, $promotionId, $promotionPrice);
 
         return redirect()->route('admin.courses.index')
                         ->with('success', 'Cập nhật khóa học thành công');
@@ -190,6 +211,63 @@ class CourseAdminController extends Controller
             ->with('success', 'Xóa khóa học thành công');
     }
 
+    protected function resolvePromotionInputs(Request $request, float $tuition): array
+    {
+        $promotionId = $request->input('promotion_id');
+        $rawPrice = $request->input('promotion_price');
+
+        $promotionPrice = null;
+        if ($rawPrice !== null && $rawPrice !== '') {
+            $promotionPrice = (float) $rawPrice;
+        }
+
+        if (!$promotionId && $promotionPrice !== null) {
+            throw ValidationException::withMessages([
+                'promotion_id' => 'Vui lòng chọn khuyến mãi khi nhập giá ưu đãi.',
+            ]);
+        }
+
+        if ($promotionPrice !== null && $promotionPrice > $tuition) {
+            throw ValidationException::withMessages([
+                'promotion_price' => 'Giá ưu đãi phải nhỏ hơn hoặc bằng học phí gốc.',
+            ]);
+        }
+
+        return [$promotionId ? (int) $promotionId : null, $promotionPrice];
+    }
+
+    protected function syncPromotion(Course $course, $promotionId, $promotionPrice): void
+    {
+        if (!$promotionId) {
+            $course->promotions()->sync([]);
+
+            return;
+        }
+
+        $promotion = Promotion::find($promotionId);
+
+        if (!$promotion) {
+            throw ValidationException::withMessages([
+                'promotion_id' => 'Khuyến mãi không hợp lệ.',
+            ]);
+        }
+
+        if (!in_array($promotion->apDungCho, [Promotion::TARGET_COURSE, Promotion::TARGET_BOTH], true)) {
+            throw ValidationException::withMessages([
+                'promotion_id' => 'Khuyến mãi không áp dụng cho khóa học.',
+            ]);
+        }
+
+        $payload = [
+            $promotion->maKM => [
+                'giaUuDai' => $promotionPrice !== null ? (int) round($promotionPrice) : null,
+                'created_at' => Carbon::now(),
+            ],
+        ];
+
+        $course->promotions()->sync($payload);
+    }
+
     protected function generateUniqueSlug(string $value, ?int $ignoreId = null): string
     {
         $base = Str::slug($value);
@@ -212,6 +290,4 @@ class CourseAdminController extends Controller
         return $slug;
     }
 }
-
-
 

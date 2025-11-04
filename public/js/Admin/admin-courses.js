@@ -1,122 +1,50 @@
-﻿// =============================================================
-// Admin Courses JS (full)
-// - Flash message (SweetAlert)
-// - Modal Edit: đổ dữ liệu
-// - Validate forms
-// - Xác nhận xóa
-// - Định dạng học phí (giữ raw khi submit)
-// - File preview gọn gàng
-// - Auto tính Thời hạn (ngày) <=> Start/End cho cả 2 modal
-// =============================================================
+"use strict";
 
 document.addEventListener("DOMContentLoaded", () => {
-    // ---------------- 0) Flash messages ----------------
-    (function showFlash() {
-        const el = document.getElementById("flash-data");
-        if (!el || typeof Swal === "undefined") return;
-        const { success, error } = el.dataset;
-        if (error) {
-            Swal.fire({
-                icon: "error",
-                title: "Thất bại",
-                text: error,
-                confirmButtonText: "OK",
-            });
-        } else if (success) {
-            Swal.fire({
-                icon: "success",
-                title: "Thành công",
-                text: success,
-                timer: 2000,
-                showConfirmButton: false,
-            });
-        }
-    })();
+    initFlashMessage();
+    initSlugHelper();
 
-    if (globalThis.AdminSlug && typeof globalThis.AdminSlug.init === "function") {
-        globalThis.AdminSlug.init();
+    const { map: promotionMap } = loadPromotionDataset();
+
+    const createModal = document.getElementById("modalCreate");
+    const createForm = createModal ? createModal.querySelector("form") : null;
+    if (createForm) {
+        bindCurrencyInputs(createForm);
+        bindValidation(createForm);
+        bindFileInputs(createForm);
+        const refreshCreatePromotion = bindPromotionControls(createForm, promotionMap);
+        refreshCreatePromotion();
+        wireDateDuration({
+            startEl: createForm.querySelector("#c_start"),
+            endEl: createForm.querySelector("#c_end"),
+            durationEl: createForm.querySelector("#c_duration"),
+        });
     }
 
-    // ---------------- Helpers cho ngày & thời hạn ----------------
-    const DAY_MS = 24 * 60 * 60 * 1000;
+    const editModal = document.getElementById("modalEdit");
+    const editForm = editModal ? editModal.querySelector("#formEdit") : null;
+    if (editModal && editForm) {
+        bindCurrencyInputs(editForm);
+        bindValidation(editForm);
+        bindFileInputs(editForm);
+        const refreshEditPromotion = bindPromotionControls(editForm, promotionMap);
 
-    function parseDate(yyyy_mm_dd) {
-        if (!yyyy_mm_dd) return null;
-        const d = new Date(yyyy_mm_dd + "T00:00:00"); // tránh lệch tz
-        return Number.isNaN(d.getTime()) ? null : d;
-    }
-    function fmtDate(d) {
-        if (!(d instanceof Date) || Number.isNaN(d.getTime())) return "";
-        const m = String(d.getMonth() + 1).padStart(2, "0");
-        const day = String(d.getDate()).padStart(2, "0");
-        return `${d.getFullYear()}-${m}-${day}`;
-    }
-    function wireDateDuration({ startEl, endEl, durationEl }) {
-        if (!startEl || !endEl || !durationEl) return;
-
-        function clearValidity() {
-            startEl.setCustomValidity("");
-            endEl.setCustomValidity("");
-            durationEl.setCustomValidity("");
-        }
-
-        function calcDurationFromDates() {
-            const s = parseDate(startEl.value);
-            const e = parseDate(endEl.value);
-            if (!s || !e) return;
-            if (e < s) {
-                endEl.setCustomValidity("Ngày kết thúc phải ≥ ngày bắt đầu.");
-                durationEl.value = "";
+        editModal.addEventListener("show.bs.modal", (event) => {
+            const trigger = event.relatedTarget;
+            if (!trigger) {
+                editForm.reset();
                 return;
             }
-            clearValidity();
-            const diff = Math.round((e - s) / DAY_MS) + 1; // inclusive
-            durationEl.value = diff;
-        }
 
-        function calcEndFromDuration() {
-            const s = parseDate(startEl.value);
-            const dur = parseInt(durationEl.value, 10);
-            if (!s || !Number.isInteger(dur) || dur < 1) return;
-            clearValidity();
-            const e = new Date(s.getTime() + (dur - 1) * DAY_MS);
-            endEl.value = fmtDate(e);
-        }
+            const action = trigger.getAttribute("data-action");
+            if (action) {
+                editForm.setAttribute("action", action);
+            }
 
-        // Khi đổi start:
-        startEl.addEventListener("change", () => {
-            // Nếu đã có duration mà chưa có end -> tính end; ngược lại -> tính duration
-            if (durationEl.value && !endEl.value) calcEndFromDuration();
-            else calcDurationFromDates();
-        });
-        endEl.addEventListener("change", calcDurationFromDates);
-        durationEl.addEventListener("input", calcEndFromDuration);
-
-        // Lần đầu mount: nếu có s & e -> set duration; nếu có s & duration -> set e
-        (function initSync() {
-            const s = parseDate(startEl.value);
-            const e = parseDate(endEl.value);
-            const dur = parseInt(durationEl.value, 10);
-            if (s && e) calcDurationFromDates();
-            else if (s && Number.isInteger(dur) && dur > 0)
-                calcEndFromDuration();
-        })();
-    }
-
-    // ---------------- 1) Modal Edit: Load data ----------------
-    const modalEdit = document.getElementById("modalEdit");
-    if (modalEdit) {
-        modalEdit.addEventListener("show.bs.modal", (evt) => {
-            const btn = evt.relatedTarget;
-            const form = modalEdit.querySelector("#formEdit");
-            const id = btn?.getAttribute("data-id");
-            form.action = id ? `/admin/courses/${id}` : "";
-
-            // Map thuộc tính data -> field id
-            const fields = {
+            const fieldMap = {
                 e_name: "data-name",
-                e_category: "data-category",
                 e_slug: "data-slug",
+                e_category: "data-category",
                 e_teacher: "data-teacher",
                 e_fee: "data-fee",
                 e_duration: "data-duration",
@@ -124,74 +52,56 @@ document.addEventListener("DOMContentLoaded", () => {
                 e_end: "data-end",
                 e_desc: "data-desc",
                 e_status: "data-status",
+                e_promotion: "data-promotion-id",
+                e_promotion_price: "data-promotion-price",
             };
 
-        Object.keys(fields).forEach((fid) => {
-            const val = btn?.getAttribute(fields[fid]) || "";
-            const el = modalEdit.querySelector(`#${fid}`);
-            if (!el) return;
+            Object.entries(fieldMap).forEach(([id, attr]) => {
+                const el = editForm.querySelector(`#${id}`);
+                if (!el) return;
+
+                let value = trigger.getAttribute(attr) ?? "";
+                if (value === "null" || value === "undefined") {
+                    value = "";
+                }
 
                 if (el.tagName === "SELECT") {
-                    if (fid === "e_status") {
-                        el.value = val || "DRAFT"; // ch??% m???c ?`??<nh cho tr???ng thA?i
-                    } else if (val) {
-                        el.value = val; // category/teacher: ch??% set khi cA3 giA? tr??<
+                    if (id === "e_status") {
+                        el.value = value || "DRAFT";
+                    } else if (value !== "") {
+                        el.value = value;
+                    } else {
+                        el.value = "";
                     }
+                } else if (el.tagName === "TEXTAREA") {
+                    el.value = value || "";
+                } else if (id === "e_fee") {
+                    const raw = sanitizeNumber(value);
+                    el.dataset.rawValue = raw;
+                    el.value = raw ? formatCurrency(raw) : "";
+                } else if (id === "e_duration") {
+                    el.value = value ? Number(value) : "";
+                } else if (id === "e_promotion_price") {
+                    el.value = value ? Number(value) : "";
                 } else {
-                    el.value = val;
-            }
-        });
-
-        const slugField = modalEdit.querySelector("#e_slug");
-        if (slugField) {
-            if (slugField.value.trim() === "") {
-                slugField.dataset.manual = "false";
-                if (typeof form.__slugAutoUpdate === "function") {
-                    form.__slugAutoUpdate();
+                    el.value = value || "";
                 }
-            } else {
-                slugField.dataset.manual = "true";
-            }
-        }
+            });
 
-        const fileInput = modalEdit.querySelector('input[name="hinhanh"]');
-            let previewWrapper = modalEdit.querySelector(
-                "[data-current-image-wrapper]"
-            );
-            if (!previewWrapper && fileInput) {
-                const fileCol =
-                    fileInput.closest(".col-12") || fileInput.parentElement;
-                if (fileCol && fileCol.parentElement) {
-                    previewWrapper = document.createElement("div");
-                    previewWrapper.className = fileCol.className || "col-12";
-                    previewWrapper.setAttribute(
-                        "data-current-image-wrapper",
-                        ""
-                    );
-                    previewWrapper.innerHTML = `
-                        <label class="form-label d-block">Hình ảnh hiện tại</label>
-                        <div class="d-flex align-items-center gap-3 flex-wrap" data-current-image-container>
-                            <img src="" alt="Hinh khoa hoc" class="img-thumbnail mb-2 d-none" style="max-height: 160px;" data-current-image>
-                            <span class="text-muted" data-current-image-empty>Khoa hoc chua co hinh.</span>
-                        </div>
-                    `;
-                    fileCol.parentElement.insertBefore(previewWrapper, fileCol);
-                }
-            }
+            editForm
+                .querySelectorAll(".is-invalid")
+                .forEach((input) => input.classList.remove("is-invalid"));
 
-            const previewImg = modalEdit.querySelector("[data-current-image]");
-            const previewEmpty = modalEdit.querySelector(
-                "[data-current-image-empty]"
-            );
+            const previewImg = editForm.querySelector("[data-current-image]");
+            const previewEmpty = editForm.querySelector("[data-current-image-empty]");
             if (previewImg && previewEmpty) {
                 const imageUrl =
-                    btn?.getAttribute("data-image-url") ||
-                    btn?.getAttribute("data-image") ||
+                    trigger.getAttribute("data-image-url") ||
+                    trigger.getAttribute("data-image") ||
                     "";
                 if (imageUrl) {
                     previewImg.src = imageUrl;
-                    previewImg.alt =
-                        btn?.getAttribute("data-name") || "Hinh anh khoa hoc";
+                    previewImg.alt = trigger.getAttribute("data-name") || "Hình ảnh khóa học";
                     previewImg.classList.remove("d-none");
                     previewEmpty.classList.add("d-none");
                 } else {
@@ -201,214 +111,366 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
 
-            const feeInput = modalEdit.querySelector("#e_fee");
-            if (feeInput && feeInput.value) {
-                const raw = feeInput.value.replace(/\D/g, "");
-                feeInput.dataset.rawValue = raw;
-                feeInput.value = raw
-                    ? parseInt(raw, 10).toLocaleString("vi-VN")
-                    : "";
-            }
+            refreshEditPromotion();
 
-            // Reset lỗi cũ
-            modalEdit
-                .querySelectorAll(".is-invalid")
-                .forEach((el) => el.classList.remove("is-invalid"));
-
-            // Re-wire auto date-duration cho modal Edit
-            const eStart = modalEdit.querySelector("#e_start");
-            const eEnd = modalEdit.querySelector("#e_end");
-            const eDur = modalEdit.querySelector("#e_duration");
             wireDateDuration({
-                startEl: eStart,
-                endEl: eEnd,
-                durationEl: eDur,
+                startEl: editForm.querySelector("#e_start"),
+                endEl: editForm.querySelector("#e_end"),
+                durationEl: editForm.querySelector("#e_duration"),
             });
         });
     }
 
-    // ---------------- 2) Form validation & submission ----------------
-    function validateCourseForm(form) {
-        const requiredFields = form.querySelectorAll("[required]");
-        let isValid = true;
+    initDeleteConfirmation();
+});
 
-        requiredFields.forEach((field) => {
-            // cho input[type="file"] không bắt buộc -> skip nếu không required
-            if (!field.value || !String(field.value).trim()) {
-                isValid = false;
-                field.classList.add("is-invalid");
-            } else field.classList.remove("is-invalid");
-        });
-
-        // Kiểm tra trạng thái hợp lệ (nếu có)
-        const statusField = form.querySelector("#e_status");
-        if (
-            statusField &&
-            !["DRAFT", "PUBLISHED", "ARCHIVED"].includes(statusField.value)
-        ) {
-            isValid = false;
-            statusField.classList.add("is-invalid");
-        }
-
-        // Kiểm tra logic ngày (nếu có 2 trường)
-        const startEl = form.querySelector('input[name="ngayBatDau"]');
-        const endEl = form.querySelector('input[name="ngayKetThuc"]');
-        if (startEl && endEl && startEl.value && endEl.value) {
-            const s = parseDate(startEl.value);
-            const e = parseDate(endEl.value);
-            if (s && e && e < s) {
-                isValid = false;
-                endEl.classList.add("is-invalid");
-                endEl.setCustomValidity("Ngày kết thúc phải ≥ ngày bắt đầu.");
-            } else if (endEl) {
-                endEl.setCustomValidity("");
-            }
-        }
-
-        return isValid;
+function initFlashMessage() {
+    const el = document.getElementById("flash-data");
+    if (!el || typeof Swal === "undefined") {
+        return;
     }
 
-    // Áp dụng validate cho cả 2 modal
-    [
-        document.getElementById("modalCreate"),
-        document.getElementById("modalEdit"),
-    ].forEach((modal) => {
-        if (!modal) return;
-        const form = modal.querySelector("form");
-        if (!form) return;
-
-        form.addEventListener("submit", function (e) {
-            if (!validateCourseForm(form)) {
-                e.preventDefault();
-                if (typeof Swal !== "undefined") {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Vui lòng điền đầy đủ thông tin!",
-                        text: "Kiểm tra các trường bắt buộc, ngày tháng và trạng thái hợp lệ.",
-                        timer: 2200,
-                        showConfirmButton: false,
-                    });
-                }
-                return false;
-            }
+    const { success = "", error = "" } = el.dataset;
+    if (error) {
+        Swal.fire({
+            icon: "error",
+            title: "Thất bại",
+            text: error,
+            confirmButtonText: "Đóng",
         });
-    });
+    } else if (success) {
+        Swal.fire({
+            icon: "success",
+            title: "Thành công",
+            text: success,
+            timer: 2000,
+            showConfirmButton: false,
+        });
+    }
+}
 
-    // ---------------- 3) Delete confirmation ----------------
-    const isDeleteForm = (form) => {
-        const hiddenMethod = form.querySelector("input[name='_method']");
-        return (
-            hiddenMethod &&
-            String(hiddenMethod.value).toLowerCase() === "delete"
+function initSlugHelper() {
+    if (globalThis.AdminSlug && typeof globalThis.AdminSlug.init === "function") {
+        globalThis.AdminSlug.init();
+    }
+}
+
+const numberFormatter = new Intl.NumberFormat("vi-VN", {
+    maximumFractionDigits: 0,
+});
+
+function formatCurrency(value) {
+    const sanitized = sanitizeNumber(value);
+    if (!sanitized) return "";
+    return numberFormatter.format(Number(sanitized));
+}
+
+function sanitizeNumber(value) {
+    return String(value ?? "").replace(/\D/g, "");
+}
+
+function loadPromotionDataset() {
+    const datasetEl = document.getElementById("course-promotion-dataset");
+    if (!datasetEl) {
+        return { list: [], map: new Map() };
+    }
+
+    try {
+        const parsed = JSON.parse(datasetEl.textContent || "{}");
+        const list = Array.isArray(parsed.promotions) ? parsed.promotions : [];
+        const map = new Map(
+            list
+                .filter((item) => item && item.id !== undefined && item.id !== null)
+                .map((item) => [Number(item.id), item])
         );
+        return { list, map };
+    } catch (error) {
+        console.error("Không thể phân tích dữ liệu khuyến mãi của khóa học:", error);
+        return { list: [], map: new Map() };
+    }
+}
+
+function bindPromotionControls(form, promotionMap) {
+    const select = form.querySelector("[data-promotion-select]");
+    const wrapper = form.querySelector("[data-promotion-price-wrapper]");
+    const priceInput = form.querySelector("[data-promotion-price-input]");
+    const help = wrapper ? wrapper.querySelector("[data-promotion-help]") : null;
+    const tuitionInput = form.querySelector('input[name="hocPhi"]');
+
+    if (!select || !wrapper || !priceInput) {
+        return () => {};
+    }
+
+    const defaultHelp = help ? help.textContent : "";
+
+    const update = () => {
+        const hasPromotion = select.value !== "";
+        wrapper.classList.toggle("show", hasPromotion);
+
+        if (!hasPromotion) {
+            priceInput.value = "";
+            priceInput.placeholder = "Giá sau ưu đãi";
+            if (help) {
+                help.textContent = defaultHelp;
+            }
+            return;
+        }
+
+        const promotion = promotionMap.get(Number(select.value));
+        let message = defaultHelp;
+        let suggested = null;
+
+        if (promotion) {
+            const baseFee = tuitionInput
+                ? Number(sanitizeNumber(tuitionInput.dataset.rawValue || tuitionInput.value))
+                : 0;
+
+            if (promotion.type === "PERCENT" && baseFee > 0) {
+                const discount = Math.round(baseFee * (Number(promotion.value) / 100));
+                suggested = Math.max(0, baseFee - discount);
+                message = `Giảm ${promotion.value}% · Giá đề xuất: ${formatCurrency(
+                    suggested
+                )} đ.`;
+            } else if (promotion.type === "FIXED" && baseFee > 0) {
+                suggested = Math.max(0, baseFee - Number(promotion.value));
+                message = `Giảm ${formatCurrency(promotion.value)} đ · Giá đề xuất: ${formatCurrency(
+                    suggested
+                )} đ.`;
+            } else if (promotion.type === "GIFT") {
+                message = "Khuyến mãi quà tặng · Bạn có thể nhập giá ưu đãi thủ công.";
+            }
+        }
+
+        priceInput.placeholder = suggested
+            ? `Đề xuất: ${formatCurrency(suggested)} đ`
+            : "Giá sau ưu đãi";
+
+        if (help) {
+            help.textContent = message;
+        }
     };
-    document.querySelectorAll("form").forEach((form) => {
-        if (!isDeleteForm(form)) return;
-        form.addEventListener("submit", function (event) {
-            if (form.dataset.confirmed === "true") return;
-            event.preventDefault();
 
-            const submitBtn = form.querySelector(
-                "button[type='submit'], .btn-danger, .btn-danger-soft"
-            );
-            if (submitBtn?.disabled) return;
-
-            if (typeof Swal === "undefined") {
-                if (confirm("Xoá khóa học này?")) {
-                    form.dataset.confirmed = "true";
-                    form.submit();
-                }
-                return;
-            }
-            Swal.fire({
-                title: "Bạn chắc chắn?",
-                text: "Thao tác này sẽ xoá khóa học và không thể hoàn tác.",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Xoá",
-                cancelButtonText: "Huỷ",
-                confirmButtonColor: "#d33",
-            }).then((res) => {
-                if (res.isConfirmed) {
-                    form.dataset.confirmed = "true";
-                    form.submit();
-                }
-            });
+    select.addEventListener("change", update);
+    if (tuitionInput) {
+        tuitionInput.addEventListener("input", () => {
+            setTimeout(update, 0);
         });
-    });
+        tuitionInput.addEventListener("blur", () => {
+            setTimeout(update, 0);
+        });
+    }
 
-    // ---------------- 4) Format hocPhi ----------------
-    document.querySelectorAll('input[name="hocPhi"]').forEach((input) => {
-        input.dataset.rawValue = input.value
-            ? input.value.replace(/\D/g, "")
-            : "";
+    return update;
+}
 
-        input.addEventListener("input", function () {
-            let value = this.value.replace(/\D/g, "");
-            if (value) {
-                this.dataset.rawValue = value;
-                this.value = parseInt(value, 10).toLocaleString("vi-VN");
-            } else {
-                this.dataset.rawValue = "";
-                this.value = "";
-            }
+function bindCurrencyInputs(root) {
+    root.querySelectorAll('input[name="hocPhi"]').forEach((input) => {
+        input.dataset.rawValue = sanitizeNumber(input.value);
+
+        input.addEventListener("input", () => {
+            const sanitized = sanitizeNumber(input.value);
+            input.dataset.rawValue = sanitized;
+            input.value = sanitized;
         });
 
-        input.addEventListener("blur", function () {
-            let value = this.dataset.rawValue;
-            this.value = value
-                ? parseInt(value, 10).toLocaleString("vi-VN")
-                : "";
+        input.addEventListener("focus", () => {
+            input.value = input.dataset.rawValue || "";
+        });
+
+        input.addEventListener("blur", () => {
+            const raw = input.dataset.rawValue || "";
+            input.value = raw ? formatCurrency(raw) : "";
         });
 
         const form = input.closest("form");
         if (form) {
-            form.addEventListener("submit", function () {
+            form.addEventListener("submit", () => {
                 input.value = input.dataset.rawValue || "";
             });
         }
     });
+}
 
-    // ---------------- 5) File preview (không cộng dồn) ----------------
-    document.querySelectorAll('input[type="file"]').forEach((input) => {
-        input.addEventListener("change", function () {
-            const fileName = this.files[0]?.name || "";
-            // tìm label ngay trước input (cùng group)
-            const wrapper =
-                this.closest(".col-12, .mb-3, .form-group") ||
-                this.parentElement;
-            const label = wrapper
-                ? wrapper.querySelector("label.form-label")
-                : null;
-            if (!label) return;
-
-            // reset về text gốc nếu đã có " (đã chọn: ... )"
-            const baseText =
-                label.getAttribute("data-base-text") ||
-                label.textContent.replace(/\s*\(đã chọn:.*\)$/i, "");
-            label.setAttribute("data-base-text", baseText);
-
-            if (fileName)
-                label.textContent = `${baseText} (đã chọn: ${fileName})`;
-            else label.textContent = baseText;
+function bindValidation(form) {
+    form.querySelectorAll("[required]").forEach((field) => {
+        field.addEventListener("input", () => {
+            field.classList.remove("is-invalid");
+        });
+        field.addEventListener("change", () => {
+            field.classList.remove("is-invalid");
         });
     });
 
-    // ---------------- 6) Auto tính Thời hạn cho cả 2 modal ----------------
-    // Modal Create: cần có id c_start, c_end, c_duration (đã hướng dẫn gắn trong Blade)
-    const cStart = document.getElementById("c_start");
-    const cEnd = document.getElementById("c_end");
-    const cDur = document.getElementById("c_duration");
-    wireDateDuration({ startEl: cStart, endEl: cEnd, durationEl: cDur });
+    form.addEventListener("submit", (event) => {
+        if (validateCourseForm(form)) {
+            return;
+        }
 
-    // Modal Edit: id e_start, e_end, e_duration (đã có sẵn)
-    const eStartStatic = document.getElementById("e_start");
-    const eEndStatic = document.getElementById("e_end");
-    const eDurStatic = document.getElementById("e_duration");
-    wireDateDuration({
-        startEl: eStartStatic,
-        endEl: eEndStatic,
-        durationEl: eDurStatic,
+        event.preventDefault();
+
+        if (typeof Swal !== "undefined") {
+            Swal.fire({
+                icon: "error",
+                title: "Vui lòng kiểm tra thông tin!",
+                text: "Kiểm tra các trường bắt buộc, ngày tháng và trạng thái hợp lệ.",
+                timer: 2200,
+                showConfirmButton: false,
+            });
+        }
     });
-});
+}
 
+function validateCourseForm(form) {
+    let isValid = true;
+
+    form.querySelectorAll("[required]").forEach((field) => {
+        const value =
+            field.type === "checkbox" || field.type === "radio"
+                ? field.checked
+                : String(field.value ?? "").trim();
+
+        if (!value) {
+            field.classList.add("is-invalid");
+            isValid = false;
+        } else {
+            field.classList.remove("is-invalid");
+        }
+    });
+
+    const start = form.querySelector('input[name="ngayBatDau"]');
+    const end = form.querySelector('input[name="ngayKetThuc"]');
+    if (start && end && start.value && end.value) {
+        const startDate = new Date(`${start.value}T00:00:00`);
+        const endDate = new Date(`${end.value}T00:00:00`);
+        if (endDate < startDate) {
+            end.classList.add("is-invalid");
+            isValid = false;
+        }
+    }
+
+    return isValid;
+}
+
+function bindFileInputs(root) {
+    root.querySelectorAll('input[type="file"]').forEach((input) => {
+        const wrapper =
+            input.closest(".col-12, .col-md-6, .mb-3, .form-group") || input.parentElement;
+        const label = wrapper ? wrapper.querySelector("label.form-label") : null;
+        if (!label) return;
+
+        const original = label.textContent;
+
+        input.addEventListener("change", () => {
+            const fileName = input.files && input.files[0] ? input.files[0].name : "";
+            label.textContent = fileName ? `${original} (đã chọn: ${fileName})` : original;
+        });
+    });
+}
+
+function initDeleteConfirmation() {
+    document.querySelectorAll("form.form-delete").forEach((form) => {
+        form.addEventListener("submit", (event) => {
+            if (form.dataset.confirmed === "true") {
+                return;
+            }
+
+            event.preventDefault();
+
+            const proceed = () => {
+                form.dataset.confirmed = "true";
+                form.submit();
+            };
+
+            if (typeof Swal === "undefined") {
+                if (confirm("Xóa khóa học này?")) {
+                    proceed();
+                }
+                return;
+            }
+
+            Swal.fire({
+                title: "Bạn chắc chắn?",
+                text: "Thao tác này sẽ xóa khóa học và không thể hoàn tác.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Xóa",
+                cancelButtonText: "Huỷ",
+                confirmButtonColor: "#d33",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    proceed();
+                }
+            });
+        });
+    });
+}
+
+function wireDateDuration({ startEl, endEl, durationEl }) {
+    if (!startEl || !endEl || !durationEl) {
+        return;
+    }
+
+    const DAY_MS = 24 * 60 * 60 * 1000;
+
+    const parseDate = (value) => {
+        if (!value) return null;
+        const date = new Date(`${value}T00:00:00`);
+        return Number.isNaN(date.getTime()) ? null : date;
+    };
+
+    const formatDate = (date) => {
+        if (!date || Number.isNaN(date.getTime())) return "";
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${date.getFullYear()}-${month}-${day}`;
+    };
+
+    const clearValidity = () => {
+        startEl.setCustomValidity("");
+        endEl.setCustomValidity("");
+        durationEl.setCustomValidity("");
+    };
+
+    const updateDuration = () => {
+        const startDate = parseDate(startEl.value);
+        const endDate = parseDate(endEl.value);
+        if (!startDate || !endDate) return;
+
+        if (endDate < startDate) {
+            endEl.setCustomValidity("Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu.");
+            durationEl.value = "";
+            return;
+        }
+
+        clearValidity();
+        const diff = Math.round((endDate - startDate) / DAY_MS) + 1;
+        durationEl.value = diff;
+    };
+
+    const updateEndDate = () => {
+        const startDate = parseDate(startEl.value);
+        const duration = parseInt(durationEl.value, 10);
+        if (!startDate || !Number.isInteger(duration) || duration < 1) return;
+
+        clearValidity();
+        const endDate = new Date(startDate.getTime() + (duration - 1) * DAY_MS);
+        endEl.value = formatDate(endDate);
+    };
+
+    startEl.addEventListener("change", () => {
+        if (durationEl.value && !endEl.value) {
+            updateEndDate();
+        } else {
+            updateDuration();
+        }
+    });
+
+    endEl.addEventListener("change", updateDuration);
+    durationEl.addEventListener("input", updateEndDate);
+
+    if (startEl.value && endEl.value) {
+        updateDuration();
+    } else if (startEl.value && durationEl.value) {
+        updateEndDate();
+    }
+}

@@ -1,0 +1,256 @@
+.promo-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.promo-stats .stats-card {
+    border-radius: 18px;
+    border: 1px solid var(--card-brd);
+    background: var(--card);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.promo-stats .stats-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 26px rgba(37, 103, 131, 0.18);
+}
+
+.promo-stats .stats-label {
+    font-size: 0.9rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.promo-stats .stats-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.promo-stats .stats-meta {
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.promo-filter {
+    border: 1px solid var(--card-brd);
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+
+.promo-filter .form-control,
+.promo-filter .form-select {
+    border-radius: 10px;
+    border-color: var(--card-brd);
+}
+
+.promo-filter .btn-outline-primary {
+    border-radius: 999px;
+    border-color: #b9d2ff;
+    color: var(--blue);
+    background: #f0f6ff;
+    transition: all 0.25s ease;
+}
+
+.promo-filter .btn-outline-primary:hover {
+    background: linear-gradient(135deg, var(--blue), var(--teal));
+    color: #fff;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(37, 103, 131, 0.18);
+}
+
+.promo-filter .btn-outline-secondary {
+    border-radius: 999px;
+    border-color: var(--card-brd);
+    background: #f7fbfd;
+    color: var(--text);
+    transition: all 0.25s ease;
+}
+
+.promo-filter .btn-outline-secondary:hover {
+    background: #eef5fb;
+    transform: translateY(-2px);
+}
+
+.promo-card {
+    border-radius: 16px;
+    border: 1px solid var(--card-brd);
+    background: var(--card);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.promo-card .card-header {
+    border-bottom: 1px solid var(--card-brd);
+    background: linear-gradient(180deg, #f9feff, #f4fbfd);
+}
+
+.promo-card .card-header .muted {
+    color: var(--muted);
+}
+
+.promo-card .card-footer {
+    background: #f7fbff;
+    border-top: 1px solid var(--card-brd);
+}
+
+.promo-table thead th {
+    background: linear-gradient(180deg, #f7fbff, #f2f8fd);
+    border-bottom: 1px solid var(--card-brd);
+    color: var(--muted);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.promo-table tbody td {
+    vertical-align: top;
+    border-color: rgba(230, 239, 245, 0.6);
+    background: transparent;
+    padding: 14px 16px;
+}
+
+.promo-name strong {
+    font-size: 1rem;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.promo-desc {
+    max-width: 360px;
+}
+
+.promo-relations {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.promo-relations .relation-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(58, 134, 255, 0.08);
+    border: 1px solid rgba(58, 134, 255, 0.18);
+    font-size: 0.82rem;
+    color: var(--blue);
+}
+
+.promo-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.82rem;
+}
+
+.promo-status.status-active {
+    background: rgba(32, 201, 151, 0.12);
+    color: #158f66;
+    border: 1px solid rgba(32, 201, 151, 0.2);
+}
+
+.promo-status.status-paused {
+    background: rgba(245, 158, 11, 0.12);
+    color: #aa7106;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.promo-status.status-expired {
+    background: rgba(214, 69, 69, 0.12);
+    color: #b43838;
+    border: 1px solid rgba(214, 69, 69, 0.2);
+}
+
+.promo-empty {
+    padding: 48px 16px;
+    border-radius: 16px;
+    border: 1px dashed rgba(58, 134, 255, 0.25);
+    background: linear-gradient(180deg, rgba(58, 134, 255, 0.08), rgba(26, 163, 163, 0.05));
+    color: var(--muted);
+}
+
+.btn-primary-soft {
+    background: rgba(58, 134, 255, 0.1);
+    border: 1px solid rgba(58, 134, 255, 0.25);
+    color: var(--blue);
+    border-radius: 10px;
+    padding: 6px 10px;
+    transition: all 0.2s ease;
+}
+
+.btn-primary-soft:hover {
+    background: linear-gradient(135deg, var(--blue), var(--teal));
+    color: #fff;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(58, 134, 255, 0.22);
+}
+
+.btn-danger-soft {
+    background: rgba(237, 66, 69, 0.08);
+    border: 1px solid rgba(237, 66, 69, 0.22);
+    color: #d64545;
+    border-radius: 10px;
+    padding: 6px 10px;
+    transition: all 0.2s ease;
+}
+
+.btn-danger-soft:hover {
+    background: #ffeded;
+    border-color: rgba(237, 66, 69, 0.35);
+    transform: translateY(-2px);
+}
+
+.promotion-form .form-control,
+.promotion-form .form-select,
+.promotion-form textarea {
+    border-radius: 12px;
+    border-color: var(--card-brd);
+}
+
+.promotion-form .modal-body {
+    padding-bottom: 12px;
+}
+
+.promotion-form .form-text {
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.promotion-form .modal-footer .btn-primary {
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--indigo), var(--blue));
+    border: none;
+}
+
+.promotion-form .modal-footer .btn-secondary {
+    border-radius: 999px;
+    background: #f2f8fd;
+    border: 1px solid var(--card-brd);
+    color: var(--text);
+}
+
+@media (max-width: 992px) {
+    .promo-relations {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .promo-table tbody td {
+        min-width: 180px;
+    }
+}

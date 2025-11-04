@@ -426,6 +426,7 @@
                                             <option
                                                 value="{{ $promotion->maKM }}"
                                                 data-type="{{ $promotion->loaiUuDai }}"
+                                                data-target="{{ $promotion->apDungCho }}"
                                                 data-value="{{ (int) round($promotion->giaTriUuDai) }}"
                                                 data-start="{{ optional($promotion->ngayBatDau)->format('Y-m-d') }}"
                                                 data-end="{{ optional($promotion->ngayKetThuc)->format('Y-m-d') }}"
@@ -436,7 +437,7 @@
                                     </select>
                                 </div>
                                 <div class="mt-2 collapse" data-promotion-price-wrapper>
-                                    <label class="form-label">Giá sau khuyến mãi</label>
+                                    <label class="form-label">Giá ưu đãi</label>
                                     <input
                                         type="number"
                                         name="promotion_price"
@@ -444,9 +445,10 @@
                                         min="0"
                                         step="1000"
                                         value="{{ old('promotion_price') }}"
+                                        placeholder="Giá sau ưu đãi"
                                         data-promotion-price-input
                                     >
-                                    <div class="form-text">
+                                    <div class="form-text" data-promotion-help>
                                         Có thể để trống để hệ thống tự tính từ loại ưu đãi.
                                     </div>
                                 </div>
@@ -607,6 +609,7 @@
                                             <option
                                                 value="{{ $promotion->maKM }}"
                                                 data-type="{{ $promotion->loaiUuDai }}"
+                                                data-target="{{ $promotion->apDungCho }}"
                                                 data-value="{{ (int) round($promotion->giaTriUuDai) }}"
                                                 data-start="{{ optional($promotion->ngayBatDau)->format('Y-m-d') }}"
                                                 data-end="{{ optional($promotion->ngayKetThuc)->format('Y-m-d') }}"
@@ -617,16 +620,17 @@
                                     </select>
                                 </div>
                                 <div class="mt-2 collapse" data-promotion-price-wrapper>
-                                    <label class="form-label">Giá sau khuyến mãi</label>
+                                    <label class="form-label">Giá ưu đãi</label>
                                     <input
                                         type="number"
                                         name="promotion_price"
                                         class="form-control"
                                         min="0"
                                         step="1000"
+                                        placeholder="Giá sau ưu đãi"
                                         data-promotion-price-input
                                     >
-                                    <div class="form-text">
+                                    <div class="form-text" data-promotion-help>
                                         Có thể để trống để hệ thống tự tính từ loại ưu đãi.
                                     </div>
                                 </div>
@@ -711,6 +715,7 @@
             'start' => optional($promotion->ngayBatDau)->format('Y-m-d'),
             'end' => optional($promotion->ngayKetThuc)->format('Y-m-d'),
             'status' => $promotion->trangThai,
+            'target' => $promotion->apDungCho,
         ])->values(),
         'updateUrlTemplate' => route('admin.combos.update', array_merge(['combo' => '__ID__'], request()->query())),
     ];
@@ -723,7 +728,4 @@
     <script src="{{ asset('js/Admin/slug-helper.js') }}" defer></script>
     <script src="{{ asset('js/Admin/combos.js') }}" defer></script>
 @endpush
-
-
-
 

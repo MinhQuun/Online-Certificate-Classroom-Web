@@ -13,6 +13,11 @@
             : []
     );
     const updateUrlTemplate = dataset.updateUrlTemplate || "";
+    const promotionMap = new Map(
+        Array.isArray(dataset.promotions)
+            ? dataset.promotions.map((promotion) => [Number(promotion.id), promotion])
+            : []
+    );
 
     function safeJsonParse(value) {
         try {
@@ -51,8 +56,69 @@
         const promotionPriceInput = form.querySelector(
             "[data-promotion-price-input]"
         );
+        const promotionHelp =
+            promotionWrapper?.querySelector("[data-promotion-help]") || null;
+        const defaultPromotionHelp = promotionHelp?.textContent || "";
 
         const selectedCourses = new Map();
+        let originalTotalCache = 0;
+
+        const updatePromotionHint = () => {
+            if (!promotionWrapper || !promotionSelect) {
+                return;
+            }
+
+            const hasPromotion = promotionSelect.value !== "";
+            promotionWrapper.classList.toggle("show", hasPromotion);
+
+            if (!hasPromotion) {
+                if (promotionPriceInput) {
+                    promotionPriceInput.value = "";
+                    promotionPriceInput.placeholder = "Giá sau ưu đãi";
+                }
+                if (promotionHelp) {
+                    promotionHelp.textContent = defaultPromotionHelp;
+                }
+                return;
+            }
+
+            const promotion = promotionMap.get(Number(promotionSelect.value));
+            let message = defaultPromotionHelp;
+            let suggested = null;
+
+            if (promotion && originalTotalCache > 0) {
+                if (promotion.type === "PERCENT") {
+                    const discount = Math.round(
+                        originalTotalCache * (Number(promotion.value) / 100)
+                    );
+                    suggested = Math.max(0, originalTotalCache - discount);
+                    message = `Giảm ${promotion.value}% · Giá đề xuất: ${formatCurrency(
+                        suggested
+                    )}.`;
+                } else if (promotion.type === "FIXED") {
+                    suggested = Math.max(
+                        0,
+                        originalTotalCache - Number(promotion.value)
+                    );
+                    message = `Giảm ${formatCurrency(
+                        promotion.value
+                    )} · Giá đề xuất: ${formatCurrency(suggested)}.`;
+                } else if (promotion.type === "GIFT") {
+                    message =
+                        "Khuyến mãi quà tặng · Nhập giá ưu đãi thủ công nếu cần.";
+                }
+            }
+
+            if (promotionHelp) {
+                promotionHelp.textContent = message;
+            }
+
+            if (promotionPriceInput) {
+                promotionPriceInput.placeholder = suggested
+                    ? `Đề xuất: ${formatCurrency(suggested)}`
+                    : "Giá sau ưu đãi";
+            }
+        };
 
         function refreshSummary() {
             const totalOriginal = Array.from(selectedCourses.values()).reduce(
@@ -62,9 +128,13 @@
             const saleValue = Number(priceInput?.value || 0);
             const saving = Math.max(0, totalOriginal - saleValue);
 
+            originalTotalCache = totalOriginal;
+
             if (originalEl) originalEl.textContent = formatCurrency(totalOriginal);
             if (saleEl) saleEl.textContent = formatCurrency(saleValue);
             if (savingEl) savingEl.textContent = formatCurrency(saving);
+
+            updatePromotionHint();
         }
 
         function refreshState() {
@@ -194,22 +264,14 @@
 
         priceInput?.addEventListener("input", refreshSummary);
 
-        promotionSelect?.addEventListener("change", () => {
-            const hasPromotion = !!promotionSelect.value;
-            if (promotionWrapper) {
-                promotionWrapper.classList.toggle("show", hasPromotion);
-            }
-
-            if (!hasPromotion && promotionPriceInput) {
-                promotionPriceInput.value = "";
-            }
-        });
+        promotionSelect?.addEventListener("change", updatePromotionHint);
 
         refreshState();
 
         return {
             setCourses,
             refresh: refreshState,
+            refreshPromotion: updatePromotionHint,
         };
     }
 
@@ -333,11 +395,8 @@
         const promotionWrapper = form.querySelector(
             "[data-promotion-price-wrapper]"
         );
-        if (promotionWrapper) {
-            promotionWrapper.classList.toggle(
-                "show",
-                !!payload.promotion_id
-            );
+        if (controller.refreshPromotion) {
+            controller.refreshPromotion();
         }
 
         const actionField = form.querySelector("[data-action-field]");

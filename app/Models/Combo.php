@@ -218,6 +218,10 @@ class Combo extends Model
     {
         $today ??= Carbon::today();
 
+        if (!in_array($promotion->apDungCho, [Promotion::TARGET_COMBO, Promotion::TARGET_BOTH], true)) {
+            return false;
+        }
+
         if ($promotion->trangThai !== 'ACTIVE') {
             return false;
         }

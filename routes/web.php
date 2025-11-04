@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\ContactReplyController;
 use App\Http\Controllers\Admin\ComboAdminController;
+use App\Http\Controllers\Admin\PromotionAdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -230,6 +231,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/combos',              [ComboAdminController::class, 'store'])->name('combos.store');
     Route::put('/combos/{combo}',       [ComboAdminController::class, 'update'])->name('combos.update');
     Route::delete('/combos/{combo}',    [ComboAdminController::class, 'destroy'])->name('combos.destroy');
+    // Qu?n l? khuy?n m?i
+    Route::get('/promotions',             [PromotionAdminController::class, 'index'])->name('promotions.index');
+    Route::post('/promotions',            [PromotionAdminController::class, 'store'])->name('promotions.store');
+    Route::put('/promotions/{promotion}', [PromotionAdminController::class, 'update'])->name('promotions.update');
+    Route::delete('/promotions/{promotion}', [PromotionAdminController::class, 'destroy'])->name('promotions.destroy');
+
 
     // Quản lý hoá đơn
     Route::get('/invoices',                 [InvoiceController::class, 'index'])->name('invoices.index');
