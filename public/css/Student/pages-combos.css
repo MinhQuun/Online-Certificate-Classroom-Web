@@ -519,10 +519,12 @@
     color: #475569;
 }
 
+/* Nút trạng thái: Đã trong giỏ hàng (Màu hồng/rose - nổi bật và khác biệt) */
 .combo-card__cta--in-cart {
-    background: rgba(16, 185, 129, 0.18);
-    color: #047857;
-    border: 1px solid rgba(16, 185, 129, 0.32);
+    background: rgba(244, 63, 94, 0.15);
+    color: #be123c;
+    font-weight: 700;
+    border: 1px solid rgba(244, 63, 94, 0.25);
     box-shadow: none;
     cursor: not-allowed;
 }

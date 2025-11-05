@@ -294,9 +294,20 @@
     border: 1px solid rgba(250, 204, 21, 0.3);
 }
 
-/* Tắt hiệu ứng hover cho cả 2 nút trạng thái */
+/* Nút trạng thái: Đã trong giỏ hàng (Màu hồng/rose - nổi bật và khác biệt) */
+.course-card__cta--in-cart {
+    background: rgba(244, 63, 94, 0.15);
+    color: #be123c;
+    font-weight: 700;
+    box-shadow: none;
+    cursor: not-allowed;
+    border: 1px solid rgba(244, 63, 94, 0.25);
+}
+
+/* Tắt hiệu ứng hover cho các nút trạng thái */
 .course-card__cta--active:hover,
-.course-card__cta--pending:hover {
+.course-card__cta--pending:hover,
+.course-card__cta--in-cart:hover {
     transform: none;
     box-shadow: none;
 }
