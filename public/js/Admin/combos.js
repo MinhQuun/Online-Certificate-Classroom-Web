@@ -95,6 +95,7 @@
             const hasPromotion = !!promotionSelect?.value;
             let finalPrice = basePrice;
             let message = defaultPromotionHelp;
+            let promotionType = null;
 
             if (hasPromotion && basePrice > 0) {
                 const promotionId = Number(promotionSelect.value);
@@ -103,6 +104,7 @@
                 if (promotion) {
                     const rawValue = Number(promotion.value) || 0;
                     const type = normalizePromotionType(promotion.type);
+                    promotionType = type;
 
                     if (type === PROMOTION_TYPE_PERCENT) {
                         const percent = Math.min(Math.max(rawValue, 0), 100);
@@ -130,6 +132,7 @@
                 saving: Math.max(0, basePrice - finalPrice),
                 hasPromotion,
                 message,
+                promotionType,
             };
         };
 
@@ -143,10 +146,17 @@
             }
 
             if (promotionPriceInput) {
-                if (totals.hasPromotion) {
-                    promotionPriceInput.value = totals.finalPrice;
-                } else {
+                const isGiftPromotion =
+                    totals.promotionType === PROMOTION_TYPE_GIFT;
+                const shouldDisable =
+                    isGiftPromotion || !totals.hasPromotion;
+
+                if (shouldDisable) {
                     promotionPriceInput.value = "";
+                    promotionPriceInput.setAttribute("disabled", "disabled");
+                } else {
+                    promotionPriceInput.removeAttribute("disabled");
+                    promotionPriceInput.value = totals.finalPrice;
                 }
             }
 
