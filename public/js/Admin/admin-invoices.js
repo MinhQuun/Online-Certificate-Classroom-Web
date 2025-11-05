@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
         totalAmount: modalEl.querySelector('[data-total-amount]'),
         processor: modalEl.querySelector('[data-processor]'),
         itemCount: modalEl.querySelector('[data-item-count]'),
+        breakdownCourse: modalEl.querySelector('[data-item-breakdown-course]'),
+        breakdownCombo: modalEl.querySelector('[data-item-breakdown-combo]'),
         note: modalEl.querySelector('[data-invoice-note]'),
         studentName: modalEl.querySelector('[data-student-name]'),
         studentEmail: modalEl.querySelector('[data-student-email]'),
@@ -118,7 +120,10 @@ document.addEventListener('DOMContentLoaded', () => {
         setText(nodeRefs.paymentMethod, invoice.payment_method ?? '---');
         setText(nodeRefs.processor, invoice.processor ?? '---');
         setText(nodeRefs.itemCount, invoice.items_total_quantity ?? 0);
-        setText(nodeRefs.note, invoice.note ?? 'Khong co');
+        const breakdown = invoice.product_breakdown || {};
+        setText(nodeRefs.breakdownCourse, `${breakdown.courses ?? 0} khóa`);
+        setText(nodeRefs.breakdownCombo, `${breakdown.combos ?? 0} combo`);
+        setText(nodeRefs.note, invoice.note ?? 'Không có');
 
         const issued = invoice.issued_at || null;
         setText(nodeRefs.issuedFull, issued?.full ?? '');
@@ -143,33 +148,50 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderItems(invoice) {
         const items = Array.isArray(invoice.items) ? invoice.items : [];
         const tbody = nodeRefs.itemsBody;
-        if (tbody) {
-            tbody.innerHTML = '';
+        if (!tbody) {
+            return;
+        }
 
-            if (items.length === 0) {
-                const emptyRow = document.createElement('tr');
-                const td = document.createElement('td');
-                td.colSpan = 5;
-                td.className = 'text-center text-muted py-3';
-                td.textContent = 'Khong co khoa hoc trong hoa don.';
-                emptyRow.appendChild(td);
-                tbody.appendChild(emptyRow);
-            } else {
-                items.forEach((item, index) => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>
-                            <div class="fw-semibold">${escapeHtml(item.course_name ?? 'Khoa hoc')}</div>
-                            <div class="text-muted small">Ma KH: ${escapeHtml(String(item.course_id ?? 'N/A'))}</div>
-                        </td>
-                        <td class="text-center">${item.quantity ?? 0}</td>
-                        <td class="text-end">${escapeHtml(item.unit_price_text ?? '0 VND')}</td>
-                        <td class="text-end">${escapeHtml(item.line_total_text ?? '0 VND')}</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            }
+        tbody.innerHTML = '';
+
+        if (items.length === 0) {
+            const emptyRow = document.createElement('tr');
+            const td = document.createElement('td');
+            td.colSpan = 6;
+            td.className = 'text-center text-muted py-3';
+            td.textContent = 'Không có sản phẩm trong hóa đơn.';
+            emptyRow.appendChild(td);
+            tbody.appendChild(emptyRow);
+        } else {
+            items.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                const typeClass = item.type === 'combo'
+                    ? 'type-pill type-pill--combo'
+                    : 'type-pill type-pill--course';
+                const courses = Array.isArray(item.courses) ? item.courses : [];
+                const courseList = courses.length
+                    ? `<ul class="product-course-list">${courses.map((course) => `
+                            <li>
+                                <span class="course-name">${escapeHtml(course.name ?? '---')}</span>
+                                <span class="course-code text-muted">#${escapeHtml(String(course.id ?? ''))}</span>
+                            </li>
+                        `).join('')}</ul>`
+                    : '';
+
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>
+                        <div class="fw-semibold">${escapeHtml(item.product_name ?? 'Sản phẩm')}</div>
+                        <div class="text-muted small">Mã: ${escapeHtml(String(item.product_id ?? 'N/A'))}</div>
+                        ${courseList}
+                    </td>
+                    <td class="text-center"><span class="${typeClass}">${escapeHtml(item.type_label ?? '---')}</span></td>
+                    <td class="text-center">${item.quantity ?? 0}</td>
+                    <td class="text-end">${escapeHtml(item.unit_price_text ?? '0 VND')}</td>
+                    <td class="text-end">${escapeHtml(item.line_total_text ?? '0 VND')}</td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
 
         setText(nodeRefs.itemsTotal, invoice.items_total_text ?? '0 VND');

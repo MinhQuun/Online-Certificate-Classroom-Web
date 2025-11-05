@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Invoice extends Model
 {
@@ -26,9 +27,14 @@ class Invoice extends Model
         return $this->belongsTo(Student::class, 'maHV', 'maHV');
     }
 
-    public function items()
+    public function items(): HasMany
     {
         return $this->hasMany(InvoiceItem::class, 'maHD', 'maHD');
+    }
+
+    public function comboItems(): HasMany
+    {
+        return $this->hasMany(InvoiceComboItem::class, 'maHD', 'maHD');
     }
 
     public function paymentMethod()
