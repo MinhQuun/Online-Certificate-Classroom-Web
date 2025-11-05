@@ -1,17 +1,14 @@
 @extends('layouts.admin')
 @section('title', 'Quản lý khóa học')
-
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/Admin/admin-courses.css') }}">
 @endpush
-
 @section('content')
     <section class="page-header">
         <span class="kicker">Admin</span>
         <h1 class="title">Quản lý khóa học</h1>
         <p class="muted">Thêm, chỉnh sửa, xóa và quản lý toàn bộ khóa học trên hệ thống.</p>
     </section>
-
     @if ($errors->any())
         <div class="alert alert-danger validation-errors" role="alert" id="validation-errors">
             <h6 class="mb-2">Thông tin chưa hợp lệ, vui lòng kiểm tra:</h6>
@@ -22,7 +19,6 @@
             </ul>
         </div>
     @endif
-
     <div class="card filter-card courses-filter mb-3">
         <div class="card-body">
             <form class="row g-2 align-items-center" method="get" action="{{ route('admin.courses.index') }}">
@@ -53,6 +49,7 @@
                         <option value="">— Tất cả trạng thái —</option>
                         <option value="PUBLISHED" {{ request('status') == 'PUBLISHED' ? 'selected' : '' }}>Đã công bố</option>
                         <option value="DRAFT" {{ request('status') == 'DRAFT' ? 'selected' : '' }}>Bản nháp</option>
+                        <option value="ARCHIVED" {{ request('status') == 'ARCHIVED' ? 'selected' : '' }}>Đã lưu trữ</option>
                     </select>
                 </div>
                 <div class="col-lg-2 d-flex gap-2 justify-content-lg-end">
@@ -62,7 +59,6 @@
             </form>
         </div>
     </div>
-
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
             <h5 class="m-0">Danh sách khóa học</h5>
@@ -70,7 +66,6 @@
                 <i class="bi bi-plus-circle me-1"></i> Thêm mới
             </button>
         </div>
-
         <div class="table-responsive">
             <table class="table align-middle mb-0 table-hover courses-table table-fixed">
                 <colgroup>
@@ -98,8 +93,13 @@
                 <tbody>
                     @forelse ($courses as $course)
                         @php
-                            $statusClass = $course->trangThai === 'PUBLISHED' ? 'text-bg-success' : 'text-bg-warning';
-                            $statusText = $course->trangThai === 'PUBLISHED' ? 'Đã công bố' : 'Bản nháp';
+                            [$statusClass, $statusText] = match ($course->trangThai) {
+                                'PUBLISHED' => ['text-bg-success', 'Đã công bố'],
+                                'DRAFT'     => ['text-bg-warning', 'Bản nháp'],
+                                'ARCHIVED'  => ['text-bg-secondary', 'Đã lưu trữ'],
+                                default     => ['text-bg-light', 'Không xác định'],
+                            };
+
                             $activePromotion = $course->active_promotion;
                             $promotionPrice = $activePromotion && $activePromotion->pivot
                                 ? (int) $activePromotion->pivot->giaUuDai
@@ -188,13 +188,11 @@
                 </tbody>
             </table>
         </div>
-
         @include('components.pagination', [
             'paginator' => $courses,
             'ariaLabel' => 'Điều hướng trang khóa học',
         ])
     </div>
-
     <div class="modal fade" id="modalCreate" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <form
@@ -302,6 +300,14 @@
                         >
                     </div>
                     <div class="col-md-6">
+                        <label for="c_status" class="form-label">Trạng thái <span class="text-danger">*</span></label>
+                        <select id="c_status" name="trangThai" class="form-select" required>
+                            <option value="DRAFT" {{ old('trangThai', 'DRAFT') == 'DRAFT' ? 'selected' : '' }}>Bản nháp</option>
+                            <option value="PUBLISHED" {{ old('trangThai') == 'PUBLISHED' ? 'selected' : '' }}>Đã công bố</option>
+                            <option value="ARCHIVED" {{ old('trangThai') == 'ARCHIVED' ? 'selected' : '' }}>Đã lưu trữ</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
                         <label for="c_promotion" class="form-label">Khuyến mãi</label>
                         <select
                             id="c_promotion"
@@ -364,7 +370,6 @@
             </form>
         </div>
     </div>
-
     <div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <form
@@ -446,8 +451,9 @@
                     <div class="col-md-6">
                         <label for="e_status" class="form-label">Trạng thái</label>
                         <select id="e_status" name="trangThai" class="form-select">
-                            <option value="PUBLISHED">Đã công bố</option>
                             <option value="DRAFT">Bản nháp</option>
+                            <option value="PUBLISHED">Đã công bố</option>
+                            <option value="ARCHIVED">Đã lưu trữ</option>
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -527,7 +533,6 @@
         </div>
     </div>
 @endsection
-
 @push('scripts')
     <script id="course-promotion-dataset" type="application/json">
         {!! json_encode([
