@@ -610,6 +610,45 @@
     box-shadow: none;
 }
 
+/* Nút trạng thái: Chờ kích hoạt (Màu cam - giống như course card) */
+.combo-card__cta--pending {
+    background: rgba(250, 204, 21, 0.22);
+    color: #b45309;
+    font-weight: 700;
+    border: 1px solid rgba(250, 204, 21, 0.3);
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+.combo-card__cta--pending:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* Nút trạng thái: Đã kích hoạt (Màu xanh lá - giống như course card) */
+.combo-card__cta--activated {
+    background: rgba(16, 185, 129, 0.16);
+    color: #047857;
+    font-weight: 700;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    box-shadow: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 24px;
+    border-radius: 999px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.combo-card__cta--activated:hover {
+    background: rgba(16, 185, 129, 0.24);
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(16, 185, 129, 0.15);
+}
+
 .combo-card--spotlight {
     position: relative;
     border: 1px solid rgba(37, 99, 235, 0.2);
@@ -1241,4 +1280,41 @@
     .combo-highlights__grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* Button states for combo detail page */
+.btn--in-cart {
+    background: rgba(244, 63, 94, 0.15) !important;
+    color: #be123c !important;
+    border: 1px solid rgba(244, 63, 94, 0.25) !important;
+    cursor: not-allowed;
+}
+
+.btn--in-cart:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.btn--pending {
+    background: rgba(250, 204, 21, 0.22) !important;
+    color: #b45309 !important;
+    border: 1px solid rgba(250, 204, 21, 0.3) !important;
+    cursor: not-allowed;
+}
+
+.btn--pending:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.btn--activated {
+    background: rgba(16, 185, 129, 0.16) !important;
+    color: #047857 !important;
+    border: 1px solid rgba(16, 185, 129, 0.25) !important;
+}
+
+.btn--activated:hover {
+    background: rgba(16, 185, 129, 0.24) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 14px 28px rgba(16, 185, 129, 0.2) !important;
 }

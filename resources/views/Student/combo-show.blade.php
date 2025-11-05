@@ -54,8 +54,23 @@
                 </div>
 
                 <div class="combo-detail-actions">
-                    @if($comboInCart)
-                        <a class="btn btn--success btn--lg" href="{{ route('student.cart.index') }}">
+                    @php
+                        $isActive = in_array($combo->maGoi, $activeComboIds ?? [], true);
+                        $isPending = in_array($combo->maGoi, $pendingComboIds ?? [], true);
+                    @endphp
+
+                    @if($isActive)
+                        <a class="btn btn--activated btn--lg" href="{{ route('student.learning.courses') }}">
+                            <i class="fa-solid fa-circle-check"></i>
+                            Đã kích hoạt
+                        </a>
+                    @elseif($isPending)
+                        <button type="button" class="btn btn--pending btn--lg" disabled>
+                            <i class="fa-solid fa-clock"></i>
+                            Chờ kích hoạt
+                        </button>
+                    @elseif($comboInCart)
+                        <a class="btn btn--in-cart btn--lg" href="{{ route('student.cart.index') }}">
                             <i class="fa-solid fa-check"></i>
                             Đã trong giỏ hàng
                         </a>

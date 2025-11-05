@@ -125,6 +125,8 @@
                     @foreach($spotlightCombos as $combo)
                         @php
                             $comboInCart = in_array($combo->maGoi, $comboCartIds ?? [], true);
+                            $isActive = in_array($combo->maGoi, $activeComboIds ?? [], true);
+                            $isPending = in_array($combo->maGoi, $pendingComboIds ?? [], true);
                         @endphp
                         <article class="combo-card combo-card--spotlight" data-combo-id="{{ $combo->maGoi }}">
                             <a class="combo-card__link" href="{{ route('student.combos.show', $combo->slug) }}">
@@ -166,18 +168,30 @@
                                         <span class="combo-card__saving">Tiết kiệm {{ number_format($combo->saving_amount, 0, ',', '.') }} VND</span>
                                     @endif
                                 </div>
-                                <form method="post" action="{{ route('student.cart.store-combo') }}" class="combo-card__action">
-                                    @csrf
-                                    <input type="hidden" name="combo_id" value="{{ $combo->maGoi }}">
-                                    <button
-                                        type="submit"
-                                        class="combo-card__cta {{ $comboInCart ? 'combo-card__cta--in-cart' : '' }}"
-                                        @if($comboInCart) disabled aria-disabled="true" @endif
-                                    >
-                                        <i class="fa-solid {{ $comboInCart ? 'fa-check' : 'fa-cart-plus' }}" aria-hidden="true"></i>
-                                        <span>{{ $comboInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng' }}</span>
+                                @if($isActive)
+                                    <a href="{{ route('student.learning.courses') }}" class="combo-card__cta combo-card__cta--activated">
+                                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                                        <span>Đã kích hoạt</span>
+                                    </a>
+                                @elseif($isPending)
+                                    <button type="button" class="combo-card__cta combo-card__cta--pending" disabled aria-disabled="true">
+                                        <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                                        <span>Chờ kích hoạt</span>
                                     </button>
-                                </form>
+                                @else
+                                    <form method="post" action="{{ route('student.cart.store-combo') }}" class="combo-card__action">
+                                        @csrf
+                                        <input type="hidden" name="combo_id" value="{{ $combo->maGoi }}">
+                                        <button
+                                            type="submit"
+                                            class="combo-card__cta {{ $comboInCart ? 'combo-card__cta--in-cart' : '' }}"
+                                            @if($comboInCart) disabled aria-disabled="true" @endif
+                                        >
+                                            <i class="fa-solid {{ $comboInCart ? 'fa-check' : 'fa-cart-plus' }}" aria-hidden="true"></i>
+                                            <span>{{ $comboInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng' }}</span>
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
                         </article>
                     @endforeach
@@ -204,6 +218,8 @@
                     @foreach($availableCombos as $combo)
                         @php
                             $comboInCart = in_array($combo->maGoi, $comboCartIds ?? [], true);
+                            $isActive = in_array($combo->maGoi, $activeComboIds ?? [], true);
+                            $isPending = in_array($combo->maGoi, $pendingComboIds ?? [], true);
                         @endphp
                         <article class="combo-card" data-combo-id="{{ $combo->maGoi }}">
                             <a class="combo-card__link" href="{{ route('student.combos.show', $combo->slug) }}">
@@ -237,18 +253,30 @@
                                         <span class="combo-card__saving">Tiết kiệm {{ number_format($combo->saving_amount, 0, ',', '.') }} VND</span>
                                     @endif
                                 </div>
-                                <form method="post" action="{{ route('student.cart.store-combo') }}" class="combo-card__action">
-                                    @csrf
-                                    <input type="hidden" name="combo_id" value="{{ $combo->maGoi }}">
-                                    <button
-                                        type="submit"
-                                        class="combo-card__cta {{ $comboInCart ? 'combo-card__cta--in-cart' : '' }}"
-                                        @if($comboInCart) disabled aria-disabled="true" @endif
-                                    >
-                                        <i class="fa-solid {{ $comboInCart ? 'fa-check' : 'fa-cart-plus' }}" aria-hidden="true"></i>
-                                        <span>{{ $comboInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng' }}</span>
+                                @if($isActive)
+                                    <a href="{{ route('student.learning.courses') }}" class="combo-card__cta combo-card__cta--activated">
+                                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                                        <span>Đã kích hoạt</span>
+                                    </a>
+                                @elseif($isPending)
+                                    <button type="button" class="combo-card__cta combo-card__cta--pending" disabled aria-disabled="true">
+                                        <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                                        <span>Chờ kích hoạt</span>
                                     </button>
-                                </form>
+                                @else
+                                    <form method="post" action="{{ route('student.cart.store-combo') }}" class="combo-card__action">
+                                        @csrf
+                                        <input type="hidden" name="combo_id" value="{{ $combo->maGoi }}">
+                                        <button
+                                            type="submit"
+                                            class="combo-card__cta {{ $comboInCart ? 'combo-card__cta--in-cart' : '' }}"
+                                            @if($comboInCart) disabled aria-disabled="true" @endif
+                                        >
+                                            <i class="fa-solid {{ $comboInCart ? 'fa-check' : 'fa-cart-plus' }}" aria-hidden="true"></i>
+                                            <span>{{ $comboInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng' }}</span>
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
                         </article>
                     @endforeach
