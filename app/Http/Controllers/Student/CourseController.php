@@ -196,21 +196,41 @@ class CourseController extends Controller
 
         $result['student'] = $student;
 
+        // Lấy khóa học đơn lẻ từ HOCVIEN_KHOAHOC
         $rows = DB::table('HOCVIEN_KHOAHOC')
-            ->select('maKH', 'trangThai')
+            ->select('maKH', 'trangThai', 'maGoi')
             ->where('maHV', $student->maHV)
             ->get();
 
         $active = [];
         $pending = [];
+        $activeComboIds = [];
 
         foreach ($rows as $row) {
             $courseId = (int) $row->maKH;
+            
+            // Lưu lại combo đã kích hoạt
+            if ($row->maGoi && $row->trangThai === 'ACTIVE') {
+                $activeComboIds[] = (int) $row->maGoi;
+            }
+            
             if ($row->trangThai === 'ACTIVE') {
                 $active[] = $courseId;
             } elseif ($row->trangThai === 'PENDING') {
                 $pending[] = $courseId;
             }
+        }
+
+        // Lấy TẤT CẢ các khóa học trong combo đã kích hoạt
+        if (!empty($activeComboIds)) {
+            $comboCoursesIds = DB::table('GOI_KHOA_HOC_CHITIET')
+                ->whereIn('maGoi', array_unique($activeComboIds))
+                ->pluck('maKH')
+                ->map(fn($id) => (int) $id)
+                ->toArray();
+
+            // Merge với các khóa học đã active, loại bỏ duplicate
+            $active = array_unique(array_merge($active, $comboCoursesIds));
         }
 
         $result['enrolledCourseIds'] = $active;

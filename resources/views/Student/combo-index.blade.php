@@ -128,11 +128,11 @@
                         @endphp
                         <article class="combo-card combo-card--spotlight" data-combo-id="{{ $combo->maGoi }}">
                             <a class="combo-card__link" href="{{ route('student.combos.show', $combo->slug) }}">
-                                <div class="combo-card__badge">
-                                    <i class="fa-solid fa-fire" aria-hidden="true"></i> Được yêu thích
-                                </div>
                                 <div class="combo-card__image">
                                     <img src="{{ $combo->cover_image_url }}" alt="{{ $combo->tenGoi }}" loading="lazy">
+                                    <div class="combo-card__badge">
+                                        <i class="fa-solid fa-fire" aria-hidden="true"></i> Được yêu thích
+                                    </div>
                                     @if($combo->saving_percent > 0)
                                         <span class="combo-card__discount">
                                             Tiết kiệm {{ $combo->saving_percent }}%
