@@ -33,22 +33,6 @@
         <p class="muted">Cấu hình các gói combo, giá bán và khuyến mãi theo dịp.</p>
     </section>
 
-    @if ($errors->any())
-        <div class="alert alert-danger validation-errors" role="alert" id="validation-errors">
-            <h6 class="mb-2">Thông tin chưa hợp lệ, vui lòng kiểm tra:</h6>
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    @if (session('success'))
-        <div class="alert alert-success combos-flash" role="alert">
-            <strong>{{ session('success') }}</strong>
-        </div>
-    @endif
 
 
     <section class="stats-grid combos-stats mb-4">

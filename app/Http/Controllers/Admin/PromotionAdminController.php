@@ -129,9 +129,9 @@ class PromotionAdminController extends Controller
             $validated['giaTriUuDai'] = 0;
         }
 
-        if ($validated['soLuongGioiHan'] === null || $validated['soLuongGioiHan'] === '') {
-            $validated['soLuongGioiHan'] = null;
-        }
+        // if ($validated['soLuongGioiHan'] === null || $validated['soLuongGioiHan'] === '') {
+        //     $validated['soLuongGioiHan'] = null;
+        // }
 
         $validated['giaTriUuDai'] = round((float) $validated['giaTriUuDai'], 2);
         $validated['apDungCho'] = strtoupper($validated['apDungCho']);

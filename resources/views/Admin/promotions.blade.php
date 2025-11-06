@@ -333,11 +333,11 @@
                         <label class="form-label">Ngày kết thúc <span class="text-danger">*</span></label>
                         <input type="date" name="ngayKetThuc" class="form-control" value="{{ old('ngayKetThuc') }}" required>
                     </div>
-                    <div class="col-md-6">
+                    {{-- <div class="col-md-6">
                         <label class="form-label">Giới hạn số lần <span class="text-muted">(tùy chọn)</span></label>
                         <input type="number" name="soLuongGioiHan" class="form-control" value="{{ old('soLuongGioiHan') }}" min="1">
                         <div class="form-text">Để trống nếu không giới hạn.</div>
-                    </div>
+                    </div> --}}
                     <div class="col-md-6">
                         <label class="form-label">Trạng thái <span class="text-danger">*</span></label>
                         <select name="trangThai" class="form-select" required>
@@ -406,11 +406,11 @@
                         <label class="form-label">Ngày kết thúc <span class="text-danger">*</span></label>
                         <input type="date" name="ngayKetThuc" class="form-control" required>
                     </div>
-                    <div class="col-md-6">
+                    {{-- <div class="col-md-6">
                         <label class="form-label">Giới hạn số lần</label>
                         <input type="number" name="soLuongGioiHan" class="form-control" min="1">
                         <div class="form-text">Để trống nếu không giới hạn.</div>
-                    </div>
+                    </div> --}}
                     <div class="col-md-6">
                         <label class="form-label">Trạng thái <span class="text-danger">*</span></label>
                         <select name="trangThai" class="form-select" required>
