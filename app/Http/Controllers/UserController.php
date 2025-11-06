@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
+use Laravel\Socialite\Facades\Socialite;
 
 class UserController extends Controller
 {
@@ -322,5 +323,25 @@ class UserController extends Controller
         }
 
         return $verified;
+    }
+
+    public function handleGoogleCallback()
+    {
+        $googleUser = Socialite::driver('google')->user();
+
+        $user = User::where('email', $googleUser->getEmail())->first();
+
+        if (!$user) {
+            $user = User::create([
+                'hoTen' => $googleUser->getName(),
+                'email' => $googleUser->getEmail(),
+                'matKhau' => bcrypt(uniqid()), // random password
+                'vaiTro' => 'HOC_VIEN',
+            ]);
+        }
+
+        auth()->login($user);
+
+        return redirect('/'); // hoặc route dashboard
     }
 }

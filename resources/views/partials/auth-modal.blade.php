@@ -1,4 +1,8 @@
-<div class="modal fade auth-modal" id="authModal" tabindex="-1" aria-hidden="true">
+@php($authRedirect = request('redirect', url()->current()))
+
+<div class="modal fade auth-modal" id="authModal" tabindex="-1" aria-hidden="true"
+     data-open-on-load="{{ session()->has('error') ? 'true' : 'false' }}"
+     data-default-panel="{{ old('name') || old('phone') ? 'register' : 'login' }}">
     <div class="modal-dialog modal-lg modal-dialog-centered auth-modal-dialog">
         <div class="modal-content auth-modal-content">
             <div class="modal-body p-0 auth-modal-body">
@@ -8,13 +12,19 @@
                 <div class="auth-form-container sign-up-container">
                     <form class="auth-form" id="signupForm" action="{{ route('users.store') }}" method="post" novalidate>
                     @csrf
-                    <input type="hidden" name="redirect" value="{{ request('redirect', url()->current()) }}">
+                    <input type="hidden" name="redirect" value="{{ $authRedirect }}">
                     <h1 class="auth-title">Đăng Ký</h1>
                     <!-- Social login buttons -->
                     <div class="auth-social-container">
-                        <a class="auth-social" href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a class="auth-social" href="#"><i class="fab fa-google"></i></a>
-                        <a class="auth-social" href="#"><i class="fab fa-github"></i></a>
+                        <a
+                            class="auth-social auth-social--google"
+                            data-auth-provider-link="google"
+                            data-provider-url="{{ route('student.auth.google.redirect') }}"
+                            href="{{ route('student.auth.google.redirect', ['redirect' => $authRedirect]) }}"
+                            title="Đăng ký nhanh với Google"
+                        >
+                            <i class="fab fa-google"></i>
+                        </a>
                     </div>
                     <span class="auth-subtitle">hoặc sử dụng email của bạn để đăng ký</span>
 
@@ -106,12 +116,18 @@
                 <div class="auth-form-container sign-in-container">
                     <form class="auth-form" id="loginForm" action="{{ route('users.login') }}" method="post" novalidate>
                     @csrf
-                    <input type="hidden" name="redirect" value="{{ request('redirect', url()->current()) }}">
+                    <input type="hidden" name="redirect" value="{{ $authRedirect }}">
                     <h1 class="auth-title">Đăng Nhập</h1>
                     <div class="auth-social-container">
-                        <a class="auth-social" href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a class="auth-social" href="#"><i class="fab fa-google"></i></a>
-                        <a class="auth-social" href="#"><i class="fab fa-github"></i></a>
+                        <a
+                            class="auth-social auth-social--google"
+                            data-auth-provider-link="google"
+                            data-provider-url="{{ route('student.auth.google.redirect') }}"
+                            href="{{ route('student.auth.google.redirect', ['redirect' => $authRedirect]) }}"
+                            title="Đăng nhập bằng Google"
+                        >
+                            <i class="fab fa-google"></i>
+                        </a>
                     </div>
                     <span class="auth-subtitle">hoặc sử dụng tài khoản của bạn</span>
 
@@ -222,297 +238,5 @@
     </div>
 </div>
 
-@if(session('error'))
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const authModal = new bootstrap.Modal(document.getElementById('authModal'));
-        const authContainer = document.getElementById('authContainer');
-        
-        // Nếu có old input từ form đăng ký (name, phone) thì mở form đăng ký
-        @if(old('name') || old('phone'))
-            authContainer.classList.add('right-panel-active');
-        @else
-            // Ngược lại giữ form đăng nhập
-            authContainer.classList.remove('right-panel-active');
-        @endif
-        
-        authModal.show();
-    });
-</script>
-@endif
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Validation rules
-    const validationRules = {
-        name: {
-            minLength: 2,
-            maxLength: 255,
-            pattern: /^.{2,255}$/,
-            message: 'Họ tên phải có ít nhất 2 ký tự'
-        },
-        email: {
-            pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            message: 'Email không đúng định dạng (VD: example@gmail.com)'
-        },
-        phone: {
-            pattern: /^0\d{9,10}$/,
-            minLength: 10,
-            maxLength: 11,
-            message: 'Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 0'
-        },
-        password: {
-            minLength: 6,
-            maxLength: 32,
-            message: 'Mật khẩu phải có từ 6-32 ký tự'
-        }
-    };
-
-    // Get form elements
-    const signupForm = document.getElementById('signupForm');
-    const nameInput = document.getElementById('signup-name');
-    const emailInput = document.getElementById('signup-email');
-    const phoneInput = document.getElementById('signup-phone');
-    const passwordInput = document.getElementById('signup-password');
-    const passwordConfirmInput = document.getElementById('signup-password-confirm');
-
-    // Validate name
-    function validateName(value) {
-        if (!value || value.trim().length === 0) {
-            return 'Vui lòng nhập họ tên';
-        }
-        if (value.length < validationRules.name.minLength) {
-            return validationRules.name.message;
-        }
-        if (value.length > validationRules.name.maxLength) {
-            return 'Họ tên không được vượt quá 255 ký tự';
-        }
-        return '';
-    }
-
-    // Validate email
-    function validateEmail(value) {
-        if (!value || value.trim().length === 0) {
-            return 'Vui lòng nhập email';
-        }
-        if (!validationRules.email.pattern.test(value)) {
-            return validationRules.email.message;
-        }
-        if (value.length > 255) {
-            return 'Email không được vượt quá 255 ký tự';
-        }
-        return '';
-    }
-
-    // Validate phone
-    function validatePhone(value) {
-        if (!value || value.trim().length === 0) {
-            return 'Vui lòng nhập số điện thoại';
-        }
-        // Remove non-digit characters
-        const cleanValue = value.replace(/[^0-9]/g, '');
-        if (cleanValue.length < validationRules.phone.minLength) {
-            return 'Số điện thoại phải có ít nhất 10 số';
-        }
-        if (cleanValue.length > validationRules.phone.maxLength) {
-            return 'Số điện thoại không được vượt quá 11 số';
-        }
-        if (!validationRules.phone.pattern.test(cleanValue)) {
-            return validationRules.phone.message;
-        }
-        return '';
-    }
-
-    // Validate password
-    function validatePassword(value) {
-        if (!value || value.length === 0) {
-            return 'Vui lòng nhập mật khẩu';
-        }
-        if (value.length < validationRules.password.minLength) {
-            return 'Mật khẩu phải có ít nhất 6 ký tự';
-        }
-        if (value.length > validationRules.password.maxLength) {
-            return 'Mật khẩu không được vượt quá 32 ký tự';
-        }
-        return '';
-    }
-
-    // Validate password confirmation
-    function validatePasswordConfirm(value, passwordValue) {
-        if (!value || value.length === 0) {
-            return 'Vui lòng xác nhận mật khẩu';
-        }
-        if (value !== passwordValue) {
-            return 'Xác nhận mật khẩu không khớp';
-        }
-        return '';
-    }
-
-    // Show error message
-    function showError(input, errorDiv, message) {
-        if (message) {
-            input.classList.add('is-invalid');
-            errorDiv.textContent = message;
-        } else {
-            input.classList.remove('is-invalid');
-            errorDiv.textContent = '';
-        }
-    }
-
-    // Real-time validation
-    if (nameInput) {
-        nameInput.addEventListener('input', function() {
-            const error = validateName(this.value);
-            showError(this, document.getElementById('name-error'), error);
-        });
-
-        nameInput.addEventListener('blur', function() {
-            const error = validateName(this.value);
-            showError(this, document.getElementById('name-error'), error);
-        });
-    }
-
-    if (emailInput) {
-        emailInput.addEventListener('input', function() {
-            const error = validateEmail(this.value);
-            showError(this, document.getElementById('email-error'), error);
-        });
-
-        emailInput.addEventListener('blur', function() {
-            const error = validateEmail(this.value);
-            showError(this, document.getElementById('email-error'), error);
-        });
-    }
-
-    if (phoneInput) {
-        phoneInput.addEventListener('input', function() {
-            // Only allow digits
-            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);
-            const error = validatePhone(this.value);
-            showError(this, document.getElementById('phone-error'), error);
-        });
-
-        phoneInput.addEventListener('blur', function() {
-            const error = validatePhone(this.value);
-            showError(this, document.getElementById('phone-error'), error);
-        });
-    }
-
-    if (passwordInput) {
-        passwordInput.addEventListener('input', function() {
-            const error = validatePassword(this.value);
-            showError(this, document.getElementById('password-error'), error);
-            
-            // Re-validate password confirmation if it has value
-            if (passwordConfirmInput && passwordConfirmInput.value) {
-                const confirmError = validatePasswordConfirm(passwordConfirmInput.value, this.value);
-                showError(passwordConfirmInput, document.getElementById('password-confirm-error'), confirmError);
-            }
-        });
-
-        passwordInput.addEventListener('blur', function() {
-            const error = validatePassword(this.value);
-            showError(this, document.getElementById('password-error'), error);
-        });
-    }
-
-    if (passwordConfirmInput) {
-        passwordConfirmInput.addEventListener('input', function() {
-            const error = validatePasswordConfirm(this.value, passwordInput.value);
-            showError(this, document.getElementById('password-confirm-error'), error);
-        });
-
-        passwordConfirmInput.addEventListener('blur', function() {
-            const error = validatePasswordConfirm(this.value, passwordInput.value);
-            showError(this, document.getElementById('password-confirm-error'), error);
-        });
-    }
-
-    // Form submission validation - Signup
-    if (signupForm) {
-        signupForm.addEventListener('submit', function(e) {
-            let hasError = false;
-
-            // Validate all fields
-            const nameError = validateName(nameInput.value);
-            showError(nameInput, document.getElementById('name-error'), nameError);
-            if (nameError) hasError = true;
-
-            const emailError = validateEmail(emailInput.value);
-            showError(emailInput, document.getElementById('email-error'), emailError);
-            if (emailError) hasError = true;
-
-            const phoneError = validatePhone(phoneInput.value);
-            showError(phoneInput, document.getElementById('phone-error'), phoneError);
-            if (phoneError) hasError = true;
-
-            const passwordError = validatePassword(passwordInput.value);
-            showError(passwordInput, document.getElementById('password-error'), passwordError);
-            if (passwordError) hasError = true;
-
-            const confirmError = validatePasswordConfirm(passwordConfirmInput.value, passwordInput.value);
-            showError(passwordConfirmInput, document.getElementById('password-confirm-error'), confirmError);
-            if (confirmError) hasError = true;
-
-            if (hasError) {
-                e.preventDefault();
-                return false;
-            }
-        });
-    }
-
-    // ===================== LOGIN FORM VALIDATION =====================
-    const loginForm = document.getElementById('loginForm');
-    const loginEmailInput = document.getElementById('login-email');
-    const loginPasswordInput = document.getElementById('login-password');
-
-    // Real-time validation for login email
-    if (loginEmailInput) {
-        loginEmailInput.addEventListener('input', function() {
-            const error = validateEmail(this.value);
-            showError(this, document.getElementById('login-email-error'), error);
-        });
-
-        loginEmailInput.addEventListener('blur', function() {
-            const error = validateEmail(this.value);
-            showError(this, document.getElementById('login-email-error'), error);
-        });
-    }
-
-    // Real-time validation for login password
-    if (loginPasswordInput) {
-        loginPasswordInput.addEventListener('input', function() {
-            const error = validatePassword(this.value);
-            showError(this, document.getElementById('login-password-error'), error);
-        });
-
-        loginPasswordInput.addEventListener('blur', function() {
-            const error = validatePassword(this.value);
-            showError(this, document.getElementById('login-password-error'), error);
-        });
-    }
-
-    // Form submission validation - Login
-    if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
-            let hasError = false;
-
-            // Validate email
-            const emailError = validateEmail(loginEmailInput.value);
-            showError(loginEmailInput, document.getElementById('login-email-error'), emailError);
-            if (emailError) hasError = true;
-
-            // Validate password
-            const passwordError = validatePassword(loginPasswordInput.value);
-            showError(loginPasswordInput, document.getElementById('login-password-error'), passwordError);
-            if (passwordError) hasError = true;
-
-            if (hasError) {
-                e.preventDefault();
-                return false;
-            }
-        });
-    }
-});
-</script>
 

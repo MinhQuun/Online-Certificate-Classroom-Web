@@ -59,6 +59,7 @@ use App\Http\Controllers\Student\LessonDiscussionController as StudentLessonDisc
 use App\Http\Controllers\Student\ContactController;
 use App\Http\Controllers\Student\ProfileController;
 use App\Http\Controllers\Student\MyCoursesController;
+use App\Http\Controllers\Student\GoogleAuthController;
 use App\Http\Controllers\Payment\VNPayController;
 
 /*
@@ -136,6 +137,8 @@ Route::get('/register', function (Request $request) {
 
 // Xử lý form đăng nhập/đăng ký/đăng xuất
 Route::post('/login',    [UserController::class, 'login'])->name('users.login');
+Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('student.auth.google.redirect');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('student.auth.google.callback');
 Route::post('/register', [UserController::class, 'store'])->name('users.store');
 Route::post('/logout',   [UserController::class, 'logout'])->name('logout');
 

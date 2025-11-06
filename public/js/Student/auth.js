@@ -55,7 +55,7 @@ function showToast(message, type = "success", duration = 4200, title) {
     const ms = Number(duration || card.dataset.autohide || 4200);
     const timer = setTimeout(remove, ms);
 
-    card.querySelector('.toast-close')?.addEventListener('click', () => {
+    card.querySelector(".toast-close")?.addEventListener("click", () => {
         clearTimeout(timer);
         remove();
     });
@@ -65,14 +65,14 @@ function showToast(message, type = "success", duration = 4200, title) {
 // ===================== Clear form errors =====================
 function clearFormErrors() {
     // Clear all error messages
-    qsa('.auth-error').forEach(errorDiv => {
-        errorDiv.textContent = '';
+    qsa(".auth-error").forEach((errorDiv) => {
+        errorDiv.textContent = "";
     });
-    
+
     // Remove invalid class from inputs
-    qsa('.auth-input').forEach(input => {
-        input.classList.remove('is-invalid');
-        input.classList.remove('is-valid');
+    qsa(".auth-input").forEach((input) => {
+        input.classList.remove("is-invalid");
+        input.classList.remove("is-valid");
     });
 }
 
@@ -87,7 +87,7 @@ function clearFormErrors() {
         clearFormErrors();
         container.classList.add("right-panel-active");
     });
-    
+
     signInButton.addEventListener("click", () => {
         clearFormErrors();
         container.classList.remove("right-panel-active");
@@ -128,11 +128,277 @@ document.addEventListener("click", (e) => {
     }
 });
 
+// ===================== Modal defaults & form validation =====================
+document.addEventListener("DOMContentLoaded", () => {
+    const authModalEl = qs("#authModal");
+    const authContainer = qs("#authContainer");
+    const defaultPanel = (
+        authModalEl?.dataset.defaultPanel || "login"
+    ).toLowerCase();
+
+    if (authContainer) {
+        authContainer.classList.toggle(
+            "right-panel-active",
+            defaultPanel === "register"
+        );
+    }
+
+    if (authModalEl?.dataset.openOnLoad === "true") {
+        if (typeof openLoginModal === "function") {
+            openLoginModal(undefined, defaultPanel);
+        } else if (window.bootstrap?.Modal && authModalEl) {
+            const ModalCtor = window.bootstrap.Modal;
+            const modalInstance =
+                typeof ModalCtor.getOrCreateInstance === "function"
+                    ? ModalCtor.getOrCreateInstance(authModalEl)
+                    : new ModalCtor(authModalEl);
+            modalInstance?.show?.();
+        }
+    }
+
+    const signupForm = qs("#signupForm");
+    const nameInput = qs("#signup-name");
+    const emailInput = qs("#signup-email");
+    const phoneInput = qs("#signup-phone");
+    const passwordInput = qs("#signup-password");
+    const passwordConfirmInput = qs("#signup-password-confirm");
+    const loginForm = qs("#loginForm");
+    const loginEmailInput = qs("#login-email");
+    const loginPasswordInput = qs("#login-password");
+
+    const nameError = qs("#name-error");
+    const emailError = qs("#email-error");
+    const phoneError = qs("#phone-error");
+    const passwordError = qs("#password-error");
+    const passwordConfirmError = qs("#password-confirm-error");
+    const loginEmailError = qs("#login-email-error");
+    const loginPasswordError = qs("#login-password-error");
+
+    const validationRules = {
+        name: { minLength: 2, maxLength: 255 },
+        email: { maxLength: 255, pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ },
+        phone: { minLength: 10, maxLength: 11, pattern: /^0\d{9,10}$/ },
+        password: { minLength: 6, maxLength: 32 },
+    };
+
+    const validateName = (value = "") => {
+        const trimmed = value.trim();
+        if (!trimmed) return "Vui lòng nhập họ tên";
+        if (trimmed.length < validationRules.name.minLength) {
+            return "Họ tên phải có ít nhất 2 ký tự";
+        }
+        if (trimmed.length > validationRules.name.maxLength) {
+            return "Họ tên không được vượt quá 255 ký tự";
+        }
+        return "";
+    };
+
+    const validateEmail = (value = "") => {
+        const trimmed = value.trim();
+        if (!trimmed) return "Vui lòng nhập email";
+        if (trimmed.length > validationRules.email.maxLength) {
+            return "Email không được vượt quá 255 ký tự";
+        }
+        if (!validationRules.email.pattern.test(trimmed)) {
+            return "Email không đúng định dạng (VD: example@gmail.com)";
+        }
+        return "";
+    };
+
+    const validatePhone = (value = "") => {
+        const digits = value.replace(/\D/g, "");
+        if (!digits) return "Vui lòng nhập số điện thoại";
+        if (digits.length < validationRules.phone.minLength) {
+            return "Số điện thoại phải có ít nhất 10 số";
+        }
+        if (digits.length > validationRules.phone.maxLength) {
+            return "Số điện thoại không được vượt quá 11 số";
+        }
+        if (!validationRules.phone.pattern.test(digits)) {
+            return "Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 0";
+        }
+        return "";
+    };
+
+    const validatePassword = (value = "") => {
+        if (!value) return "Vui lòng nhập mật khẩu";
+        if (value.length < validationRules.password.minLength) {
+            return "Mật khẩu phải có ít nhất 6 ký tự";
+        }
+        if (value.length > validationRules.password.maxLength) {
+            return "Mật khẩu không được vượt quá 32 ký tự";
+        }
+        return "";
+    };
+
+    const validatePasswordConfirm = (value = "", passwordValue = "") => {
+        if (!value) return "Vui lòng xác nhận mật khẩu";
+        if (value !== passwordValue) return "Xác nhận mật khẩu không khớp";
+        return "";
+    };
+
+    const showError = (input, errorEl, message) => {
+        if (!input || !errorEl) return;
+        if (message) {
+            input.classList.add("is-invalid");
+            errorEl.textContent = message;
+        } else {
+            input.classList.remove("is-invalid");
+            errorEl.textContent = "";
+        }
+    };
+
+    if (nameInput && nameError) {
+        const handle = () => {
+            const error = validateName(nameInput.value);
+            showError(nameInput, nameError, error);
+        };
+        nameInput.addEventListener("input", handle);
+        nameInput.addEventListener("blur", handle);
+    }
+
+    if (emailInput && emailError) {
+        const handle = () => {
+            const error = validateEmail(emailInput.value);
+            showError(emailInput, emailError, error);
+        };
+        emailInput.addEventListener("input", handle);
+        emailInput.addEventListener("blur", handle);
+    }
+
+    if (phoneInput && phoneError) {
+        phoneInput.addEventListener("input", () => {
+            phoneInput.value = phoneInput.value
+                .replace(/\D/g, "")
+                .slice(0, validationRules.phone.maxLength);
+            const error = validatePhone(phoneInput.value);
+            showError(phoneInput, phoneError, error);
+        });
+        phoneInput.addEventListener("blur", () => {
+            const error = validatePhone(phoneInput.value);
+            showError(phoneInput, phoneError, error);
+        });
+    }
+
+    if (passwordInput && passwordError) {
+        passwordInput.addEventListener("input", () => {
+            const error = validatePassword(passwordInput.value);
+            showError(passwordInput, passwordError, error);
+
+            if (
+                passwordConfirmInput &&
+                passwordConfirmError &&
+                passwordConfirmInput.value
+            ) {
+                const confirmError = validatePasswordConfirm(
+                    passwordConfirmInput.value,
+                    passwordInput.value
+                );
+                showError(
+                    passwordConfirmInput,
+                    passwordConfirmError,
+                    confirmError
+                );
+            }
+        });
+        passwordInput.addEventListener("blur", () => {
+            const error = validatePassword(passwordInput.value);
+            showError(passwordInput, passwordError, error);
+        });
+    }
+
+    if (passwordConfirmInput && passwordConfirmError) {
+        const handle = () => {
+            const error = validatePasswordConfirm(
+                passwordConfirmInput.value,
+                passwordInput?.value || ""
+            );
+            showError(passwordConfirmInput, passwordConfirmError, error);
+        };
+        passwordConfirmInput.addEventListener("input", handle);
+        passwordConfirmInput.addEventListener("blur", handle);
+    }
+
+    if (signupForm) {
+        signupForm.addEventListener("submit", (e) => {
+            let hasError = false;
+            const validations = [
+                [nameInput, nameError, validateName],
+                [emailInput, emailError, validateEmail],
+                [phoneInput, phoneError, validatePhone],
+                [passwordInput, passwordError, validatePassword],
+                [
+                    passwordConfirmInput,
+                    passwordConfirmError,
+                    (value) =>
+                        validatePasswordConfirm(
+                            value,
+                            passwordInput?.value || ""
+                        ),
+                ],
+            ];
+
+            validations.forEach(([input, errorEl, validator]) => {
+                if (!input || !errorEl) return;
+                const message = validator(input.value);
+                showError(input, errorEl, message);
+                if (message) hasError = true;
+            });
+
+            if (hasError) {
+                e.preventDefault();
+            }
+        });
+    }
+
+    if (loginEmailInput && loginEmailError) {
+        const handle = () => {
+            const error = validateEmail(loginEmailInput.value);
+            showError(loginEmailInput, loginEmailError, error);
+        };
+        loginEmailInput.addEventListener("input", handle);
+        loginEmailInput.addEventListener("blur", handle);
+    }
+
+    if (loginPasswordInput && loginPasswordError) {
+        const handle = () => {
+            const error = validatePassword(loginPasswordInput.value);
+            showError(loginPasswordInput, loginPasswordError, error);
+        };
+        loginPasswordInput.addEventListener("input", handle);
+        loginPasswordInput.addEventListener("blur", handle);
+    }
+
+    if (loginForm) {
+        loginForm.addEventListener("submit", (e) => {
+            let hasError = false;
+            if (loginEmailInput && loginEmailError) {
+                const emailMessage = validateEmail(loginEmailInput.value);
+                showError(loginEmailInput, loginEmailError, emailMessage);
+                if (emailMessage) hasError = true;
+            }
+            if (loginPasswordInput && loginPasswordError) {
+                const passwordMessage = validatePassword(
+                    loginPasswordInput.value
+                );
+                showError(
+                    loginPasswordInput,
+                    loginPasswordError,
+                    passwordMessage
+                );
+                if (passwordMessage) hasError = true;
+            }
+            if (hasError) {
+                e.preventDefault();
+            }
+        });
+    }
+});
+
 // ===================== Redirect handling =====================
 let _redirectValue = "";
 function setRedirectInputs(val) {
-    if (!val) return;
-    _redirectValue = val;
+    _redirectValue = val || "";
     qsa("#authModal form.auth-form").forEach((form) => {
         let input = form.querySelector('input[name="redirect"]');
         if (!input) {
@@ -141,7 +407,23 @@ function setRedirectInputs(val) {
             input.name = "redirect";
             form.appendChild(input);
         }
-        input.value = val;
+        input.value = _redirectValue;
+    });
+
+    qsa("[data-auth-provider-link]").forEach((link) => {
+        const base = link.dataset.providerUrl || link.href;
+        if (!base) return;
+        try {
+            const url = new URL(base, window.location.origin);
+            if (_redirectValue) {
+                url.searchParams.set("redirect", _redirectValue);
+            } else {
+                url.searchParams.delete("redirect");
+            }
+            link.href = url.toString();
+        } catch (error) {
+            console.warn("Không thể cập nhật URL đăng nhập Google.", error);
+        }
     });
 }
 function getRedirectFrom(url) {

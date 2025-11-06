@@ -32,9 +32,11 @@ cũng không thấy được, nên buộc phải tự tạo)
 
 10. Chạy lệnh composer require laravel/sanctum để cài xác thực (authentication) cho API và SPA
 
-11. Chạy lệnh  npm install  để cài đặt
+11. Chạy lệnh composer require laravel/socialite : thư viện hỗ trợ OAuth (Google, Facebook, GitHub...)
 
-12. Khởi động server: php artisan serve
+12. Chạy lệnh  npm install  để cài đặt
+
+13. Khởi động server: php artisan serve
 
 # Clear cache (nếu lỗi view/config)
 php artisan cache:clear

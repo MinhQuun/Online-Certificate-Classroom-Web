@@ -24,10 +24,14 @@ CREATE TABLE NGUOIDUNG (
     hoTen VARCHAR(100) NOT NULL,              -- Họ tên đầy đủ
     email VARCHAR(255) NOT NULL UNIQUE,       -- Email duy nhất
     sdt VARCHAR(20) UNIQUE,                   -- Số điện thoại duy nhất
+    google_id VARCHAR(191) NULL UNIQUE,      -- ID Google (nếu đăng nhập bằng Google)
     matKhau VARCHAR(255) NOT NULL,            -- Mật khẩu (hashed)
+    remember_token VARCHAR(100) NULL,
     chuyenMon VARCHAR(255),                   -- Chuyên môn (cho giảng viên)
+    avatar VARCHAR(700) NULL,               -- Ảnh đại diện
     vaiTro ENUM('ADMIN','GIAO_VU','GIANG_VIEN','HOC_VIEN') DEFAULT 'HOC_VIEN',  -- Vai trò mặc định là học viên
     trangThai ENUM('ACTIVE','INACTIVE') DEFAULT 'ACTIVE',                       -- Trạng thái hoạt động
+    email_verified_at DATETIME NULL,        -- Thời điểm xác thực email
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (maND)

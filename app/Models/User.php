@@ -29,6 +29,9 @@ class User extends Authenticatable
         'chuyenMon',
         'vaiTro',
         'trangThai',
+        'google_id',
+        'avatar',
+        'email_verified_at',
     ];
 
     protected $hidden = [
