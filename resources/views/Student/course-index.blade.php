@@ -105,7 +105,7 @@
                                         $statusLabel = 'Chờ kích hoạt';
                                         $statusClass = 'pending';
                                     }
-                                    $ctaClass = $isActive ? 'course-card__cta--active' : ($isPending ? 'course-card__cta--pending' : '');
+                                    $ctaClass = $isActive ? 'course-card__cta--active' : ($isPending ? 'course-card__cta--pending' : ($inCart ? 'course-card__cta--in-cart' : ''));
                                 @endphp
                                 <article class="course-card">
                                     <div class="course-card__category">

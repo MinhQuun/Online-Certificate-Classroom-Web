@@ -109,6 +109,9 @@
     background: linear-gradient(135deg, #ffc107, #fd7e14) !important;
     color: #000 !important;
 }
+.badge.text-bg-secondary {
+    background: linear-gradient(135deg, #6c757d, #adb5bd) !important;
+}
 
 /* ================== Action buttons ================== */
 .td-actions {

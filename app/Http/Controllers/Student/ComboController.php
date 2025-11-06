@@ -7,6 +7,8 @@ use App\Models\Combo;
 use App\Support\Cart\StudentComboCart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ComboController extends Controller
@@ -49,12 +51,16 @@ class ComboController extends Controller
             ->limit(3)
             ->get();
 
+        $enrollment = $this->resolveComboEnrollment();
+
         return view('Student.combo-index', [
             'search' => $search,
             'availableCombos' => $availableCombos,
             'upcomingCombos' => $upcomingCombos,
             'spotlightCombos' => $spotlightCombos,
             'comboCartIds' => StudentComboCart::ids(),
+            'activeComboIds' => $enrollment['activeComboIds'],
+            'pendingComboIds' => $enrollment['pendingComboIds'],
         ]);
     }
 
@@ -76,11 +82,69 @@ class ComboController extends Controller
             ->limit(4)
             ->get();
 
+        $enrollment = $this->resolveComboEnrollment();
+
         return view('Student.combo-show', [
             'combo' => $combo,
             'isAvailable' => $isAvailable,
             'relatedCombos' => $relatedCombos,
             'comboInCart' => StudentComboCart::has($combo->maGoi),
+            'activeComboIds' => $enrollment['activeComboIds'],
+            'pendingComboIds' => $enrollment['pendingComboIds'],
         ]);
+    }
+
+    /**
+     * Resolve combo enrollment status for authenticated student
+     */
+    private function resolveComboEnrollment(): array
+    {
+        $result = [
+            'isAuthenticated'  => false,
+            'student'          => null,
+            'activeComboIds'   => [],
+            'pendingComboIds'  => [],
+        ];
+
+        $userId = Auth::id();
+
+        if (!$userId) {
+            return $result;
+        }
+
+        $result['isAuthenticated'] = true;
+
+        $student = DB::table('HOCVIEN')->where('maND', $userId)->first();
+
+        if (!$student) {
+            return $result;
+        }
+
+        $result['student'] = $student;
+
+        // Lấy tất cả combo từ HOCVIEN_KHOAHOC (có maGoi không null)
+        $comboEnrollments = DB::table('HOCVIEN_KHOAHOC')
+            ->select('maGoi', 'trangThai')
+            ->where('maHV', $student->maHV)
+            ->whereNotNull('maGoi')
+            ->get();
+
+        $active = [];
+        $pending = [];
+
+        foreach ($comboEnrollments as $enrollment) {
+            $comboId = (int) $enrollment->maGoi;
+            
+            if ($enrollment->trangThai === 'ACTIVE') {
+                $active[] = $comboId;
+            } elseif ($enrollment->trangThai === 'PENDING') {
+                $pending[] = $comboId;
+            }
+        }
+
+        $result['activeComboIds'] = array_unique($active);
+        $result['pendingComboIds'] = array_unique($pending);
+
+        return $result;
     }
 }

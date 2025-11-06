@@ -85,6 +85,11 @@ class Course extends Model
         return $query->where('trangThai', 'PUBLISHED');
     }
 
+    public function scopeArchived($query)
+    {
+        return $query->where('trangThai', 'ARCHIVED');
+    }
+
     /* ---------------- Accessors ---------------- */
 
     public function getCoverImageUrlAttribute(): string

@@ -89,7 +89,22 @@ class ComboAdminController extends Controller
             ]);
         }
 
+        $selectedPromotion = null;
+        if (!empty($validated['promotion_id'])) {
+            $selectedPromotion = Promotion::find($validated['promotion_id']);
+
+            if (!$selectedPromotion) {
+                throw ValidationException::withMessages([
+                    'promotion_id' => 'Khuyến mãi không hợp lệ.',
+                ]);
+            }
+        }
+
         $promotionPrice = $validated['promotion_price'] ?? null;
+        if ($selectedPromotion && $selectedPromotion->loaiUuDai === Promotion::TYPE_GIFT) {
+            $promotionPrice = null;
+        }
+
         if ($promotionPrice !== null && $promotionPrice > $validated['gia']) {
             throw ValidationException::withMessages([
                 'promotion_price' => 'Giá ưu đãi phải nhỏ hơn hoặc bằng giá combo.',
@@ -120,7 +135,7 @@ class ComboAdminController extends Controller
 
         $combo->courses()->sync($coursePayload['pivot']);
 
-        $this->syncPromotion($combo, $validated['promotion_id'] ?? null, $promotionPrice);
+        $this->syncPromotion($combo, $selectedPromotion, $promotionPrice);
 
         return redirect()
             ->route('admin.combos.index')
@@ -139,7 +154,22 @@ class ComboAdminController extends Controller
             ]);
         }
 
+        $selectedPromotion = null;
+        if (!empty($validated['promotion_id'])) {
+            $selectedPromotion = Promotion::find($validated['promotion_id']);
+
+            if (!$selectedPromotion) {
+                throw ValidationException::withMessages([
+                    'promotion_id' => 'Khuyến mãi không hợp lệ.',
+                ]);
+            }
+        }
+
         $promotionPrice = $validated['promotion_price'] ?? null;
+        if ($selectedPromotion && $selectedPromotion->loaiUuDai === Promotion::TYPE_GIFT) {
+            $promotionPrice = null;
+        }
+
         if ($promotionPrice !== null && $promotionPrice > $validated['gia']) {
             throw ValidationException::withMessages([
                 'promotion_price' => 'Giá ưu đãi phải nhỏ hơn hoặc bằng giá combo.',
@@ -169,7 +199,7 @@ class ComboAdminController extends Controller
 
         $combo->courses()->sync($coursePayload['pivot']);
 
-        $this->syncPromotion($combo, $validated['promotion_id'] ?? null, $promotionPrice);
+        $this->syncPromotion($combo, $selectedPromotion, $promotionPrice);
 
         return redirect()
             ->route('admin.combos.index', $request->query())
@@ -292,26 +322,22 @@ class ComboAdminController extends Controller
         ];
     }
 
-    protected function syncPromotion(Combo $combo, $promotionId, $promotionPrice): void
+    protected function syncPromotion(Combo $combo, ?Promotion $promotion, $promotionPrice): void
     {
-        if (!$promotionId) {
+        if (!$promotion) {
             $combo->promotions()->sync([]);
 
             return;
         }
 
-        $promotion = Promotion::find($promotionId);
-
-        if (!$promotion) {
+        if (!in_array($promotion->apDungCho, [Promotion::TARGET_COMBO, Promotion::TARGET_BOTH], true)) {
             throw ValidationException::withMessages([
-                'promotion_id' => 'Khuyến mãi không hợp lệ.',
+                'promotion_id' => 'Khuyến mãi không áp dụng cho combo.',
             ]);
         }
 
-        if (!in_array($promotion->apDungCho, [Promotion::TARGET_COMBO, Promotion::TARGET_BOTH], true)) {
-            throw ValidationException::withMessages([
-                'promotion_id' => 'Khuy?n m?i kh?ng ?p d?ng cho combo.',
-            ]);
+        if ($promotion->loaiUuDai === Promotion::TYPE_GIFT) {
+            $promotionPrice = null;
         }
 
         $payload = [

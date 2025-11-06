@@ -83,6 +83,7 @@ class CourseAdminController extends Controller
             'thoiHanNgay' => 'required|integer|min:1',
             'promotion_id' => ['nullable','integer','exists:KHUYEN_MAI,maKM'],
             'promotion_price' => ['nullable','numeric','min:0'],
+            'trangThai'   => 'required|in:DRAFT,PUBLISHED,ARCHIVED',
         ]);
 
         $tuition = (float) $request->input('hocPhi');
@@ -94,7 +95,7 @@ class CourseAdminController extends Controller
         $data['slug'] = $this->generateUniqueSlug(
             $slugInput !== '' ? $slugInput : $data['tenKH']
         );
-        $data['trangThai'] = 'DRAFT';
+        $data['trangThai'] = $request->input('trangThai', 'DRAFT');
 
         // Upload ảnh -> public/Assets (viết hoa A để khớp accessor)
         if ($request->hasFile('hinhanh')) {
@@ -290,4 +291,3 @@ class CourseAdminController extends Controller
         return $slug;
     }
 }
-

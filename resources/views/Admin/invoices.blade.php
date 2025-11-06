@@ -163,7 +163,7 @@
                     <col style="width:18%;">
                     <col style="width:14%;">
                     <col style="width:12%;">
-                    <col style="width:10%;">
+                    <col style="width:15%;">
                     <col style="width:14%;">
                     <col style="width:12%;">
                 </colgroup>
@@ -174,7 +174,7 @@
                         <th>Email</th>
                         <th>Phương thức</th>
                         <th class="text-end">Tổng tiền</th>
-                        <th class="text-center">Số khóa</th>
+                        <th class="text-center">Sản phẩm</th>
                         <th>Ngày lập</th>
                         <th class="text-end">Thao tác</th>
                     </tr>
@@ -190,6 +190,9 @@
                             $issuedAt = $invoice->ngayLap
                                 ? \Illuminate\Support\Carbon::parse($invoice->ngayLap)
                                 : ($invoice->created_at ? \Illuminate\Support\Carbon::parse($invoice->created_at) : null);
+                            $courseQuantity = $invoice->items->sum('soLuong');
+                            $comboQuantity = $invoice->comboItems->sum('soLuong');
+                            $totalProducts = $courseQuantity + $comboQuantity;
                         @endphp
                         <tr class="invoice-row" data-invoice-id="{{ $invoice->maHD }}">
                             <td><strong>#{{ $invoice->maHD }}</strong></td>
@@ -200,7 +203,19 @@
                             </td>
                             <td class="text-end fw-semibold text-primary">{{ number_format($invoice->tongTien) }} VND</td>
                             <td class="text-center">
-                                <span class="badge rounded-pill text-bg-light">{{ $invoice->items_count }}</span>
+                                @if ($totalProducts > 0)
+                                    <div class="product-pill-group">
+                                        <span class="product-pill product-pill--total">{{ $totalProducts }} SP</span>
+                                        @if ($courseQuantity > 0)
+                                            <span class="product-pill product-pill--course">{{ $courseQuantity }} KH</span>
+                                        @endif
+                                        @if ($comboQuantity > 0)
+                                            <span class="product-pill product-pill--combo">{{ $comboQuantity }} Combo</span>
+                                        @endif
+                                    </div>
+                                @else
+                                    <span class="text-muted small">0</span>
+                                @endif
                             </td>
                             <td>
                                 @if ($issuedAt)
@@ -301,20 +316,29 @@
                                     <ul class="detail-card__list">
                                         <li><span>Mã hóa đơn</span><strong data-invoice-number-summary>---</strong></li>
                                         <li><span>Người xử lý</span><strong data-processor>---</strong></li>
-                                        <li><span>Số khóa học</span><strong data-item-count>0</strong></li>
+                                        <li><span>Số sản phẩm</span><strong data-item-count>0</strong></li>
+                                        <li class="detail-breakdown">
+                                            <span>Phân bổ</span>
+                                            <strong>
+                                                <span data-item-breakdown-course>0 khóa</span>
+                                                <span class="detail-breakdown__divider">/</span>
+                                                <span data-item-breakdown-combo>0 combo</span>
+                                            </strong>
+                                        </li>
                                         <li><span>Ghi chú</span><strong data-invoice-note>---</strong></li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
 
-                        <h6 class="section-title">Danh sách khóa học</h6>
+                        <h6 class="section-title">Danh sách sản phẩm</h6>
                         <div class="table-responsive mb-3">
                             <table class="table table-striped align-middle">
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Khóa học</th>
+                                        <th>Sản phẩm</th>
+                                        <th>Loại</th>
                                         <th class="text-center">Số lượng</th>
                                         <th class="text-end">Đơn giá</th>
                                         <th class="text-end">Thành tiền</th>

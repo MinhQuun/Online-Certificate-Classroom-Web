@@ -86,10 +86,18 @@ class InvoiceController extends Controller
         ]);
     }
 
-    public function show($id)
+        public function show($id)
     {
-        $invoice = Invoice::with(['student.user', 'paymentMethod', 'items.course'])
+        $invoice = Invoice::with([
+                'student.user',
+                'paymentMethod',
+                'items.course',
+                'comboItems.combo.courses',
+                'comboItems.promotion',
+            ])
             ->findOrFail($id);
+
+        $lineItems = $this->prepareInvoiceLineItems($invoice);
 
         $student = $invoice->student;
         $relatedInvoices = Invoice::where('maHV', $student?->maHV)
@@ -97,7 +105,6 @@ class InvoiceController extends Controller
             ->take(5)
             ->get();
 
-        // đảm bảo giá trị ngày là instance của Carbon trước khi gọi format()
         $issuedAt = null;
         if ($invoice->ngayLap) {
             try {
@@ -113,22 +120,32 @@ class InvoiceController extends Controller
                 'total_amount_text' => number_format($invoice->tongTien) . ' VND',
                 'payment_method' => $invoice->paymentMethod?->tenPhuongThuc ?? 'N/A',
                 'processor' => $invoice->nguoiXuLy ?? 'Hệ thống',
-                'items_total_quantity' => $invoice->items->sum('soLuong'),
-                'items_total_text' => number_format($invoice->tongTien) . ' VND',
+                'items_total_quantity' => $lineItems['total_quantity'],
+                'items_total_text' => number_format($lineItems['total_amount']) . ' VND',
+                'product_breakdown' => [
+                    'courses' => $lineItems['course_quantity'],
+                    'combos' => $lineItems['combo_quantity'],
+                ],
                 'issued_at' => [
                     'full' => $issuedAt ? $issuedAt->format('d/m/Y H:i') : null,
                     'date' => $issuedAt ? $issuedAt->format('d/m/Y') : null,
                     'time' => $issuedAt ? $issuedAt->format('H:i') : null,
                 ],
-                'items' => $invoice->items->map(function ($item) {
+                'items' => $lineItems['items']->map(function (array $item) {
                     return [
-                        'course_id' => $item->maKH,
-                        'course_name' => $item->course?->tenKH ?? '---',
-                        'quantity' => $item->soLuong,
-                        'unit_price_text' => number_format($item->donGia) . ' VND',
-                        'line_total_text' => number_format($item->thanhTien) . ' VND',
+                        'type' => $item['type'],
+                        'type_label' => $item['type_label'],
+                        'product_id' => $item['product_id'],
+                        'product_name' => $item['product_name'],
+                        'quantity' => $item['quantity'],
+                        'unit_price_text' => $item['unit_price_text'],
+                        'line_total_text' => $item['line_total_text'],
+                        'courses' => $item['courses'],
+                        'promotion_code' => $item['promotion_code'],
+                        'promotion_name' => $item['promotion_name'],
                     ];
                 })->values(),
+                'note' => $invoice->ghiChu ?? 'Không có',
             ],
             'student' => [
                 'student_id' => $student?->maHV,
@@ -158,38 +175,34 @@ class InvoiceController extends Controller
     }
 
 
-    public function exportPdf(Invoice $invoice)
+        public function exportPdf(Invoice $invoice)
     {
         $invoice->loadMissing([
             'student.user',
             'paymentMethod',
             'items.course',
+            'comboItems.combo.courses',
+            'comboItems.promotion',
         ]);
 
         $issuedAt = $invoice->ngayLap
             ? Carbon::parse($invoice->ngayLap)
             : ($invoice->created_at ? Carbon::parse($invoice->created_at) : null);
 
-        $items = $invoice->items->map(function ($item) {
-            $lineTotal = (float) $item->soLuong * (float) $item->donGia;
-
-            return [
-                'course_name' => $item->course->tenKH ?? ('Khóa học #' . $item->maKH),
-                'course_id'   => $item->maKH,
-                'quantity'    => (int) $item->soLuong,
-                'unit_price'  => (float) $item->donGia,
-                'line_total'  => $lineTotal,
-            ];
-        });
+        $lineItems = $this->prepareInvoiceLineItems($invoice);
 
         $data = [
             'invoice'       => $invoice,
             'student'       => $invoice->student,
             'user'          => $invoice->student?->user,
             'issuedAt'      => $issuedAt,
-            'items'         => $items,
-            'totalQuantity' => $items->sum('quantity'),
-            'totalAmount'   => $items->sum('line_total'),
+            'items'         => $lineItems['items']->values()->all(),
+            'totalQuantity' => $lineItems['total_quantity'],
+            'totalAmount'   => $lineItems['total_amount'],
+            'breakdown'     => [
+                'courses' => $lineItems['course_quantity'],
+                'combos'  => $lineItems['combo_quantity'],
+            ],
         ];
 
         $pdf = Pdf::loadView('Admin.invoice-pdf', $data)->setPaper('a4');
@@ -214,7 +227,7 @@ class InvoiceController extends Controller
 
             return redirect()
                 ->route('admin.invoices.index', $queryString)
-                ->with('warning', 'Không có hóa đơn nào để xuất Excel.');
+                ->with('warning', 'Khong co hoa don nao de xuat Excel.');
         }
 
         $export   = new InvoiceExcelExport($invoices);
@@ -224,19 +237,21 @@ class InvoiceController extends Controller
     }
 
     /**
-     * Query cơ bản: chỉ load quan hệ + đếm items
-     * KHÔNG thêm orderBy ở đây → tránh lỗi GROUP BY
+     * Query cÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€¦Ã‚Â¾ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­ bÃƒÆ’Ã†â€™Ãƒâ€¦Ã‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‹Å“ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âºn: chÃƒÆ’Ã†â€™Ãƒâ€¦Ã‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬ÂÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â« load quan hÃƒÆ’Ã†â€™Ãƒâ€¦Ã‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬ÂÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ + ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¦ÃƒÆ’Ã†â€™Ãƒâ€¦Ã‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‹Å“ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒâ€šÃ‚Âm items
+     * KHÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¶NG thÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬m orderBy ÃƒÆ’Ã†â€™Ãƒâ€¦Ã‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬ÂÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¦ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³y ÃƒÆ’Ã…Â½ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¥ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â  trÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­nh lÃƒÆ’Ã†â€™Ãƒâ€¦Ã‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬ÂÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¹i GROUP BY
      */
-    private function baseQuery(): Builder
+        private function baseQuery(): Builder
     {
         return Invoice::query()
             ->with([
                 'student.user',
                 'paymentMethod',
-                'items',
                 'items.course',
+                'comboItems',
+                'comboItems.combo',
             ])
-            ->withCount('items');
+            ->withCount('items')
+            ->withCount(['comboItems as combo_items_count']);
     }
 
     private function extractFilters(Request $request): array
@@ -304,6 +319,82 @@ class InvoiceController extends Controller
         }
     }
 
+    private function prepareInvoiceLineItems(Invoice $invoice): array
+    {
+        $invoice->loadMissing([
+            'items.course',
+            'comboItems.combo.courses',
+            'comboItems.promotion',
+        ]);
+
+        $items = collect();
+        $courseQuantity = 0;
+        $comboQuantity = 0;
+
+        foreach ($invoice->items as $item) {
+            $quantity = (int) ($item->soLuong ?? 0);
+            $unitPrice = (int) round((float) $item->donGia);
+            $lineTotal = $quantity * $unitPrice;
+
+            $items->push([
+                'type' => 'course',
+                'type_label' => 'Khóa học',
+                'product_id' => $item->maKH,
+                'product_name' => $item->course?->tenKH ?? ('Khóa học #' . $item->maKH),
+                'quantity' => $quantity,
+                'unit_price' => $unitPrice,
+                'unit_price_text' => number_format($unitPrice) . ' VND',
+                'line_total' => $lineTotal,
+                'line_total_text' => number_format($lineTotal) . ' VND',
+                'courses' => [],
+                'promotion_code' => null,
+                'promotion_name' => null,
+            ]);
+
+            $courseQuantity += $quantity;
+        }
+
+        foreach ($invoice->comboItems as $comboItem) {
+            $quantity = (int) ($comboItem->soLuong ?? 0);
+            $unitPrice = (int) round((float) $comboItem->donGia);
+            $lineTotal = $quantity * $unitPrice;
+
+            $courses = $comboItem->combo?->courses
+                ? $comboItem->combo->courses->map(function ($course) {
+                    return [
+                        'id' => $course->maKH,
+                        'name' => $course->tenKH,
+                    ];
+                })->values()->all()
+                : [];
+
+            $items->push([
+                'type' => 'combo',
+                'type_label' => 'Combo',
+                'product_id' => $comboItem->maGoi,
+                'product_name' => $comboItem->combo?->tenGoi ?? ('Combo #' . $comboItem->maGoi),
+                'quantity' => $quantity,
+                'unit_price' => $unitPrice,
+                'unit_price_text' => number_format($unitPrice) . ' VND',
+                'line_total' => $lineTotal,
+                'line_total_text' => number_format($lineTotal) . ' VND',
+                'courses' => $courses,
+                'promotion_code' => $comboItem->maKM,
+                'promotion_name' => $comboItem->promotion?->tenKM ?? null,
+            ]);
+
+            $comboQuantity += $quantity;
+        }
+
+        return [
+            'items' => $items->values(),
+            'total_quantity' => $courseQuantity + $comboQuantity,
+            'total_amount' => (int) $items->sum('line_total'),
+            'course_quantity' => $courseQuantity,
+            'combo_quantity' => $comboQuantity,
+        ];
+    }
+
     private function normalizeCurrency(?string $value): ?float
     {
         if ($value === null) {
@@ -346,7 +437,7 @@ final class InvoiceExcelExport implements FromCollection, WithHeadings, WithMapp
         return $this->invoices;
     }
 
-    public function headings(): array
+            public function headings(): array
     {
         return [
             'Mã HD',
@@ -355,18 +446,24 @@ final class InvoiceExcelExport implements FromCollection, WithHeadings, WithMapp
             'Email',
             'Phương thức thanh toán',
             'Tổng tiền',
-            'Số khóa học',
+            'Số sản phẩm',
             'Ngày lập',
         ];
     }
 
-    public function map($invoice): array
+        public function map($invoice): array
     {
+        $invoice->loadMissing(['student.user', 'items', 'comboItems']);
+
         $student = $invoice->student;
         $user    = $student?->user;
         $issuedAt = $invoice->ngayLap
             ? Carbon::parse($invoice->ngayLap)
             : ($invoice->created_at ? Carbon::parse($invoice->created_at) : null);
+
+        $courseQuantity = (int) $invoice->items->sum('soLuong');
+        $comboQuantity = (int) $invoice->comboItems->sum('soLuong');
+        $totalProducts = $courseQuantity + $comboQuantity;
 
         return [
             $invoice->maHD,
@@ -375,8 +472,11 @@ final class InvoiceExcelExport implements FromCollection, WithHeadings, WithMapp
             $user?->email ?? 'N/A',
             $invoice->paymentMethod->tenPhuongThuc ?? ($invoice->maTT ?: 'N/A'),
             (float) $invoice->tongTien,
-            (int) ($invoice->items_count ?? $invoice->items->count()),
+            $totalProducts,
             $issuedAt ? $issuedAt->format('d/m/Y H:i') : 'N/A',
         ];
     }
+
+
+
 }

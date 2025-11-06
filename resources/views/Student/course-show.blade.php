@@ -246,7 +246,7 @@
                         @csrf
                         <input type="hidden" name="course_id" value="{{ $course->maKH }}">
                         <button type="submit"
-                                class="btn btn--primary {{ $isEnrolled ? 'btn--owned' : ($isPending ? 'btn--pending' : '') }}"
+                                class="btn btn--primary {{ $isEnrolled ? 'btn--owned' : ($isPending ? 'btn--pending' : ($isInCart ? 'btn--in-cart' : '')) }}"
                                 style="text-align: center; padding: 16px 24px; font-weight: 700; font-size: 16px; border-radius: 12px;"
                                 @if($isEnrolled || $isPending || $isInCart) disabled @endif>
                             {{ $isEnrolled ? 'Đã kích hoạt' : ($isPending ? 'Chờ kích hoạt' : ($isInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng')) }}
@@ -436,7 +436,7 @@
                                         @csrf
                                         <input type="hidden" name="course_id" value="{{ $related->maKH }}">
                                         <button type="submit"
-                                                class="course-card__cta {{ $isOwned ? 'course-card__cta--owned' : '' }}"
+                                                class="course-card__cta {{ $isOwned ? 'course-card__cta--owned' : ($inCart ? 'course-card__cta--in-cart' : '') }}"
                                                 @if($isOwned || $inCart) disabled @endif>
                                             {{ $isOwned ? 'Đã mua' : ($inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng') }}
                                         </button>

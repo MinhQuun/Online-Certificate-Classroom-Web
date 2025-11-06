@@ -6,6 +6,10 @@
         return;
     }
 
+    const PROMOTION_TYPE_PERCENT = "PERCENT_DISCOUNT";
+    const PROMOTION_TYPE_FIXED = "FIXED_DISCOUNT";
+    const PROMOTION_TYPE_GIFT = "GIFT";
+
     const dataset = safeJsonParse(datasetEl.textContent);
     const courseMap = new Map(
         Array.isArray(dataset.courses)
@@ -15,7 +19,13 @@
     const updateUrlTemplate = dataset.updateUrlTemplate || "";
     const promotionMap = new Map(
         Array.isArray(dataset.promotions)
-            ? dataset.promotions.map((promotion) => [Number(promotion.id), promotion])
+            ? dataset.promotions.map((promotion) => [
+                  Number(promotion.id),
+                  {
+                      ...promotion,
+                      type: normalizePromotionType(promotion.type),
+                  },
+              ])
             : []
     );
 
@@ -34,6 +44,20 @@
                 Number(value) || 0
             ) + " VND"
         );
+    }
+
+    function normalizePromotionType(type) {
+        const value = String(type || "").toUpperCase();
+
+        if (value === PROMOTION_TYPE_PERCENT || value === "PERCENT") {
+            return PROMOTION_TYPE_PERCENT;
+        }
+
+        if (value === PROMOTION_TYPE_FIXED || value === "FIXED") {
+            return PROMOTION_TYPE_FIXED;
+        }
+
+        return PROMOTION_TYPE_GIFT;
     }
 
     function createFormController(form) {
@@ -71,6 +95,7 @@
             const hasPromotion = !!promotionSelect?.value;
             let finalPrice = basePrice;
             let message = defaultPromotionHelp;
+            let promotionType = null;
 
             if (hasPromotion && basePrice > 0) {
                 const promotionId = Number(promotionSelect.value);
@@ -78,15 +103,17 @@
 
                 if (promotion) {
                     const rawValue = Number(promotion.value) || 0;
+                    const type = normalizePromotionType(promotion.type);
+                    promotionType = type;
 
-                    if (promotion.type === "PERCENT") {
+                    if (type === PROMOTION_TYPE_PERCENT) {
                         const percent = Math.min(Math.max(rawValue, 0), 100);
                         const discount = Math.round(basePrice * (percent / 100));
                         finalPrice = Math.max(0, basePrice - discount);
                         message = `Giảm ${percent}% · Giá sau ưu đãi: ${formatCurrency(
                             finalPrice
                         )}.`;
-                    } else if (promotion.type === "FIXED") {
+                    } else if (type === PROMOTION_TYPE_FIXED) {
                         const discount = Math.max(0, rawValue);
                         finalPrice = Math.max(0, basePrice - discount);
                         message = `Giảm ${formatCurrency(
@@ -105,6 +132,7 @@
                 saving: Math.max(0, basePrice - finalPrice),
                 hasPromotion,
                 message,
+                promotionType,
             };
         };
 
@@ -118,10 +146,17 @@
             }
 
             if (promotionPriceInput) {
-                if (totals.hasPromotion) {
-                    promotionPriceInput.value = totals.finalPrice;
-                } else {
+                const isGiftPromotion =
+                    totals.promotionType === PROMOTION_TYPE_GIFT;
+                const shouldDisable =
+                    isGiftPromotion || !totals.hasPromotion;
+
+                if (shouldDisable) {
                     promotionPriceInput.value = "";
+                    promotionPriceInput.setAttribute("disabled", "disabled");
+                } else {
+                    promotionPriceInput.removeAttribute("disabled");
+                    promotionPriceInput.value = totals.finalPrice;
                 }
             }
 
