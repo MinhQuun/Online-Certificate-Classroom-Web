@@ -60,7 +60,7 @@
                     @endphp
 
                     @if($isActive)
-                        <a class="btn btn--activated btn--lg" href="{{ route('student.learning.courses') }}">
+                        <a class="btn btn--activated btn--lg" href="{{ route('student.my-courses') }}">
                             <i class="fa-solid fa-circle-check"></i>
                             Đã kích hoạt
                         </a>

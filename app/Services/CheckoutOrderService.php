@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Mail\ActivationCodeMail;
 use App\Models\ActivationCode;
 use App\Models\Combo;
+use App\Models\ComboActivationCode;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Invoice;
@@ -41,6 +42,7 @@ class CheckoutOrderService
         $now = Carbon::now();
         $invoice = null;
         $activationPackages = [];
+        $comboActivationPackages = [];
         $pendingCourses = [];
         $alreadyActiveCourses = [];
 
@@ -58,6 +60,8 @@ class CheckoutOrderService
             return $this->resolveComboPrice($combo, $comboPriceOverrides);
         });
 
+        $comboIndex = $combos->keyBy('maGoi');
+
         DB::transaction(function () use (
             $student,
             $courses,
@@ -72,8 +76,10 @@ class CheckoutOrderService
             $now,
             &$invoice,
             &$activationPackages,
+            &$comboActivationPackages,
             &$pendingCourses,
-            &$alreadyActiveCourses
+            &$alreadyActiveCourses,
+            $comboIndex
         ) {
             $invoiceData = [
                 'maHV' => $student->maHV,
@@ -90,6 +96,8 @@ class CheckoutOrderService
             }
 
             $invoice = Invoice::create($invoiceData);
+
+            $comboCourseMap = [];
 
             foreach ($courses as $course) {
                 InvoiceItem::create([
@@ -115,6 +123,7 @@ class CheckoutOrderService
             foreach ($coursePayloads as $payload) {
                 /** @var Course $course */
                 $course = $payload['course'];
+                $comboId = $payload['combo_id'];
 
                 $enrollment = Enrollment::firstOrNew([
                     'maHV' => $student->maHV,
@@ -143,7 +152,7 @@ class CheckoutOrderService
                 $enrollment->trangThai = 'PENDING';
                 $enrollment->activated_at = null;
                 $enrollment->expires_at = null;
-                $enrollment->maGoi = $payload['combo_id'];
+                $enrollment->maGoi = $comboId;
                 $enrollment->maKM = $payload['promotion_id'];
                 $enrollment->updated_at = $now;
                 $enrollment->save();
@@ -156,6 +165,25 @@ class CheckoutOrderService
                         'expires_at' => $now,
                         'updated_at' => $now,
                     ]);
+
+                $pendingCourses[$course->maKH] = [
+                    'maKH' => $course->maKH,
+                    'tenKH' => $course->tenKH,
+                    'combo_id' => $comboId,
+                ];
+
+                if ($comboId) {
+                    if (!isset($comboCourseMap[$comboId])) {
+                        $comboCourseMap[$comboId] = [
+                            'combo' => $comboIndex->get($comboId),
+                            'courses' => [],
+                        ];
+                    }
+
+                    $comboCourseMap[$comboId]['courses'][] = $course;
+
+                    continue;
+                }
 
                 $codeValue = $this->generateActivationCode($student->maHV, $course->maKH);
 
@@ -173,34 +201,94 @@ class CheckoutOrderService
                     'course' => $course,
                     'code' => $codeValue,
                 ];
+            }
 
-                $pendingCourses[$course->maKH] = [
-                    'maKH' => $course->maKH,
-                    'tenKH' => $course->tenKH,
+            foreach ($comboCourseMap as $comboId => $bundle) {
+                if (empty($bundle['courses'])) {
+                    continue;
+                }
+
+                /** @var Combo|null $combo */
+                $combo = $bundle['combo'] ?? $comboIndex->get($comboId);
+
+                if (!$combo instanceof Combo) {
+                    $combo = Combo::find($comboId);
+                }
+
+                ComboActivationCode::where('maHV', $student->maHV)
+                    ->where('maGoi', $comboId)
+                    ->whereIn('trangThai', ['CREATED', 'SENT'])
+                    ->update([
+                        'trangThai' => 'EXPIRED',
+                        'expires_at' => $now,
+                        'updated_at' => $now,
+                    ]);
+
+                $codeValue = $this->generateComboActivationCode($student->maHV, $comboId);
+
+                $activation = ComboActivationCode::create([
+                    'maHV' => $student->maHV,
+                    'maGoi' => $comboId,
+                    'maHD' => $invoice->maHD,
+                    'code' => $codeValue,
+                    'trangThai' => 'CREATED',
+                    'generated_at' => $now,
+                ]);
+
+                $comboActivationPackages[] = [
+                    'model' => $activation,
+                    'combo' => $combo,
+                    'courses' => $bundle['courses'],
+                    'code' => $codeValue,
                 ];
             }
         });
+
+        $pendingComboActivations = array_map(function (array $package) {
+            /** @var Combo|null $combo */
+            $combo = $package['combo'];
+            $courses = array_map(
+                fn (Course $course) => [
+                    'maKH' => $course->maKH,
+                    'tenKH' => $course->tenKH,
+                ],
+                $package['courses'] ?? []
+            );
+
+            return [
+                'maGoi' => $combo?->maGoi,
+                'tenGoi' => $combo?->tenGoi ?? ($combo ? ('Combo #' . $combo->maGoi) : null),
+                'courses' => $courses,
+            ];
+        }, $comboActivationPackages);
 
         return [
             'invoice' => $invoice,
             'student' => $student,
             'user' => $user,
-            'activation_packages' => $activationPackages,
+            'course_activation_packages' => $activationPackages,
+            'combo_activation_packages' => $comboActivationPackages,
             'pending_activation_courses' => array_values($pendingCourses),
+            'pending_activation_combos' => array_values($pendingComboActivations),
             'already_active_courses' => array_values($alreadyActiveCourses),
             'course_total' => $totalCoursePrice,
             'combo_total' => $totalComboPrice,
         ];
     }
 
-    public function dispatchActivationEmails(User $user, Student $student, array $packages): void
+    public function dispatchActivationEmails(
+        User $user,
+        Student $student,
+        array $coursePackages,
+        array $comboPackages = []
+    ): void
     {
-        if (empty($packages)) {
+        if (empty($coursePackages) && empty($comboPackages)) {
             return;
         }
 
         $courseCodes = [];
-        foreach ($packages as $package) {
+        foreach ($coursePackages as $package) {
             $course = $package['course'];
             $courseCodes[] = [
                 'course_name' => $course->tenKH,
@@ -208,17 +296,51 @@ class CheckoutOrderService
             ];
         }
 
-        Mail::to($user->email)->send(new ActivationCodeMail($user->hoTen, $courseCodes));
+        $comboCodes = [];
+        foreach ($comboPackages as $package) {
+            /** @var Combo|null $combo */
+            $combo = $package['combo'];
+            $comboCourses = array_map(
+                fn (Course $course) => [
+                    'maKH' => $course->maKH,
+                    'tenKH' => $course->tenKH,
+                    'course_name' => $course->tenKH,
+                ],
+                $package['courses'] ?? []
+            );
 
-        $ids = array_map(
+            $comboCodes[] = [
+                'combo_name' => $combo?->tenGoi ?? ($combo ? ('Combo #' . $combo->maGoi) : 'Combo'),
+                'combo_id' => $combo?->maGoi,
+                'code' => $package['code'],
+                'courses' => $comboCourses,
+            ];
+        }
+
+        Mail::to($user->email)->send(new ActivationCodeMail($user->hoTen, $courseCodes, $comboCodes));
+
+        $timestamp = Carbon::now();
+
+        $courseIds = array_filter(array_map(
             fn ($package) => $package['model']->id ?? null,
-            $packages
-        );
-        $ids = array_filter($ids);
+            $coursePackages
+        ));
 
-        if (!empty($ids)) {
-            $timestamp = Carbon::now();
-            ActivationCode::whereIn('id', $ids)->update([
+        if (!empty($courseIds)) {
+            ActivationCode::whereIn('id', $courseIds)->update([
+                'trangThai' => 'SENT',
+                'sent_at' => $timestamp,
+                'updated_at' => $timestamp,
+            ]);
+        }
+
+        $comboIds = array_filter(array_map(
+            fn ($package) => $package['model']->id ?? null,
+            $comboPackages
+        ));
+
+        if (!empty($comboIds)) {
+            ComboActivationCode::whereIn('id', $comboIds)->update([
                 'trangThai' => 'SENT',
                 'sent_at' => $timestamp,
                 'updated_at' => $timestamp,
@@ -290,6 +412,20 @@ class CheckoutOrderService
                 Str::upper(Str::random(4))
             );
         } while (ActivationCode::where('code', $code)->exists());
+
+        return $code;
+    }
+
+    private function generateComboActivationCode(int $studentId, int $comboId): string
+    {
+        do {
+            $code = sprintf(
+                'OCC-CB%04d-%04d-%s',
+                $comboId % 10000,
+                $studentId % 10000,
+                Str::upper(Str::random(4))
+            );
+        } while (ComboActivationCode::where('code', $code)->exists());
 
         return $code;
     }

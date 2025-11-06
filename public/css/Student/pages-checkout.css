@@ -545,6 +545,51 @@
     margin-bottom: 6px;
 }
 
+.checkout-activation__combos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+}
+
+.checkout-activation__combo-item {
+    background: rgba(37, 99, 235, 0.08);
+    border-radius: 12px;
+    padding: 12px 14px;
+    border: 1px solid rgba(37, 99, 235, 0.14);
+}
+
+.checkout-activation__combo-item .combo-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #1e3a8a;
+    margin-bottom: 8px;
+}
+
+.checkout-activation__courses {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+    color: #1e293b;
+    font-size: 0.9rem;
+}
+
+.checkout-activation__courses li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkout-activation__courses i {
+    color: var(--checkout-accent);
+    font-size: 0.85rem;
+}
+
 .checkout-note {
     display: flex;
     gap: 12px;

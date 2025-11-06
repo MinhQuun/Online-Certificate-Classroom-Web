@@ -80,6 +80,66 @@
             .activation-table tbody tr:hover {
                 background: #f9fafb;
             }
+            .combo-block {
+                margin: 24px 0;
+                padding: 20px 24px;
+                background: #eef4ff;
+                border: 1px solid #dbeafe;
+                border-radius: 12px;
+                box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.05);
+            }
+            .combo-block h3 {
+                font-size: 16px;
+                font-weight: 700;
+                color: #1e3a8a;
+                margin-bottom: 16px;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+            }
+            .combo-card {
+                background: #ffffff;
+                border-radius: 12px;
+                padding: 18px 20px;
+                box-shadow: 0 10px 24px rgba(37, 99, 235, 0.08);
+                border: 1px solid rgba(37, 99, 235, 0.12);
+                margin-bottom: 16px;
+            }
+            .combo-card:last-child {
+                margin-bottom: 0;
+            }
+            .combo-card__head {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+                margin-bottom: 12px;
+            }
+            .combo-card__title {
+                font-size: 15px;
+                font-weight: 600;
+                color: #1e40af;
+            }
+            .combo-card__courses {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: grid;
+                gap: 8px;
+            }
+            .combo-card__courses li {
+                font-size: 14px;
+                color: #334155;
+                position: relative;
+                padding-left: 16px;
+            }
+            .combo-card__courses li::before {
+                content: '•';
+                position: absolute;
+                left: 0;
+                color: #2563eb;
+                font-size: 14px;
+                line-height: 1;
+            }
             .activation-code {
                 display: inline-block;
                 background: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
@@ -183,6 +243,27 @@
                     <p>Chào {{ $hocVienName ?? 'bạn' }},</p>
                     <p>Cảm ơn bạn đã lựa chọn đồng hành cùng Online Certificate Classroom. Dưới đây là mã kích hoạt tương ứng với từng khóa học bạn vừa thanh toán.</p>
 
+                    @if(!empty($comboCodes))
+                        <div class="combo-block">
+                            <h3>Combo bạn đã mua</h3>
+                            @foreach ($comboCodes as $combo)
+                                <div class="combo-card">
+                                    <div class="combo-card__head">
+                                        <span class="combo-card__title">{{ $combo['combo_name'] ?? 'Combo OCC' }}</span>
+                                        <span class="activation-code">{{ $combo['code'] ?? '---' }}</span>
+                                    </div>
+                                    @if(!empty($combo['courses']))
+                                        <ul class="combo-card__courses">
+                                            @foreach ($combo['courses'] as $course)
+                                                <li>{{ $course['course_name'] ?? ($course['tenKH'] ?? 'Khoa hoc OCC') }}</li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+
                     @if(!empty($courseCodes))
                         <table class="activation-table" role="presentation" cellspacing="0" cellpadding="0">
                             <thead>
@@ -206,14 +287,14 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    @else
+                    @elseif(empty($comboCodes))
                         <p>Hiện chưa có mã kích hoạt nào trong email này. Nếu bạn cần hỗ trợ, vui lòng liên hệ đội ngũ OCC.</p>
                     @endif
 
                     <p>Để kích hoạt nhanh chóng, hãy thực hiện các bước sau:</p>
                     <ol class="activation-steps">
                         <li>Truy cập trang <strong>Mã kích hoạt</strong> của OCC.</li>
-                        <li>Nhập mã tương ứng với từng khóa học.</li>
+                        <li>Nhập mã tương ứng với từng combo hoặc khóa học.</li>
                         <li>Hoàn tất và bắt đầu học ngay khi mã hiển thị trạng thái "Đã sử dụng".</li>
                     </ol>
 

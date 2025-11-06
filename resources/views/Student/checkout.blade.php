@@ -15,6 +15,8 @@
     $currentUser = auth()->user();
     $successMethod = $successPayload['payment_method'] ?? null;
     $pendingActivations = $successPayload['pending_activation_courses'] ?? [];
+    $pendingComboActivations = $successPayload['pending_activation_combos'] ?? [];
+    $pendingCourseActivations = array_values(array_filter($pendingActivations, fn ($item) => empty($item['combo_id'] ?? null)));
     $alreadyActiveCourses = $successPayload['already_active_courses'] ?? [];
 
     $methodLabels = [
@@ -421,11 +423,34 @@
                                     <h3>Mã kích hoạt</h3>
                                     <p>Chúng tôi đã gửi mã kích hoạt đến email {{ $currentUser?->email ?? 'của bạn' }}. Bạn có thể kích hoạt khóa học trong mục “Mã kích hoạt”.</p>
 
-                                    @if(!empty($pendingActivations))
+                                    @if(!empty($pendingComboActivations))
                                         <div class="checkout-activation">
-                                            <h4>Chờ kích hoạt ({{ count($pendingActivations) }})</h4>
+                                            <h4>Combo chờ kích hoạt ({{ count($pendingComboActivations) }})</h4>
+                                            <ul class="checkout-activation__combos">
+                                                @foreach($pendingComboActivations as $combo)
+                                                    <li class="checkout-activation__combo-item">
+                                                        <div class="combo-name">
+                                                            <i class="fa-solid fa-layer-group"></i>
+                                                            {{ $combo['tenGoi'] ?? ('Combo #' . ($combo['maGoi'] ?? '')) }}
+                                                        </div>
+                                                        @if(!empty($combo['courses']))
+                                                            <ul class="checkout-activation__courses">
+                                                                @foreach($combo['courses'] as $course)
+                                                                    <li><i class="fa-solid fa-key"></i> {{ $course['tenKH'] ?? '' }}</li>
+                                                                @endforeach
+                                                            </ul>
+                                                        @endif
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
+
+                                    @if(!empty($pendingCourseActivations))
+                                        <div class="checkout-activation">
+                                            <h4>Khóa học chờ kích hoạt ({{ count($pendingCourseActivations) }})</h4>
                                             <ul>
-                                                @foreach($pendingActivations as $item)
+                                                @foreach($pendingCourseActivations as $item)
                                                     <li><i class="fa-solid fa-key"></i> {{ $item['tenKH'] ?? '' }}</li>
                                                 @endforeach
                                             </ul>

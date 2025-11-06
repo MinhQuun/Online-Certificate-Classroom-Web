@@ -169,7 +169,7 @@
                                     @endif
                                 </div>
                                 @if($isActive)
-                                    <a href="{{ route('student.learning.courses') }}" class="combo-card__cta combo-card__cta--activated">
+                                    <a href="{{ route('student.my-courses') }}" class="combo-card__cta combo-card__cta--activated">
                                         <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
                                         <span>Đã kích hoạt</span>
                                     </a>
@@ -254,7 +254,7 @@
                                     @endif
                                 </div>
                                 @if($isActive)
-                                    <a href="{{ route('student.learning.courses') }}" class="combo-card__cta combo-card__cta--activated">
+                                    <a href="{{ route('student.my-courses') }}" class="combo-card__cta combo-card__cta--activated">
                                         <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
                                         <span>Đã kích hoạt</span>
                                     </a>

@@ -210,6 +210,75 @@
     gap: 12px;
 }
 
+.activation-history-group {
+    margin-bottom: 20px;
+}
+
+.activation-history-group h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e3a8a;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.activation-history__item--combo {
+    border: 1px solid rgba(37, 99, 235, 0.18);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(96, 165, 250, 0.14));
+    box-shadow: 0 16px 32px rgba(59, 130, 246, 0.12);
+}
+
+.history-code {
+    margin: 10px 0;
+}
+
+.history-code .activation-code {
+    display: inline-block;
+    background: #0f172a;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-family: "Fira Code", "SFMono-Regular", Menlo, monospace;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+}
+
+.history-combo-courses {
+    margin-top: 12px;
+    background: rgba(59, 130, 246, 0.08);
+    border-radius: 10px;
+    padding: 12px 14px;
+}
+
+.history-combo-courses span {
+    display: block;
+    font-weight: 600;
+    color: #1d4ed8;
+    margin-bottom: 6px;
+}
+
+.history-combo-courses ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+    color: #1f2937;
+    font-size: 13px;
+}
+
+.history-combo-courses li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.history-combo-courses li::before {
+    content: '\2022';
+    color: #2563eb;
+}
+
 .history-headline {
     display: flex;
     align-items: center;
