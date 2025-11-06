@@ -230,7 +230,7 @@ class CheckoutController extends Controller
         }
 
         if ($combos->isNotEmpty()) {
-            $combos->loadMissing('courses', 'promotions');
+            $combos->each->loadMissing('courses', 'promotions');
         }
 
         $courseTotal = (int) $courses->sum('hocPhi');
@@ -264,7 +264,7 @@ class CheckoutController extends Controller
     private function buildTransactionSnapshot(Collection $courses, Collection $combos, int $courseTotal, int $comboTotal): array
     {
         if ($combos->isNotEmpty()) {
-            $combos->loadMissing('courses', 'promotions');
+            $combos->each->loadMissing('courses', 'promotions');
         }
 
         return [
