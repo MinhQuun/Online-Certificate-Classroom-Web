@@ -4,12 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Combo;
+use App\Models\ComboActivationCode;
 use App\Models\Course;
+use App\Models\Enrollment;
+use App\Models\PaymentTransaction;
 use App\Models\Promotion;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -208,18 +212,71 @@ class ComboAdminController extends Controller
 
     public function destroy(Request $request, Combo $combo): RedirectResponse
     {
-        if ($combo->hinhanh) {
-            $path = public_path($combo->hinhanh);
-            if (is_file($path)) {
-                @unlink($path);
+        $usage = $this->summarizeComboUsage($combo);
+
+        if ($usage['locked']) {
+            $parts = [];
+
+            if ($usage['invoice'] > 0) {
+                $parts[] = $usage['invoice'] . ' hóa đơn';
             }
+
+            if ($usage['enrollment'] > 0) {
+                $parts[] = $usage['enrollment'] . ' học viên đang sở hữu';
+            }
+
+            if ($usage['transaction'] > 0) {
+                $parts[] = $usage['transaction'] . ' giao dịch thanh toán';
+            }
+
+            if ($usage['activation'] > 0) {
+                $parts[] = $usage['activation'] . ' mã kích hoạt combo';
+            }
+
+            $reason = !empty($parts)
+                ? 'Phát sinh: ' . implode(', ', $parts) . '.'
+                : '';
+
+            return redirect()
+                ->route('admin.combos.index', $request->query())
+                ->with('error', 'Combo này đã được học viên mua nên không thể xóa. ' . $reason . ' Vui lòng chuyển combo sang trạng thái lưu trữ hoặc tạo combo mới thay thế.');
         }
 
-        $combo->delete();
+        $imagePath = $combo->hinhanh ? public_path($combo->hinhanh) : null;
+
+        DB::transaction(function () use ($combo) {
+            $combo->promotions()->sync([]);
+            $combo->courses()->sync([]);
+            $combo->delete();
+        });
+
+        if ($imagePath && is_file($imagePath)) {
+            @unlink($imagePath);
+        }
 
         return redirect()
             ->route('admin.combos.index', $request->query())
             ->with('success', 'Đã xoá combo.');
+    }
+
+    protected function summarizeComboUsage(Combo $combo): array
+    {
+        $invoiceCount = $combo->invoiceItems()->count();
+        $enrollmentCount = Enrollment::where('maGoi', $combo->maGoi)->count();
+        $transactionCount = PaymentTransaction::where('maGoi', $combo->maGoi)
+            ->whereIn('trangThai', [PaymentTransaction::STATUS_PENDING, PaymentTransaction::STATUS_PAID])
+            ->count();
+        $activationCount = ComboActivationCode::where('maGoi', $combo->maGoi)
+            ->whereIn('trangThai', ['CREATED', 'SENT', 'USED'])
+            ->count();
+
+        return [
+            'invoice' => $invoiceCount,
+            'enrollment' => $enrollmentCount,
+            'transaction' => $transactionCount,
+            'activation' => $activationCount,
+            'locked' => ($invoiceCount + $enrollmentCount + $transactionCount + $activationCount) > 0,
+        ];
     }
 
     protected function validateCombo(Request $request, ?Combo $combo = null): array

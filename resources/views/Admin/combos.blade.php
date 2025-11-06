@@ -44,6 +44,13 @@
         </div>
     @endif
 
+    @if (session('success'))
+        <div class="alert alert-success combos-flash" role="alert">
+            <strong>{{ session('success') }}</strong>
+        </div>
+    @endif
+
+
     <section class="stats-grid combos-stats mb-4">
         <article class="stats-card">
             <span class="stats-label">Tổng combo</span>
