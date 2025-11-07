@@ -20,18 +20,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
-                    if (!entry.isIntersecting) {
-                        return;
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-visible");
+                    } else {
+                        entry.target.classList.remove("is-visible"); // Remove để reset animation khi scroll lên
                     }
-                    entry.target.classList.add("is-visible");
-                    observer.unobserve(entry.target);
                 });
             },
-            { threshold: 0.2 }
+            { threshold: 0.2 } // Trigger khi 20% element vào view
         );
 
         revealTargets.forEach((el) => observer.observe(el));
     } else {
-        revealTargets.forEach((el) => el.classList.add("is-visible"));
+        revealTargets.forEach((el) => el.classList.add("is-visible")); // Fallback
     }
 });

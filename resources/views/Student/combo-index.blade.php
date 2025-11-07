@@ -71,10 +71,6 @@
             <div class="combo-hero__visual" aria-hidden="true">
                 <div class="combo-hero__visual-card">
                     <img src="{{ $heroImage }}" alt="Combo nổi bật" loading="lazy">
-                    <div class="combo-hero__visual-overlay">
-                        <strong>Tiết kiệm tới {{ max($averageSaving, 15) }}%</strong>
-                        <span>Lộ trình trọn gói, cam kết tiến bộ</span>
-                    </div>
                 </div>
             </div>
         </div>

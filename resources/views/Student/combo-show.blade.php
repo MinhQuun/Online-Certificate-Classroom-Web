@@ -148,8 +148,10 @@
             </div>
 
             <aside class="combo-detail-sidebar">
-                <div class="combo-summary-card">
-                    <h3>Tóm tắt combo</h3>
+                <div class="combo-summary-card" data-reveal-on-scroll>
+                    <div class="section__header section__header--sidebar section__header--card">
+                        <h3>Tóm tắt combo</h3>
+                    </div>
                     <ul class="combo-summary-list">
                         <li>
                             <span>Trạng thái</span>
@@ -191,8 +193,10 @@
                     </div>
                 </div>
 
-                <div class="combo-includes-card">
-                    <h3>Bạn nhận được</h3>
+                <div class="combo-includes-card" data-reveal-on-scroll>
+                    <div class="section__header section__header--sidebar section__header--card">
+                        <h3>Bạn nhận được</h3>
+                    </div>
                     <ul>
                         <li><i class="fa-solid fa-clipboard-check"></i> Lộ trình học cá nhân hóa</li>
                         <li><i class="fa-solid fa-video"></i> Video bài giảng cập nhật 2025</li>
@@ -202,8 +206,10 @@
                 </div>
 
                 @if($relatedCombos->isNotEmpty())
-                    <div class="section__header">
-                        <h2>Combo liên quan</h3>
+                    <div class="combo-related" data-reveal-on-scroll>
+                        <div class="section__header section__header--sidebar">
+                            <h2>Combo liên quan</h2>
+                        </div>
                         <ul>
                             @foreach($relatedCombos as $related)
                                 <li>
