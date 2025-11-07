@@ -189,4 +189,66 @@ INSERT INTO GOI_KHOA_HOC_CHITIET (maGoi, maKH, thuTu) VALUES (@maGoi, @kh_writin
 INSERT INTO GOI_KHOA_HOC_CHITIET (maGoi, maKH, thuTu) VALUES (@maGoi, @kh_listening_405_600, 3);
 INSERT INTO GOI_KHOA_HOC_CHITIET (maGoi, maKH, thuTu) VALUES (@maGoi, @kh_reading_405_600, 4);
 
+-- =========================
+-- Tạo combo cho band Intermediate (605-780)
+-- =========================
+-- Lấy ID của các khóa học từ band 605-780
+SELECT maKH INTO @kh_speaking_605_780 FROM KHOAHOC WHERE slug = 'luyen-thi-toeic-speaking-605-780';
+SELECT maKH INTO @kh_writing_605_780 FROM KHOAHOC WHERE slug = 'luyen-thi-toeic-writing-605-780';
+SELECT maKH INTO @kh_listening_605_780 FROM KHOAHOC WHERE slug = 'luyen-thi-toeic-listening-605-780';
+SELECT maKH INTO @kh_reading_605_780 FROM KHOAHOC WHERE slug = 'luyen-thi-toeic-reading-605-780';
+
+INSERT INTO GOI_KHOA_HOC (tenGoi, slug, moTa, gia, giaGoc, hinhanh, ngayBatDau, ngayKetThuc, trangThai, created_by)
+VALUES (
+    'TOEIC Intermediate Full Pack (605-780)',
+    'toeic-intermediate-full-pack-605-780',
+    'Gói combo đầy đủ 4 kỹ năng TOEIC cho band 605-780: Speaking, Writing, Listening, Reading. Nâng cao trình độ trung cấp!',
+    3600000.00,  -- Giá bán ưu đãi (giảm ~14% so với mua lẻ)
+    5000000.00,  -- Giá gốc: 1,150,000 + 1,100,000 + 1,400,000 + 1,350,000 = 5,000,000
+    'toeic-intermediate-pack.png',
+    '2025-11-01',
+    '2025-12-31',
+    'PUBLISHED',
+    1
+);
+
+SET @maGoi = LAST_INSERT_ID();
+
+-- Liên kết các khóa học vào combo Intermediate
+INSERT INTO GOI_KHOA_HOC_CHITIET (maGoi, maKH, thuTu) VALUES (@maGoi, @kh_speaking_605_780, 1);
+INSERT INTO GOI_KHOA_HOC_CHITIET (maGoi, maKH, thuTu) VALUES (@maGoi, @kh_writing_605_780, 2);
+INSERT INTO GOI_KHOA_HOC_CHITIET (maGoi, maKH, thuTu) VALUES (@maGoi, @kh_listening_605_780, 3);
+INSERT INTO GOI_KHOA_HOC_CHITIET (maGoi, maKH, thuTu) VALUES (@maGoi, @kh_reading_605_780, 4);
+
+-- =========================
+-- Tạo combo cho band Advanced (785-990)
+-- =========================
+-- Lấy ID của các khóa học từ band 785-990
+SELECT maKH INTO @kh_speaking_785_990 FROM KHOAHOC WHERE slug = 'luyen-thi-toeic-speaking-785-990';
+SELECT maKH INTO @kh_writing_785_990 FROM KHOAHOC WHERE slug = 'luyen-thi-toeic-writing-785-990';
+SELECT maKH INTO @kh_listening_785_990 FROM KHOAHOC WHERE slug = 'luyen-thi-toeic-listening-785-990';
+SELECT maKH INTO @kh_reading_785_990 FROM KHOAHOC WHERE slug = 'luyen-thi-toeic-reading-785-990';
+
+INSERT INTO GOI_KHOA_HOC (tenGoi, slug, moTa, gia, giaGoc, hinhanh, ngayBatDau, ngayKetThuc, trangThai, created_by)
+VALUES (
+    'TOEIC Advanced Full Pack (785-990)',
+    'toeic-advanced-full-pack-785-990',
+    'Gói combo đầy đủ 4 kỹ năng TOEIC cho band 785-990: Speaking, Writing, Listening, Reading. Chinh phục điểm cao tuyệt đối!',
+    4200000.00,  -- Giá bán ưu đãi (giảm ~17% so với mua lẻ)
+    5800000.00,  -- Giá gốc: 1,350,000 + 1,300,000 + 1,600,000 + 1,550,000 = 5,800,000
+    'toeic-advanced-pack.png',
+    '2025-11-01',
+    '2025-12-31',
+    'PUBLISHED',
+    1
+);
+
+SET @maGoi = LAST_INSERT_ID();
+
+-- Liên kết các khóa học vào combo Advanced
+INSERT INTO GOI_KHOA_HOC_CHITIET (maGoi, maKH, thuTu) VALUES (@maGoi, @kh_speaking_785_990, 1);
+INSERT INTO GOI_KHOA_HOC_CHITIET (maGoi, maKH, thuTu) VALUES (@maGoi, @kh_writing_785_990, 2);
+INSERT INTO GOI_KHOA_HOC_CHITIET (maGoi, maKH, thuTu) VALUES (@maGoi, @kh_listening_785_990, 3);
+INSERT INTO GOI_KHOA_HOC_CHITIET (maGoi, maKH, thuTu) VALUES (@maGoi, @kh_reading_785_990, 4);
+
 COMMIT;

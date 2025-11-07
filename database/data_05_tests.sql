@@ -98,7 +98,7 @@ SELECT maChuong INTO @ch_wr_785_3 FROM CHUONG WHERE maKH=@kh_wr_785 AND thuTu=3 
 -- 2) CHÈN DỮ LIỆU MINI-TESTS CHO BAND 405–600
 --    Mỗi chương: 3 mini-tests + tài liệu PDF đề thi + 1 câu hỏi mẫu
 -- =========================================================
-Practice Ex
+
 -- BAND 405-600
 -- ---------- LISTENING ----------
 -- Chương 1: PART 1: Photographs → 3 mini-tests

@@ -135,28 +135,12 @@
                                     <div class="combo-card__badge">
                                         <i class="fa-solid fa-fire" aria-hidden="true"></i> Được yêu thích
                                     </div>
-                                    @if($combo->saving_percent > 0)
-                                        <span class="combo-card__discount">
-                                            Tiết kiệm {{ $combo->saving_percent }}%
-                                        </span>
-                                    @endif
                                 </div>
                                 <div class="combo-card__body">
                                     <h3>{{ $combo->tenGoi }}</h3>
-                                    <p class="combo-card__description">{{ \Illuminate\Support\Str::limit($combo->moTa, 140) }}</p>
                                     <ul class="combo-card__meta">
                                         <li><i class="fa-solid fa-book" aria-hidden="true"></i> {{ $combo->courses_count }} khóa học</li>
-                                        <li><i class="fa-solid fa-clock" aria-hidden="true"></i>
-                                            {{ $combo->ngayKetThuc ? 'Đến ' . optional($combo->ngayKetThuc)->format('d/m/Y') : 'Không giới hạn thời gian' }}
-                                        </li>
                                     </ul>
-                                    @if($combo->rating_avg)
-                                        <div class="combo-card__rating">
-                                            <i class="fa-solid fa-star" aria-hidden="true"></i>
-                                            <span>{{ number_format($combo->rating_avg, 1) }}/5</span>
-                                            <small>({{ $combo->rating_count ?? 0 }} đánh giá)</small>
-                                        </div>
-                                    @endif
                                 </div>
                             </a>
                             <div class="combo-card__footer">
@@ -225,23 +209,12 @@
                             <a class="combo-card__link" href="{{ route('student.combos.show', $combo->slug) }}">
                                 <div class="combo-card__image">
                                     <img src="{{ $combo->cover_image_url }}" alt="{{ $combo->tenGoi }}" loading="lazy">
-                                    @if($combo->saving_percent > 0)
-                                        <span class="combo-card__discount">Tiết kiệm {{ $combo->saving_percent }}%</span>
-                                    @endif
                                 </div>
                                 <div class="combo-card__body">
                                     <h3>{{ $combo->tenGoi }}</h3>
-                                    <p class="combo-card__description">{{ \Illuminate\Support\Str::limit($combo->moTa, 130) }}</p>
                                     <ul class="combo-card__meta">
                                         <li><i class="fa-solid fa-layer-group" aria-hidden="true"></i> {{ $combo->courses_count }} khóa học</li>
-                                        <li><i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
-                                            {{ $combo->ngayBatDau ? 'Bắt đầu ' . optional($combo->ngayBatDau)->format('d/m') : 'Kích hoạt ngay' }}
-                                        </li>
                                     </ul>
-                                    <div class="combo-card__tags">
-                                        <span><i class="fa-solid fa-stopwatch" aria-hidden="true"></i> Tiến độ linh hoạt</span>
-                                        <span><i class="fa-solid fa-user" aria-hidden="true"></i> Mentor OCC</span>
-                                    </div>
                                 </div>
                             </a>
                             <div class="combo-card__footer">

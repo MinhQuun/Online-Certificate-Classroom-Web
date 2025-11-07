@@ -48,7 +48,7 @@ class ComboController extends Controller
         $spotlightCombos = (clone $baseQuery)
             ->available()
             ->orderByDesc('rating_avg')
-            ->limit(3)
+            ->limit(1)
             ->get();
 
         $enrollment = $this->resolveComboEnrollment();

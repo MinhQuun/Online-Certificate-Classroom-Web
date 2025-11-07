@@ -207,6 +207,7 @@
 
 .combo-section-head {
     text-align: center;
+    margin-top: 48px;
     margin-bottom: 32px;
 }
 
@@ -269,25 +270,32 @@
 .combo-grid {
     display: grid;
     gap: 24px;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 320px));
+    justify-content: center;
 }
 
 .combo-card {
     position: relative;
-    background: #fff;
-    border-radius: 20px;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
-    border: 1px solid rgba(226, 232, 240, 0.7);
-    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+    border-radius: 26px;
+    border: 1px solid rgba(226, 232, 240, 0.65);
+    background: radial-gradient(
+        circle at top,
+        #f9fbff 0%,
+        #ffffff 55%,
+        #f7f9ff 100%
+    );
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .combo-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
-    border-color: rgba(37, 99, 235, 0.25);
+    border-color: rgba(37, 99, 235, 0.35);
+    box-shadow: 0 30px 60px rgba(37, 99, 235, 0.16);
 }
 
 .combo-card__link {
@@ -296,54 +304,27 @@
     flex: 1;
     text-decoration: none;
     color: inherit;
-    position: relative;
-    z-index: 1;
-}
-
-.combo-card:focus-within {
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.35),
-        0 28px 60px rgba(15, 23, 42, 0.18);
-    border-color: rgba(37, 99, 235, 0.24);
-}
-
-.combo-card__link:focus-visible {
-    outline: none;
 }
 
 .combo-card__image {
-    position: relative;
-    background: linear-gradient(
-        135deg,
-        rgba(248, 250, 252, 0.5),
-        rgba(241, 245, 249, 0.5)
-    );
-    min-height: 190px;
-    max-height: 190px;
+    display: block;
+    border-radius: 0;
     overflow: hidden;
-    z-index: 2;
-}
-
-.combo-card__image::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        to bottom, 
-        transparent 40%, 
-        rgba(15, 23, 42, 0.03) 100%
-    );
-    pointer-events: none;
+    aspect-ratio: 16 / 9;
+    position: relative;
+    background: #eef2ff;
 }
 
 .combo-card__image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.4s ease-out;
+    object-position: center;
+    transition: transform 0.35s ease;
 }
 
 .combo-card:hover .combo-card__image img {
-    transform: scale(1.05);
+    transform: scale(1.04);
 }
 
 /* Badge "Tiết kiệm X%" - đặt ở góc DƯỚI bên PHẢI */
@@ -366,49 +347,35 @@
 }
 
 .combo-card__body {
-    padding: 22px 24px;
+    padding: 20px;
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    position: relative;
-    z-index: 2;
+    gap: 14px;
 }
 
 .combo-card__body h3 {
-    font-size: 1.15rem;
     margin: 0;
-    color: #0f172a;
+    font-size: 19px;
+    line-height: 1.4;
+    color: var(--color-text);
+    min-height: 2.8em;
+    text-align: center;
     font-weight: 700;
-    line-height: 1.45;
     transition: color 0.2s ease;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
 }
 
 .combo-card:hover .combo-card__body h3 {
     color: #2563eb;
 }
 
-.combo-card__description {
-    color: #64748b;
-    font-size: 0.9rem;
-    line-height: 1.6;
-    margin: 4px 0 0 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
 .combo-card__meta {
     list-style: none;
-    margin: 10px 0 0 0;
+    margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 8px;
     font-size: 0.875rem;
     color: #64748b;
@@ -417,32 +384,19 @@
 .combo-card__meta li {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 7px 10px;
-    background: rgba(241, 245, 249, 0.6);
-    border-radius: 10px;
-    border: 1px solid rgba(226, 232, 240, 0.5);
-    transition: all 0.2s ease;
-}
-
-.combo-card:hover .combo-card__meta li {
-    background: rgba(239, 246, 255, 0.8);
-    border-color: rgba(37, 99, 235, 0.15);
+    gap: 6px;
 }
 
 .combo-card__meta li i {
     color: #2563eb;
     font-size: 0.9rem;
-    width: 16px;
-    text-align: center;
-    flex-shrink: 0;
 }
 
 .combo-card__rating {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
-    margin-top: 8px;
     padding: 8px 12px;
     background: rgba(254, 243, 199, 0.5);
     border-radius: 10px;
@@ -466,70 +420,48 @@
     font-weight: 500;
 }
 
-.combo-card__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 8px 0 0;
-    position: relative;
-    z-index: 2;
-}
-
-.combo-card__tags span {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.8rem;
-    color: #3b82f6;
-    background: rgba(239, 246, 255, 0.7);
-    border-radius: 8px;
-    padding: 5px 10px;
-    font-weight: 600;
-    border: 1px solid rgba(37, 99, 235, 0.15);
-}
-
-.combo-card__tags span i {
-    font-size: 0.8rem;
-}
-
 .combo-card__footer {
     margin-top: auto;
-    padding: 18px 24px 20px;
+    padding: 0 20px 20px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    gap: 14px;
-    flex-wrap: wrap;
-    position: relative;
-    z-index: 2;
-    background: rgba(249, 250, 251, 0.8);
-    backdrop-filter: blur(8px);
-    border-top: 1px solid rgba(226, 232, 240, 0.5);
+    justify-content: center;
+    gap: 12px;
 }
 
 .combo-card__price-block {
+    background: rgba(15, 23, 42, 0.04);
+    border-radius: 18px;
+    padding: 10px 18px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    min-width: 160px;
-    padding: 12px 16px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, rgba(239, 246, 255, 0.8), rgba(241, 245, 249, 0.8));
-    border: 1px solid rgba(37, 99, 235, 0.12);
+    min-width: 170px;
+    text-align: center;
 }
 
 .combo-card__price-block small {
     text-transform: uppercase;
+    font-size: 11px;
     letter-spacing: 0.08em;
-    font-size: 0.7rem;
-    color: #3b82f6;
-    font-weight: 600;
+    color: var(--color-muted);
+    margin-bottom: 4px;
 }
 
 .combo-card__price-block strong {
-    font-size: 1.3rem;
-    color: #0f172a;
-    font-weight: 800;
+    font-size: 20px;
+    color: var(--color-accent);
+}
+
+.combo-card__action {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.combo-card__action form {
+    display: flex;
+    justify-content: center;
 }
 
 .combo-card__origin {
@@ -562,37 +494,33 @@
 
 .combo-card__cta {
     border: none;
-    border-radius: 12px;
+    border-radius: 999px;
     padding: 12px 22px;
-    font-weight: 700;
-    font-size: 0.9rem;
+    font-weight: 600;
     color: #fff;
-    background: linear-gradient(135deg, #2563eb, #3b82f6);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    background: linear-gradient(135deg, #2563eb, #60a5fa);
+    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.35);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    position: relative;
+    justify-content: center;
+    gap: 10px;
+    font-size: 14px;
 }
 
 .combo-card__cta i {
-    font-size: 0.95rem;
+    font-size: 14px;
 }
 
 .combo-card__cta:hover:not([disabled]) {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
-    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    box-shadow: 0 16px 32px rgba(37, 99, 235, 0.4);
 }
 
 .combo-card__cta[disabled],
 .combo-card__cta[aria-disabled="true"] {
     cursor: not-allowed;
-    box-shadow: none;
-    background: rgba(148, 163, 184, 0.18);
-    color: #475569;
 }
 
 /* Nút trạng thái: Đã trong giỏ hàng (Màu hồng/rose - nổi bật và khác biệt) */
