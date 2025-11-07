@@ -287,6 +287,7 @@ class Combo extends Model
         }
 
         $map = [
+            'toeic-combo' => 'combo_khoahoc.png',
             'toeic-foundation-full-pack-405-600' => 'combo_toeic_foundation_405-600.jpg',
             'toeic-intermediate-full-pack-605-780' => 'combo_toeic_intermediate_605-780.jpg',
             'toeic-advanced-full-pack-785-990' => 'combo_toeic_advanced_785-990.jpg',

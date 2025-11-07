@@ -15,8 +15,7 @@
         : $availableCollection->count();
     $averageSaving = (int) round($availableCollection->avg('saving_percent') ?? 0);
     $totalCoursesInCombos = (int) $availableCollection->sum('courses_count');
-    $heroImage = optional($spotlightCombos->first())->cover_image_url
-        ?? asset('Assets/Combos/combo_khoahoc.png');
+    $heroImage = asset('Assets/Combos/combo_khoahoc.png');
     $comboCartIds = $comboCartIds ?? [];
 @endphp
 
@@ -77,17 +76,6 @@
                         <span>Lộ trình trọn gói, cam kết tiến bộ</span>
                     </div>
                 </div>
-
-                @if($spotlightCombos->isNotEmpty())
-                    <ul class="combo-hero__spotlights">
-                        @foreach($spotlightCombos->take(2) as $combo)
-                            <li>
-                                <span>{{ $combo->tenGoi }}</span>
-                                <small>{{ number_format($combo->sale_price, 0, ',', '.') }} VND</small>
-                            </li>
-                        @endforeach
-                    </ul>
-                @endif
             </div>
         </div>
     </section>
@@ -117,7 +105,7 @@
     @if($spotlightCombos->isNotEmpty())
         <section class="combo-spotlight">
             <div class="oc-container">
-                <div class="combo-section-head">
+                <div class="section__header">
                     <h2>Combo nổi bật tuần này</h2>
                     <p>Lộ trình được đăng ký nhiều nhất trong 7 ngày qua, sẵn sàng giúp bạn bứt tốc điểm số.</p>
                 </div>
@@ -186,7 +174,7 @@
 
     <section class="combo-listing">
         <div class="oc-container">
-            <div class="combo-section-head">
+            <div class="section__header">
                 <h2>Combo đang mở bán</h2>
                 <p>Truy cập ngay sau thanh toán, học linh hoạt trên mọi thiết bị.</p>
             </div>

@@ -116,7 +116,7 @@
 
     <section class="combo-detail-content">
         <div class="oc-container combo-detail-layout">
-            <div class="combo-detail-main">
+            <div class="section__header">
                 <h2>Các khóa học trong combo</h2>
                 <p class="text-muted">
                     Toàn bộ khóa học sẽ được kích hoạt đồng thời ngay sau khi hoàn tất thanh toán.
@@ -202,8 +202,8 @@
                 </div>
 
                 @if($relatedCombos->isNotEmpty())
-                    <div class="combo-related">
-                        <h3>Combo liên quan</h3>
+                    <div class="section__header">
+                        <h2>Combo liên quan</h3>
                         <ul>
                             @foreach($relatedCombos as $related)
                                 <li>
