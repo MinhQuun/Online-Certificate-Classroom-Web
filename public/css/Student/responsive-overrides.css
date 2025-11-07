@@ -1,0 +1,82 @@
+/* Shared responsive adjustments for Student area */
+@media (max-width: 1200px) {
+    .course-layout,
+    .combo-detail-layout,
+    .lesson-layout,
+    .cart-layout,
+    .checkout-stage__grid,
+    .minitests-layout {
+        grid-template-columns: 1fr !important;
+        gap: clamp(20px, 4vw, 32px);
+    }
+
+    .lesson-layout__aside,
+    .checkout-card--sidebar,
+    .cart-summary {
+        position: static !important;
+        top: auto !important;
+        width: 100%;
+    }
+}
+
+@media (max-width: 992px) {
+    .course-card__footer,
+    .combo-card__footer,
+    .cart-board__header,
+    .cart-board__header-main,
+    .cart-board__actions,
+    .checkout-actions,
+    .cart-item__top,
+    .cart-item__foot {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .course-card__price-block,
+    .course-card__cta,
+    .combo-card__price-block,
+    .combo-card__action,
+    .cart-board__remove,
+    .cart-board__clear,
+    .checkout-actions .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero__grid,
+    .lesson-hero__grid,
+    .combo-hero__inner,
+    .combo-detail-hero__inner {
+        grid-template-columns: 1fr;
+    }
+
+    .lesson-meta {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+
+    .course-band__title,
+    .page-hero__header,
+    .cart-board__header-main {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .checkout-stepper {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+}
+
+@media (max-width: 576px) {
+    .stat-grid,
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cart-item__media img {
+        width: 100%;
+        height: auto;
+    }
+}

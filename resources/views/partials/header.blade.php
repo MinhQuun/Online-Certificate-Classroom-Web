@@ -15,6 +15,15 @@
 
             <nav class="main-nav" aria-label="Thanh điều hướng chính">
                 <ul class="nav-list">
+                    <li class="nav-item nav-item--mobile-search">
+                        <form action="{{ route('student.courses.index') }}" method="get" class="header-search" role="search">
+                            <label for="header-search-mobile" class="sr-only">Tìm khóa học</label>
+                            <input id="header-search-mobile" type="text" name="q" placeholder="Tìm khóa học..." value="{{ request('q') }}">
+                            <button type="submit" aria-label="Tìm kiếm">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.94 15.12a8 8 0 1 0-1.82 1.82l4.65 4.65a1.28 1.28 0 0 0 1.81-1.81Zm-6.44.88a5.5 5.5 0 1 1 5.5-5.5a5.5 5.5 0 0 1-5.5 5.5Z"/></svg>
+                            </button>
+                        </form>
+                    </li>
                     <!-- DROPDOWN: Danh mục khóa học -->
                     <li class="nav-item nav-item--mega" data-dropdown>
                         <button class="nav-link" data-dropdown-trigger aria-expanded="false" aria-haspopup="true" aria-controls="menu-categories">
@@ -88,6 +97,7 @@
         </div>
 
         <div class="header-right">
+            <div class="header-actions">
             @auth
                 @php
                     $fullName = Auth::user()->name ?? 'User';
@@ -176,6 +186,7 @@
                     <span class="header-icon__badge">{{ $studentCartCount }}</span>
                 @endif
             </a>
+            </div>
 
             <button class="header-toggle" type="button" data-header-toggle aria-expanded="false" aria-label="Mở menu">
                 <span></span><span></span><span></span>
@@ -191,3 +202,5 @@
 @push('scripts')
     <script src="{{ asset('js/Student/dropdown.js') }}" defer></script>
 @endpush
+
+

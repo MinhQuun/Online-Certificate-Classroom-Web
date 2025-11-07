@@ -33,6 +33,8 @@
     <link rel="stylesheet" href="{{ asset('css/common/toast.css') }}">
 
     @stack('styles')
+    @php $responsiveStyle = 'css/Student/responsive-overrides.css'; @endphp
+    <link rel="stylesheet" href="{{ asset($responsiveStyle) }}?v={{ student_asset_version($responsiveStyle) }}">
 </head>
 <body>
     @include('partials.header')
