@@ -450,10 +450,32 @@
 .discussion-reply__actions {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+    gap: 12px;
     font-size: 12px;
-    color: #94a3b8;
+    color: #475569;
+    flex-wrap: wrap;
+}
+
+.discussion-reply__actions button {
+    border: none;
+    background: transparent;
+    color: #2563eb;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+}
+
+.discussion-reply__actions button[data-reply-action="delete"] {
+    color: #dc2626;
+}
+
+.discussion-reply__children {
+    margin-left: 36px;
+    padding-left: 16px;
+    border-left: 2px solid rgba(148, 163, 184, 0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .reply-form {
@@ -463,8 +485,24 @@
     gap: 10px;
 }
 
+.discussion-reply__children .reply-form {
+    margin-left: 0;
+}
+
 .reply-form.is-visible {
     display: flex;
+}
+
+.reply-form__context {
+    font-size: 12px;
+    color: #475569;
+    background: rgba(37, 99, 235, 0.08);
+    border-radius: 10px;
+    padding: 6px 12px;
+}
+
+.reply-form__context[hidden] {
+    display: none;
 }
 
 .reply-form textarea {
@@ -542,5 +580,10 @@
     .discussion-replies,
     .reply-form {
         margin-left: 0;
+    }
+
+    .discussion-reply__children {
+        margin-left: 18px;
+        padding-left: 10px;
     }
 }

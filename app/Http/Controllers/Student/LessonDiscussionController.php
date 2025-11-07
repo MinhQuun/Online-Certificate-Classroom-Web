@@ -237,8 +237,12 @@ class LessonDiscussionController extends Controller
         }
 
         DB::transaction(function () use ($discussion, $reply) {
+            $nestedCount = $this->countNestedReplies($reply);
+
             $reply->delete();
-            $discussion->reply_count = max(0, $discussion->reply_count - 1);
+
+            $totalRemoved = 1 + $nestedCount;
+            $discussion->reply_count = max(0, $discussion->reply_count - $totalRemoved);
             $discussion->last_replied_at = now();
             $discussion->save();
         });
@@ -246,6 +250,28 @@ class LessonDiscussionController extends Controller
         return response()->json([
             'message' => 'Đã xóa phản hồi.',
         ]);
+    }
+
+    private function countNestedReplies(LessonDiscussionReply $reply): int
+    {
+        $count = 0;
+        $stack = [$reply->id];
+
+        while ($stack) {
+            $currentId = array_pop($stack);
+
+            $children = LessonDiscussionReply::where('parent_reply_id', $currentId)->pluck('id');
+            if ($children->isEmpty()) {
+                continue;
+            }
+
+            $count += $children->count();
+            foreach ($children as $childId) {
+                $stack[] = $childId;
+            }
+        }
+
+        return $count;
     }
 
     private function transformDiscussion(LessonDiscussion $discussion, ?User $currentUser): array

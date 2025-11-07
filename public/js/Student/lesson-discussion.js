@@ -1,4 +1,4 @@
-﻿(function () {
+﻿﻿(function () {
     'use strict';
 
     const config = window.lessonDiscussionBootstrap || {};
@@ -71,7 +71,7 @@
             }
 
             if (action === 'reply-toggle') {
-                toggleReplyForm(discussionId);
+                toggleReplyForm(discussionId, null, null);
                 return;
             }
 
@@ -101,15 +101,33 @@
             }
         }
 
-        const replyDeleteBtn = event.target.closest('[data-reply-action="delete"]');
-        if (replyDeleteBtn) {
-            const discussionAttr = replyDeleteBtn.getAttribute('data-discussion-id');
-            const replyAttr = replyDeleteBtn.getAttribute('data-reply-id');
+        const replyActionBtn = event.target.closest('[data-reply-action]');
+        if (replyActionBtn) {
+            const discussionAttr = replyActionBtn.getAttribute('data-discussion-id');
             const discussionId = discussionAttr ? parseInt(discussionAttr, 10) : NaN;
-            const replyId = replyAttr ? parseInt(replyAttr, 10) : NaN;
+            if (!discussionId) {
+                return;
+            }
 
-            if (discussionId && replyId) {
-                deleteReply(discussionId, replyId, replyDeleteBtn);
+            const action = replyActionBtn.getAttribute('data-reply-action');
+            if (action === 'delete') {
+                const replyAttr = replyActionBtn.getAttribute('data-reply-id');
+                const replyId = replyAttr ? parseInt(replyAttr, 10) : NaN;
+
+                if (replyId) {
+                    deleteReply(discussionId, replyId, replyActionBtn);
+                }
+                return;
+            }
+
+            if (action === 'reply') {
+                const replyAttr = replyActionBtn.getAttribute('data-reply-id');
+                const replyId = replyAttr ? parseInt(replyAttr, 10) : NaN;
+                if (!replyId) {
+                    return;
+                }
+                const replyItem = replyActionBtn.closest('.discussion-reply');
+                toggleReplyForm(discussionId, replyId, replyItem);
             }
         }
     });
@@ -299,7 +317,6 @@
         name.textContent = author.name || 'Người dùng';
         nameRow.appendChild(name);
 
-
         const timestamp = document.createElement('div');
         timestamp.className = 'discussion-card__timestamp';
         timestamp.textContent = discussion.created_human || '';
@@ -407,11 +424,12 @@
         const repliesContainer = document.createElement('div');
         repliesContainer.className = 'discussion-replies';
 
-        (discussion.replies || []).forEach(function (reply) {
-            repliesContainer.appendChild(createReplyBlock(reply, discussion));
+        const replyTree = buildReplyTree(discussion.replies || []);
+        replyTree.forEach(function (replyNode) {
+            repliesContainer.appendChild(createReplyThread(replyNode, discussion));
         });
 
-        if (config.permissions.can_reply) {
+        if (config.permissions.can_reply && !discussion.is_locked && discussion.status !== 'HIDDEN') {
             repliesContainer.appendChild(createReplyForm(discussion.id));
         }
 
@@ -420,10 +438,13 @@
         return card;
     }
 
-    function createReplyBlock(reply, discussion) {
+    function createReplyThread(node, discussion) {
+        const reply = node || {};
         const replyWrap = document.createElement('div');
         replyWrap.className = 'discussion-reply';
         replyWrap.dataset.replyId = String(reply.id);
+        replyWrap.dataset.replyAuthor = reply.author?.name || '';
+        replyWrap.dataset.discussionId = String(discussion.id);
 
         if (reply.is_official) {
             replyWrap.classList.add('is-official');
@@ -458,17 +479,41 @@
         content.textContent = reply.content || '';
         replyWrap.appendChild(content);
 
+        const controls = document.createElement('div');
+        controls.className = 'discussion-reply__actions';
+
+        if (config.permissions.can_reply && !discussion.is_locked) {
+            const replyBtn = document.createElement('button');
+            replyBtn.type = 'button';
+            replyBtn.dataset.replyAction = 'reply';
+            replyBtn.dataset.discussionId = String(discussion.id);
+            replyBtn.dataset.replyId = String(reply.id);
+            replyBtn.textContent = 'Trả lời';
+            controls.appendChild(replyBtn);
+        }
+
         if (canDeleteReply(reply, discussion)) {
-            const actions = document.createElement('div');
-            actions.className = 'discussion-reply__actions';
             const deleteBtn = document.createElement('button');
             deleteBtn.type = 'button';
             deleteBtn.dataset.replyAction = 'delete';
             deleteBtn.dataset.discussionId = String(discussion.id);
             deleteBtn.dataset.replyId = String(reply.id);
-            deleteBtn.textContent = 'Xóa phản hồi';
-            actions.appendChild(deleteBtn);
-            replyWrap.appendChild(actions);
+            deleteBtn.textContent = 'Xóa';
+            controls.appendChild(deleteBtn);
+        }
+
+        if (controls.childElementCount) {
+            replyWrap.appendChild(controls);
+        }
+
+        const children = Array.isArray(node.children) ? node.children : [];
+        if (children.length) {
+            const childrenContainer = document.createElement('div');
+            childrenContainer.className = 'discussion-reply__children';
+            children.forEach(function (childNode) {
+                childrenContainer.appendChild(createReplyThread(childNode, discussion));
+            });
+            replyWrap.appendChild(childrenContainer);
         }
 
         return replyWrap;
@@ -478,6 +523,13 @@
         const form = document.createElement('form');
         form.className = 'reply-form';
         form.dataset.discussionId = String(discussionId);
+        form.dataset.parentId = '';
+
+        const context = document.createElement('div');
+        context.className = 'reply-form__context';
+        context.setAttribute('data-reply-context', '');
+        context.hidden = true;
+        form.appendChild(context);
 
         const textarea = document.createElement('textarea');
         textarea.placeholder = 'Bạn muốn chia sẻ gì?';
@@ -497,8 +549,7 @@
         cancelBtn.className = 'btn btn--ghost';
         cancelBtn.textContent = 'Hủy';
         cancelBtn.addEventListener('click', function () {
-            form.classList.remove('is-visible');
-            textarea.value = '';
+            resetReplyForm(form);
         });
         actions.appendChild(cancelBtn);
 
@@ -506,7 +557,7 @@
         return form;
     }
 
-    function toggleReplyForm(discussionId) {
+    function toggleReplyForm(discussionId, parentReplyId, replyElement) {
         const card = listEl.querySelector('[data-discussion-id="' + discussionId + '"]');
         if (!card) {
             return;
@@ -517,29 +568,56 @@
             return;
         }
 
-        const textarea = form.querySelector('textarea');
-        const isVisible = form.classList.contains('is-visible');
+        const targetParent = parentReplyId ? String(parentReplyId) : '';
+        const currentParent = form.dataset.parentId || '';
+        const isVisible = form.classList.contains('is-visible') && targetParent === currentParent;
 
-        Array.from(listEl.querySelectorAll('.reply-form.is-visible')).forEach(function (node) {
+        Array.from(listEl.querySelectorAll('.reply-form')).forEach(function (node) {
             if (node !== form) {
-                node.classList.remove('is-visible');
-                const input = node.querySelector('textarea');
-                if (input) {
-                    input.value = '';
-                }
+                resetReplyForm(node);
             }
         });
 
-        if (!isVisible) {
-            form.classList.add('is-visible');
-            if (textarea) {
-                textarea.focus();
+        if (isVisible) {
+            resetReplyForm(form);
+            return;
+        }
+
+        let container = card.querySelector('.discussion-replies');
+        let replyTarget = replyElement || null;
+
+        if (parentReplyId && !replyTarget) {
+            replyTarget = listEl.querySelector('[data-reply-id="' + parentReplyId + '"]');
+        }
+
+        if (parentReplyId) {
+            const nestedContainer = ensureReplyChildContainer(replyTarget);
+            container = nestedContainer || container;
+        }
+
+        if (!container) {
+            return;
+        }
+
+        container.appendChild(form);
+        form.dataset.parentId = targetParent;
+
+        const context = form.querySelector('[data-reply-context]');
+        if (context) {
+            if (parentReplyId && replyTarget) {
+                const authorName = replyTarget.getAttribute('data-reply-author') || 'một phản hồi';
+                context.hidden = false;
+                context.textContent = 'Đang trả lời ' + authorName;
+            } else {
+                context.hidden = true;
+                context.textContent = '';
             }
-        } else {
-            form.classList.remove('is-visible');
-            if (textarea) {
-                textarea.value = '';
-            }
+        }
+
+        form.classList.add('is-visible');
+        const textarea = form.querySelector('textarea');
+        if (textarea) {
+            textarea.focus();
         }
     }
 
@@ -603,7 +681,17 @@
         if (submitBtn) {
             submitBtn.disabled = true;
         }
+        const textarea = form.querySelector('textarea');
+        if (textarea) {
+            textarea.disabled = true;
+        }
         renderInlineError(form, null);
+
+        const payload = { noi_dung: content };
+        const parentId = form.dataset.parentId;
+        if (parentId) {
+            payload.parent_reply_id = parseInt(parentId, 10);
+        }
 
         try {
             const response = await fetch(url, {
@@ -615,7 +703,7 @@
                     'X-Requested-With': 'XMLHttpRequest',
                 },
                 credentials: 'same-origin',
-                body: JSON.stringify({ noi_dung: content }),
+                body: JSON.stringify(payload),
             });
 
             if (!response.ok) {
@@ -627,8 +715,8 @@
                 return;
             }
 
-            const payload = await safeJson(response) || {};
-            const updated = payload.data && payload.data.discussion;
+            const payloadBody = await safeJson(response) || {};
+            const updated = payloadBody.data && payloadBody.data.discussion;
 
             if (updated) {
                 state.discussions = state.discussions.map(function (item) {
@@ -636,12 +724,16 @@
                 });
 
                 renderDiscussions();
+                resetReplyForm(form);
             }
         } catch (error) {
-            renderInlineError(form, 'Không thể gửi phản hồi. Vui lòng thử lại.');
+            renderInlineError(form, 'Không thể gửi phản hồi. Vui lòng thử lại!');
         } finally {
             if (submitBtn) {
                 submitBtn.disabled = false;
+            }
+            if (textarea) {
+                textarea.disabled = false;
             }
         }
     }
@@ -721,13 +813,21 @@
                     return item;
                 }
 
-                const replies = (item.replies || []).filter(function (reply) {
-                    return reply.id !== replyId;
+                const replies = Array.isArray(item.replies) ? item.replies.slice() : [];
+                const branchIds = collectReplyBranchIds(replies, replyId);
+                if (!branchIds.length) {
+                    return item;
+                }
+
+                const remaining = replies.filter(function (reply) {
+                    return !branchIds.includes(reply.id);
                 });
 
+                const removedCount = replies.length - remaining.length;
+
                 return Object.assign({}, item, {
-                    replies: replies,
-                    reply_count: Math.max(0, (item.reply_count || 0) - 1),
+                    replies: remaining,
+                    reply_count: Math.max(0, (item.reply_count || 0) - removedCount),
                 });
             });
 
@@ -768,6 +868,99 @@
         } finally {
             trigger.disabled = false;
         }
+    }
+
+    function buildReplyTree(flatReplies) {
+        if (!Array.isArray(flatReplies) || !flatReplies.length) {
+            return [];
+        }
+
+        const map = new Map();
+        flatReplies.forEach(function (reply) {
+            const node = Object.assign({}, reply);
+            node.children = [];
+            map.set(reply.id, node);
+        });
+
+        const roots = [];
+        map.forEach(function (node) {
+            if (node.parent_reply_id && map.has(node.parent_reply_id)) {
+                const parent = map.get(node.parent_reply_id);
+                parent.children.push(node);
+            } else {
+                roots.push(node);
+            }
+        });
+
+        return roots;
+    }
+
+    function collectReplyBranchIds(replies, rootId) {
+        if (!rootId) {
+            return [];
+        }
+        const ids = [];
+        const queue = [rootId];
+
+        while (queue.length) {
+            const current = queue.shift();
+            ids.push(current);
+
+            replies.forEach(function (reply) {
+                if (reply.parent_reply_id === current) {
+                    queue.push(reply.id);
+                }
+            });
+        }
+
+        return ids;
+    }
+
+    function ensureReplyChildContainer(replyElement) {
+        if (!replyElement) {
+            return null;
+        }
+        let children = replyElement.querySelector('.discussion-reply__children');
+        if (!children) {
+            children = document.createElement('div');
+            children.className = 'discussion-reply__children';
+            replyElement.appendChild(children);
+        }
+        return children;
+    }
+
+    function resetReplyForm(form) {
+        if (!form) {
+            return;
+        }
+
+        form.classList.remove('is-visible');
+        form.dataset.parentId = '';
+
+        const textarea = form.querySelector('textarea');
+        if (textarea) {
+            textarea.value = '';
+            textarea.disabled = false;
+        }
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = false;
+        }
+
+        const context = form.querySelector('[data-reply-context]');
+        if (context) {
+            context.hidden = true;
+            context.textContent = '';
+        }
+
+        const card = form.closest('.discussion-card');
+        const rootContainer = card ? card.querySelector('.discussion-replies') : null;
+        if (rootContainer && form.parentElement !== rootContainer) {
+            rootContainer.appendChild(form);
+        }
+
+        renderInlineError(form, null);
     }
 
     function updateCount() {

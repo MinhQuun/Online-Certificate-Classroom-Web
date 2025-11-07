@@ -298,10 +298,10 @@
             event.preventDefault();
 
             const submitBtn = form.querySelector("button[type='submit'], .btn-danger, .btn-danger-soft");
-            if (submitBtn?.disabledabled) return;
+            if (submitBtn?.disabled) return;
 
             if (typeof Swal === "undefined") {
-                if (confirm("Xoá bài giảng/tài liệu này?")) {
+                if (confirm("Xóa bài giảng/tài liệu này?")) {
                     form.dataset.confirmed = "true";
                     form.submit();
                 }
@@ -309,11 +309,11 @@
             }
             Swal.fire({
                 title: "Bạn chắc chắn?",
-                text: "Thao tác này sẽ xoá và không thể hoàn tác.",
+                text: "Thao tác này sẽ xóa và không thể hoàn tác.",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: "Xoá",
-                cancelButtonText: "Huỷ",
+                confirmButtonText: "Xóa",
+                cancelButtonText: "Hủy",
                 confirmButtonColor: "#d33",
             }).then((res) => {
                 if (res.isConfirmed) {
@@ -685,7 +685,7 @@ class TeacherDiscussionPanel {
             }
 
             if (action === 'reply-toggle') {
-                this.toggleReplyForm(discussionId);
+                this.toggleReplyForm(discussionId, null, null);
                 return;
             }
             if (action === 'pin') {
@@ -710,12 +710,24 @@ class TeacherDiscussionPanel {
             }
         }
 
-        const replyDeleteBtn = event.target.closest('[data-reply-action="delete"]');
-        if (replyDeleteBtn) {
-            const discussionId = parseInt(replyDeleteBtn.getAttribute('data-discussion-id') || '', 10);
-            const replyId = parseInt(replyDeleteBtn.getAttribute('data-reply-id') || '', 10);
-            if (discussionId && replyId) {
-                this.deleteReply(discussionId, replyId, replyDeleteBtn);
+        const replyActionBtn = event.target.closest('[data-reply-action]');
+        if (replyActionBtn) {
+            const discussionId = parseInt(replyActionBtn.getAttribute('data-discussion-id') || '', 10);
+            const replyId = parseInt(replyActionBtn.getAttribute('data-reply-id') || '', 10);
+            const action = replyActionBtn.getAttribute('data-reply-action');
+
+            if (!discussionId) {
+                return;
+            }
+
+            if (action === 'delete' && replyId) {
+                this.deleteReply(discussionId, replyId, replyActionBtn);
+                return;
+            }
+
+            if (action === 'reply' && replyId) {
+                const replyItem = replyActionBtn.closest('.discussion-reply');
+                this.toggleReplyForm(discussionId, replyId, replyItem);
             }
         }
     }
@@ -733,25 +745,115 @@ class TeacherDiscussionPanel {
         this.submitReply(discussionId, form);
     }
 
-    toggleReplyForm(discussionId) {
-        const forms = this.listEl?.querySelectorAll('.reply-form');
-        if (!forms) {
+    toggleReplyForm(discussionId, parentReplyId = null, replyElement = null) {
+        const card = this.listEl?.querySelector(`[data-discussion-id="${discussionId}"]`);
+        if (!card) {
             return;
         }
-        forms.forEach((form) => {
-            const formId = parseInt(form.getAttribute('data-discussion-id') || '', 10);
-            if (formId === discussionId) {
-                const isVisible = form.classList.toggle('is-visible');
-                if (isVisible) {
-                    const textarea = form.querySelector('textarea');
-                    if (textarea) {
-                        textarea.focus();
-                    }
-                }
-            } else {
-                form.classList.remove('is-visible');
+
+        const form = card.querySelector('.reply-form');
+        if (!form) {
+            return;
+        }
+
+        const targetParent = parentReplyId ? String(parentReplyId) : '';
+        const currentParent = form.dataset.parentId || '';
+        const isVisible = form.classList.contains('is-visible') && targetParent === currentParent;
+
+        this.listEl?.querySelectorAll('.reply-form').forEach((node) => {
+            if (node !== form) {
+                this.resetReplyForm(node);
             }
         });
+
+        if (isVisible) {
+            this.resetReplyForm(form);
+            return;
+        }
+
+        let container = card.querySelector('.discussion-replies');
+        let replyTarget = replyElement || null;
+
+        if (parentReplyId && !replyTarget) {
+            replyTarget = card.querySelector(`[data-reply-id="${parentReplyId}"]`);
+        }
+
+        if (parentReplyId) {
+            const nested = this.ensureReplyChildContainer(replyTarget);
+            container = nested || container;
+        }
+
+        if (!container) {
+            return;
+        }
+
+        container.appendChild(form);
+        form.dataset.parentId = targetParent;
+        this.updateReplyFormContext(form, replyTarget);
+
+        form.classList.add('is-visible');
+        const textarea = form.querySelector('textarea');
+        if (textarea) {
+            textarea.focus();
+        }
+    }
+
+    ensureReplyChildContainer(replyNode) {
+        if (!replyNode) {
+            return null;
+        }
+        let container = replyNode.querySelector('.discussion-reply__children');
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'discussion-reply__children';
+            replyNode.appendChild(container);
+        }
+        return container;
+    }
+
+    resetReplyForm(form) {
+        if (!form) {
+            return;
+        }
+        form.classList.remove('is-visible');
+        form.dataset.parentId = '';
+
+        const textarea = form.querySelector('textarea');
+        if (textarea) {
+            textarea.value = '';
+            textarea.disabled = false;
+        }
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = false;
+        }
+
+        this.updateReplyFormContext(form, null);
+
+        const card = form.closest('.discussion-card');
+        const container = card?.querySelector('.discussion-replies');
+        if (container && form.parentElement !== container) {
+            container.appendChild(form);
+        }
+
+        this.showInlineError(form, '');
+    }
+
+    updateReplyFormContext(form, replyNode) {
+        const context = form.querySelector('[data-reply-context]');
+        if (!context) {
+            return;
+        }
+
+        if (replyNode) {
+            const authorName = replyNode.getAttribute('data-reply-author') || 'một phản hồi';
+            context.hidden = false;
+            context.textContent = 'Đang trả lời ' + authorName;
+        } else {
+            context.hidden = true;
+            context.textContent = '';
+        }
     }
 
     async submitReply(discussionId, form) {
@@ -779,6 +881,11 @@ class TeacherDiscussionPanel {
         this.showInlineError(form, '');
 
         const url = this.currentConfig.replyUrlTemplate.replace('__DISCUSSION__', String(discussionId));
+        const payload = { noi_dung: content };
+        const parentId = form.dataset.parentId;
+        if (parentId) {
+            payload.parent_reply_id = parseInt(parentId, 10);
+        }
 
         try {
             const response = await fetch(url, {
@@ -790,19 +897,17 @@ class TeacherDiscussionPanel {
                     'X-Requested-With': 'XMLHttpRequest',
                 },
                 credentials: 'same-origin',
-                body: JSON.stringify({ noi_dung: content }),
+                body: JSON.stringify(payload),
             });
 
             if (!response.ok) {
-                const payload = await safeJson(response);
-                const message = payload?.message || 'Không thể gửi phản hồi.';
+                const payloadBody = await safeJson(response);
+                const message = payloadBody?.message || 'Không thể gửi phản hồi.';
                 this.showInlineError(form, message);
                 return;
             }
 
-            textarea.value = '';
-            form.classList.remove('is-visible');
-            this.showInlineError(form, '');
+            this.resetReplyForm(form);
             notify('Đã gửi phản hồi.', 'success');
             await this.fetchPage(1, false);
         } catch (error) {
@@ -963,14 +1068,9 @@ class TeacherDiscussionPanel {
 
         card.appendChild(this.createActionsRow(discussion));
 
-        const replies = this.createRepliesList(discussion);
-        if (replies) {
-            card.appendChild(replies);
-        }
-
-        const replyForm = this.createReplyForm(discussion);
-        if (replyForm) {
-            card.appendChild(replyForm);
+        const repliesSection = this.createRepliesSection(discussion);
+        if (repliesSection) {
+            card.appendChild(repliesSection);
         }
 
         return card;
@@ -1088,26 +1188,31 @@ class TeacherDiscussionPanel {
         return btn;
     }
 
-    createRepliesList(discussion) {
-        const replies = Array.isArray(discussion.replies) ? discussion.replies : [];
-        if (!replies.length) {
-            return null;
-        }
-
+    createRepliesSection(discussion) {
         const wrapper = document.createElement('div');
         wrapper.className = 'discussion-replies';
 
-        replies.forEach((reply) => {
-            wrapper.appendChild(this.createReplyItem(reply, discussion.id));
+        const tree = buildReplyTree(discussion.replies || []);
+        tree.forEach((node) => {
+            wrapper.appendChild(this.createReplyItem(node, discussion));
         });
 
-        return wrapper;
+        if (this.currentConfig?.permissions?.can_reply && !discussion.is_locked) {
+            const form = this.createReplyForm(discussion);
+            if (form) {
+                wrapper.appendChild(form);
+            }
+        }
+
+        return wrapper.childElementCount ? wrapper : null;
     }
 
-    createReplyItem(reply, discussionId) {
+    createReplyItem(node, discussion) {
+        const reply = node || {};
         const item = document.createElement('div');
         item.className = 'discussion-reply';
         item.dataset.replyId = String(reply.id);
+        item.dataset.replyAuthor = reply.author?.name || '';
 
         const header = document.createElement('div');
         header.className = 'discussion-reply__header';
@@ -1146,18 +1251,30 @@ class TeacherDiscussionPanel {
         meta.appendChild(body);
         header.appendChild(meta);
 
-        if (reply.can_delete) {
-            const actions = document.createElement('div');
-            actions.className = 'discussion-reply__actions';
+        const actions = document.createElement('div');
+        actions.className = 'discussion-reply__actions';
 
+        if (this.currentConfig?.permissions?.can_reply && !discussion.is_locked) {
+            const replyBtn = document.createElement('button');
+            replyBtn.type = 'button';
+            replyBtn.dataset.replyAction = 'reply';
+            replyBtn.setAttribute('data-discussion-id', String(discussion.id));
+            replyBtn.setAttribute('data-reply-id', String(reply.id));
+            replyBtn.textContent = 'Trả lời';
+            actions.appendChild(replyBtn);
+        }
+
+        if (reply.can_delete) {
             const deleteBtn = document.createElement('button');
             deleteBtn.type = 'button';
             deleteBtn.dataset.replyAction = 'delete';
-            deleteBtn.setAttribute('data-discussion-id', String(discussionId));
+            deleteBtn.setAttribute('data-discussion-id', String(discussion.id));
             deleteBtn.setAttribute('data-reply-id', String(reply.id));
             deleteBtn.textContent = 'Xóa';
-
             actions.appendChild(deleteBtn);
+        }
+
+        if (actions.childElementCount) {
             header.appendChild(actions);
         }
 
@@ -1167,6 +1284,16 @@ class TeacherDiscussionPanel {
         content.className = 'discussion-reply__content';
         content.textContent = reply.content || '';
         item.appendChild(content);
+
+        const children = Array.isArray(node.children) ? node.children : [];
+        if (children.length) {
+            const childrenContainer = document.createElement('div');
+            childrenContainer.className = 'discussion-reply__children';
+            children.forEach((child) => {
+                childrenContainer.appendChild(this.createReplyItem(child, discussion));
+            });
+            item.appendChild(childrenContainer);
+        }
 
         return item;
     }
@@ -1179,6 +1306,13 @@ class TeacherDiscussionPanel {
         const form = document.createElement('form');
         form.className = 'reply-form';
         form.dataset.discussionId = String(discussion.id);
+        form.dataset.parentId = '';
+
+        const context = document.createElement('div');
+        context.className = 'reply-form__context';
+        context.setAttribute('data-reply-context', '');
+        context.hidden = true;
+        form.appendChild(context);
 
         const textarea = document.createElement('textarea');
         textarea.setAttribute('rows', '3');
@@ -1192,6 +1326,12 @@ class TeacherDiscussionPanel {
         submitBtn.type = 'submit';
         submitBtn.textContent = 'Gửi phản hồi';
         actions.appendChild(submitBtn);
+
+        const cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button';
+        cancelBtn.textContent = 'Hủy';
+        cancelBtn.addEventListener('click', () => this.resetReplyForm(form));
+        actions.appendChild(cancelBtn);
 
         form.appendChild(actions);
         return form;
@@ -1224,6 +1364,31 @@ async function mutateDiscussion(url, method, body, csrfToken) {
     }
 
     return safeJson(response);
+}
+
+function buildReplyTree(flatReplies) {
+    if (!Array.isArray(flatReplies) || !flatReplies.length) {
+        return [];
+    }
+
+    const map = new Map();
+    flatReplies.forEach((reply) => {
+        const node = Object.assign({}, reply);
+        node.children = [];
+        map.set(reply.id, node);
+    });
+
+    const roots = [];
+    map.forEach((node) => {
+        if (node.parent_reply_id && map.has(node.parent_reply_id)) {
+            const parent = map.get(node.parent_reply_id);
+            parent.children.push(node);
+        } else {
+            roots.push(node);
+        }
+    });
+
+    return roots;
 }
 
 function createLabel(text, modifier, icon) {
