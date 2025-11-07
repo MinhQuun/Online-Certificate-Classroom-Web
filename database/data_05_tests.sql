@@ -98,15 +98,15 @@ SELECT maChuong INTO @ch_wr_785_3 FROM CHUONG WHERE maKH=@kh_wr_785 AND thuTu=3 
 -- 2) CHÈN DỮ LIỆU MINI-TESTS CHO BAND 405–600
 --    Mỗi chương: 3 mini-tests + tài liệu PDF đề thi + 1 câu hỏi mẫu
 -- =========================================================
-
+Practice Ex
 -- BAND 405-600
 -- ---------- LISTENING ----------
 -- Chương 1: PART 1: Photographs → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_li_405,@ch_li_405_1,'Mini-test 1 – Listening Photographs','LISTENING',1,10.00,0.00,10,1,1,1),
-(@kh_li_405,@ch_li_405_1,'Mini-test 2 – Listening Photographs','LISTENING',2,10.00,0.00,10,1,1,1),
-(@kh_li_405,@ch_li_405_1,'Mini-test 3 – Listening Photographs','LISTENING',3,10.00,0.00,10,1,1,1);
+(@kh_li_405,@ch_li_405_1,'Review exercises 1 – Listening Photographs','LISTENING',1,10.00,0.00,10,1,1,1),
+(@kh_li_405,@ch_li_405_1,'Review exercises 2 – Listening Photographs','LISTENING',2,10.00,0.00,10,1,1,1),
+(@kh_li_405,@ch_li_405_1,'Review exercises 3 – Listening Photographs','LISTENING',3,10.00,0.00,10,1,1,1);
 SET @mt_li_405_1_1 := LAST_INSERT_ID(); SET @mt_li_405_1_2 := @mt_li_405_1_1+1; SET @mt_li_405_1_3 := @mt_li_405_1_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -133,9 +133,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%
 -- Chương 2: PART 2: Question–Response → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_li_405,@ch_li_405_2,'Mini-test 1 – Question–Response','LISTENING',1,10.00,0.00,10,1,1,1),
-(@kh_li_405,@ch_li_405_2,'Mini-test 2 – Question–Response','LISTENING',2,10.00,0.00,10,1,1,1),
-(@kh_li_405,@ch_li_405_2,'Mini-test 3 – Question–Response','LISTENING',3,10.00,0.00,10,1,1,1);
+(@kh_li_405,@ch_li_405_2,'Review exercises 1 – Question–Response','LISTENING',1,10.00,0.00,10,1,1,1),
+(@kh_li_405,@ch_li_405_2,'Review exercises 2 – Question–Response','LISTENING',2,10.00,0.00,10,1,1,1),
+(@kh_li_405,@ch_li_405_2,'Review exercises 3 – Question–Response','LISTENING',3,10.00,0.00,10,1,1,1);
 SET @mt_li_405_2_1 := LAST_INSERT_ID(); SET @mt_li_405_2_2 := @mt_li_405_2_1+1; SET @mt_li_405_2_3 := @mt_li_405_2_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -162,9 +162,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%
 -- Chương 3: PART 3: Short Conversations → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_li_405,@ch_li_405_3,'Mini-test 1 – Short Conversations','LISTENING',1,10.00,0.00,10,1,1,1),
-(@kh_li_405,@ch_li_405_3,'Mini-test 2 – Short Conversations','LISTENING',2,10.00,0.00,10,1,1,1),
-(@kh_li_405,@ch_li_405_3,'Mini-test 3 – Short Conversations','LISTENING',3,10.00,0.00,10,1,1,1);
+(@kh_li_405,@ch_li_405_3,'Review exercises 1 – Short Conversations','LISTENING',1,10.00,0.00,10,1,1,1),
+(@kh_li_405,@ch_li_405_3,'Review exercises 2 – Short Conversations','LISTENING',2,10.00,0.00,10,1,1,1),
+(@kh_li_405,@ch_li_405_3,'Review exercises 3 – Short Conversations','LISTENING',3,10.00,0.00,10,1,1,1);
 SET @mt_li_405_3_1 := LAST_INSERT_ID(); SET @mt_li_405_3_2 := @mt_li_405_3_1+1; SET @mt_li_405_3_3 := @mt_li_405_3_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -191,9 +191,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%
 -- Chương 4: PART 4: Short Talks → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_li_405,@ch_li_405_4,'Mini-test 1 – Short Talks','LISTENING',1,10.00,0.00,10,1,1,1),
-(@kh_li_405,@ch_li_405_4,'Mini-test 2 – Short Talks','LISTENING',2,10.00,0.00,10,1,1,1),
-(@kh_li_405,@ch_li_405_4,'Mini-test 3 – Short Talks','LISTENING',3,10.00,0.00,10,1,1,1);
+(@kh_li_405,@ch_li_405_4,'Review exercises 1 – Short Talks','LISTENING',1,10.00,0.00,10,1,1,1),
+(@kh_li_405,@ch_li_405_4,'Review exercises 2 – Short Talks','LISTENING',2,10.00,0.00,10,1,1,1),
+(@kh_li_405,@ch_li_405_4,'Review exercises 3 – Short Talks','LISTENING',3,10.00,0.00,10,1,1,1);
 SET @mt_li_405_4_1 := LAST_INSERT_ID(); SET @mt_li_405_4_2 := @mt_li_405_4_1+1; SET @mt_li_405_4_3 := @mt_li_405_4_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -221,9 +221,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%
 -- Chương 1: Read a Text Aloud → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_sp_405,@ch_sp_405_1,'Mini-test 1 – Read a Text Aloud','SPEAKING',1,10.00,0.00,5,1,1,1),
-(@kh_sp_405,@ch_sp_405_1,'Mini-test 2 – Read a Text Aloud','SPEAKING',2,10.00,0.00,5,1,1,1),
-(@kh_sp_405,@ch_sp_405_1,'Mini-test 3 – Read a Text Aloud','SPEAKING',3,10.00,0.00,5,1,1,1);
+(@kh_sp_405,@ch_sp_405_1,'Review exercises 1 – Read a Text Aloud','SPEAKING',1,10.00,0.00,5,1,1,1),
+(@kh_sp_405,@ch_sp_405_1,'Review exercises 2 – Read a Text Aloud','SPEAKING',2,10.00,0.00,5,1,1,1),
+(@kh_sp_405,@ch_sp_405_1,'Review exercises 3 – Read a Text Aloud','SPEAKING',3,10.00,0.00,5,1,1,1);
 SET @mt_sp_405_1_1 := LAST_INSERT_ID(); SET @mt_sp_405_1_2 := @mt_sp_405_1_1+1; SET @mt_sp_405_1_3 := @mt_sp_405_1_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -250,9 +250,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 2: Describe a Picture → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_sp_405,@ch_sp_405_2,'Mini-test 1 – Describe a Picture','SPEAKING',1,10.00,0.00,5,1,1,1),
-(@kh_sp_405,@ch_sp_405_2,'Mini-test 2 – Describe a Picture','SPEAKING',2,10.00,0.00,5,1,1,1),
-(@kh_sp_405,@ch_sp_405_2,'Mini-test 3 – Describe a Picture','SPEAKING',3,10.00,0.00,5,1,1,1);
+(@kh_sp_405,@ch_sp_405_2,'Review exercises 1 – Describe a Picture','SPEAKING',1,10.00,0.00,5,1,1,1),
+(@kh_sp_405,@ch_sp_405_2,'Review exercises 2 – Describe a Picture','SPEAKING',2,10.00,0.00,5,1,1,1),
+(@kh_sp_405,@ch_sp_405_2,'Review exercises 3 – Describe a Picture','SPEAKING',3,10.00,0.00,5,1,1,1);
 SET @mt_sp_405_2_1 := LAST_INSERT_ID(); SET @mt_sp_405_2_2 := @mt_sp_405_2_1+1; SET @mt_sp_405_2_3 := @mt_sp_405_2_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -279,9 +279,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 3: Respond to Questions → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_sp_405,@ch_sp_405_3,'Mini-test 1 – Respond to Questions','SPEAKING',1,10.00,0.00,5,1,1,1),
-(@kh_sp_405,@ch_sp_405_3,'Mini-test 2 – Respond to Questions','SPEAKING',2,10.00,0.00,5,1,1,1),
-(@kh_sp_405,@ch_sp_405_3,'Mini-test 3 – Respond to Questions','SPEAKING',3,10.00,0.00,5,1,1,1);
+(@kh_sp_405,@ch_sp_405_3,'Review exercises 1 – Respond to Questions','SPEAKING',1,10.00,0.00,5,1,1,1),
+(@kh_sp_405,@ch_sp_405_3,'Review exercises 2 – Respond to Questions','SPEAKING',2,10.00,0.00,5,1,1,1),
+(@kh_sp_405,@ch_sp_405_3,'Review exercises 3 – Respond to Questions','SPEAKING',3,10.00,0.00,5,1,1,1);
 SET @mt_sp_405_3_1 := LAST_INSERT_ID(); SET @mt_sp_405_3_2 := @mt_sp_405_3_1+1; SET @mt_sp_405_3_3 := @mt_sp_405_3_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -308,9 +308,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 4: Respond to Questions Using Information Provided → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_sp_405,@ch_sp_405_4,'Mini-test 1 – Respond Using Info','SPEAKING',1,10.00,0.00,5,1,1,1),
-(@kh_sp_405,@ch_sp_405_4,'Mini-test 2 – Respond Using Info','SPEAKING',2,10.00,0.00,5,1,1,1),
-(@kh_sp_405,@ch_sp_405_4,'Mini-test 3 – Respond Using Info','SPEAKING',3,10.00,0.00,5,1,1,1);
+(@kh_sp_405,@ch_sp_405_4,'Review exercises 1 – Respond Using Info','SPEAKING',1,10.00,0.00,5,1,1,1),
+(@kh_sp_405,@ch_sp_405_4,'Review exercises 2 – Respond Using Info','SPEAKING',2,10.00,0.00,5,1,1,1),
+(@kh_sp_405,@ch_sp_405_4,'Review exercises 3 – Respond Using Info','SPEAKING',3,10.00,0.00,5,1,1,1);
 SET @mt_sp_405_4_1 := LAST_INSERT_ID(); SET @mt_sp_405_4_2 := @mt_sp_405_4_1+1; SET @mt_sp_405_4_3 := @mt_sp_405_4_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -338,9 +338,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 1: PART 5–6: Incomplete Sentences → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_re_405,@ch_re_405_1,'Mini-test 1 – Incomplete Sentences','READING',1,10.00,0.00,10,1,1,1),
-(@kh_re_405,@ch_re_405_1,'Mini-test 2 – Incomplete Sentences','READING',2,10.00,0.00,10,1,1,1),
-(@kh_re_405,@ch_re_405_1,'Mini-test 3 – Incomplete Sentences','READING',3,10.00,0.00,10,1,1,1);
+(@kh_re_405,@ch_re_405_1,'Review exercises 1 – Incomplete Sentences','READING',1,10.00,0.00,10,1,1,1),
+(@kh_re_405,@ch_re_405_1,'Review exercises 2 – Incomplete Sentences','READING',2,10.00,0.00,10,1,1,1),
+(@kh_re_405,@ch_re_405_1,'Review exercises 3 – Incomplete Sentences','READING',3,10.00,0.00,10,1,1,1);
 SET @mt_re_405_1_1 := LAST_INSERT_ID(); SET @mt_re_405_1_2 := @mt_re_405_1_1+1; SET @mt_re_405_1_3 := @mt_re_405_1_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -362,9 +362,9 @@ INSERT INTO MINITEST_QUESTIONS
 -- Chương 2: PART 7: Vocabulary & Reading Comprehension → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_re_405,@ch_re_405_2,'Mini-test 1 – Reading Comprehension','READING',1,10.00,0.00,10,1,1,1),
-(@kh_re_405,@ch_re_405_2,'Mini-test 2 – Reading Comprehension','READING',2,10.00,0.00,10,1,1,1),
-(@kh_re_405,@ch_re_405_2,'Mini-test 3 – Reading Comprehension','READING',3,10.00,0.00,10,1,1,1);
+(@kh_re_405,@ch_re_405_2,'Review exercises 1 – Reading Comprehension','READING',1,10.00,0.00,10,1,1,1),
+(@kh_re_405,@ch_re_405_2,'Review exercises 2 – Reading Comprehension','READING',2,10.00,0.00,10,1,1,1),
+(@kh_re_405,@ch_re_405_2,'Review exercises 3 – Reading Comprehension','READING',3,10.00,0.00,10,1,1,1);
 SET @mt_re_405_2_1 := LAST_INSERT_ID(); SET @mt_re_405_2_2 := @mt_re_405_2_1+1; SET @mt_re_405_2_3 := @mt_re_405_2_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -387,9 +387,9 @@ INSERT INTO MINITEST_QUESTIONS
 -- Chương 1: Express an Opinion → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_wr_405,@ch_wr_405_1,'Mini-test 1 – Express an Opinion','WRITING',1,10.00,0.00,20,1,1,1),
-(@kh_wr_405,@ch_wr_405_1,'Mini-test 2 – Express an Opinion','WRITING',2,10.00,0.00,20,1,1,1),
-(@kh_wr_405,@ch_wr_405_1,'Mini-test 3 – Express an Opinion','WRITING',3,10.00,0.00,20,1,1,1);
+(@kh_wr_405,@ch_wr_405_1,'Review exercises 1 – Express an Opinion','WRITING',1,10.00,0.00,20,1,1,1),
+(@kh_wr_405,@ch_wr_405_1,'Review exercises 2 – Express an Opinion','WRITING',2,10.00,0.00,20,1,1,1),
+(@kh_wr_405,@ch_wr_405_1,'Review exercises 3 – Express an Opinion','WRITING',3,10.00,0.00,20,1,1,1);
 SET @mt_wr_405_1_1 := LAST_INSERT_ID(); SET @mt_wr_405_1_2 := @mt_wr_405_1_1+1; SET @mt_wr_405_1_3 := @mt_wr_405_1_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -416,9 +416,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 2: Write a Sentence Based on a Picture → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_wr_405,@ch_wr_405_2,'Mini-test 1 – Sentence Based on Picture','WRITING',1,10.00,0.00,10,1,1,1),
-(@kh_wr_405,@ch_wr_405_2,'Mini-test 2 – Sentence Based on Picture','WRITING',2,10.00,0.00,10,1,1,1),
-(@kh_wr_405,@ch_wr_405_2,'Mini-test 3 – Sentence Based on Picture','WRITING',3,10.00,0.00,10,1,1,1);
+(@kh_wr_405,@ch_wr_405_2,'Review exercises 1 – Sentence Based on Picture','WRITING',1,10.00,0.00,10,1,1,1),
+(@kh_wr_405,@ch_wr_405_2,'Review exercises 2 – Sentence Based on Picture','WRITING',2,10.00,0.00,10,1,1,1),
+(@kh_wr_405,@ch_wr_405_2,'Review exercises 3 – Sentence Based on Picture','WRITING',3,10.00,0.00,10,1,1,1);
 SET @mt_wr_405_2_1 := LAST_INSERT_ID(); SET @mt_wr_405_2_2 := @mt_wr_405_2_1+1; SET @mt_wr_405_2_3 := @mt_wr_405_2_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -445,9 +445,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 3: Respond to a Written Request → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_wr_405,@ch_wr_405_3,'Mini-test 1 – Respond to Request','WRITING',1,10.00,0.00,20,1,1,1),
-(@kh_wr_405,@ch_wr_405_3,'Mini-test 2 – Respond to Request','WRITING',2,10.00,0.00,20,1,1,1),
-(@kh_wr_405,@ch_wr_405_3,'Mini-test 3 – Respond to Request','WRITING',3,10.00,0.00,20,1,1,1);
+(@kh_wr_405,@ch_wr_405_3,'Review exercises 1 – Respond to Request','WRITING',1,10.00,0.00,20,1,1,1),
+(@kh_wr_405,@ch_wr_405_3,'Review exercises 2 – Respond to Request','WRITING',2,10.00,0.00,20,1,1,1),
+(@kh_wr_405,@ch_wr_405_3,'Review exercises 3 – Respond to Request','WRITING',3,10.00,0.00,20,1,1,1);
 SET @mt_wr_405_3_1 := LAST_INSERT_ID(); SET @mt_wr_405_3_2 := @mt_wr_405_3_1+1; SET @mt_wr_405_3_3 := @mt_wr_405_3_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -476,9 +476,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 1: PART 1: Photographs → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_li_605,@ch_li_605_1,'Mini-test 1 – Listening Photographs','LISTENING',1,10.00,0.00,10,1,1,1),
-(@kh_li_605,@ch_li_605_1,'Mini-test 2 – Listening Photographs','LISTENING',2,10.00,0.00,10,1,1,1),
-(@kh_li_605,@ch_li_605_1,'Mini-test 3 – Listening Photographs','LISTENING',3,10.00,0.00,10,1,1,1);
+(@kh_li_605,@ch_li_605_1,'Review exercises 1 – Listening Photographs','LISTENING',1,10.00,0.00,10,1,1,1),
+(@kh_li_605,@ch_li_605_1,'Review exercises 2 – Listening Photographs','LISTENING',2,10.00,0.00,10,1,1,1),
+(@kh_li_605,@ch_li_605_1,'Review exercises 3 – Listening Photographs','LISTENING',3,10.00,0.00,10,1,1,1);
 SET @mt_li_605_1_1 := LAST_INSERT_ID(); SET @mt_li_605_1_2 := @mt_li_605_1_1+1; SET @mt_li_605_1_3 := @mt_li_605_1_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -505,9 +505,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%
 -- Chương 2: PART 2: Question–Response → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_li_605,@ch_li_605_2,'Mini-test 1 – Question–Response','LISTENING',1,10.00,0.00,10,1,1,1),
-(@kh_li_605,@ch_li_605_2,'Mini-test 2 – Question–Response','LISTENING',2,10.00,0.00,10,1,1,1),
-(@kh_li_605,@ch_li_605_2,'Mini-test 3 – Question–Response','LISTENING',3,10.00,0.00,10,1,1,1);
+(@kh_li_605,@ch_li_605_2,'Review exercises 1 – Question–Response','LISTENING',1,10.00,0.00,10,1,1,1),
+(@kh_li_605,@ch_li_605_2,'Review exercises 2 – Question–Response','LISTENING',2,10.00,0.00,10,1,1,1),
+(@kh_li_605,@ch_li_605_2,'Review exercises 3 – Question–Response','LISTENING',3,10.00,0.00,10,1,1,1);
 SET @mt_li_605_2_1 := LAST_INSERT_ID(); SET @mt_li_605_2_2 := @mt_li_605_2_1+1; SET @mt_li_605_2_3 := @mt_li_605_2_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -534,9 +534,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%
 -- Chương 3: PART 3: Short Conversations → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_li_605,@ch_li_605_3,'Mini-test 1 – Short Conversations','LISTENING',1,10.00,0.00,10,1,1,1),
-(@kh_li_605,@ch_li_605_3,'Mini-test 2 – Short Conversations','LISTENING',2,10.00,0.00,10,1,1,1),
-(@kh_li_605,@ch_li_605_3,'Mini-test 3 – Short Conversations','LISTENING',3,10.00,0.00,10,1,1,1);
+(@kh_li_605,@ch_li_605_3,'Review exercises 1 – Short Conversations','LISTENING',1,10.00,0.00,10,1,1,1),
+(@kh_li_605,@ch_li_605_3,'Review exercises 2 – Short Conversations','LISTENING',2,10.00,0.00,10,1,1,1),
+(@kh_li_605,@ch_li_605_3,'Review exercises 3 – Short Conversations','LISTENING',3,10.00,0.00,10,1,1,1);
 SET @mt_li_605_3_1 := LAST_INSERT_ID(); SET @mt_li_605_3_2 := @mt_li_605_3_1+1; SET @mt_li_605_3_3 := @mt_li_605_3_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -563,9 +563,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%
 -- Chương 4: PART 4: Short Talks → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_li_605,@ch_li_605_4,'Mini-test 1 – Short Talks','LISTENING',1,10.00,0.00,10,1,1,1),
-(@kh_li_605,@ch_li_605_4,'Mini-test 2 – Short Talks','LISTENING',2,10.00,0.00,10,1,1,1),
-(@kh_li_605,@ch_li_605_4,'Mini-test 3 – Short Talks','LISTENING',3,10.00,0.00,10,1,1,1);
+(@kh_li_605,@ch_li_605_4,'Review exercises 1 – Short Talks','LISTENING',1,10.00,0.00,10,1,1,1),
+(@kh_li_605,@ch_li_605_4,'Review exercises 2 – Short Talks','LISTENING',2,10.00,0.00,10,1,1,1),
+(@kh_li_605,@ch_li_605_4,'Review exercises 3 – Short Talks','LISTENING',3,10.00,0.00,10,1,1,1);
 SET @mt_li_605_4_1 := LAST_INSERT_ID(); SET @mt_li_605_4_2 := @mt_li_605_4_1+1; SET @mt_li_605_4_3 := @mt_li_605_4_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -593,9 +593,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%
 -- Chương 1: Read a Text Aloud → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_sp_605,@ch_sp_605_1,'Mini-test 1 – Read a Text Aloud','SPEAKING',1,10.00,0.00,5,1,1,1),
-(@kh_sp_605,@ch_sp_605_1,'Mini-test 2 – Read a Text Aloud','SPEAKING',2,10.00,0.00,5,1,1,1),
-(@kh_sp_605,@ch_sp_605_1,'Mini-test 3 – Read a Text Aloud','SPEAKING',3,10.00,0.00,5,1,1,1);
+(@kh_sp_605,@ch_sp_605_1,'Review exercises 1 – Read a Text Aloud','SPEAKING',1,10.00,0.00,5,1,1,1),
+(@kh_sp_605,@ch_sp_605_1,'Review exercises 2 – Read a Text Aloud','SPEAKING',2,10.00,0.00,5,1,1,1),
+(@kh_sp_605,@ch_sp_605_1,'Review exercises 3 – Read a Text Aloud','SPEAKING',3,10.00,0.00,5,1,1,1);
 SET @mt_sp_605_1_1 := LAST_INSERT_ID(); SET @mt_sp_605_1_2 := @mt_sp_605_1_1+1; SET @mt_sp_605_1_3 := @mt_sp_605_1_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -622,9 +622,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 2: Describe a Picture → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_sp_605,@ch_sp_605_2,'Mini-test 1 – Describe a Picture','SPEAKING',1,10.00,0.00,5,1,1,1),
-(@kh_sp_605,@ch_sp_605_2,'Mini-test 2 – Describe a Picture','SPEAKING',2,10.00,0.00,5,1,1,1),
-(@kh_sp_605,@ch_sp_605_2,'Mini-test 3 – Describe a Picture','SPEAKING',3,10.00,0.00,5,1,1,1);
+(@kh_sp_605,@ch_sp_605_2,'Review exercises 1 – Describe a Picture','SPEAKING',1,10.00,0.00,5,1,1,1),
+(@kh_sp_605,@ch_sp_605_2,'Review exercises 2 – Describe a Picture','SPEAKING',2,10.00,0.00,5,1,1,1),
+(@kh_sp_605,@ch_sp_605_2,'Review exercises 3 – Describe a Picture','SPEAKING',3,10.00,0.00,5,1,1,1);
 SET @mt_sp_605_2_1 := LAST_INSERT_ID(); SET @mt_sp_605_2_2 := @mt_sp_605_2_1+1; SET @mt_sp_605_2_3 := @mt_sp_605_2_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -651,9 +651,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 3: Respond to Questions → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_sp_605,@ch_sp_605_3,'Mini-test 1 – Respond to Questions','SPEAKING',1,10.00,0.00,5,1,1,1),
-(@kh_sp_605,@ch_sp_605_3,'Mini-test 2 – Respond to Questions','SPEAKING',2,10.00,0.00,5,1,1,1),
-(@kh_sp_605,@ch_sp_605_3,'Mini-test 3 – Respond to Questions','SPEAKING',3,10.00,0.00,5,1,1,1);
+(@kh_sp_605,@ch_sp_605_3,'Review exercises 1 – Respond to Questions','SPEAKING',1,10.00,0.00,5,1,1,1),
+(@kh_sp_605,@ch_sp_605_3,'Review exercises 2 – Respond to Questions','SPEAKING',2,10.00,0.00,5,1,1,1),
+(@kh_sp_605,@ch_sp_605_3,'Review exercises 3 – Respond to Questions','SPEAKING',3,10.00,0.00,5,1,1,1);
 SET @mt_sp_605_3_1 := LAST_INSERT_ID(); SET @mt_sp_605_3_2 := @mt_sp_605_3_1+1; SET @mt_sp_605_3_3 := @mt_sp_605_3_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -680,9 +680,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 4: Respond to Questions Using Information Provided → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_sp_605,@ch_sp_605_4,'Mini-test 1 – Respond Using Info','SPEAKING',1,10.00,0.00,5,1,1,1),
-(@kh_sp_605,@ch_sp_605_4,'Mini-test 2 – Respond Using Info','SPEAKING',2,10.00,0.00,5,1,1,1),
-(@kh_sp_605,@ch_sp_605_4,'Mini-test 3 – Respond Using Info','SPEAKING',3,10.00,0.00,5,1,1,1);
+(@kh_sp_605,@ch_sp_605_4,'Review exercises 1 – Respond Using Info','SPEAKING',1,10.00,0.00,5,1,1,1),
+(@kh_sp_605,@ch_sp_605_4,'Review exercises 2 – Respond Using Info','SPEAKING',2,10.00,0.00,5,1,1,1),
+(@kh_sp_605,@ch_sp_605_4,'Review exercises 3 – Respond Using Info','SPEAKING',3,10.00,0.00,5,1,1,1);
 SET @mt_sp_605_4_1 := LAST_INSERT_ID(); SET @mt_sp_605_4_2 := @mt_sp_605_4_1+1; SET @mt_sp_605_4_3 := @mt_sp_605_4_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -710,9 +710,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 1: PART 5–6: Incomplete Sentences → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_re_605,@ch_re_605_1,'Mini-test 1 – Incomplete Sentences','READING',1,10.00,0.00,10,1,1,1),
-(@kh_re_605,@ch_re_605_1,'Mini-test 2 – Incomplete Sentences','READING',2,10.00,0.00,10,1,1,1),
-(@kh_re_605,@ch_re_605_1,'Mini-test 3 – Incomplete Sentences','READING',3,10.00,0.00,10,1,1,1);
+(@kh_re_605,@ch_re_605_1,'Review exercises 1 – Incomplete Sentences','READING',1,10.00,0.00,10,1,1,1),
+(@kh_re_605,@ch_re_605_1,'Review exercises 2 – Incomplete Sentences','READING',2,10.00,0.00,10,1,1,1),
+(@kh_re_605,@ch_re_605_1,'Review exercises 3 – Incomplete Sentences','READING',3,10.00,0.00,10,1,1,1);
 SET @mt_re_605_1_1 := LAST_INSERT_ID(); SET @mt_re_605_1_2 := @mt_re_605_1_1+1; SET @mt_re_605_1_3 := @mt_re_605_1_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -734,9 +734,9 @@ INSERT INTO MINITEST_QUESTIONS
 -- Chương 2: PART 7: Vocabulary & Reading Comprehension → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_re_605,@ch_re_605_2,'Mini-test 1 – Reading Comprehension','READING',1,10.00,0.00,10,1,1,1),
-(@kh_re_605,@ch_re_605_2,'Mini-test 2 – Reading Comprehension','READING',2,10.00,0.00,10,1,1,1),
-(@kh_re_605,@ch_re_605_2,'Mini-test 3 – Reading Comprehension','READING',3,10.00,0.00,10,1,1,1);
+(@kh_re_605,@ch_re_605_2,'Review exercises 1 – Reading Comprehension','READING',1,10.00,0.00,10,1,1,1),
+(@kh_re_605,@ch_re_605_2,'Review exercises 2 – Reading Comprehension','READING',2,10.00,0.00,10,1,1,1),
+(@kh_re_605,@ch_re_605_2,'Review exercises 3 – Reading Comprehension','READING',3,10.00,0.00,10,1,1,1);
 SET @mt_re_605_2_1 := LAST_INSERT_ID(); SET @mt_re_605_2_2 := @mt_re_605_2_1+1; SET @mt_re_605_2_3 := @mt_re_605_2_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -759,9 +759,9 @@ INSERT INTO MINITEST_QUESTIONS
 -- Chương 1: Express an Opinion → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_wr_605,@ch_wr_605_1,'Mini-test 1 – Express an Opinion','WRITING',1,10.00,0.00,20,1,1,1),
-(@kh_wr_605,@ch_wr_605_1,'Mini-test 2 – Express an Opinion','WRITING',2,10.00,0.00,20,1,1,1),
-(@kh_wr_605,@ch_wr_605_1,'Mini-test 3 – Express an Opinion','WRITING',3,10.00,0.00,20,1,1,1);
+(@kh_wr_605,@ch_wr_605_1,'Review exercises 1 – Express an Opinion','WRITING',1,10.00,0.00,20,1,1,1),
+(@kh_wr_605,@ch_wr_605_1,'Review exercises 2 – Express an Opinion','WRITING',2,10.00,0.00,20,1,1,1),
+(@kh_wr_605,@ch_wr_605_1,'Review exercises 3 – Express an Opinion','WRITING',3,10.00,0.00,20,1,1,1);
 SET @mt_wr_605_1_1 := LAST_INSERT_ID(); SET @mt_wr_605_1_2 := @mt_wr_605_1_1+1; SET @mt_wr_605_1_3 := @mt_wr_605_1_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -788,9 +788,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 2: Write a Sentence Based on a Picture → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_wr_605,@ch_wr_605_2,'Mini-test 1 – Sentence Based on Picture','WRITING',1,10.00,0.00,10,1,1,1),
-(@kh_wr_605,@ch_wr_605_2,'Mini-test 2 – Sentence Based on Picture','WRITING',2,10.00,0.00,10,1,1,1),
-(@kh_wr_605,@ch_wr_605_2,'Mini-test 3 – Sentence Based on Picture','WRITING',3,10.00,0.00,10,1,1,1);
+(@kh_wr_605,@ch_wr_605_2,'Review exercises 1 – Sentence Based on Picture','WRITING',1,10.00,0.00,10,1,1,1),
+(@kh_wr_605,@ch_wr_605_2,'Review exercises 2 – Sentence Based on Picture','WRITING',2,10.00,0.00,10,1,1,1),
+(@kh_wr_605,@ch_wr_605_2,'Review exercises 3 – Sentence Based on Picture','WRITING',3,10.00,0.00,10,1,1,1);
 SET @mt_wr_605_2_1 := LAST_INSERT_ID(); SET @mt_wr_605_2_2 := @mt_wr_605_2_1+1; SET @mt_wr_605_2_3 := @mt_wr_605_2_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -817,9 +817,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 3: Respond to a Written Request → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_wr_605,@ch_wr_605_3,'Mini-test 1 – Respond to Request','WRITING',1,10.00,0.00,20,1,1,1),
-(@kh_wr_605,@ch_wr_605_3,'Mini-test 2 – Respond to Request','WRITING',2,10.00,0.00,20,1,1,1),
-(@kh_wr_605,@ch_wr_605_3,'Mini-test 3 – Respond to Request','WRITING',3,10.00,0.00,20,1,1,1);
+(@kh_wr_605,@ch_wr_605_3,'Review exercises 1 – Respond to Request','WRITING',1,10.00,0.00,20,1,1,1),
+(@kh_wr_605,@ch_wr_605_3,'Review exercises 2 – Respond to Request','WRITING',2,10.00,0.00,20,1,1,1),
+(@kh_wr_605,@ch_wr_605_3,'Review exercises 3 – Respond to Request','WRITING',3,10.00,0.00,20,1,1,1);
 SET @mt_wr_605_3_1 := LAST_INSERT_ID(); SET @mt_wr_605_3_2 := @mt_wr_605_3_1+1; SET @mt_wr_605_3_3 := @mt_wr_605_3_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -848,9 +848,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 1: PART 1: Photographs → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_li_785,@ch_li_785_1,'Mini-test 1 – Listening Photographs','LISTENING',1,10.00,0.00,10,1,1,1),
-(@kh_li_785,@ch_li_785_1,'Mini-test 2 – Listening Photographs','LISTENING',2,10.00,0.00,10,1,1,1),
-(@kh_li_785,@ch_li_785_1,'Mini-test 3 – Listening Photographs','LISTENING',3,10.00,0.00,10,1,1,1);
+(@kh_li_785,@ch_li_785_1,'Review exercises 1 – Listening Photographs','LISTENING',1,10.00,0.00,10,1,1,1),
+(@kh_li_785,@ch_li_785_1,'Review exercises 2 – Listening Photographs','LISTENING',2,10.00,0.00,10,1,1,1),
+(@kh_li_785,@ch_li_785_1,'Review exercises 3 – Listening Photographs','LISTENING',3,10.00,0.00,10,1,1,1);
 SET @mt_li_785_1_1 := LAST_INSERT_ID(); SET @mt_li_785_1_2 := @mt_li_785_1_1+1; SET @mt_li_785_1_3 := @mt_li_785_1_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -877,9 +877,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%
 -- Chương 2: PART 2: Question–Response → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_li_785,@ch_li_785_2,'Mini-test 1 – Question–Response','LISTENING',1,10.00,0.00,10,1,1,1),
-(@kh_li_785,@ch_li_785_2,'Mini-test 2 – Question–Response','LISTENING',2,10.00,0.00,10,1,1,1),
-(@kh_li_785,@ch_li_785_2,'Mini-test 3 – Question–Response','LISTENING',3,10.00,0.00,10,1,1,1);
+(@kh_li_785,@ch_li_785_2,'Review exercises 1 – Question–Response','LISTENING',1,10.00,0.00,10,1,1,1),
+(@kh_li_785,@ch_li_785_2,'Review exercises 2 – Question–Response','LISTENING',2,10.00,0.00,10,1,1,1),
+(@kh_li_785,@ch_li_785_2,'Review exercises 3 – Question–Response','LISTENING',3,10.00,0.00,10,1,1,1);
 SET @mt_li_785_2_1 := LAST_INSERT_ID(); SET @mt_li_785_2_2 := @mt_li_785_2_1+1; SET @mt_li_785_2_3 := @mt_li_785_2_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -906,9 +906,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%
 -- Chương 3: PART 3: Short Conversations → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_li_785,@ch_li_785_3,'Mini-test 1 – Short Conversations','LISTENING',1,10.00,0.00,10,1,1,1),
-(@kh_li_785,@ch_li_785_3,'Mini-test 2 – Short Conversations','LISTENING',2,10.00,0.00,10,1,1,1),
-(@kh_li_785,@ch_li_785_3,'Mini-test 3 – Short Conversations','LISTENING',3,10.00,0.00,10,1,1,1);
+(@kh_li_785,@ch_li_785_3,'Review exercises 1 – Short Conversations','LISTENING',1,10.00,0.00,10,1,1,1),
+(@kh_li_785,@ch_li_785_3,'Review exercises 2 – Short Conversations','LISTENING',2,10.00,0.00,10,1,1,1),
+(@kh_li_785,@ch_li_785_3,'Review exercises 3 – Short Conversations','LISTENING',3,10.00,0.00,10,1,1,1);
 SET @mt_li_785_3_1 := LAST_INSERT_ID(); SET @mt_li_785_3_2 := @mt_li_785_3_1+1; SET @mt_li_785_3_3 := @mt_li_785_3_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -935,9 +935,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%
 -- Chương 4: PART 4: Short Talks → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_li_785,@ch_li_785_4,'Mini-test 1 – Short Talks','LISTENING',1,10.00,0.00,10,1,1,1),
-(@kh_li_785,@ch_li_785_4,'Mini-test 2 – Short Talks','LISTENING',2,10.00,0.00,10,1,1,1),
-(@kh_li_785,@ch_li_785_4,'Mini-test 3 – Short Talks','LISTENING',3,10.00,0.00,10,1,1,1);
+(@kh_li_785,@ch_li_785_4,'Review exercises 1 – Short Talks','LISTENING',1,10.00,0.00,10,1,1,1),
+(@kh_li_785,@ch_li_785_4,'Review exercises 2 – Short Talks','LISTENING',2,10.00,0.00,10,1,1,1),
+(@kh_li_785,@ch_li_785_4,'Review exercises 3 – Short Talks','LISTENING',3,10.00,0.00,10,1,1,1);
 SET @mt_li_785_4_1 := LAST_INSERT_ID(); SET @mt_li_785_4_2 := @mt_li_785_4_1+1; SET @mt_li_785_4_3 := @mt_li_785_4_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -965,9 +965,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB%
 -- Chương 1: Read a Text Aloud → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_sp_785,@ch_sp_785_1,'Mini-test 1 – Read a Text Aloud','SPEAKING',1,10.00,0.00,5,1,1,1),
-(@kh_sp_785,@ch_sp_785_1,'Mini-test 2 – Read a Text Aloud','SPEAKING',2,10.00,0.00,5,1,1,1),
-(@kh_sp_785,@ch_sp_785_1,'Mini-test 3 – Read a Text Aloud','SPEAKING',3,10.00,0.00,5,1,1,1);
+(@kh_sp_785,@ch_sp_785_1,'Review exercises 1 – Read a Text Aloud','SPEAKING',1,10.00,0.00,5,1,1,1),
+(@kh_sp_785,@ch_sp_785_1,'Review exercises 2 – Read a Text Aloud','SPEAKING',2,10.00,0.00,5,1,1,1),
+(@kh_sp_785,@ch_sp_785_1,'Review exercises 3 – Read a Text Aloud','SPEAKING',3,10.00,0.00,5,1,1,1);
 SET @mt_sp_785_1_1 := LAST_INSERT_ID(); SET @mt_sp_785_1_2 := @mt_sp_785_1_1+1; SET @mt_sp_785_1_3 := @mt_sp_785_1_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -994,9 +994,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 2: Describe a Picture → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_sp_785,@ch_sp_785_2,'Mini-test 1 – Describe a Picture','SPEAKING',1,10.00,0.00,5,1,1,1),
-(@kh_sp_785,@ch_sp_785_2,'Mini-test 2 – Describe a Picture','SPEAKING',2,10.00,0.00,5,1,1,1),
-(@kh_sp_785,@ch_sp_785_2,'Mini-test 3 – Describe a Picture','SPEAKING',3,10.00,0.00,5,1,1,1);
+(@kh_sp_785,@ch_sp_785_2,'Review exercises 1 – Describe a Picture','SPEAKING',1,10.00,0.00,5,1,1,1),
+(@kh_sp_785,@ch_sp_785_2,'Review exercises 2 – Describe a Picture','SPEAKING',2,10.00,0.00,5,1,1,1),
+(@kh_sp_785,@ch_sp_785_2,'Review exercises 3 – Describe a Picture','SPEAKING',3,10.00,0.00,5,1,1,1);
 SET @mt_sp_785_2_1 := LAST_INSERT_ID(); SET @mt_sp_785_2_2 := @mt_sp_785_2_1+1; SET @mt_sp_785_2_3 := @mt_sp_785_2_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -1023,9 +1023,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 3: Respond to Questions → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_sp_785,@ch_sp_785_3,'Mini-test 1 – Respond to Questions','SPEAKING',1,10.00,0.00,5,1,1,1),
-(@kh_sp_785,@ch_sp_785_3,'Mini-test 2 – Respond to Questions','SPEAKING',2,10.00,0.00,5,1,1,1),
-(@kh_sp_785,@ch_sp_785_3,'Mini-test 3 – Respond to Questions','SPEAKING',3,10.00,0.00,5,1,1,1);
+(@kh_sp_785,@ch_sp_785_3,'Review exercises 1 – Respond to Questions','SPEAKING',1,10.00,0.00,5,1,1,1),
+(@kh_sp_785,@ch_sp_785_3,'Review exercises 2 – Respond to Questions','SPEAKING',2,10.00,0.00,5,1,1,1),
+(@kh_sp_785,@ch_sp_785_3,'Review exercises 3 – Respond to Questions','SPEAKING',3,10.00,0.00,5,1,1,1);
 SET @mt_sp_785_3_1 := LAST_INSERT_ID(); SET @mt_sp_785_3_2 := @mt_sp_785_3_1+1; SET @mt_sp_785_3_3 := @mt_sp_785_3_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -1052,9 +1052,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 4: Respond to Questions Using Information Provided → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_sp_785,@ch_sp_785_4,'Mini-test 1 – Respond Using Info','SPEAKING',1,10.00,0.00,5,1,1,1),
-(@kh_sp_785,@ch_sp_785_4,'Mini-test 2 – Respond Using Info','SPEAKING',2,10.00,0.00,5,1,1,1),
-(@kh_sp_785,@ch_sp_785_4,'Mini-test 3 – Respond Using Info','SPEAKING',3,10.00,0.00,5,1,1,1);
+(@kh_sp_785,@ch_sp_785_4,'Review exercises 1 – Respond Using Info','SPEAKING',1,10.00,0.00,5,1,1,1),
+(@kh_sp_785,@ch_sp_785_4,'Review exercises 2 – Respond Using Info','SPEAKING',2,10.00,0.00,5,1,1,1),
+(@kh_sp_785,@ch_sp_785_4,'Review exercises 3 – Respond Using Info','SPEAKING',3,10.00,0.00,5,1,1,1);
 SET @mt_sp_785_4_1 := LAST_INSERT_ID(); SET @mt_sp_785_4_2 := @mt_sp_785_4_1+1; SET @mt_sp_785_4_3 := @mt_sp_785_4_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -1082,9 +1082,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 1: PART 5–6: Incomplete Sentences → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_re_785,@ch_re_785_1,'Mini-test 1 – Incomplete Sentences','READING',1,10.00,0.00,10,1,1,1),
-(@kh_re_785,@ch_re_785_1,'Mini-test 2 – Incomplete Sentences','READING',2,10.00,0.00,10,1,1,1),
-(@kh_re_785,@ch_re_785_1,'Mini-test 3 – Incomplete Sentences','READING',3,10.00,0.00,10,1,1,1);
+(@kh_re_785,@ch_re_785_1,'Review exercises 1 – Incomplete Sentences','READING',1,10.00,0.00,10,1,1,1),
+(@kh_re_785,@ch_re_785_1,'Review exercises 2 – Incomplete Sentences','READING',2,10.00,0.00,10,1,1,1),
+(@kh_re_785,@ch_re_785_1,'Review exercises 3 – Incomplete Sentences','READING',3,10.00,0.00,10,1,1,1);
 SET @mt_re_785_1_1 := LAST_INSERT_ID(); SET @mt_re_785_1_2 := @mt_re_785_1_1+1; SET @mt_re_785_1_3 := @mt_re_785_1_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -1106,9 +1106,9 @@ INSERT INTO MINITEST_QUESTIONS
 -- Chương 2: PART 7: Vocabulary & Reading Comprehension → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_re_785,@ch_re_785_2,'Mini-test 1 – Reading Comprehension','READING',1,10.00,0.00,10,1,1,1),
-(@kh_re_785,@ch_re_785_2,'Mini-test 2 – Reading Comprehension','READING',2,10.00,0.00,10,1,1,1),
-(@kh_re_785,@ch_re_785_2,'Mini-test 3 – Reading Comprehension','READING',3,10.00,0.00,10,1,1,1);
+(@kh_re_785,@ch_re_785_2,'Review exercises 1 – Reading Comprehension','READING',1,10.00,0.00,10,1,1,1),
+(@kh_re_785,@ch_re_785_2,'Review exercises 2 – Reading Comprehension','READING',2,10.00,0.00,10,1,1,1),
+(@kh_re_785,@ch_re_785_2,'Review exercises 3 – Reading Comprehension','READING',3,10.00,0.00,10,1,1,1);
 SET @mt_re_785_2_1 := LAST_INSERT_ID(); SET @mt_re_785_2_2 := @mt_re_785_2_1+1; SET @mt_re_785_2_3 := @mt_re_785_2_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -1131,9 +1131,9 @@ INSERT INTO MINITEST_QUESTIONS
 -- Chương 1: Express an Opinion → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_wr_785,@ch_wr_785_1,'Mini-test 1 – Express an Opinion','WRITING',1,10.00,0.00,20,1,1,1),
-(@kh_wr_785,@ch_wr_785_1,'Mini-test 2 – Express an Opinion','WRITING',2,10.00,0.00,20,1,1,1),
-(@kh_wr_785,@ch_wr_785_1,'Mini-test 3 – Express an Opinion','WRITING',3,10.00,0.00,20,1,1,1);
+(@kh_wr_785,@ch_wr_785_1,'Review exercises 1 – Express an Opinion','WRITING',1,10.00,0.00,20,1,1,1),
+(@kh_wr_785,@ch_wr_785_1,'Review exercises 2 – Express an Opinion','WRITING',2,10.00,0.00,20,1,1,1),
+(@kh_wr_785,@ch_wr_785_1,'Review exercises 3 – Express an Opinion','WRITING',3,10.00,0.00,20,1,1,1);
 SET @mt_wr_785_1_1 := LAST_INSERT_ID(); SET @mt_wr_785_1_2 := @mt_wr_785_1_1+1; SET @mt_wr_785_1_3 := @mt_wr_785_1_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -1160,9 +1160,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 2: Write a Sentence Based on a Picture → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_wr_785,@ch_wr_785_2,'Mini-test 1 – Sentence Based on Picture','WRITING',1,10.00,0.00,10,1,1,1),
-(@kh_wr_785,@ch_wr_785_2,'Mini-test 2 – Sentence Based on Picture','WRITING',2,10.00,0.00,10,1,1,1),
-(@kh_wr_785,@ch_wr_785_2,'Mini-test 3 – Sentence Based on Picture','WRITING',3,10.00,0.00,10,1,1,1);
+(@kh_wr_785,@ch_wr_785_2,'Review exercises 1 – Sentence Based on Picture','WRITING',1,10.00,0.00,10,1,1,1),
+(@kh_wr_785,@ch_wr_785_2,'Review exercises 2 – Sentence Based on Picture','WRITING',2,10.00,0.00,10,1,1,1),
+(@kh_wr_785,@ch_wr_785_2,'Review exercises 3 – Sentence Based on Picture','WRITING',3,10.00,0.00,10,1,1,1);
 SET @mt_wr_785_2_1 := LAST_INSERT_ID(); SET @mt_wr_785_2_2 := @mt_wr_785_2_1+1; SET @mt_wr_785_2_3 := @mt_wr_785_2_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
@@ -1189,9 +1189,9 @@ CONCAT(@R2_BASE_PUBLIC,'/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA%
 -- Chương 3: Respond to a Written Request → 3 mini-tests
 INSERT INTO CHUONG_MINITEST
 (maKH,maChuong,title,skill_type,thuTu,max_score,trongSo,time_limit_min,attempts_allowed,is_active,is_published) VALUES
-(@kh_wr_785,@ch_wr_785_3,'Mini-test 1 – Respond to Request','WRITING',1,10.00,0.00,20,1,1,1),
-(@kh_wr_785,@ch_wr_785_3,'Mini-test 2 – Respond to Request','WRITING',2,10.00,0.00,20,1,1,1),
-(@kh_wr_785,@ch_wr_785_3,'Mini-test 3 – Respond to Request','WRITING',3,10.00,0.00,20,1,1,1);
+(@kh_wr_785,@ch_wr_785_3,'Review exercises 1 – Respond to Request','WRITING',1,10.00,0.00,20,1,1,1),
+(@kh_wr_785,@ch_wr_785_3,'Review exercises 2 – Respond to Request','WRITING',2,10.00,0.00,20,1,1,1),
+(@kh_wr_785,@ch_wr_785_3,'Review exercises 3 – Respond to Request','WRITING',3,10.00,0.00,20,1,1,1);
 SET @mt_wr_785_3_1 := LAST_INSERT_ID(); SET @mt_wr_785_3_2 := @mt_wr_785_3_1+1; SET @mt_wr_785_3_3 := @mt_wr_785_3_1+2;
 
 INSERT INTO MINITEST_TAILIEU (maMT,tenTL,loai,mime_type,visibility,public_url) VALUES
