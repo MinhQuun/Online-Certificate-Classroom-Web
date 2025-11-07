@@ -105,7 +105,7 @@
             <div class="course-layout__main">
                 <div class="section__header">
                     <h2>Nội dung khóa học</h2>
-                    <p>Khóa học được chia thành các chương kèm theo bài kiểm tra nhỏ (mini test), giúp bạn đánh giá tiến độ trước khi chuyển sang nội dung mới.</p>
+                    <p>Khóa học được chia thành các chương kèm theo bài ôn luyện (review exercises), giúp bạn đánh giá tiến độ trước khi chuyển sang nội dung mới.</p>
                 </div>
 
                 <!-- Chapters -->
@@ -158,7 +158,7 @@
                                         <header class="module__header">
                                             <button class="module__toggle" type="button" aria-expanded="false">
                                                 <div class="module__info">
-                                                    <span class="module__title" style="font-size: 18px; font-weight: 700;">MiniTest</span>
+                                                    <span class="module__title" style="font-size: 18px; font-weight: 700;">Review Exercises</span>
                                                 </div>
                                                 <span style="margin-left: auto; margin-right: 16px; background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;">
                                                     {{ $chapter->miniTests->count() }} bài
@@ -192,19 +192,19 @@
                                                                     @csrf
                                                                     <button type="submit" class="mini-test-link" style="background:transparent;border:0;padding:0;text-align:left;width:100%;">
                                                                         <div class="lesson-list__meta">
-                                                                            <span class="lesson-list__eyebrow">MiniTest {{ $miniTest->thuTu }}</span>
+                                                                            <span class="lesson-list__eyebrow">Practice {{ $miniTest->thuTu }}</span>
                                                                             <span class="lesson-list__title">{{ $miniTest->title }}</span>
                                                                         </div>
-                                                                        <span class="badge badge--minitest">MINI TEST</span>
+                                                                        <span class="badge badge--minitest">REVIEW EXERCISES</span>
                                                                     </button>
                                                                 </form>
                                                             @else
                                                                 <a href="#" class="mini-test-link" >
                                                                     <div class="lesson-list__meta">
-                                                                        <span class="lesson-list__eyebrow">MiniTest {{ $miniTest->thuTu }}</span>
+                                                                        <span class="lesson-list__eyebrow">Review Exercises {{ $miniTest->thuTu }}</span>
                                                                         <span class="lesson-list__title">{{ $miniTest->title }}</span>
                                                                     </div>
-                                                                    <span class="badge badge--minitest">MINI TEST</span>
+                                                                    <span class="badge badge--minitest">REVIEW EXERCISES</span>
                                                                 </a>
                                                             @endif
                                                             <ul class="meta-list meta-list--inline mt-1">
@@ -261,8 +261,7 @@
                     @endif
                     <ul class="course-sidebar__list">
                         <li>Tài liệu định dạng sẵn</li>
-                        <li>Mini test từng chương</li>
-                        <li>Final test tổng hợp</li>
+                        <li>Review Exercises từng chương</li>
                         <li>Chứng chỉ hoàn thành</li>
                     </ul>
                 </div>
@@ -493,7 +492,7 @@
                     <h6 class="fw-bold mb-3">Quyền lợi khi đăng ký khóa học:</h6>
                     <ul class="list-unstyled mb-0 row row-cols-2">
                         <li class="d-flex align-items-center gap-2 mb-3 col"><i class="fas fa-check-circle text-success"></i> Tài liệu định dạng sẵn</li>
-                        <li class="d-flex align-items-center gap-2 mb-3 col"><i class="fas fa-check-circle text-success"></i> Mini test từng chương</li>
+                        <li class="d-flex align-items-center gap-2 mb-3 col"><i class="fas fa-check-circle text-success"></i> Review Exercises từng chương</li>
                         <li class="d-flex align-items-center gap-2 mb-3 col"><i class="fas fa-check-circle text-success"></i> Final test tổng hợp</li>
                         <li class="d-flex align-items-center gap-2 col"><i class="fas fa-check-circle text-success"></i> Chứng chỉ hoàn thành</li>
                     </ul>

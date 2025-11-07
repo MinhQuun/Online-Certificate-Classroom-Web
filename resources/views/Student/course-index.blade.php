@@ -26,7 +26,7 @@
                 <p>Chương trình được thiết kế bởi đội ngũ chuyên môn, tập trung vào kỹ năng thực hành và hệ thống đánh giá liên tục.</p>
                 <div class="hero__meta">
                     <span>Thư viện tài liệu số</span>
-                    <span>Mini test từng chương</span>
+                    <span>Review Exercises từng chương</span>
                     <span>Mentor theo sát</span>
                 </div>
             </div>

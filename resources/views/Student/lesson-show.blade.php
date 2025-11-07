@@ -282,7 +282,7 @@
                                             <div class="aside-mini">
                                                 <div class="aside-mini__header">
                                                     
-                                                    <span class="aside-mini__label">Mini test chương</span>
+                                                    <span class="aside-mini__label">Review Exercises chương</span>
                                                 </div>
                                                 <ul class="mini-test-chip-list">
                                                     @foreach ($chapter->miniTests as $miniTest)

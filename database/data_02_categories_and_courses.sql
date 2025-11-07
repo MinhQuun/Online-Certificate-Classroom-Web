@@ -29,7 +29,7 @@ INSERT INTO KHOAHOC
     'Luyện TOEIC Speaking 405-600',
     'luyen-thi-toeic-speaking-405-600',
     950000,
-    'Khóa luyện Speaking TOEIC: tập trung phát âm chuẩn, kỹ năng trả lời các dạng câu hỏi Speaking, có bài tập ôn luyện theo chương và thi cuối khóa.',
+    'Khóa luyện Speaking TOEIC: tập trung phát âm chuẩn, kỹ năng trả lời các dạng câu hỏi Speaking, có bài tập ôn luyện theo chương.',
     '2025-01-01','2025-12-31','toeic-speaking-405-600.png',365,'PUBLISHED');
 SET @kh_speaking_405_600 := LAST_INSERT_ID();
 
@@ -40,7 +40,7 @@ INSERT INTO KHOAHOC
     'Luyện TOEIC Writing 405-600',
     'luyen-thi-toeic-writing-405-600',
     900000,
-    'Khóa luyện Writing TOEIC: kỹ năng viết email, bài luận, triển khai ý mạch lạc, có bài tập ôn luyện theo chương và thi cuối khóa.',
+    'Khóa luyện Writing TOEIC: kỹ năng viết email, bài luận, triển khai ý mạch lạc, có bài tập ôn luyện theo chương.',
     '2025-01-01','2025-12-31','toeic-writing-405-600.png',365,'PUBLISHED');
 SET @kh_writing_405_600 := LAST_INSERT_ID();
 
