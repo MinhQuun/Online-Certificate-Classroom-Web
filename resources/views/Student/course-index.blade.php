@@ -114,21 +114,6 @@
                                         : null;
                                 @endphp
                                 <article class="course-card {{ $hasPromotion ? 'course-card--has-promo' : '' }}">
-                                    @if ($hasPromotion)
-                                        <div class="course-card__flag">
-                                            <i class="fa-solid fa-bolt" aria-hidden="true"></i>
-                                            <span>Ưu đãi {{ $course->saving_percent }}%</span>
-                                        </div>
-                                    @endif
-                                    {{-- <div class="course-card__category">
-                                        <span class="chip chip--category">{{ $categoryName }}</span>
-                                        @if ($hasPromotion && $promotionLabel)
-                                            <span class="chip chip--promo">
-                                                <i class="fa-solid fa-gift" aria-hidden="true"></i>
-                                                {{ \Illuminate\Support\Str::limit($promotionLabel, 28) }}
-                                            </span>
-                                        @endif
-                                    </div> --}}
                                     <div class="course-card__media">
                                         <a href="{{ route('student.courses.show', $course->slug) }}" class="course-card__thumb">
                                             <img src="{{ $course->cover_image_url }}" alt="{{ $course->tenKH }}" loading="lazy">

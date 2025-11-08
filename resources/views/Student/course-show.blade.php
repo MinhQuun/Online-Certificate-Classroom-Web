@@ -415,40 +415,42 @@
                 <div class="card-grid">
                     @foreach ($relatedCourses as $related)
                         @php
-                            $isOwned = in_array($related->maKH, $activeCourseIds);
-                            $inCart = in_array($related->maKH, $cartIds);
+                            $categoryName = optional($related->category)->tenDanhMuc ?? 'Chương trình nổi bật';
+                            $inCart = in_array($related->maKH, $cartIds ?? [], true);
+                            $isActive = in_array($related->maKH, $activeCourseIds ?? [], true);
+                            $isPending = in_array($related->maKH, $pendingCourseIds ?? [], true);
+                            if ($isActive || $isPending) {
+                                $inCart = false;
+                            }
+                            $ctaClass = $isActive
+                                ? 'course-card__cta--active'
+                                : ($isPending
+                                    ? 'course-card__cta--pending'
+                                    : ($inCart ? 'course-card__cta--in-cart' : ''));
+                            $ctaText = $isActive
+                                ? 'Đã kích hoạt'
+                                : ($isPending
+                                    ? 'Chờ kích hoạt'
+                                    : ($inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng'));
                             $promotion = $related->active_promotion;
                             $hasPromotion = $related->saving_amount > 0;
                             $promotionLabel = $promotion?->tenKM;
+                            $promotionEnds = $promotion && $promotion->ngayKetThuc
+                                ? optional($promotion->ngayKetThuc)->format('d/m')
+                                : null;
                         @endphp
                         <article class="course-card {{ $hasPromotion ? 'course-card--has-promo' : '' }}">
-                            @if ($hasPromotion)
-                                <div class="course-card__flag">
-                                    <i class="fa-solid fa-bolt" aria-hidden="true"></i>
-                                    <span>Ưu đãi {{ $related->saving_percent }}%</span>
-                                </div>
-                            @endif
+
                             <div class="course-card__category">
-                                <span class="chip chip--category">{{ optional($related->category)->tenDanhMuc ?? 'Khác' }}</span>
-                                @if ($hasPromotion && $promotionLabel)
-                                    <span class="chip chip--promo">
-                                        <i class="fa-solid fa-gift" aria-hidden="true"></i>
-                                        {{ \Illuminate\Support\Str::limit($promotionLabel, 28) }}
-                                    </span>
-                                @endif
+                                <span class="chip chip--category">{{ $categoryName }}</span>
                             </div>
                             <div class="course-card__media">
                                 <a href="{{ route('student.courses.show', $related->slug) }}" class="course-card__thumb">
                                     <img src="{{ $related->cover_image_url }}" alt="{{ $related->tenKH }}" loading="lazy">
-                                    @if ($hasPromotion && $related->saving_percent > 0)
-                                        <span class="course-card__discount" aria-label="Giảm {{ $related->saving_percent }}%">
-                                            -{{ $related->saving_percent }}%
-                                        </span>
-                                    @endif
                                 </a>
                                 <div class="course-card__media-meta">
                                     <span class="course-card__media-tag {{ $hasPromotion ? 'is-promo' : '' }}">
-                                        <i class="fa-regular {{ $hasPromotion ? 'fa-badge-percent' : 'fa-shield-check' }}" aria-hidden="true"></i>
+                                        <i class="fa-solid fa-gift" aria-hidden="true"></i>
                                         {{ $hasPromotion ? ($promotionLabel ?? 'Ưu đãi đang diễn ra') : 'Giá niêm yết ổn định' }}
                                     </span>
                                 </div>
@@ -458,12 +460,12 @@
                                 <p class="course-card__promo-note {{ $hasPromotion ? 'is-active' : '' }}">
                                     <i class="fa-regular {{ $hasPromotion ? 'fa-clock' : 'fa-circle-check' }}" aria-hidden="true"></i>
                                     <span>
-                                        @if ($hasPromotion && $promotion?->ngayKetThuc)
-                                            Ưu đãi đến {{ optional($promotion->ngayKetThuc)->format('d/m') }}
+                                        @if ($hasPromotion && $promotionEnds)
+                                            Ưu đãi đến {{ $promotionEnds }}
                                         @elseif ($hasPromotion)
-                                            Ưu đãi giới hạn thời gian
+                                            Ưu đãi giới hạn số lượng
                                         @else
-                                            Giá ổn định mọi thời điểm
+                                            Giá niêm yết ổn định toàn khóa
                                         @endif
                                     </span>
                                 </p>
@@ -487,8 +489,7 @@
                                                 </span>
                                             @else
                                                 <span class="course-card__note">
-                                                    <i class="fa-regular fa-file-lines" aria-hidden="true"></i>
-                                                    Bao gồm tài liệu luyện tập
+                                                    Bao gồm tài liệu & mentor đồng hành
                                                 </span>
                                             @endif
                                         </div>
@@ -496,10 +497,12 @@
                                     <form method="post" action="{{ route('student.cart.store') }}">
                                         @csrf
                                         <input type="hidden" name="course_id" value="{{ $related->maKH }}">
-                                        <button type="submit"
-                                                class="course-card__cta {{ $isOwned ? 'course-card__cta--owned' : ($inCart ? 'course-card__cta--in-cart' : '') }}"
-                                                @if($isOwned || $inCart) disabled @endif>
-                                            {{ $isOwned ? 'Đã mua' : ($inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng') }}
+                                        <button
+                                            type="submit"
+                                            class="course-card__cta {{ $ctaClass }}"
+                                            @if($isActive || $isPending || $inCart) disabled aria-disabled="true" @endif
+                                        >
+                                            {{ $ctaText }}
                                         </button>
                                     </form>
                                 </div>
