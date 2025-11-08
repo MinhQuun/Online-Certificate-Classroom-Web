@@ -422,27 +422,76 @@
                             $promotionLabel = $promotion?->tenKM;
                         @endphp
                         <article class="course-card {{ $hasPromotion ? 'course-card--has-promo' : '' }}">
+                            @if ($hasPromotion)
+                                <div class="course-card__flag">
+                                    <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                                    <span>Ưu đãi {{ $related->saving_percent }}%</span>
+                                </div>
+                            @endif
                             <div class="course-card__category">
                                 <span class="chip chip--category">{{ optional($related->category)->tenDanhMuc ?? 'Khác' }}</span>
-                            </div>
-                            <a href="{{ route('student.courses.show', $related->slug) }}" class="course-card__thumb">
-                                <img src="{{ $related->cover_image_url }}" alt="{{ $related->tenKH }}" loading="lazy">
-                                @if ($hasPromotion && $related->saving_percent > 0)
-                                    <span class="course-card__discount" aria-label="Giảm {{ $related->saving_percent }}%">
-                                        -{{ $related->saving_percent }}%
+                                @if ($hasPromotion && $promotionLabel)
+                                    <span class="chip chip--promo">
+                                        <i class="fa-solid fa-gift" aria-hidden="true"></i>
+                                        {{ \Illuminate\Support\Str::limit($promotionLabel, 28) }}
                                     </span>
                                 @endif
-                            </a>
+                            </div>
+                            <div class="course-card__media">
+                                <a href="{{ route('student.courses.show', $related->slug) }}" class="course-card__thumb">
+                                    <img src="{{ $related->cover_image_url }}" alt="{{ $related->tenKH }}" loading="lazy">
+                                    @if ($hasPromotion && $related->saving_percent > 0)
+                                        <span class="course-card__discount" aria-label="Giảm {{ $related->saving_percent }}%">
+                                            -{{ $related->saving_percent }}%
+                                        </span>
+                                    @endif
+                                </a>
+                                <div class="course-card__media-meta">
+                                    <span class="course-card__media-tag {{ $hasPromotion ? 'is-promo' : '' }}">
+                                        <i class="fa-regular {{ $hasPromotion ? 'fa-badge-percent' : 'fa-shield-check' }}" aria-hidden="true"></i>
+                                        {{ $hasPromotion ? ($promotionLabel ?? 'Ưu đãi đang diễn ra') : 'Giá niêm yết ổn định' }}
+                                    </span>
+                                </div>
+                            </div>
                             <div class="course-card__body">
                                 <h3><a href="{{ route('student.courses.show', $related->slug) }}">{{ $related->tenKH }}</a></h3>
+                                <p class="course-card__promo-note {{ $hasPromotion ? 'is-active' : '' }}">
+                                    <i class="fa-regular {{ $hasPromotion ? 'fa-clock' : 'fa-circle-check' }}" aria-hidden="true"></i>
+                                    <span>
+                                        @if ($hasPromotion && $promotion?->ngayKetThuc)
+                                            Ưu đãi đến {{ optional($promotion->ngayKetThuc)->format('d/m') }}
+                                        @elseif ($hasPromotion)
+                                            Ưu đãi giới hạn thời gian
+                                        @else
+                                            Giá ổn định mọi thời điểm
+                                        @endif
+                                    </span>
+                                </p>
                                 <div class="course-card__footer">
                                     <div class="course-card__price-block {{ $hasPromotion ? 'course-card__price-block--promo' : '' }}">
-                                        <small>{{ $hasPromotion ? 'Chỉ còn' : 'Học phí' }}</small>
-                                        <strong>{{ number_format($related->sale_price, 0, ',', '.') }} VND</strong>
-                                        @if ($hasPromotion)
-                                            <span class="course-card__origin">{{ number_format($related->original_price, 0, ',', '.') }} VND</span>
-                                            <span class="course-card__saving">Tiết kiệm {{ number_format($related->saving_amount, 0, ',', '.') }} VND</span>
-                                        @endif
+                                        <div class="course-card__price-label">
+                                            <span>{{ $hasPromotion ? 'Chỉ còn' : 'Học phí' }}</span>
+                                            <span class="course-card__price-pill {{ $hasPromotion ? 'is-promo' : '' }}">
+                                                {{ $hasPromotion ? 'Đã giảm ' . $related->saving_percent . '%' : 'Ổn định' }}
+                                            </span>
+                                        </div>
+                                        <div class="course-card__price-value">
+                                            {{ number_format($related->sale_price, 0, ',', '.') }} VND
+                                        </div>
+                                        <div class="course-card__price-meta">
+                                            @if ($hasPromotion)
+                                                <span class="course-card__origin">{{ number_format($related->original_price, 0, ',', '.') }} VND</span>
+                                                <span class="course-card__saving">
+                                                    <i class="fa-solid fa-arrow-trend-down" aria-hidden="true"></i>
+                                                    Tiết kiệm {{ number_format($related->saving_amount, 0, ',', '.') }} VND
+                                                </span>
+                                            @else
+                                                <span class="course-card__note">
+                                                    <i class="fa-regular fa-file-lines" aria-hidden="true"></i>
+                                                    Bao gồm tài liệu luyện tập
+                                                </span>
+                                            @endif
+                                        </div>
                                     </div>
                                     <form method="post" action="{{ route('student.cart.store') }}">
                                         @csrf
