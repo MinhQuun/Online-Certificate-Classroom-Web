@@ -1,5 +1,9 @@
 "use strict";
 
+const PROMOTION_TYPE_PERCENT = "PERCENT_DISCOUNT";
+const PROMOTION_TYPE_FIXED = "FIXED_DISCOUNT";
+const PROMOTION_TYPE_GIFT = "GIFT";
+
 document.addEventListener("DOMContentLoaded", () => {
     initFlashMessage();
     initSlugHelper();
@@ -169,6 +173,20 @@ function sanitizeNumber(value) {
     return String(value ?? "").replace(/\D/g, "");
 }
 
+function normalizePromotionType(type) {
+    const value = String(type || "").toUpperCase();
+
+    if (value.includes("PERCENT")) {
+        return PROMOTION_TYPE_PERCENT;
+    }
+
+    if (value.includes("FIXED")) {
+        return PROMOTION_TYPE_FIXED;
+    }
+
+    return PROMOTION_TYPE_GIFT;
+}
+
 function loadPromotionDataset() {
     const datasetEl = document.getElementById("course-promotion-dataset");
     if (!datasetEl) {
@@ -181,7 +199,17 @@ function loadPromotionDataset() {
         const map = new Map(
             list
                 .filter((item) => item && item.id !== undefined && item.id !== null)
-                .map((item) => [Number(item.id), item])
+                .map((item) => [
+                    Number(item.id),
+                    {
+                        ...item,
+                        value:
+                            Number(
+                                item.value !== undefined ? item.value : item.giaTriUuDai
+                            ) || 0,
+                        type: normalizePromotionType(item.type),
+                    },
+                ])
         );
         return { list, map };
     } catch (error) {
@@ -203,47 +231,76 @@ function bindPromotionControls(form, promotionMap) {
 
     const defaultHelp = help ? help.textContent : "";
 
+    const parseBaseFee = () => {
+        if (!tuitionInput) {
+            return 0;
+        }
+
+        const rawValue =
+            tuitionInput.dataset.rawValue ?? tuitionInput.value ?? "";
+
+        return Number(sanitizeNumber(rawValue));
+    };
+
+    const resetUi = () => {
+        priceInput.removeAttribute("disabled");
+        priceInput.value = "";
+        priceInput.placeholder = "Giá sau ưu đãi";
+        if (help) {
+            help.textContent = defaultHelp;
+        }
+    };
+
     const update = () => {
         const hasPromotion = select.value !== "";
         wrapper.classList.toggle("show", hasPromotion);
 
         if (!hasPromotion) {
-            priceInput.value = "";
-            priceInput.placeholder = "Giá sau ưu đãi";
-            if (help) {
-                help.textContent = defaultHelp;
-            }
+            resetUi();
             return;
         }
 
         const promotion = promotionMap.get(Number(select.value));
-        let message = defaultHelp;
-        let suggested = null;
-
-        if (promotion) {
-            const baseFee = tuitionInput
-                ? Number(sanitizeNumber(tuitionInput.dataset.rawValue || tuitionInput.value))
-                : 0;
-
-            if (promotion.type === "PERCENT" && baseFee > 0) {
-                const discount = Math.round(baseFee * (Number(promotion.value) / 100));
-                suggested = Math.max(0, baseFee - discount);
-                message = `Giảm ${promotion.value}% · Giá đề xuất: ${formatCurrency(
-                    suggested
-                )} đ.`;
-            } else if (promotion.type === "FIXED" && baseFee > 0) {
-                suggested = Math.max(0, baseFee - Number(promotion.value));
-                message = `Giảm ${formatCurrency(promotion.value)} đ · Giá đề xuất: ${formatCurrency(
-                    suggested
-                )} đ.`;
-            } else if (promotion.type === "GIFT") {
-                message = "Khuyến mãi quà tặng · Bạn có thể nhập giá ưu đãi thủ công.";
-            }
+        if (!promotion) {
+            resetUi();
+            return;
         }
 
-        priceInput.placeholder = suggested
-            ? `Đề xuất: ${formatCurrency(suggested)} đ`
-            : "Giá sau ưu đãi";
+        const baseFee = parseBaseFee();
+        const type = normalizePromotionType(promotion.type);
+        const value = Number(promotion.value) || 0;
+        let suggested = null;
+        let message = defaultHelp;
+
+        if ((type === PROMOTION_TYPE_PERCENT || type === PROMOTION_TYPE_FIXED) && baseFee <= 0) {
+            message = "Nhập học phí gốc trước khi áp dụng khuyến mãi.";
+        } else if (type === PROMOTION_TYPE_PERCENT) {
+            const percent = Math.min(Math.max(value, 0), 100);
+            const discount = Math.round(baseFee * (percent / 100));
+            suggested = Math.max(0, baseFee - discount);
+            message = `Giảm ${percent}% - Giá sau ưu đãi: ${formatCurrency(suggested)} đ.`;
+        } else if (type === PROMOTION_TYPE_FIXED) {
+            const discount = Math.max(0, value);
+            suggested = Math.max(0, baseFee - discount);
+            message = `Giảm ${formatCurrency(discount)} đ - Giá sau ưu đãi: ${formatCurrency(suggested)} đ.`;
+        } else {
+            message = "Khuyến mãi quà tặng - Giá ưu đãi giữ nguyên.";
+        }
+
+        if (type === PROMOTION_TYPE_GIFT) {
+            priceInput.value = "";
+            priceInput.setAttribute("disabled", "disabled");
+            priceInput.placeholder = "Áp dụng quà tặng";
+        } else {
+            priceInput.removeAttribute("disabled");
+            if (suggested !== null) {
+                priceInput.value = suggested;
+                priceInput.placeholder = `Đề xuất: ${formatCurrency(suggested)} đ`;
+            } else {
+                priceInput.value = "";
+                priceInput.placeholder = "Giá sau ưu đãi";
+            }
+        }
 
         if (help) {
             help.textContent = message;
@@ -362,7 +419,7 @@ function bindFileInputs(root) {
 
         input.addEventListener("change", () => {
             const fileName = input.files && input.files[0] ? input.files[0].name : "";
-            label.textContent = fileName ? `${original} (đã chọn: ${fileName})` : original;
+            label.textContent = fileName ? `${original} (Đã chọn: ${fileName})` : original;
         });
     });
 }

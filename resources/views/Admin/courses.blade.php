@@ -131,9 +131,9 @@
                                         @else
                                             Quà tặng / Khác
                                         @endif
-                                        @if ($promotionPrice)
+                                        {{-- @if ($promotionPrice)
                                             · Giá ưu đãi: {{ number_format($promotionPrice, 0, ',', '.') }} đ
-                                        @endif
+                                        @endif --}}
                                     </div>
                                 @else
                                     <span class="text-muted small">Chưa áp dụng</span>

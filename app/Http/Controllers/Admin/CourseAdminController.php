@@ -87,7 +87,7 @@ class CourseAdminController extends Controller
         ]);
 
         $tuition = (float) $request->input('hocPhi');
-        [$promotionId, $promotionPrice] = $this->resolvePromotionInputs($request, $tuition);
+        [$promotion, $promotionPrice] = $this->resolvePromotionInputs($request, $tuition);
 
         $data = $request->except('hinhanh', 'slug', 'promotion_id', 'promotion_price');
         $data['tenKH'] = trim((string) $data['tenKH']);
@@ -107,7 +107,7 @@ class CourseAdminController extends Controller
         }
 
         $course = Course::create($data);
-        $this->syncPromotion($course, $promotionId, $promotionPrice);
+        $this->syncPromotion($course, $promotion, $promotionPrice);
 
         // Tạo thư mục trên R2 theo slug tên khoá (không bắt buộc)
         try {
@@ -149,7 +149,7 @@ class CourseAdminController extends Controller
             'trangThai'   => 'required|in:DRAFT,PUBLISHED,ARCHIVED',
         ]);
         $tuition = (float) $request->input('hocPhi');
-        [$promotionId, $promotionPrice] = $this->resolvePromotionInputs($request, $tuition);
+        [$promotion, $promotionPrice] = $this->resolvePromotionInputs($request, $tuition);
 
         $data = $request->except('hinhanh', 'slug', 'promotion_id', 'promotion_price');
         $data['tenKH'] = trim((string) $data['tenKH']);
@@ -182,7 +182,7 @@ class CourseAdminController extends Controller
         $course->trangThai = $request->input('trangThai', $course->trangThai);
 
         $course->save();
-        $this->syncPromotion($course, $promotionId, $promotionPrice);
+        $this->syncPromotion($course, $promotion, $promotionPrice);
 
         return redirect()->route('admin.courses.index')
                         ->with('success', 'Cập nhật khóa học thành công');
@@ -216,6 +216,17 @@ class CourseAdminController extends Controller
     {
         $promotionId = $request->input('promotion_id');
         $rawPrice = $request->input('promotion_price');
+        $promotion = null;
+
+        if ($promotionId) {
+            $promotion = Promotion::find($promotionId);
+
+            if (!$promotion) {
+                throw ValidationException::withMessages([
+                    'promotion_id' => 'Khuyen mai khong hop le.',
+                ]);
+            }
+        }
 
         $promotionPrice = null;
         if ($rawPrice !== null && $rawPrice !== '') {
@@ -234,23 +245,19 @@ class CourseAdminController extends Controller
             ]);
         }
 
-        return [$promotionId ? (int) $promotionId : null, $promotionPrice];
+        if ($promotion && $promotion->loaiUuDai === Promotion::TYPE_GIFT) {
+            $promotionPrice = null;
+        }
+
+        return [$promotion, $promotionPrice];
     }
 
-    protected function syncPromotion(Course $course, $promotionId, $promotionPrice): void
+    protected function syncPromotion(Course $course, ?Promotion $promotion, $promotionPrice): void
     {
-        if (!$promotionId) {
+        if (!$promotion) {
             $course->promotions()->sync([]);
 
             return;
-        }
-
-        $promotion = Promotion::find($promotionId);
-
-        if (!$promotion) {
-            throw ValidationException::withMessages([
-                'promotion_id' => 'Khuyến mãi không hợp lệ.',
-            ]);
         }
 
         if (!in_array($promotion->apDungCho, [Promotion::TARGET_COURSE, Promotion::TARGET_BOTH], true)) {
