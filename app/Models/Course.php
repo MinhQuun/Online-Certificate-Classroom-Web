@@ -213,6 +213,15 @@ class Course extends Model
         return max(0, $this->original_price - $this->sale_price);
     }
 
+    public function getSavingPercentAttribute(): int
+    {
+        if ($this->original_price <= 0) {
+            return 0;
+        }
+
+        return (int) round(($this->saving_amount / $this->original_price) * 100);
+    }
+
     public function getActivePromotionAttribute(): ?Promotion
     {
         if (!$this->relationLoaded('promotions')) {
@@ -256,12 +265,61 @@ class Course extends Model
 
     protected function castToInteger($value): int
     {
+        if ($value === null || $value === '') {
+            return 0;
+        }
+
         if ($value instanceof \Stringable) {
             $value = (string) $value;
         }
 
+        if (is_int($value)) {
+            return $value;
+        }
+
+        if (is_float($value)) {
+            return (int) round($value);
+        }
+
         if (is_string($value)) {
-            $value = preg_replace('/[^\d\-]/', '', $value) ?: '0';
+            $trimmed = trim($value);
+
+            if ($trimmed === '') {
+                return 0;
+            }
+
+            if (is_numeric($trimmed)) {
+                return (int) round((float) $trimmed);
+            }
+
+            $filtered = preg_replace('/[^\d.,-]/', '', $trimmed) ?: '0';
+
+            $isNegative = Str::startsWith($filtered, '-');
+            $filtered = ltrim($filtered, '+-');
+            $filtered = str_replace(',', '.', $filtered);
+
+            if (substr_count($filtered, '.') > 1) {
+                $segments = explode('.', $filtered);
+                $fraction = array_pop($segments);
+                $filtered = implode('', $segments) . '.' . $fraction;
+            }
+
+            $fractionLength = null;
+            if (($pos = strrpos($filtered, '.')) !== false) {
+                $fractionLength = strlen(substr($filtered, $pos + 1));
+            }
+
+            if ($fractionLength === null || $fractionLength === 0 || $fractionLength > 2) {
+                $filtered = str_replace('.', '', $filtered);
+            }
+
+            $numeric = $filtered === '' ? '0' : $filtered;
+
+            if ($isNegative && $numeric !== '0') {
+                $numeric = '-' . $numeric;
+            }
+
+            return (int) round((float) $numeric);
         }
 
         return (int) round((float) $value);

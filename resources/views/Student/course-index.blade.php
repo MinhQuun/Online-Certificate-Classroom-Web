@@ -107,21 +107,42 @@
                                     }
                                     $ctaClass = $isActive ? 'course-card__cta--active' : ($isPending ? 'course-card__cta--pending' : ($inCart ? 'course-card__cta--in-cart' : ''));
                                 @endphp
-                                <article class="course-card">
+                                @php
+                                    $promotion = $course->active_promotion;
+                                    $hasPromotion = $course->saving_amount > 0;
+                                    $promotionLabel = $promotion?->tenKM;
+                                    $promotionEnds = $promotion && $promotion->ngayKetThuc
+                                        ? optional($promotion->ngayKetThuc)->format('d/m')
+                                        : null;
+                                @endphp
+                                <article class="course-card {{ $hasPromotion ? 'course-card--has-promo' : '' }}">
                                     <div class="course-card__category">
                                         <span class="chip chip--category">{{ $categoryName }}</span>
-                                        {{-- @if($statusLabel)
-                                            <span class="chip chip--status chip--status-{{ $statusClass }}">{{ $statusLabel }}</span>
-                                        @endif --}}
                                     </div>
                                     <a href="{{ route('student.courses.show', $course->slug) }}" class="course-card__thumb">
                                         <img src="{{ $course->cover_image_url }}" alt="{{ $course->tenKH }}" loading="lazy">
+                                        @if ($hasPromotion && $course->saving_percent > 0)
+                                            <span class="course-card__discount" aria-label="Giảm {{ $course->saving_percent }}%">
+                                                -{{ $course->saving_percent }}%
+                                            </span>
+                                        @endif
                                     </a>
                                     <div class="course-card__body">
                                         <h3><a href="{{ route('student.courses.show', $course->slug) }}">{{ $course->tenKH }}</a></h3>
+                                        @if ($hasPromotion && $promotionEnds)
+                                            <p class="course-card__promo-note">
+                                                <i class="fa-regular fa-clock" aria-hidden="true"></i>
+                                                Ưu đãi đến {{ $promotionEnds }}
+                                            </p>
+                                        @endif
                                         <div class="course-card__footer">
-                                            <div class="course-card__price-block">
-                                                <strong>{{ number_format((float) $course->hocPhi, 0, ',', '.') }} VNĐ</strong>
+                                            <div class="course-card__price-block {{ $hasPromotion ? 'course-card__price-block--promo' : '' }}">
+                                                <small>{{ $hasPromotion ? 'Chỉ còn' : 'Học phí' }}</small>
+                                                <strong>{{ number_format($course->sale_price, 0, ',', '.') }} VND</strong>
+                                                @if ($hasPromotion)
+                                                    <span class="course-card__origin">{{ number_format($course->original_price, 0, ',', '.') }} VND</span>
+                                                    <span class="course-card__saving">Tiết kiệm {{ number_format($course->saving_amount, 0, ',', '.') }} VND</span>
+                                                @endif
                                             </div>
                                             <form method="post" action="{{ route('student.cart.store') }}">
                                                 @csrf

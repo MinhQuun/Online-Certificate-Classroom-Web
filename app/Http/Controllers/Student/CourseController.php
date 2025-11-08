@@ -20,7 +20,7 @@ class CourseController extends Controller
 
         $currentCategory = null;
 
-        $query = Course::published()->with('category');
+        $query = Course::published()->with(['category', 'promotions']);
 
         $query->when($q, function ($query) use ($q) {
             $query->where('tenKH', 'like', "%$q%");
@@ -64,6 +64,7 @@ class CourseController extends Controller
                     ]);
                 },
                 'teacher',
+                'promotions',
             ])
             ->firstOrFail();
 
@@ -108,7 +109,7 @@ class CourseController extends Controller
         $relatedCourses = Course::published()
             ->where('maDanhMuc', $course->maDanhMuc)
             ->where('maKH', '!=', $course->maKH)
-            ->with('category')
+            ->with(['category', 'promotions'])
             ->orderByDesc('created_at')
             ->limit(4)
             ->get();
