@@ -30,6 +30,20 @@
         $studentRatingValue = old('diemSo', $studentReview->diemSo ?? null);
         $studentReviewContent = old('nhanxet', $studentReview->nhanxet ?? '');
         $nonEnrolledError = $errors->getBag('review')->first('review');
+
+        $activePromotion = $course->active_promotion;
+        $courseHasPromotion = $course->saving_amount > 0;
+        $activePromotionLabel = $activePromotion?->tenKM;
+        $activePromotionEnds = $activePromotion && $activePromotion->ngayKetThuc
+            ? optional($activePromotion->ngayKetThuc)->format('d/m')
+            : null;
+        $coursePriceEyebrow = $courseHasPromotion ? 'Chỉ còn' : 'Học phí';
+        $coursePricePill = $courseHasPromotion ? 'Đã giảm ' . $course->saving_percent . '%' : 'Ổn định';
+        $coursePriceNote = $courseHasPromotion
+            ? 'Tiết kiệm ' . number_format($course->saving_amount, 0, ',', '.') . ' VND'
+            : 'Bao gồm tài liệu & mentor đồng hành';
+        $courseSalePrice = number_format($course->sale_price, 0, ',', '.');
+        $courseOriginalPrice = number_format($course->original_price, 0, ',', '.');
     @endphp
 
     <!-- Hero Section -->
@@ -41,7 +55,6 @@
                 <p>{{ $course->moTa }}</p>
                 <ul class="course-hero__stats">
                     <li><strong>{{ $course->thoiHanNgay }}</strong> <span>Ngày học</span></li>
-                    <li><strong>{{ number_format((float) $course->hocPhi, 0, ",", ".") }}₫</strong> <span>Học phí</span></li>
                     <li><strong>{{ $course->chapters->count() }}</strong> <span>Chương học</span></li>
                     <li><strong>{{ $averageRating !== null ? number_format((float) $averageRating, 1, ",", ".") : "--" }}
                         <div class="course-rating-summary__stars">
@@ -241,7 +254,35 @@
             <!-- Sidebar -->
             <aside class="course-sidebar">
                 <div class="course-sidebar__card">
-                    <div class="course-sidebar__price">{{ number_format((float) $course->hocPhi, 0, ',', '.') }}₫</div>
+                    <div class="course-sidebar__price">
+                        <div class="course-price-card {{ $courseHasPromotion ? 'course-price-card--promo' : '' }} course-price-card--compact">
+                            <div class="course-price-card__header">
+                                <span class="course-price-card__eyebrow">{{ $coursePriceEyebrow }}</span>
+                                <span class="course-price-card__pill {{ $courseHasPromotion ? 'is-promo' : '' }}">{{ $coursePricePill }}</span>
+                            </div>
+                            <div class="course-price-card__value">{{ $courseSalePrice }} VND</div>
+                            <div class="course-price-card__meta">
+                                @if ($courseHasPromotion)
+                                    <span class="course-price-card__origin">{{ $courseOriginalPrice }} VND</span>
+                                    <span class="course-price-card__saving">
+                                        <i class="fa-solid fa-arrow-trend-down" aria-hidden="true"></i>
+                                        {{ $coursePriceNote }}
+                                    </span>
+                                    @if ($activePromotionEnds)
+                                        <span class="course-price-card__expiry">
+                                            <i class="fa-regular fa-clock" aria-hidden="true"></i>
+                                            Ưu đãi đến {{ $activePromotionEnds }}
+                                        </span>
+                                    @endif
+                                @else
+                                    <span class="course-price-card__note">
+                                        <i class="fa-regular fa-file-lines" aria-hidden="true"></i>
+                                        {{ $coursePriceNote }}
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                     <form method="post" action="{{ route('student.cart.store') }}" class="course-sidebar__cta">
                         @csrf
                         <input type="hidden" name="course_id" value="{{ $course->maKH }}">
@@ -549,7 +590,33 @@
                             </div>
                         </div>
                         <div class="mb-2">
-                            <strong class="fs-3 text-primary">{{ number_format((float) $course->hocPhi, 0, ',', '.') }}₫</strong>
+                            <div class="course-price-card {{ $courseHasPromotion ? 'course-price-card--promo' : '' }} course-price-card--compact">
+                                <div class="course-price-card__header">
+                                    <span class="course-price-card__eyebrow">{{ $coursePriceEyebrow }}</span>
+                                    <span class="course-price-card__pill {{ $courseHasPromotion ? 'is-promo' : '' }}">{{ $coursePricePill }}</span>
+                                </div>
+                                <div class="course-price-card__value">{{ $courseSalePrice }} VND</div>
+                                <div class="course-price-card__meta">
+                                    @if ($courseHasPromotion)
+                                        <span class="course-price-card__origin">{{ $courseOriginalPrice }} VND</span>
+                                        <span class="course-price-card__saving">
+                                            <i class="fa-solid fa-arrow-trend-down" aria-hidden="true"></i>
+                                            {{ $coursePriceNote }}
+                                        </span>
+                                        @if ($activePromotionEnds)
+                                            <span class="course-price-card__expiry">
+                                                <i class="fa-regular fa-clock" aria-hidden="true"></i>
+                                                Ưu đãi đến {{ $activePromotionEnds }}
+                                            </span>
+                                        @endif
+                                    @else
+                                        <span class="course-price-card__note">
+                                            <i class="fa-regular fa-file-lines" aria-hidden="true"></i>
+                                            {{ $coursePriceNote }}
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
