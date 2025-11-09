@@ -11,69 +11,47 @@ class StudentComboCart
 
     public static function ids(): array
     {
-        $ids = session(self::SESSION_KEY, []);
-
-        return array_values(array_unique(array_map('intval', $ids)));
+        return CartStorage::ids('combo', self::SESSION_KEY);
     }
 
     public static function count(): int
     {
-        return count(self::ids());
+        return CartStorage::count('combo', self::SESSION_KEY);
     }
 
     public static function has(int $comboId): bool
     {
-        return in_array($comboId, self::ids(), true);
+        return CartStorage::has('combo', self::SESSION_KEY, $comboId);
     }
 
     public static function add(int $comboId): bool
     {
-        $comboId = (int) $comboId;
-        $ids = self::ids();
-
-        if (!in_array($comboId, $ids, true)) {
-            $ids[] = $comboId;
-            session()->put(self::SESSION_KEY, $ids);
-
-            return true;
-        }
-
-        return false;
+        return CartStorage::add('combo', self::SESSION_KEY, $comboId);
     }
 
     public static function remove(int $comboId): void
     {
-        $comboId = (int) $comboId;
-        $ids = array_filter(self::ids(), fn (int $id) => $id !== $comboId);
-        session()->put(self::SESSION_KEY, array_values($ids));
+        CartStorage::remove('combo', self::SESSION_KEY, $comboId);
     }
 
     public static function removeMany(array $comboIds): void
     {
-        if (empty($comboIds)) {
-            return;
-        }
-
-        $comboIds = array_map('intval', $comboIds);
-        $removeSet = array_flip($comboIds);
-
-        $ids = array_filter(
-            self::ids(),
-            fn (int $id) => !array_key_exists($id, $removeSet)
-        );
-
-        session()->put(self::SESSION_KEY, array_values($ids));
+        CartStorage::removeMany('combo', self::SESSION_KEY, $comboIds);
     }
 
     public static function clear(): void
     {
-        session()->forget(self::SESSION_KEY);
+        CartStorage::clear('combo', self::SESSION_KEY);
     }
 
     public static function sync(array $comboIds): void
     {
-        $normalized = array_values(array_unique(array_filter(array_map('intval', $comboIds))));
-        session()->put(self::SESSION_KEY, $normalized);
+        CartStorage::sync('combo', self::SESSION_KEY, $comboIds);
+    }
+
+    public static function migrateSessionToUser(): void
+    {
+        CartStorage::migrateSessionToUser('combo', self::SESSION_KEY);
     }
 
     public static function combos(): Collection
@@ -114,4 +92,3 @@ class StudentComboCart
         return $ordered->values();
     }
 }
-

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Services\EnsureCustomerProfile;
 use App\Support\RoleResolver;
+use App\Support\Cart\StudentCart;
+use App\Support\Cart\StudentComboCart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -79,6 +81,8 @@ class UserController extends Controller
 
             Auth::login($user);
             $request->session()->regenerate();
+            StudentCart::migrateSessionToUser();
+            StudentComboCart::migrateSessionToUser();
 
             $target = $this->sanitizeRedirect($request->input('redirect'))
                 ?? route('student.courses.index');
@@ -140,6 +144,8 @@ class UserController extends Controller
 
         Auth::login($user);
         $request->session()->regenerate();
+        StudentCart::migrateSessionToUser();
+        StudentComboCart::migrateSessionToUser();
 
         $role = RoleResolver::resolve($user);
 
@@ -341,6 +347,8 @@ class UserController extends Controller
         }
 
         auth()->login($user);
+        StudentCart::migrateSessionToUser();
+        StudentComboCart::migrateSessionToUser();
 
         return redirect('/'); // hoặc route dashboard
     }

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\EnsureCustomerProfile;
 use App\Support\RoleResolver;
+use App\Support\Cart\StudentCart;
+use App\Support\Cart\StudentComboCart;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -95,6 +97,8 @@ class GoogleAuthController extends Controller
         }
 
         Auth::login($user, true);
+        StudentCart::migrateSessionToUser();
+        StudentComboCart::migrateSessionToUser();
 
         $role = RoleResolver::resolve($user);
         if ($role === 'student') {

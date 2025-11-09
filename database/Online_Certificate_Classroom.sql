@@ -310,6 +310,20 @@ CREATE TABLE KHUYEN_MAI_KHOAHOC (
     CONSTRAINT FK_KMKH_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Bảng student_cart_items: Đồng bộ giỏ hàng của học viên đăng nhập (web + mobile).
+CREATE TABLE student_cart_items (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,                                   -- Liên kết NGUOIDUNG.maND
+    item_type ENUM('course','combo') NOT NULL,              -- Phân biệt khóa học hay combo
+    item_id INT NOT NULL,                                   -- ID khóa học hoặc combo tương ứng
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY student_cart_unique_item (user_id, item_type, item_id),
+    KEY idx_cart_user_type (user_id, item_type),
+    CONSTRAINT FK_CART_USER FOREIGN KEY (user_id) REFERENCES NGUOIDUNG(maND) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- =========================================================
 -- 4) GHI DANH HỌC VIÊN VÀ TIẾN ĐỘ HỌC TẬP
 -- =========================================================

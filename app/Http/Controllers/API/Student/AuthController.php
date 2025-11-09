@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password;
 use Laravel\Socialite\Contracts\User as SocialiteUser;
 use Laravel\Socialite\Facades\Socialite;
 use Throwable;
@@ -113,6 +114,65 @@ class AuthController extends Controller
                 'user'         => $this->formatUser($user),
             ],
         ]);
+    }
+
+
+    public function register(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name'        => ['required', 'string', 'min:2', 'max:255'],
+            'email'       => ['required', 'email', 'max:255', 'unique:nguoidung,email'],
+            'password'    => ['required', 'confirmed', Password::min(6)->max(32)],
+            'phone'       => ['required', 'regex:/^0\d{9,10}$/', 'unique:nguoidung,sdt'],
+            'device_name' => ['nullable', 'string', 'max:120'],
+        ], [
+            'name.required'      => 'Vui lòng nhập họ tên.',
+            'name.min'           => 'Họ tên phải có ít nhất :min ký tự.',
+            'name.max'           => 'Họ tên không vượt quá :max ký tự.',
+            'email.required'     => 'Vui lòng nhập email.',
+            'email.email'        => 'Email không đúng định dạng.',
+            'email.unique'       => 'Email đã được sử dụng.',
+            'password.required'  => 'Vui lòng nhập mật khẩu.',
+            'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
+            'password.min'       => 'Mật khẩu phải có ít nhất :min ký tự.',
+            'password.max'       => 'Mật khẩu không vượt quá :max ký tự.',
+            'phone.required'     => 'Vui lòng nhập số điện thoại.',
+            'phone.regex'        => 'Số điện thoại phải bắt đầu bằng 0 và gồm 10 chữ số.',
+            'phone.unique'       => 'Số điện thoại đã được sử dụng.',
+        ]);
+
+        $user = DB::transaction(function () use ($validated) {
+            /** @var User $user */
+            $user = User::create([
+                'hoTen'     => $validated['name'],
+                'email'     => $validated['email'],
+                'sdt'       => $validated['phone'],
+                'matKhau'   => Hash::make($validated['password']),
+                'vaiTro'    => 'HOC_VIEN',
+                'trangThai' => 'ACTIVE',
+            ]);
+
+            if ($roleId = RoleResolver::findRoleId(['student'])) {
+                $user->assignRole($roleId);
+            }
+
+            app(EnsureCustomerProfile::class)->handle($user);
+
+            return $user;
+        });
+
+        $tokenName = $validated['device_name'] ?? 'student_mobile_register';
+        $token = $user->createToken($tokenName)->plainTextToken;
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Đăng ký tài khoản thành công.',
+            'data'    => [
+                'token_type'   => 'Bearer',
+                'access_token' => $token,
+                'user'         => $this->formatUser($user),
+            ],
+        ], 201);
     }
 
     public function logout(Request $request): JsonResponse

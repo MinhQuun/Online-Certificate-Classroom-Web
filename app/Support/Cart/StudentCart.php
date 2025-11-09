@@ -11,65 +11,47 @@ class StudentCart
 
     public static function ids(): array
     {
-        $ids = session(self::SESSION_KEY, []);
-
-        return array_values(array_unique(array_map('intval', $ids)));
+        return CartStorage::ids('course', self::SESSION_KEY);
     }
 
     public static function count(): int
     {
-        return count(self::ids());
+        return CartStorage::count('course', self::SESSION_KEY);
     }
 
     public static function has(int $courseId): bool
     {
-        return in_array($courseId, self::ids(), true);
+        return CartStorage::has('course', self::SESSION_KEY, $courseId);
     }
 
     public static function add(int $courseId): bool
     {
-        $ids = self::ids();
-
-        if (!in_array($courseId, $ids, true)) {
-            $ids[] = $courseId;
-            session()->put(self::SESSION_KEY, $ids);
-
-            return true;
-        }
-
-        return false;
+        return CartStorage::add('course', self::SESSION_KEY, $courseId);
     }
 
     public static function remove(int $courseId): void
     {
-        $ids = array_filter(self::ids(), fn (int $id) => $id !== $courseId);
-        session()->put(self::SESSION_KEY, array_values($ids));
+        CartStorage::remove('course', self::SESSION_KEY, $courseId);
     }
 
     public static function removeMany(array $courseIds): void
     {
-        if (empty($courseIds)) {
-            return;
-        }
-
-        $removeSet = array_flip(array_map('intval', $courseIds));
-        $ids = array_filter(
-            self::ids(),
-            fn (int $id) => !array_key_exists($id, $removeSet)
-        );
-
-        session()->put(self::SESSION_KEY, array_values($ids));
+        CartStorage::removeMany('course', self::SESSION_KEY, $courseIds);
     }
 
     public static function clear(): void
     {
-        session()->forget(self::SESSION_KEY);
+        CartStorage::clear('course', self::SESSION_KEY);
     }
 
     public static function sync(array $courseIds): void
     {
-        $normalized = array_values(array_unique(array_filter(array_map('intval', $courseIds))));
-        session()->put(self::SESSION_KEY, $normalized);
+        CartStorage::sync('course', self::SESSION_KEY, $courseIds);
+    }
+
+    public static function migrateSessionToUser(): void
+    {
+        CartStorage::migrateSessionToUser('course', self::SESSION_KEY);
     }
 
     public static function courses(): Collection
