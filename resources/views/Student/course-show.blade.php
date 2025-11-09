@@ -29,7 +29,6 @@
 
         $studentRatingValue = old('diemSo', $studentReview->diemSo ?? null);
         $studentReviewContent = old('nhanxet', $studentReview->nhanxet ?? '');
-        $nonEnrolledError = $errors->getBag('review')->first('review');
 
         $activePromotion = $course->active_promotion;
         $courseHasPromotion = $course->saving_amount > 0;
@@ -356,23 +355,6 @@
                     </ul>
                 </div>
                 <div class="course-reviews__form">
-                    @if (session('review_status') === 'success')
-                        <div class="alert alert-success">{{ session('review_message') }}</div>
-                    @endif
-                    @if ($nonEnrolledError)
-                        <div class="alert alert-warning">{{ $nonEnrolledError }}</div>
-                    @endif
-                    @if ($errors->getBag('default')->has('diemSo') || $errors->getBag('default')->has('nhanxet'))
-                        <div class="alert alert-danger">
-                            @foreach ($errors->getBag('default')->get('diemSo') as $message)
-                                <div>{{ $message }}</div>
-                            @endforeach
-                            @foreach ($errors->getBag('default')->get('nhanxet') as $message)
-                                <div>{{ $message }}</div>
-                            @endforeach
-                        </div>
-                    @endif
-
                     @if ($isEnrolled)
                         <form method="post" action="{{ route('student.courses.reviews.store', $course->slug) }}" class="review-form" id="courseReviewForm" data-reveal-from-left>
                             @csrf

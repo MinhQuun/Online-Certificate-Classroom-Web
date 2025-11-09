@@ -22,6 +22,8 @@
         },
     };
 
+    const STORAGE_KEY = "occStudentQueuedToasts";
+
     const ensureStack = () => {
         let stack = document.querySelector(".toast-stack");
         if (stack) return stack;
@@ -114,9 +116,67 @@
         });
     };
 
+    const readQueuedToasts = () => {
+        try {
+            const raw = sessionStorage.getItem(STORAGE_KEY);
+            if (!raw) return [];
+            const parsed = JSON.parse(raw);
+            sessionStorage.removeItem(STORAGE_KEY);
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (error) {
+            try {
+                sessionStorage.removeItem(STORAGE_KEY);
+            } catch (_) {
+                /* ignore */
+            }
+            return [];
+        }
+    };
+
+    const enqueueToast = (payload) => {
+        try {
+            const raw = sessionStorage.getItem(STORAGE_KEY);
+            const parsed = raw ? JSON.parse(raw) : [];
+            const queue = Array.isArray(parsed) ? parsed : [];
+            queue.push(payload);
+            sessionStorage.setItem(STORAGE_KEY, JSON.stringify(queue));
+            return true;
+        } catch (error) {
+            return false;
+        }
+    };
+
+    const flushQueuedToasts = () => {
+        readQueuedToasts().forEach((toast) => {
+            if (!toast) return;
+            if (typeof toast === "string") {
+                createToast("info", toast);
+                return;
+            }
+            createToast(
+                toast.type,
+                toast.message,
+                toast.title,
+                toast.autohide ?? toast.duration
+            );
+        });
+    };
+
     const api = {
         push: (message, type = "info", title, duration) =>
             createToast(type, message, title, duration),
+        queue: (message, type = "info", title, duration, options = {}) => {
+            const payload = {
+                type,
+                message,
+                title,
+                autohide: duration ?? options.autohide ?? undefined,
+            };
+            if (!enqueueToast(payload)) {
+                return createToast(type, message, title, duration);
+            }
+            return payload;
+        },
         fromDataset,
     };
 
@@ -131,6 +191,7 @@
         document
             .querySelectorAll("[data-flash-dataset]")
             .forEach((el) => fromDataset(el));
+        flushQueuedToasts();
     };
 
     if (document.readyState === "loading") {

@@ -76,9 +76,7 @@ class CourseReviewController extends Controller
 
         return redirect()
             ->route('student.courses.show', $course->slug)
-            ->with([
-                'review_status'  => 'success',
-                'review_message' => $message,
-            ]);
+            ->with('success', $message)
+            ->with('success_title', 'Đánh giá đã được ghi nhận');
     }
 }

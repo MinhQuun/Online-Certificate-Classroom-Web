@@ -95,10 +95,6 @@
                             </div>
                         </div>
 
-                        @error('items')
-                            <p class="cart-error" role="alert">{{ $message }}</p>
-                        @enderror
-
                         <ul class="cart-list">
                             @foreach($combos as $combo)
                                 <li class="cart-item cart-item--combo" data-cart-item data-price="{{ $combo->sale_price }}">

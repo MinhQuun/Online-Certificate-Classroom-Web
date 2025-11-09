@@ -17,14 +17,6 @@
             <p class="profile-subtitle">Quản lý thông tin tài khoản của bạn</p>
         </div>
 
-        {{-- Hiển thị thông báo thành công --}}
-        @if (session('success'))
-            <div class="alert alert-success">
-                <i class="fa-solid fa-circle-check"></i>
-                <span>{{ session('success') }}</span>
-            </div>
-        @endif
-
         {{-- Thông tin cá nhân --}}
         <div class="profile-card">
             <div class="profile-card__header">
