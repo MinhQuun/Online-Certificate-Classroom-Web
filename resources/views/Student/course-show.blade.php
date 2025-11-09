@@ -47,8 +47,6 @@
     @endphp
 
     <!-- Hero Section -->
-    @endphp
-
     <section class="course-hero" data-course-detail>
         <div class="oc-container course-hero__grid">
             <div class="course-hero__text" data-reveal-from-left>
