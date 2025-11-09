@@ -2318,3 +2318,70 @@
     60% { transform: translateX(-3px); }
     80% { transform: translateX(3px); }
 }
+
+/* ==================== SCROLL ANIMATIONS ==================== */
+@media (prefers-reduced-motion: no-preference) {
+    .course-animate-ready [data-reveal-on-scroll] {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .course-animate-ready [data-reveal-on-scroll].is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Stagger animation delays for multiple elements */
+    .course-animate-ready [data-reveal-on-scroll]:nth-child(1) {
+        transition-delay: 0.05s;
+    }
+
+    .course-animate-ready [data-reveal-on-scroll]:nth-child(2) {
+        transition-delay: 0.1s;
+    }
+
+    .course-animate-ready [data-reveal-on-scroll]:nth-child(3) {
+        transition-delay: 0.15s;
+    }
+
+    .course-animate-ready [data-reveal-on-scroll]:nth-child(4) {
+        transition-delay: 0.2s;
+    }
+
+    /* Fade in from left */
+    .course-animate-ready [data-reveal-from-left] {
+        opacity: 0;
+        transform: translateX(-30px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .course-animate-ready [data-reveal-from-left].is-visible {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    /* Fade in from right */
+    .course-animate-ready [data-reveal-from-right] {
+        opacity: 0;
+        transform: translateX(30px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .course-animate-ready [data-reveal-from-right].is-visible {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    /* Scale up animation */
+    .course-animate-ready [data-reveal-scale] {
+        opacity: 0;
+        transform: scale(0.95);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .course-animate-ready [data-reveal-scale].is-visible {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

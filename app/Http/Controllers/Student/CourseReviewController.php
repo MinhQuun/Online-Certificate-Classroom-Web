@@ -7,12 +7,14 @@ use App\Models\Course;
 use App\Models\CourseReview;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CourseReviewController extends Controller
 {
-    public function store(Request $request, Course $course)
+    public function store(Request $request, Course $course): RedirectResponse|JsonResponse
     {
         $validated = $request->validate([
             'diemSo'  => ['required', 'integer', 'min:1', 'max:5'],
@@ -21,11 +23,17 @@ class CourseReviewController extends Controller
 
         $userId = Auth::id();
         if (!$userId) {
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Bạn cần đăng nhập để đánh giá.'], 403);
+            }
             abort(403);
         }
 
         $student = Student::where('maND', $userId)->first();
         if (!$student) {
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Không tìm thấy thông tin học viên.'], 403);
+            }
             abort(403);
         }
 
@@ -36,12 +44,15 @@ class CourseReviewController extends Controller
             ->exists();
 
         if (!$isEnrolled) {
+            $message = 'Bạn cần kích hoạt khóa học trước khi đánh giá.';
+            
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $message], 200);
+            }
+            
             return redirect()
                 ->back()
-                ->withErrors(
-                    ['review' => 'Ban can kich hoat khoa hoc truoc khi danh gia.'],
-                    'review'
-                )
+                ->withErrors(['review' => $message], 'review')
                 ->withInput();
         }
 
@@ -57,11 +68,17 @@ class CourseReviewController extends Controller
             ]
         );
 
+        $message = 'Cảm ơn bạn đã đánh giá khóa học.';
+        
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => $message]);
+        }
+
         return redirect()
             ->route('student.courses.show', $course->slug)
             ->with([
                 'review_status'  => 'success',
-                'review_message' => 'Cam on ban da danh gia khoa hoc.',
+                'review_message' => $message,
             ]);
     }
 }

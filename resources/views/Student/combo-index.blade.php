@@ -276,3 +276,7 @@
         </section>
     @endif
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/Student/ajax-forms.js') }}"></script>
+@endpush

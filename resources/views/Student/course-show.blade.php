@@ -47,9 +47,11 @@
     @endphp
 
     <!-- Hero Section -->
-    <section class="course-hero">
+    @endphp
+
+    <section class="course-hero" data-course-detail>
         <div class="oc-container course-hero__grid">
-            <div class="course-hero__text">
+            <div class="course-hero__text" data-reveal-from-left>
                 <span class="chip chip--soft">Lộ trình chứng chỉ</span>
                 <h1>{{ $course->tenKH }}</h1>
                 <p>{{ $course->moTa }}</p>
@@ -116,14 +118,14 @@
 
             <!-- Course Content -->
             <div class="course-layout__main">
-                <div class="section__header">
+                <div class="section__header" data-reveal-on-scroll>
                     <h2>Nội dung khóa học</h2>
                     <p>Khóa học được chia thành các chương kèm theo bài ôn luyện (review exercises), giúp bạn đánh giá tiến độ trước khi chuyển sang nội dung mới.</p>
                 </div>
 
                 <!-- Chapters -->
                 @foreach ($course->chapters as $chapter)
-                    <article class="module is-open" data-accordion>
+                    <article class="module is-open" data-accordion data-reveal-on-scroll>
                         <header class="module__header">
                             <button class="module__toggle" type="button" aria-expanded="true">
                                 <div class="module__info">
@@ -252,7 +254,7 @@
             </div>
 
             <!-- Sidebar -->
-            <aside class="course-sidebar">
+            <aside class="course-sidebar" data-reveal-from-right>
                 <div class="course-sidebar__card">
                     <div class="course-sidebar__price">
                         <div class="course-price-card {{ $courseHasPromotion ? 'course-price-card--promo' : '' }} course-price-card--compact">
@@ -321,7 +323,7 @@
     </section>
 
     <!-- Course Reviews -->
-    <section id="course-reviews" class="section section--course-reviews">
+    <section id="course-reviews" class="section section--course-reviews" data-reveal-on-scroll>
         <div class="oc-container">
             <div class="course-reviews__grid">
                 <div class="course-reviews__summary">
@@ -374,7 +376,7 @@
                     @endif
 
                     @if ($isEnrolled)
-                        <form method="post" action="{{ route('student.courses.reviews.store', $course->slug) }}" class="review-form" id="courseReviewForm">
+                        <form method="post" action="{{ route('student.courses.reviews.store', $course->slug) }}" class="review-form" id="courseReviewForm" data-reveal-from-left>
                             @csrf
                             <input type="hidden" name="diemSo" value="{{ $studentRatingValue ?? '' }}">
                             <div class="review-form__rating" data-rating-input data-initial="{{ $studentRatingValue ?? 0 }}">
@@ -409,7 +411,7 @@
                             ?? 'Học viên ẩn danh';
                         $reviewDate = $review->ngayDG ?? $review->updated_at ?? $review->created_at;
                     @endphp
-                    <article class="course-review">
+                    <article class="course-review" data-reveal-from-right>
                         <header class="course-review__header">
                             <div class="course-review__avatar" aria-hidden="true">{{ strtoupper(substr($reviewerName, 0, 1)) }}</div>
                             <div class="course-review__meta">
@@ -447,7 +449,7 @@
 
     <!-- Related Courses -->
     @if ($relatedCourses->count())
-        <section class="section">
+        <section class="section" data-reveal-on-scroll>
             <div class="oc-container">
                 <div class="section__header">
                     <h2>Khóa học gợi ý</h2>
@@ -480,7 +482,7 @@
                                 ? optional($promotion->ngayKetThuc)->format('d/m')
                                 : null;
                         @endphp
-                        <article class="course-card {{ $hasPromotion ? 'course-card--has-promo' : '' }}">
+                        <article class="course-card {{ $hasPromotion ? 'course-card--has-promo' : '' }}" data-reveal-scale>
 
                             <div class="course-card__category">
                                 <span class="chip chip--category">{{ $categoryName }}</span>
@@ -558,6 +560,7 @@
 
 @push('scripts')
     <script src="{{ asset('js/Student/course-show.js') }}" defer></script>
+    <script src="{{ asset('js/Student/ajax-forms.js') }}"></script>
 @endpush
 
 <!-- Enroll Prompt Modal -->

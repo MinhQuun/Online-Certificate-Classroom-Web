@@ -19,9 +19,9 @@
         $firstCourse = $courses->first();
     @endphp
 
-    <section class="hero hero--courses">
+    <section class="hero hero--courses" data-home-index>
         <div class="oc-container hero__grid">
-            <div class="hero__text">
+            <div class="hero__text" data-reveal-from-left>
                 <h1>Khởi động lộ trình chứng chỉ trực tuyến</h1>
                 <p>Chương trình được thiết kế bởi đội ngũ chuyên môn, tập trung vào kỹ năng thực hành và hệ thống đánh giá liên tục.</p>
                 <div class="hero__meta">
@@ -30,7 +30,7 @@
                     <span>Mentor theo sát</span>
                 </div>
             </div>
-            <div class="hero__media hero-banner" data-hero-banner>
+            <div class="hero__media hero-banner" data-hero-banner data-reveal-from-right>
                 <div class="hero-banner__slides">
                     @foreach ($heroBanners as $banner)
                         <div class="hero-banner__slide {{ $loop->first ? 'is-active' : '' }}">
@@ -81,7 +81,7 @@
                 @endphp
 
                 @foreach ($grouped as $bandName => $groupCourses)
-                    <section class="course-band" data-band="{{ $bandName }}">
+                    <section class="course-band" data-band="{{ $bandName }}" data-reveal-on-scroll>
                         <h3 class="course-band__title">
                             <span class="course-band__title-text">{{ $bandName }}</span>
                             <span class="course-band__count">({{ $groupCourses->count() }} khóa học)</span>
@@ -113,7 +113,7 @@
                                         ? optional($promotion->ngayKetThuc)->format('d/m')
                                         : null;
                                 @endphp
-                                <article class="course-card {{ $hasPromotion ? 'course-card--has-promo' : '' }}">
+                                <article class="course-card {{ $hasPromotion ? 'course-card--has-promo' : '' }}" data-reveal-scale>
                                     <div class="course-card__media">
                                         <a href="{{ route('student.courses.show', $course->slug) }}" class="course-card__thumb">
                                             <img src="{{ $course->cover_image_url }}" alt="{{ $course->tenKH }}" loading="lazy">
@@ -203,4 +203,6 @@
 
 @push('scripts')
     <script src="{{ asset('js/Student/hero-banner.js') }}" defer></script>
+    <script src="{{ asset('js/Student/ajax-forms.js') }}"></script>
+    <script src="{{ asset('js/Student/home-index.js') }}"></script>
 @endpush

@@ -219,4 +219,47 @@ document.addEventListener("DOMContentLoaded", () => {
             reviewSection.scrollIntoView({ behavior: "smooth", block: "start" });
         }, 150);
     }
+
+    // ==================== SCROLL ANIMATIONS ====================
+    // Add animation class to body
+    const courseDetail = document.querySelector("[data-course-detail]");
+    if (courseDetail) {
+        document.body.classList.add("course-animate-ready");
+        window.requestAnimationFrame(() => {
+            courseDetail.classList.add("is-animated");
+        });
+    }
+
+    // Setup Intersection Observer for scroll animations
+    const revealTargets = document.querySelectorAll(
+        "[data-reveal-on-scroll], [data-reveal-from-left], [data-reveal-from-right], [data-reveal-scale]"
+    );
+
+    if (!revealTargets.length) {
+        return;
+    }
+
+    if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-visible");
+                    } else {
+                        // Remove để reset animation khi scroll lên
+                        entry.target.classList.remove("is-visible");
+                    }
+                });
+            },
+            { 
+                threshold: 0.15, // Trigger khi 15% element vào view
+                rootMargin: "0px 0px -50px 0px" // Trigger sớm hơn một chút
+            }
+        );
+
+        revealTargets.forEach((el) => observer.observe(el));
+    } else {
+        // Fallback for browsers without IntersectionObserver
+        revealTargets.forEach((el) => el.classList.add("is-visible"));
+    }
 });

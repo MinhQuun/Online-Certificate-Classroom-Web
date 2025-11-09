@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 
@@ -11,7 +13,7 @@ class ContactController extends Controller
 {
     protected string $table = 'CONTACT_REPLIES';
 
-    public function submit(Request $request)
+    public function submit(Request $request): RedirectResponse|JsonResponse
     {
         $validated = $request->validate([
             'name' => 'required|string|min:2|max:120',
@@ -29,7 +31,13 @@ class ContactController extends Controller
 
         // Kiểm tra bảng tồn tại
         if (!DB::getSchemaBuilder()->hasTable($this->table)) {
-            return back()->with('error', 'Hệ thống chưa sẵn sàng. Vui lòng thử lại sau.');
+            $message = 'Hệ thống chưa sẵn sàng. Vui lòng thử lại sau.';
+            
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $message], 500);
+            }
+            
+            return back()->with('error', $message);
         }
 
         // Lưu vào database
@@ -42,6 +50,12 @@ class ContactController extends Controller
             'updated_at' => Carbon::now(),
         ]);
 
-        return back()->with('success', 'Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi trong thời gian sớm nhất.');
+        $message = 'Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi trong thời gian sớm nhất.';
+        
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => $message]);
+        }
+
+        return back()->with('success', $message);
     }
 }

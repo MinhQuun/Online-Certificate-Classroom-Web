@@ -229,4 +229,5 @@
 
 @push('scripts')
     <script src="{{ asset('js/Student/combo-detail.js') }}" defer></script>
+    <script src="{{ asset('js/Student/ajax-forms.js') }}"></script>
 @endpush

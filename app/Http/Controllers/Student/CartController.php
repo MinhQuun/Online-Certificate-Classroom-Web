@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Support\Cart\StudentCart;
 use App\Support\Cart\StudentComboCart;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -30,7 +31,7 @@ class CartController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $validated = $request->validate([
             'course_id' => ['required', 'integer', 'exists:khoahoc,maKH'],
@@ -47,7 +48,11 @@ class CartController extends Controller
         });
 
         if ($comboInCart) {
-            return back()->with('info', 'Khóa học đã nằm trong combo "' . $comboInCart->tenGoi . '" ở giỏ hàng.');
+            $message = 'Khóa học đã nằm trong combo "' . $comboInCart->tenGoi . '" ở giỏ hàng.';
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $message], 200);
+            }
+            return back()->with('info', $message);
         }
 
         $added = StudentCart::add($course->maKH);
@@ -56,10 +61,18 @@ class CartController extends Controller
             ? 'Đã thêm khóa học vào giỏ hàng!'
             : 'Khóa học này đã có trong giỏ hàng.';
 
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => $added,
+                'message' => $message,
+                'cartCount' => count(StudentCart::ids()) + count(StudentComboCart::ids())
+            ]);
+        }
+
         return back()->with($added ? 'success' : 'info', $message);
     }
 
-    public function storeCombo(Request $request): RedirectResponse
+    public function storeCombo(Request $request): RedirectResponse|JsonResponse
     {
         $validated = $request->validate([
             'combo_id' => ['required', 'integer', 'exists:GOI_KHOA_HOC,maGoi'],
@@ -75,11 +88,19 @@ class CartController extends Controller
             ->firstOrFail();
 
         if (!$combo->isCurrentlyAvailable()) {
-            return back()->with('info', 'Combo này hiện chưa mở bán.');
+            $message = 'Combo này hiện chưa mở bán.';
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $message], 200);
+            }
+            return back()->with('info', $message);
         }
 
         if (StudentComboCart::has($combo->maGoi)) {
-            return back()->with('info', 'Combo đã có trong giỏ hàng của bạn.');
+            $message = 'Combo đã có trong giỏ hàng của bạn.';
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $message], 200);
+            }
+            return back()->with('info', $message);
         }
 
         $coursesInCombo = $combo->courses->pluck('maKH')->all();
@@ -89,83 +110,130 @@ class CartController extends Controller
 
         StudentComboCart::add($combo->maGoi);
 
-        return back()->with('success', 'Đã thêm combo vào giỏ hàng!');
-    }
-
-    public function destroy(Course $course): RedirectResponse
-    {
-        StudentCart::remove($course->maKH);
-
-        return back()->with('success', 'Đã xoá khóa học khỏi giỏ hàng.');
-    }
-
-    public function destroyCombo(Combo $combo): RedirectResponse
-    {
-        StudentComboCart::remove($combo->maGoi);
-
-        return back()->with('success', 'Đã xoá combo khỏi giỏ hàng.');
-    }
-
-    public function destroySelected(Request $request): RedirectResponse
-    {
-        $validated = $request->validate([
-            'items' => ['required', 'array', 'min:1'],
-            'items.*' => ['string'],
-        ], [
-            'items.required' => 'Vui lòng chọn ít nhất một mục để xoá.',
-            'items.array' => 'Danh sách lựa chọn không hợp lệ.',
-            'items.min' => 'Vui lòng chọn ít nhất một mục để xoá.',
-            'items.*.string' => 'Mục không hợp lệ.',
-        ]);
-
-        $courseIds = [];
-        $comboIds = [];
-
-        foreach ($validated['items'] as $value) {
-            if (!is_string($value)) {
-                continue;
-            }
-
-            if (str_starts_with($value, 'combo:')) {
-                $comboIds[] = (int) substr($value, 6);
-                continue;
-            }
-
-            if (str_starts_with($value, 'course:')) {
-                $courseIds[] = (int) substr($value, 7);
-                continue;
-            }
-
-            if (is_numeric($value)) {
-                $courseIds[] = (int) $value;
-            }
+        $message = 'Đã thêm combo vào giỏ hàng!';
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'cartCount' => count(StudentCart::ids()) + count(StudentComboCart::ids())
+            ]);
         }
-
-        $courseIds = array_values(array_intersect(StudentCart::ids(), $courseIds));
-        $comboIds = array_values(array_intersect(StudentComboCart::ids(), $comboIds));
-
-        if (empty($courseIds) && empty($comboIds)) {
-            return back()->with('info', 'Các mục đã được xoá khỏi giỏ hàng trước đó.');
-        }
-
-        StudentCart::removeMany($courseIds);
-        StudentComboCart::removeMany($comboIds);
-
-        $removedCount = count($courseIds) + count($comboIds);
-
-        $message = $removedCount === 1
-            ? 'Đã xoá 1 mục khỏi giỏ hàng.'
-            : "Đã xoá {$removedCount} mục khỏi giỏ hàng.";
 
         return back()->with('success', $message);
     }
 
-    public function destroyAll(): RedirectResponse
+    public function destroy(string $courseId): RedirectResponse|JsonResponse
+    {
+        $courseId = (int)$courseId;
+
+        if (!StudentCart::has($courseId)) {
+            $message = 'Khóa học không có trong giỏ hàng.';
+            if (request()->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $message], 200);
+            }
+            return back()->with('info', $message);
+        }
+
+        StudentCart::remove($courseId);
+
+        $message = 'Đã xóa khóa học khỏi giỏ hàng.';
+        if (request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'cartCount' => count(StudentCart::ids()) + count(StudentComboCart::ids())
+            ]);
+        }
+
+        return redirect()->route('student.cart.index')->with('success', $message);
+    }
+
+    public function destroyCombo(string $comboId): RedirectResponse|JsonResponse
+    {
+        $comboId = (int)$comboId;
+
+        if (!StudentComboCart::has($comboId)) {
+            $message = 'Combo không có trong giỏ hàng.';
+            if (request()->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $message], 200);
+            }
+            return back()->with('info', $message);
+        }
+
+        StudentComboCart::remove($comboId);
+
+        $message = 'Đã xóa combo khỏi giỏ hàng.';
+        if (request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'cartCount' => count(StudentCart::ids()) + count(StudentComboCart::ids())
+            ]);
+        }
+
+        return redirect()->route('student.cart.index')->with('success', $message);
+    }
+
+    public function destroySelected(Request $request): RedirectResponse|JsonResponse
+    {
+        $validated = $request->validate([
+            'selected_courses' => ['nullable', 'array'],
+            'selected_courses.*' => ['integer', 'exists:KHOAHOC,maKH'],
+            'selected_combos' => ['nullable', 'array'],
+            'selected_combos.*' => ['integer', 'exists:GOI_KHOA_HOC,maGoi'],
+        ]);
+
+        $selectedCourses = $validated['selected_courses'] ?? [];
+        $selectedCombos = $validated['selected_combos'] ?? [];
+
+        if (empty($selectedCourses) && empty($selectedCombos)) {
+            $message = 'Vui lòng chọn ít nhất một mục để xóa.';
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $message], 200);
+            }
+            return back()->with('warning', $message);
+        }
+
+        $removedCount = 0;
+
+        if (!empty($selectedCourses)) {
+            StudentCart::removeMany($selectedCourses);
+            $removedCount += count($selectedCourses);
+        }
+
+        if (!empty($selectedCombos)) {
+            StudentComboCart::removeMany($selectedCombos);
+            $removedCount += count($selectedCombos);
+        }
+
+        $message = "Đã xóa {$removedCount} mục khỏi giỏ hàng.";
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'removedCount' => $removedCount,
+                'cartCount' => count(StudentCart::ids()) + count(StudentComboCart::ids())
+            ]);
+        }
+
+        return redirect()->route('student.cart.index')->with('success', $message);
+    }
+
+    public function destroyAll(): RedirectResponse|JsonResponse
     {
         StudentCart::clear();
         StudentComboCart::clear();
 
-        return back()->with('success', 'Đã xoá toàn bộ giỏ hàng.');
+        $message = 'Đã xóa tất cả mục khỏi giỏ hàng.';
+        if (request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'cartCount' => 0
+            ]);
+        }
+
+        return redirect()->route('student.cart.index')->with('success', $message);
     }
 }
 
