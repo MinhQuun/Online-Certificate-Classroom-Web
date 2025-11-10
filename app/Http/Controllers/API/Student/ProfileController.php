@@ -71,7 +71,7 @@ class ProfileController extends Controller
                 ])->save();
             }
 
-            // Đồng bộ dữ liệu bảng HOCVIEN
+            // Đồng bộ dữ liệu bảng hocvien
             $user->student()->updateOrCreate(
                 ['maND' => $user->maND],
                 array_filter([

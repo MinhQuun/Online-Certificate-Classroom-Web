@@ -449,7 +449,7 @@ class CheckoutOrderService
         }
 
         try {
-            $this->invoiceNotesSupported = Schema::hasColumn('HOADON', 'ghiChu');
+            $this->invoiceNotesSupported = Schema::hasColumn('hoadon', 'ghiChu');
         } catch (\Throwable $e) {
             $this->invoiceNotesSupported = false;
         }

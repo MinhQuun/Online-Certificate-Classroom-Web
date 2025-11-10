@@ -50,29 +50,29 @@ class ResultController extends Controller
             ])
             ->whereIn('maKQDG', function ($subQuery) use ($teacherId, $selectedCourseId, $selectedMiniTestId, $searchStudent) {
                 $subQuery->select(DB::raw('MAX(maKQDG)'))
-                    ->from('KETQUA_MINITEST')
+                    ->from('ketqua_minitest')
                     ->whereExists(function ($existsQuery) use ($teacherId, $selectedCourseId) {
                         $existsQuery->select(DB::raw(1))
-                            ->from('CHUONG_MINITEST')
-                            ->whereColumn('CHUONG_MINITEST.maMT', 'KETQUA_MINITEST.maMT')
+                            ->from('chuong_minitest')
+                            ->whereColumn('chuong_minitest.maMT', 'ketqua_minitest.maMT')
                             ->whereExists(function ($courseQuery) use ($teacherId) {
                                 $courseQuery->select(DB::raw(1))
-                                    ->from('KHOAHOC')
-                                    ->whereColumn('KHOAHOC.maKH', 'CHUONG_MINITEST.maKH')
-                                    ->where('KHOAHOC.maND', $teacherId);
+                                    ->from('khoahoc')
+                                    ->whereColumn('khoahoc.maKH', 'chuong_minitest.maKH')
+                                    ->where('khoahoc.maND', $teacherId);
                             })
-                            ->when($selectedCourseId, fn($q) => $q->where('CHUONG_MINITEST.maKH', $selectedCourseId));
+                            ->when($selectedCourseId, fn($q) => $q->where('chuong_minitest.maKH', $selectedCourseId));
                     })
                     ->when($selectedMiniTestId, fn($q) => $q->where('maMT', $selectedMiniTestId))
                     ->when($searchStudent, function ($q) use ($searchStudent) {
                         $q->whereExists(function ($studentQuery) use ($searchStudent) {
                             $studentQuery->select(DB::raw(1))
-                                ->from('HOCVIEN')
-                                ->whereColumn('HOCVIEN.maHV', 'KETQUA_MINITEST.maHV')
+                                ->from('hocvien')
+                                ->whereColumn('hocvien.maHV', 'ketqua_minitest.maHV')
                                 ->whereExists(function ($userQuery) use ($searchStudent) {
                                     $userQuery->select(DB::raw(1))
                                         ->from('users')
-                                        ->whereColumn('users.id', 'HOCVIEN.maND')
+                                        ->whereColumn('users.id', 'hocvien.maND')
                                         ->where('users.name', 'like', "%{$searchStudent}%");
                                 });
                         });

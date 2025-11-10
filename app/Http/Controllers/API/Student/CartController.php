@@ -25,7 +25,7 @@ class CartController extends Controller
     public function storeCourse(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'course_id' => ['required', 'integer', 'exists:KHOAHOC,maKH'],
+            'course_id' => ['required', 'integer', 'exists:khoahoc,maKH'],
         ]);
 
         /** @var Course $course */
@@ -57,7 +57,7 @@ class CartController extends Controller
     public function storeCombo(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'combo_id' => ['required', 'integer', 'exists:GOI_KHOA_HOC,maGoi'],
+            'combo_id' => ['required', 'integer', 'exists:goi_khoa_hoc,maGoi'],
         ]);
 
         /** @var Combo $combo */

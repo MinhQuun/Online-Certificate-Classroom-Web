@@ -10,7 +10,7 @@ SET @R2_BASE_PUBLIC := 'https://pub-9b3a3b8712d849d7b4e15e85e6beca8d.r2.dev';
 -- =========================================================
 -- Band 405-600 SPEAKING
 -- =========================================================
-INSERT INTO TAILIEUHOCTAP
+INSERT INTO tailieuhoctap
 (maBH, tenTL, loai, kichThuoc, moTa, mime_type, visibility, public_url) VALUES
 -- Chương 1 - N1. Read a Text Aloud
 -- Bài 1
@@ -103,7 +103,7 @@ CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA
 -- =========================================================
 -- Band 405-600 WRITING
 -- =========================================================
-INSERT INTO TAILIEUHOCTAP
+INSERT INTO tailieuhoctap
 (maBH, tenTL, loai, kichThuoc, moTa, mime_type, visibility, public_url) VALUES
 -- Chương 1 - V1. Express an Opinion
 -- Bài 1
@@ -174,7 +174,7 @@ CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA
 -- =========================================================
 -- Band 405-600 LISTENING
 -- =========================================================
-INSERT INTO TAILIEUHOCTAP
+INSERT INTO tailieuhoctap
 (maBH, tenTL, loai, kichThuoc, moTa, mime_type, visibility, public_url) VALUES
 
 -- Chương 1 - PART 1. Photographs
@@ -376,7 +376,7 @@ CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB
 -- =========================================================
 -- Band 405-600 READING
 -- =========================================================
-INSERT INTO TAILIEUHOCTAP
+INSERT INTO tailieuhoctap
 (maBH, tenTL, loai, kichThuoc, moTa, mime_type, visibility, public_url) VALUES
 
 -- Chương 1 - PART 5 - 6. Incomplete Sentences
@@ -432,7 +432,7 @@ CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA
 -- =========================================================
 -- Band 605-780 SPEAKING
 -- =========================================================
-INSERT INTO TAILIEUHOCTAP
+INSERT INTO tailieuhoctap
 (maBH, tenTL, loai, kichThuoc, moTa, mime_type, visibility, public_url) VALUES
 
 -- Chương 1 - N1. Read a Text Aloud
@@ -526,7 +526,7 @@ CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA
 -- =========================================================
 -- Band 605-780 WRITING
 -- =========================================================
-INSERT INTO TAILIEUHOCTAP
+INSERT INTO tailieuhoctap
 (maBH, tenTL, loai, kichThuoc, moTa, mime_type, visibility, public_url) VALUES
 
 -- Chương 1 - V1. Express an Opinion
@@ -598,7 +598,7 @@ CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA
 -- =========================================================
 -- Band 605-780 LISTENING
 -- =========================================================
-INSERT INTO TAILIEUHOCTAP
+INSERT INTO tailieuhoctap
 (maBH, tenTL, loai, kichThuoc, moTa, mime_type, visibility, public_url) VALUES
 
 -- Chương 1 - PART 1. Photographs
@@ -799,7 +799,7 @@ CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB
 -- =========================================================
 -- Band 605-780 READING
 -- =========================================================
-INSERT INTO TAILIEUHOCTAP
+INSERT INTO tailieuhoctap
 (maBH, tenTL, loai, kichThuoc, moTa, mime_type, visibility, public_url) VALUES
 
 -- Chương 1 - PART 5 - 6. Incomplete Sentences
@@ -856,7 +856,7 @@ CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA
 -- =========================================================
 -- Band 785-990 SPEAKING
 -- =========================================================
-INSERT INTO TAILIEUHOCTAP
+INSERT INTO tailieuhoctap
 (maBH, tenTL, loai, kichThuoc, moTa, mime_type, visibility, public_url) VALUES
 
 -- Chương 1 - N1. Read a Text Aloud
@@ -950,7 +950,7 @@ CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA
 -- =========================================================
 -- Band 785-990 WRITING
 -- =========================================================
-INSERT INTO TAILIEUHOCTAP
+INSERT INTO tailieuhoctap
 (maBH, tenTL, loai, kichThuoc, moTa, mime_type, visibility, public_url) VALUES
 
 -- Chương 1 - V1. Express an Opinion
@@ -1022,7 +1022,7 @@ CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(N%C3%B3i%20-%20Vi%E1%BA
 -- =========================================================
 -- Band 785-990 LISTENING
 -- =========================================================
-INSERT INTO TAILIEUHOCTAP
+INSERT INTO tailieuhoctap
 (maBH, tenTL, loai, kichThuoc, moTa, mime_type, visibility, public_url) VALUES
 
 -- Chương 1 - PART 1. Photographs
@@ -1224,7 +1224,7 @@ CONCAT(@R2_BASE_PUBLIC, '/Luy%E1%BB%87n%20thi%20TOEIC%20(Nghe%20-%20%C4%90%E1%BB
 -- =========================================================
 -- Band 785-990 READING
 -- =========================================================
-INSERT INTO TAILIEUHOCTAP
+INSERT INTO tailieuhoctap
 (maBH, tenTL, loai, kichThuoc, moTa, mime_type, visibility, public_url) VALUES
 
 -- Chương 1 - PART 5 - 6. Incomplete Sentences

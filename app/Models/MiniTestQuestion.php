@@ -13,7 +13,7 @@ class MiniTestQuestion extends Model
     public const TYPE_TRUE_FALSE      = 'true_false';
     public const TYPE_ESSAY           = 'essay';
 
-    protected $table = 'MINITEST_QUESTIONS';
+    protected $table = 'minitest_questions';
     protected $primaryKey = 'maCauHoi';
     public $incrementing = true;
     protected $keyType = 'int';

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class ContactController extends Controller
 {
-    protected string $table = 'CONTACT_REPLIES';
+    protected string $table = 'contact_replies';
 
     public function store(Request $request): JsonResponse
     {

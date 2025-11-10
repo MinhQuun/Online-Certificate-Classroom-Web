@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Invoice extends Model
 {
-    protected $table = 'HOADON';
+    protected $table = 'hoadon';
     protected $primaryKey = 'maHD';
     public $timestamps = true;
 

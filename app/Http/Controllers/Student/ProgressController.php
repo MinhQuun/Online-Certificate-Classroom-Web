@@ -22,7 +22,7 @@ class ProgressController extends Controller
             return redirect()->route('login', ['redirect' => $request->fullUrl()]);
         }
 
-        $student = DB::table('HOCVIEN')->where('maND', $userId)->first();
+        $student = DB::table('hocvien')->where('maND', $userId)->first();
 
         if (!$student) {
             return redirect()
@@ -131,8 +131,8 @@ class ProgressController extends Controller
             return collect();
         }
 
-        return DB::table('CHUONG as ch')
-            ->join('BAIHOC as bh', 'bh.maChuong', '=', 'ch.maChuong')
+        return DB::table('chuong as ch')
+            ->join('baihoc as bh', 'bh.maChuong', '=', 'ch.maChuong')
             ->whereIn('ch.maKH', $courseIds)
             ->groupBy('ch.maKH')
             ->select('ch.maKH')
@@ -172,7 +172,7 @@ class ProgressController extends Controller
             return collect();
         }
 
-        return DB::table('CHUONG_MINITEST as mt')
+        return DB::table('chuong_minitest as mt')
             ->select('mt.maKH')
             ->selectRaw('COUNT(DISTINCT mt.maMT) as total_minitests')
             ->where('mt.is_active', 1)

@@ -118,9 +118,9 @@ class OrderController extends Controller
         $courseIds = $enrollments->pluck('maKH');
 
         return (int) Invoice::query()
-            ->join('CTHD', 'CTHD.maHD', '=', 'HOADON.maHD')
-            ->where('HOADON.maHV', $studentId)
-            ->whereIn('CTHD.maKH', $courseIds)
-            ->sum(DB::raw('CTHD.donGia * IFNULL(CTHD.soLuong,1)'));
+            ->join('cthd', 'cthd.maHD', '=', 'hoadon.maHD')
+            ->where('hoadon.maHV', $studentId)
+            ->whereIn('cthd.maKH', $courseIds)
+            ->sum(DB::raw('cthd.donGia * IFNULL(cthd.soLuong,1)'));
     }
 }

@@ -5,7 +5,7 @@ START TRANSACTION;
 -- =========================================================
 -- 1) QUYỀN
 -- =========================================================
-INSERT INTO QUYEN (maQuyen, tenQuyen) VALUES
+INSERT INTO quyen (maQuyen, tenQuyen) VALUES
 ('Q001', 'Quản trị viên'),
 ('Q002', 'Giảng viên'),
 ('Q003', 'Học viên')
@@ -16,7 +16,7 @@ ON DUPLICATE KEY UPDATE tenQuyen=VALUES(tenQuyen);
 --  LƯU Ý: vaiTro dùng ENUM: ADMIN | GIAO_VU | GIANG_VIEN | HOC_VIEN
 --  Mật khẩu là ví dụ placeholder, thay bằng hash thật trong Laravel.
 -- =========================================================
-INSERT INTO NGUOIDUNG (hoTen, email, sdt, matKhau, chuyenMon, vaiTro) VALUES
+INSERT INTO nguoidung (hoTen, email, sdt, matKhau, chuyenMon, vaiTro) VALUES
 ('Võ Nguyễn Minh Quân',    'vonguyenminhquan20052004@gmail.com',    '0966546750', '123456', 'Quản trị hệ thống', 'ADMIN'),
 ('Nguyễn Phạm Trường Duy', 'nptduyc920@gmail.com',             '0796177075', '123456', 'Ngôn ngữ Anh',      'GIANG_VIEN'),
 ('Trương Quang Như Đoan',  'truongdoan76qn@gmail.com',         '0866503201', '123456', 'Ngôn ngữ Anh',      'GIANG_VIEN'),
@@ -25,17 +25,17 @@ INSERT INTO NGUOIDUNG (hoTen, email, sdt, matKhau, chuyenMon, vaiTro) VALUES
 ('Nghê Minh Trí',          'tringhe2004@gmail.com',            '0856780003', '123456',  NULL,               'HOC_VIEN');
 
 -- Lấy id theo email để map quyền/học viên
-SELECT maND INTO @nd_admin1   FROM NGUOIDUNG WHERE email='vonguyenminhquan20052004@gmail.com';
-SELECT maND INTO @nd_teacher1 FROM NGUOIDUNG WHERE email='nptduyc920@gmail.com';
-SELECT maND INTO @nd_teacher2 FROM NGUOIDUNG WHERE email='truongdoan76qn@gmail.com';
-SELECT maND INTO @nd_student1 FROM NGUOIDUNG WHERE email='nguyenthitutrinh120504@gmail.com';
-SELECT maND INTO @nd_student2 FROM NGUOIDUNG WHERE email='hakachi303@gmail.com';
-SELECT maND INTO @nd_student3 FROM NGUOIDUNG WHERE email='tringhe2004@gmail.com';
+SELECT maND INTO @nd_admin1   FROM nguoidung WHERE email='vonguyenminhquan20052004@gmail.com';
+SELECT maND INTO @nd_teacher1 FROM nguoidung WHERE email='nptduyc920@gmail.com';
+SELECT maND INTO @nd_teacher2 FROM nguoidung WHERE email='truongdoan76qn@gmail.com';
+SELECT maND INTO @nd_student1 FROM nguoidung WHERE email='nguyenthitutrinh120504@gmail.com';
+SELECT maND INTO @nd_student2 FROM nguoidung WHERE email='hakachi303@gmail.com';
+SELECT maND INTO @nd_student3 FROM nguoidung WHERE email='tringhe2004@gmail.com';
 
 -- =========================================================
 -- 3) GÁN QUYỀN
 -- =========================================================
-INSERT IGNORE INTO QUYEN_NGUOIDUNG (maND, maQuyen) VALUES
+INSERT IGNORE INTO quyen_nguoidung (maND, maQuyen) VALUES
 (@nd_admin1,   'Q001'),
 (@nd_teacher1, 'Q002'),
 (@nd_teacher2, 'Q002'),
@@ -44,15 +44,15 @@ INSERT IGNORE INTO QUYEN_NGUOIDUNG (maND, maQuyen) VALUES
 (@nd_student3, 'Q003');
 
 -- =========================================================
--- 4) HỒ SƠ HỌC VIÊN (1-1 với NGUOIDUNG)
+-- 4) HỒ SƠ HỌC VIÊN (1-1 với nguoidung)
 -- =========================================================
-INSERT INTO HOCVIEN (maND, hoTen, ngaySinh, ngayNhapHoc) VALUES
+INSERT INTO hocvien (maND, hoTen, ngaySinh, ngayNhapHoc) VALUES
 (@nd_student1, 'Nguyễn Thị Tú Trinh', '2004-05-12', '2025-01-10'),
 (@nd_student2, 'Trần Minh Luân',      '2004-10-22', '2025-01-15'),
 (@nd_student3, 'Nghê Minh Trí',       '2004-01-26', '2025-01-15');
 
-SELECT maHV INTO @hv_trinh FROM HOCVIEN WHERE maND=@nd_student1;
-SELECT maHV INTO @hv_luan  FROM HOCVIEN WHERE maND=@nd_student2;
-SELECT maHV INTO @hv_tri   FROM HOCVIEN WHERE maND=@nd_student3;
+SELECT maHV INTO @hv_trinh FROM hocvien WHERE maND=@nd_student1;
+SELECT maHV INTO @hv_luan  FROM hocvien WHERE maND=@nd_student2;
+SELECT maHV INTO @hv_tri   FROM hocvien WHERE maND=@nd_student3;
 
 COMMIT;

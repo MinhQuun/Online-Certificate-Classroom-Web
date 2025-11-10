@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class InvoiceComboItem extends Model
 {
-    protected $table = 'CTHD_GOI';
+    protected $table = 'cthd_goi';
     public $timestamps = false;
     public $incrementing = false; // khóa chính (maHD, maGoi)
     protected $fillable = ['maHD','maGoi','soLuong','donGia','maKM'];

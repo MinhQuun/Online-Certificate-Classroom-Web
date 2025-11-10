@@ -10,7 +10,7 @@ class Role extends Model
 {
     use HasFactory;
 
-    protected $table = 'QUYEN';
+    protected $table = 'quyen';
     protected $primaryKey = 'maQuyen';
     protected $keyType = 'string';
     public $incrementing = false;

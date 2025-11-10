@@ -49,7 +49,7 @@ class UserAdminController extends Controller
             return 0;
         }
 
-        return (int) DB::table('QUYEN_NGUOIDUNG')
+        return (int) DB::table('quyen_nguoidung')
             ->where('maQuyen', $adminId)
             ->count();
     }
@@ -61,7 +61,7 @@ class UserAdminController extends Controller
         $roleFilter      = $this->normalizeRoleSlug($roleFilterInput);
         $roleFilterCode  = $roleFilter ? $this->roleId($roleFilter) : null;
 
-        $roles = DB::table('QUYEN')
+        $roles = DB::table('quyen')
             ->selectRaw('maQuyen as MAQUYEN, tenQuyen as TENQUYEN')
             ->orderBy('maQuyen')
             ->get();
@@ -76,7 +76,7 @@ class UserAdminController extends Controller
             })
             ->when($roleFilterCode, function ($builder) use ($roleFilterCode) {
                 $builder->whereHas('roles', function ($roleQuery) use ($roleFilterCode) {
-                    $roleQuery->where('QUYEN.maQuyen', $roleFilterCode);
+                    $roleQuery->where('quyen.maQuyen', $roleFilterCode);
                 });
             })
             ->with('roles')
@@ -89,9 +89,9 @@ class UserAdminController extends Controller
 
         $counts = [
             'total'   => (int) User::count(),
-            'admin'   => $adminId ? (int) DB::table('QUYEN_NGUOIDUNG')->where('maQuyen', $adminId)->count() : 0,
-            'teacher' => $teacherId ? (int) DB::table('QUYEN_NGUOIDUNG')->where('maQuyen', $teacherId)->count() : 0,
-            'student' => $studentId ? (int) DB::table('QUYEN_NGUOIDUNG')->where('maQuyen', $studentId)->count() : 0,
+            'admin'   => $adminId ? (int) DB::table('quyen_nguoidung')->where('maQuyen', $adminId)->count() : 0,
+            'teacher' => $teacherId ? (int) DB::table('quyen_nguoidung')->where('maQuyen', $teacherId)->count() : 0,
+            'student' => $studentId ? (int) DB::table('quyen_nguoidung')->where('maQuyen', $studentId)->count() : 0,
         ];
 
         return view('admin.index', compact(
@@ -114,7 +114,7 @@ class UserAdminController extends Controller
             'email'    => ['required', 'email:rfc,dns', 'max:255', 'unique:nguoidung,email'],
             'password' => ['required', 'confirmed', Password::min(6)],
             'phone'    => ['nullable', 'regex:/^0\d{9}$/'],
-            'MAQUYEN'  => ['required', 'exists:QUYEN,maQuyen'],
+            'MAQUYEN'  => ['required', 'exists:quyen,maQuyen'],
             'chuyenMon' => ['nullable', 'string', 'max:255'], // Validation cho chuyên môn
         ], [
             'name.required'      => 'Vui lòng nhập họ tên.',
@@ -132,7 +132,7 @@ class UserAdminController extends Controller
         ]);
 
         // Lấy tên quyền từ MAQUYEN để ánh xạ thành vaiTro
-        $roleName = DB::table('QUYEN')
+        $roleName = DB::table('quyen')
             ->where('maQuyen', $request->MAQUYEN)
             ->value('tenQuyen');
 
@@ -175,7 +175,7 @@ class UserAdminController extends Controller
             'email'    => ['required', 'email:rfc,dns', 'max:255', 'unique:nguoidung,email,' . $user->getKey() . ',maND'],
             'phone'    => ['nullable', 'regex:/^0\d{9}$/'],
             'password' => ['nullable', 'confirmed', Password::min(6)],
-            'MAQUYEN'  => ['required', 'exists:QUYEN,maQuyen'], // Thêm validation cho MAQUYEN
+            'MAQUYEN'  => ['required', 'exists:quyen,maQuyen'], // Thêm validation cho MAQUYEN
             'chuyenMon' => ['nullable', 'string', 'max:255'],   // Thêm validation cho chuyenMon
         ], [
             'name.required'      => 'Vui lòng nhập họ tên.',
@@ -192,7 +192,7 @@ class UserAdminController extends Controller
         ]);
 
         // Lấy tên quyền từ MAQUYEN để ánh xạ thành vaiTro
-        $roleName = DB::table('QUYEN')
+        $roleName = DB::table('quyen')
             ->where('maQuyen', $request->MAQUYEN)
             ->value('tenQuyen');
 
@@ -232,7 +232,7 @@ class UserAdminController extends Controller
     public function updateRole(Request $request, User $user)
     {
         $request->validate([
-            'MAQUYEN' => ['required', 'exists:QUYEN,maQuyen'],
+            'MAQUYEN' => ['required', 'exists:quyen,maQuyen'],
         ], [
             'MAQUYEN.required' => 'Vui lòng chọn quyền.',
             'MAQUYEN.exists'   => 'Quyền không hợp lệ.',
@@ -263,7 +263,7 @@ class UserAdminController extends Controller
         $adminId = $this->roleId('admin');
 
         $isAdmin = $adminId
-            ? $user->roles()->where('QUYEN.maQuyen', $adminId)->exists()
+            ? $user->roles()->where('quyen.maQuyen', $adminId)->exists()
             : false;
 
         if ($isAdmin) {

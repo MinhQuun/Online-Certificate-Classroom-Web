@@ -11,15 +11,15 @@ USE Online_Certificate_Classroom;
 -- =========================================================
 -- 1) PHÂN QUYỀN & NGƯỜI DÙNG
 -- =========================================================
--- Bảng QUYEN: Lưu trữ các quyền hệ thống (ví dụ: admin, giáo vụ, giảng viên, học viên).
-CREATE TABLE QUYEN (
+-- Bảng quyen: Lưu trữ các quyền hệ thống (ví dụ: admin, giáo vụ, giảng viên, học viên).
+CREATE TABLE quyen (
     maQuyen VARCHAR(10)  NOT NULL,
     tenQuyen VARCHAR(50) NOT NULL,
     PRIMARY KEY (maQuyen)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng NGUOIDUNG: Thông tin người dùng chung (admin, giáo vụ, giảng viên, học viên).
-CREATE TABLE NGUOIDUNG (
+-- Bảng nguoidung: Thông tin người dùng chung (admin, giáo vụ, giảng viên, học viên).
+CREATE TABLE nguoidung (
     maND INT NOT NULL AUTO_INCREMENT,
     hoTen VARCHAR(100) NOT NULL,              -- Họ tên đầy đủ
     email VARCHAR(255) NOT NULL UNIQUE,       -- Email duy nhất
@@ -37,35 +37,35 @@ CREATE TABLE NGUOIDUNG (
     PRIMARY KEY (maND)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng QUYEN_NGUOIDUNG: Liên kết quyền với người dùng (nhiều-nhiều).
-CREATE TABLE QUYEN_NGUOIDUNG (
+-- Bảng quyen_nguoidung: Liên kết quyền với người dùng (nhiều-nhiều).
+CREATE TABLE quyen_nguoidung (
     maND INT NOT NULL,
     maQuyen VARCHAR(10) NOT NULL,
     PRIMARY KEY (maND, maQuyen),
     KEY IX_QND_MAQUYEN (maQuyen),
-    CONSTRAINT FK_QND_ND FOREIGN KEY (maND) REFERENCES NGUOIDUNG(maND) ON DELETE CASCADE,
-    CONSTRAINT FK_QND_Q  FOREIGN KEY (maQuyen) REFERENCES QUYEN(maQuyen) ON DELETE CASCADE
+    CONSTRAINT FK_QND_ND FOREIGN KEY (maND) REFERENCES nguoidung(maND) ON DELETE CASCADE,
+    CONSTRAINT FK_QND_Q  FOREIGN KEY (maQuyen) REFERENCES quyen(maQuyen) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng HOCVIEN: Hồ sơ chi tiết học viên (1-1 với NGUOIDUNG).
-CREATE TABLE HOCVIEN (
+-- Bảng hocvien: Hồ sơ chi tiết học viên (1-1 với nguoidung).
+CREATE TABLE hocvien (
     maHV INT NOT NULL AUTO_INCREMENT,
-    maND INT NOT NULL UNIQUE,                 -- Liên kết với NGUOIDUNG
+    maND INT NOT NULL UNIQUE,                 -- Liên kết với nguoidung
     hoTen VARCHAR(100),                       -- Họ tên (có thể override)
     ngaySinh DATE,                            -- Ngày sinh
     ngayNhapHoc DATE,                         -- Ngày nhập học
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (maHV),
-    CONSTRAINT FK_HV_ND FOREIGN KEY (maND) REFERENCES NGUOIDUNG(maND) ON DELETE CASCADE
+    CONSTRAINT FK_HV_ND FOREIGN KEY (maND) REFERENCES nguoidung(maND) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 -- =========================================================
 -- 2) DANH MỤC / KHÓA HỌC / CHƯƠNG / BÀI HỌC / TÀI LIỆU
 -- =========================================================
--- Bảng DANHMUC: Danh mục khóa học (ví dụ: CNTT, Kinh doanh).
-CREATE TABLE DANHMUC (
+-- Bảng danhmuc: Danh mục khóa học (ví dụ: CNTT, Kinh doanh).
+CREATE TABLE danhmuc (
     maDanhMuc INT NOT NULL AUTO_INCREMENT,
     tenDanhMuc VARCHAR(100) NOT NULL,         -- Tên danh mục
     slug VARCHAR(120) NOT NULL UNIQUE,        -- Slug cho URL
@@ -75,8 +75,8 @@ CREATE TABLE DANHMUC (
     PRIMARY KEY (maDanhMuc)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng KHOAHOC: Thông tin khóa học.
-CREATE TABLE KHOAHOC (
+-- Bảng khoahoc: Thông tin khóa học.
+CREATE TABLE khoahoc (
     maKH INT NOT NULL AUTO_INCREMENT,
     maDanhMuc INT NOT NULL,                   -- Liên kết danh mục
     maND INT NOT NULL,                        -- Người tạo (giảng viên)
@@ -95,12 +95,12 @@ CREATE TABLE KHOAHOC (
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (maKH),
     KEY idx_course_category (maDanhMuc),
-    CONSTRAINT FK_KH_DM FOREIGN KEY (maDanhMuc) REFERENCES DANHMUC(maDanhMuc) ON DELETE CASCADE,
-    CONSTRAINT FK_KH_ND FOREIGN KEY (maND) REFERENCES NGUOIDUNG(maND) ON DELETE CASCADE
+    CONSTRAINT FK_KH_DM FOREIGN KEY (maDanhMuc) REFERENCES danhmuc(maDanhMuc) ON DELETE CASCADE,
+    CONSTRAINT FK_KH_ND FOREIGN KEY (maND) REFERENCES nguoidung(maND) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng CHUONG: Chương trong khóa học.
-CREATE TABLE CHUONG (
+-- Bảng chuong: Chương trong khóa học.
+CREATE TABLE chuong (
     maChuong INT NOT NULL AUTO_INCREMENT,
     maKH INT NOT NULL,                        -- Liên kết khóa học
     tenChuong VARCHAR(255) NOT NULL,          -- Tên chương
@@ -109,13 +109,13 @@ CREATE TABLE CHUONG (
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (maChuong),
-    KEY idx_chuong_kh (maKH),
-    CONSTRAINT uq_chuong_order UNIQUE (maKH, thuTu),
-    CONSTRAINT FK_CHUONG_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE
+    KEY idx_CHUONG_kh (maKH),
+    CONSTRAINT uq_CHUONG_order UNIQUE (maKH, thuTu),
+    CONSTRAINT FK_CHUONG_KH FOREIGN KEY (maKH) REFERENCES khoahoc(maKH) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng BAIHOC: Bài học trong chương.
-CREATE TABLE BAIHOC (
+-- Bảng baihoc: Bài học trong chương.
+CREATE TABLE baihoc (
     maBH INT NOT NULL AUTO_INCREMENT,
     maChuong INT NOT NULL,                    -- Liên kết chương
     tieuDe VARCHAR(150) NOT NULL,             -- Tiêu đề bài học
@@ -125,13 +125,13 @@ CREATE TABLE BAIHOC (
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (maBH),
-    KEY idx_baihoc_chuong (maChuong),
-    CONSTRAINT uq_baihoc_order UNIQUE (maChuong, thuTu),
-    CONSTRAINT FK_BH_CHUONG FOREIGN KEY (maChuong) REFERENCES CHUONG(maChuong) ON DELETE CASCADE
+    KEY idx_BAIHOC_CHUONG (maChuong),
+    CONSTRAINT uq_BAIHOC_order UNIQUE (maChuong, thuTu),
+    CONSTRAINT FK_BH_CHUONG FOREIGN KEY (maChuong) REFERENCES chuong(maChuong) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng TAILIEUHOCTAP: Tài liệu học tập đính kèm bài học.
-CREATE TABLE TAILIEUHOCTAP (
+-- Bảng tailieuhoctap: Tài liệu học tập đính kèm bài học.
+CREATE TABLE tailieuhoctap (
     maTL INT NOT NULL AUTO_INCREMENT,
     maBH INT NOT NULL,                        -- Liên kết bài học
     tenTL VARCHAR(150) NOT NULL,              -- Tên tài liệu
@@ -146,22 +146,22 @@ CREATE TABLE TAILIEUHOCTAP (
     PRIMARY KEY (maTL),
     KEY IX_TL_MABH (maBH),
     KEY IX_TL_BH_LOAI (maBH, loai),
-    CONSTRAINT FK_TL_BH FOREIGN KEY (maBH) REFERENCES BAIHOC(maBH) ON DELETE CASCADE
+    CONSTRAINT FK_TL_BH FOREIGN KEY (maBH) REFERENCES baihoc(maBH) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================
 -- 3) COMBO / KHUYẾN MÃI / THANH TOÁN
 -- =========================================================
 
--- Bảng PHUONGTHUCTHANHTOAN: Các phương thức thanh toán (ví dụ: chuyển khoản, thẻ tín dụng).
-CREATE TABLE PHUONGTHUCTHANHTOAN (
+-- Bảng phuongthucthanhtoan: Các phương thức thanh toán (ví dụ: chuyển khoản, thẻ tín dụng).
+CREATE TABLE phuongthucthanhtoan (
     maTT VARCHAR(10) NOT NULL,
     tenPhuongThuc VARCHAR(100) NOT NULL,      -- Tên phương thức
     PRIMARY KEY (maTT)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng GOI_KHOA_HOC: Thông tin gói combo khóa học.
-CREATE TABLE GOI_KHOA_HOC (
+-- Bảng goi_khoa_hoc: Thông tin gói combo khóa học.
+CREATE TABLE goi_khoa_hoc (
     maGoi INT NOT NULL AUTO_INCREMENT,
     tenGoi VARCHAR(150) NOT NULL,
     slug VARCHAR(150) NOT NULL UNIQUE,
@@ -178,21 +178,21 @@ CREATE TABLE GOI_KHOA_HOC (
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (maGoi),
-    CONSTRAINT FK_GKH_ND FOREIGN KEY (created_by) REFERENCES NGUOIDUNG(maND) ON DELETE CASCADE
+    CONSTRAINT FK_GKH_ND FOREIGN KEY (created_by) REFERENCES nguoidung(maND) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE GOI_KHOA_HOC_CHITIET (
+CREATE TABLE goi_khoa_hoc_chitiet (
     maGoi INT NOT NULL,
     maKH INT NOT NULL,
     thuTu INT DEFAULT 1,
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (maGoi, maKH),
-    CONSTRAINT FK_GKHCT_GOI FOREIGN KEY (maGoi) REFERENCES GOI_KHOA_HOC(maGoi) ON DELETE CASCADE,
-    CONSTRAINT FK_GKHCT_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE
+    CONSTRAINT FK_GKHCT_GOI FOREIGN KEY (maGoi) REFERENCES goi_khoa_hoc(maGoi) ON DELETE CASCADE,
+    CONSTRAINT FK_GKHCT_KH FOREIGN KEY (maKH) REFERENCES khoahoc(maKH) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng KHUYEN_MAI: Thông tin khuyến mãi theo dịp.
-CREATE TABLE KHUYEN_MAI (
+-- Bảng khuyen_mai: Thông tin khuyến mãi theo dịp.
+CREATE TABLE khuyen_mai (
     maKM INT NOT NULL AUTO_INCREMENT,
     tenKM VARCHAR(150) NOT NULL,
     moTa VARCHAR(2000),
@@ -207,11 +207,11 @@ CREATE TABLE KHUYEN_MAI (
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (maKM),
-    CONSTRAINT FK_KM_ND FOREIGN KEY (created_by) REFERENCES NGUOIDUNG(maND) ON DELETE CASCADE
+    CONSTRAINT FK_KM_ND FOREIGN KEY (created_by) REFERENCES nguoidung(maND) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng HOADON: Hóa đơn thanh toán.
-CREATE TABLE HOADON (
+-- Bảng hoadon: Hóa đơn thanh toán.
+CREATE TABLE hoadon (
     maHD INT NOT NULL AUTO_INCREMENT,
     maHV INT NOT NULL,                        -- Học viên
     maTT VARCHAR(10) NOT NULL,                -- Phương thức thanh toán
@@ -226,13 +226,13 @@ CREATE TABLE HOADON (
     KEY IX_HD_MAHV (maHV),
     KEY IX_HD_MATT (maTT),
     KEY IX_HD_MAND (maND),
-    CONSTRAINT FK_HD_HV FOREIGN KEY (maHV) REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
-    CONSTRAINT FK_HD_ND FOREIGN KEY (maND) REFERENCES NGUOIDUNG(maND) ON DELETE SET NULL,
-    CONSTRAINT FK_HD_TT FOREIGN KEY (maTT) REFERENCES PHUONGTHUCTHANHTOAN(maTT) ON DELETE RESTRICT
+    CONSTRAINT FK_HD_HV FOREIGN KEY (maHV) REFERENCES hocvien(maHV) ON DELETE CASCADE,
+    CONSTRAINT FK_HD_ND FOREIGN KEY (maND) REFERENCES nguoidung(maND) ON DELETE SET NULL,
+    CONSTRAINT FK_HD_TT FOREIGN KEY (maTT) REFERENCES phuongthucthanhtoan(maTT) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng CTHD: Chi tiết hóa đơn (các khóa học trong hóa đơn).
-CREATE TABLE CTHD (
+-- Bảng cthd: Chi tiết hóa đơn (các khóa học trong hóa đơn).
+CREATE TABLE cthd (
     maHD INT NOT NULL,
     maKH INT NOT NULL,                        -- Khóa học mua
     soLuong INT NOT NULL,                     -- Số lượng (thường là 1)
@@ -241,14 +241,14 @@ CREATE TABLE CTHD (
     PRIMARY KEY (maHD, maKH),
     KEY IX_CTHD_MAHD (maHD),
     KEY IX_CTHD_MAKH (maKH),
-    CONSTRAINT FK_CTHD_HD FOREIGN KEY (maHD) REFERENCES HOADON(maHD) ON DELETE CASCADE,
-    CONSTRAINT FK_CTHD_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE
+    CONSTRAINT FK_CTHD_HD FOREIGN KEY (maHD) REFERENCES hoadon(maHD) ON DELETE CASCADE,
+    CONSTRAINT FK_CTHD_KH FOREIGN KEY (maKH) REFERENCES khoahoc(maKH) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE GIAODICH_VNPAY (
+CREATE TABLE giaodich_vnpay (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    maHV INT NOT NULL,              -- Học viên mua (FK tới HOCVIEN.maHV)
-    maKH INT NULL,                  -- Khóa học được mua (FK tới KHOAHOC.maKH) - có thể null nếu thanh toán combo
+    maHV INT NOT NULL,              -- Học viên mua (FK tới hocvien.maHV)
+    maKH INT NULL,                  -- Khóa học được mua (FK tới khoahoc.maKH) - có thể null nếu thanh toán combo
     soTien DECIMAL(12,2) NOT NULL,  -- Số tiền VND bán để định thu cho khóa học tại thời điểm bấm thanh toán
     txn_ref VARCHAR(64) NOT NULL,   -- Mã đơn gửi sang VNPay (vnp_TxnRef)
     vnp_response_code VARCHAR(10) NULL,     -- Mã phản hồi VNPay (vnp_ResponseCode)
@@ -267,16 +267,16 @@ CREATE TABLE GIAODICH_VNPAY (
     PRIMARY KEY (id),
     UNIQUE KEY uq_txnref (txn_ref),
     KEY IX_GDVNPAY_HVKH (maHV, maKH),
-    CONSTRAINT FK_GDVNPAY_HV FOREIGN KEY (maHV) REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
-    CONSTRAINT FK_GDVNPAY_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE,
+    CONSTRAINT FK_GDVNPAY_HV FOREIGN KEY (maHV) REFERENCES hocvien(maHV) ON DELETE CASCADE,
+    CONSTRAINT FK_GDVNPAY_KH FOREIGN KEY (maKH) REFERENCES khoahoc(maKH) ON DELETE CASCADE,
     -- Các tham chiếu này giờ đã HỢP LỆ vì bảng đã được tạo ở Mục 2.5
-    CONSTRAINT FK_GDVNPAY_GOI FOREIGN KEY (maGoi) REFERENCES GOI_KHOA_HOC(maGoi) ON DELETE CASCADE,
-    CONSTRAINT FK_GDVNPAY_KM FOREIGN KEY (maKM) REFERENCES KHUYEN_MAI(maKM) ON DELETE SET NULL,
-    CONSTRAINT FK_GDVNPAY_HD FOREIGN KEY (maHD) REFERENCES HOADON(maHD) ON DELETE CASCADE
+    CONSTRAINT FK_GDVNPAY_GOI FOREIGN KEY (maGoi) REFERENCES goi_khoa_hoc(maGoi) ON DELETE CASCADE,
+    CONSTRAINT FK_GDVNPAY_KM FOREIGN KEY (maKM) REFERENCES khuyen_mai(maKM) ON DELETE SET NULL,
+    CONSTRAINT FK_GDVNPAY_HD FOREIGN KEY (maHD) REFERENCES hoadon(maHD) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng CTHD_GOI: Chi tiết hóa đơn cho combo.
-CREATE TABLE CTHD_GOI (
+-- Bảng cthd_goi: Chi tiết hóa đơn cho combo.
+CREATE TABLE cthd_goi (
     maHD INT NOT NULL,
     maGoi INT NOT NULL,
     soLuong INT NOT NULL DEFAULT 1,
@@ -284,36 +284,36 @@ CREATE TABLE CTHD_GOI (
     thanhTien DECIMAL(12,2) AS (soLuong * donGia) STORED,
     maKM INT NULL,  -- Khuyến mãi áp dụng
     PRIMARY KEY (maHD, maGoi),
-    CONSTRAINT FK_CTHDG_HD FOREIGN KEY (maHD) REFERENCES HOADON(maHD) ON DELETE CASCADE,
-    CONSTRAINT FK_CTHDG_GOI FOREIGN KEY (maGoi) REFERENCES GOI_KHOA_HOC(maGoi) ON DELETE CASCADE,
-    CONSTRAINT FK_CTHDG_KM FOREIGN KEY (maKM) REFERENCES KHUYEN_MAI(maKM) ON DELETE SET NULL
+    CONSTRAINT FK_CTHDG_HD FOREIGN KEY (maHD) REFERENCES hoadon(maHD) ON DELETE CASCADE,
+    CONSTRAINT FK_CTHDG_GOI FOREIGN KEY (maGoi) REFERENCES goi_khoa_hoc(maGoi) ON DELETE CASCADE,
+    CONSTRAINT FK_CTHDG_KM FOREIGN KEY (maKM) REFERENCES khuyen_mai(maKM) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng KHUYEN_MAI_GOI: Liên kết khuyến mãi với combo.
-CREATE TABLE KHUYEN_MAI_GOI (
+-- Bảng khuyen_mai_goi: Liên kết khuyến mãi với combo.
+CREATE TABLE khuyen_mai_goi (
     maKM INT NOT NULL,
     maGoi INT NOT NULL,
     giaUuDai DECIMAL(12,2) NULL,  -- Giá sau ưu đãi
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (maKM, maGoi),
-    CONSTRAINT FK_KMG_KM FOREIGN KEY (maKM) REFERENCES KHUYEN_MAI(maKM) ON DELETE CASCADE,
-    CONSTRAINT FK_KMG_GOI FOREIGN KEY (maGoi) REFERENCES GOI_KHOA_HOC(maGoi) ON DELETE CASCADE
+    CONSTRAINT FK_KMG_KM FOREIGN KEY (maKM) REFERENCES khuyen_mai(maKM) ON DELETE CASCADE,
+    CONSTRAINT FK_KMG_GOI FOREIGN KEY (maGoi) REFERENCES goi_khoa_hoc(maGoi) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE KHUYEN_MAI_KHOAHOC (
+CREATE TABLE khuyen_mai_khoahoc (
     maKM INT NOT NULL,
     maKH INT NOT NULL,
     giaUuDai DECIMAL(12,2) NULL,  -- Gia sau uu dai
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (maKM, maKH),
-    CONSTRAINT FK_KMKH_KM FOREIGN KEY (maKM) REFERENCES KHUYEN_MAI(maKM) ON DELETE CASCADE,
-    CONSTRAINT FK_KMKH_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE
+    CONSTRAINT FK_KMKH_KM FOREIGN KEY (maKM) REFERENCES khuyen_mai(maKM) ON DELETE CASCADE,
+    CONSTRAINT FK_KMKH_KH FOREIGN KEY (maKH) REFERENCES khoahoc(maKH) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Bảng student_cart_items: Đồng bộ giỏ hàng của học viên đăng nhập (web + mobile).
 CREATE TABLE student_cart_items (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    user_id INT NOT NULL,                                   -- Liên kết NGUOIDUNG.maND
+    user_id INT NOT NULL,                                   -- Liên kết nguoidung.maND
     item_type ENUM('course','combo') NOT NULL,              -- Phân biệt khóa học hay combo
     item_id INT NOT NULL,                                   -- ID khóa học hoặc combo tương ứng
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
@@ -321,7 +321,7 @@ CREATE TABLE student_cart_items (
     PRIMARY KEY (id),
     UNIQUE KEY student_cart_unique_item (user_id, item_type, item_id),
     KEY idx_cart_user_type (user_id, item_type),
-    CONSTRAINT FK_CART_USER FOREIGN KEY (user_id) REFERENCES NGUOIDUNG(maND) ON DELETE CASCADE
+    CONSTRAINT FK_CART_USER FOREIGN KEY (user_id) REFERENCES nguoidung(maND) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================
@@ -346,20 +346,20 @@ CREATE TABLE HOCVIEN_KHOAHOC (
     PRIMARY KEY (maHV, maKH),
     KEY IX_HVK_MAHV (maHV),
     KEY IX_HVK_MAKH (maKH),
-    CONSTRAINT FK_HVK_HV   FOREIGN KEY (maHV) REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
-    CONSTRAINT FK_HVK_KH   FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE,
-    CONSTRAINT FK_HVK_LAST FOREIGN KEY (last_lesson_id) REFERENCES BAIHOC(maBH) ON DELETE SET NULL,
+    CONSTRAINT FK_HVK_HV   FOREIGN KEY (maHV) REFERENCES hocvien(maHV) ON DELETE CASCADE,
+    CONSTRAINT FK_HVK_KH   FOREIGN KEY (maKH) REFERENCES khoahoc(maKH) ON DELETE CASCADE,
+    CONSTRAINT FK_HVK_LAST FOREIGN KEY (last_lesson_id) REFERENCES baihoc(maBH) ON DELETE SET NULL,
     -- Các tham chiếu này giờ đã HỢP LỆ vì bảng đã được tạo ở Mục 2.5
-    CONSTRAINT FK_HVK_GOI  FOREIGN KEY (maGoi) REFERENCES GOI_KHOA_HOC(maGoi) ON DELETE SET NULL,
-    CONSTRAINT FK_HVK_KM   FOREIGN KEY (maKM) REFERENCES KHUYEN_MAI(maKM) ON DELETE SET NULL
+    CONSTRAINT FK_HVK_GOI  FOREIGN KEY (maGoi) REFERENCES goi_khoa_hoc(maGoi) ON DELETE SET NULL,
+    CONSTRAINT FK_HVK_KM   FOREIGN KEY (maKM) REFERENCES khuyen_mai(maKM) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================
--- 5) HỎI ĐÁP TRONG BÀI HỌC (HOIDAP_BAIHOC & PHANHOI)
+-- 5) HỎI ĐÁP TRONG BÀI HỌC (hoidap_baihoc & PHANHOI)
 -- =========================================================
 
--- Bảng HOIDAP_BAIHOC: Câu hỏi / thảo luận trong bài học
-CREATE TABLE HOIDAP_BAIHOC (
+-- Bảng hoidap_baihoc: Câu hỏi / thảo luận trong bài học
+CREATE TABLE hoidap_baihoc (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     maBH INT NOT NULL,                                 -- Liên kết bài học
     maND INT NOT NULL,                                 -- Người hỏi (học viên/giảng viên)
@@ -375,14 +375,14 @@ CREATE TABLE HOIDAP_BAIHOC (
     INDEX idx_hdb_bh_status (maBH, status),
     INDEX idx_hdb_mand (maND),
     INDEX idx_hdb_pinned (is_pinned, last_replied_at),
-    CONSTRAINT FK_HDB_BH FOREIGN KEY (maBH) REFERENCES BAIHOC(maBH) ON DELETE CASCADE,
-    CONSTRAINT FK_HDB_ND FOREIGN KEY (maND) REFERENCES NGUOIDUNG(maND) ON DELETE CASCADE
+    CONSTRAINT FK_HDB_BH FOREIGN KEY (maBH) REFERENCES baihoc(maBH) ON DELETE CASCADE,
+    CONSTRAINT FK_HDB_ND FOREIGN KEY (maND) REFERENCES nguoidung(maND) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng HOIDAP_BAIHOC_PHANHOI: Phản hồi (trả lời) cho câu hỏi
-CREATE TABLE HOIDAP_BAIHOC_PHANHOI (
+-- Bảng hoidap_baihoc_phanhoi: Phản hồi (trả lời) cho câu hỏi
+CREATE TABLE hoidap_baihoc_phanhoi (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    discussion_id BIGINT UNSIGNED NOT NULL,            -- Liên kết HOIDAP_BAIHOC.id
+    discussion_id BIGINT UNSIGNED NOT NULL,            -- Liên kết hoidap_baihoc.id
     maND INT NOT NULL,                                 -- Người trả lời
     noiDung TEXT NOT NULL,                             -- Nội dung phản hồi
     parent_reply_id BIGINT UNSIGNED NULL,              -- Trả lời cho phản hồi khác (thread)
@@ -394,13 +394,13 @@ CREATE TABLE HOIDAP_BAIHOC_PHANHOI (
     INDEX idx_hdbph_mand (maND),
     INDEX idx_hdbph_parent (parent_reply_id),
     INDEX idx_hdbph_official (is_official),
-    CONSTRAINT FK_HDBPH_DISC FOREIGN KEY (discussion_id) REFERENCES HOIDAP_BAIHOC(id) ON DELETE CASCADE,
-    CONSTRAINT FK_HDBPH_ND FOREIGN KEY (maND) REFERENCES NGUOIDUNG(maND) ON DELETE CASCADE,
-    CONSTRAINT FK_HDBPH_PARENT FOREIGN KEY (parent_reply_id) REFERENCES HOIDAP_BAIHOC_PHANHOI(id) ON DELETE CASCADE
+    CONSTRAINT FK_HDBPH_DISC FOREIGN KEY (discussion_id) REFERENCES hoidap_baihoc(id) ON DELETE CASCADE,
+    CONSTRAINT FK_HDBPH_ND FOREIGN KEY (maND) REFERENCES nguoidung(maND) ON DELETE CASCADE,
+    CONSTRAINT FK_HDBPH_PARENT FOREIGN KEY (parent_reply_id) REFERENCES hoidap_baihoc_phanhoi(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng TIENDO_HOCTAP: Tiến độ chi tiết theo từng bài học.
-CREATE TABLE TIENDO_HOCTAP (
+-- Bảng tiendo_hoctap: Tiến độ chi tiết theo từng bài học.
+CREATE TABLE tiendo_hoctap (
     id INT NOT NULL AUTO_INCREMENT,
     maHV INT NOT NULL,
     maKH INT NOT NULL,
@@ -431,14 +431,14 @@ CREATE TABLE TIENDO_HOCTAP (
     KEY IX_TD_BAIHOC (maBH),
     KEY IX_TD_STATUS (trangThai),
     CONSTRAINT FK_TD_ENROLL FOREIGN KEY (maHV, maKH) REFERENCES HOCVIEN_KHOAHOC(maHV, maKH) ON DELETE CASCADE,
-    CONSTRAINT FK_TD_BAIHOC FOREIGN KEY (maBH) REFERENCES BAIHOC(maBH) ON DELETE CASCADE
+    CONSTRAINT FK_TD_BAIHOC FOREIGN KEY (maBH) REFERENCES baihoc(maBH) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================
 -- 6) MÃ KÍCH HOẠT & MINI-TEST (THEO CHƯƠNG) & KẾT QUẢ
 -- =========================================================
--- Bảng MA_KICH_HOAT: Mã kích hoạt ghi danh khóa học.
-CREATE TABLE MA_KICH_HOAT (
+-- Bảng ma_kich_hoat: Mã kích hoạt ghi danh khóa học.
+CREATE TABLE ma_kich_hoat (
     id INT NOT NULL AUTO_INCREMENT,
     maHV INT NOT NULL,
     maKH INT NOT NULL,                        -- Liên kết ghi danh
@@ -457,13 +457,13 @@ CREATE TABLE MA_KICH_HOAT (
     KEY IX_MAKH_ENROLL (maHV, maKH),
     KEY IX_MAKH_HD (maHD),
     CONSTRAINT FK_MAKH_ENROLL FOREIGN KEY (maHV, maKH) REFERENCES HOCVIEN_KHOAHOC(maHV, maKH) ON DELETE CASCADE,
-    CONSTRAINT FK_MAKH_HD FOREIGN KEY (maHD) REFERENCES HOADON(maHD) ON DELETE SET NULL,
-    CONSTRAINT FK_MAKH_GOI FOREIGN KEY (maGoi) REFERENCES GOI_KHOA_HOC(maGoi) ON DELETE CASCADE
+    CONSTRAINT FK_MAKH_HD FOREIGN KEY (maHD) REFERENCES hoadon(maHD) ON DELETE SET NULL,
+    CONSTRAINT FK_MAKH_GOI FOREIGN KEY (maGoi) REFERENCES goi_khoa_hoc(maGoi) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bang MA_KICH_HOAT_COMBO: Ma kich hoat cho goi combo, ket noi tat ca khoa hoc trong goi.
+-- Bang ma_kich_hoat_combo: Ma kich hoat cho goi combo, ket noi tat ca khoa hoc trong goi.
 
-CREATE TABLE MA_KICH_HOAT_COMBO (
+CREATE TABLE ma_kich_hoat_combo (
 
     id INT NOT NULL AUTO_INCREMENT,
 
@@ -495,19 +495,19 @@ CREATE TABLE MA_KICH_HOAT_COMBO (
 
     KEY IX_MAKH_COMBO_CODE (code),
 
-    CONSTRAINT FK_MAKH_COMBO_HV FOREIGN KEY (maHV) REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
+    CONSTRAINT FK_MAKH_COMBO_HV FOREIGN KEY (maHV) REFERENCES hocvien(maHV) ON DELETE CASCADE,
 
-    CONSTRAINT FK_MAKH_COMBO_GOI FOREIGN KEY (maGoi) REFERENCES GOI_KHOA_HOC(maGoi) ON DELETE CASCADE,
+    CONSTRAINT FK_MAKH_COMBO_GOI FOREIGN KEY (maGoi) REFERENCES goi_khoa_hoc(maGoi) ON DELETE CASCADE,
 
-    CONSTRAINT FK_MAKH_COMBO_HD FOREIGN KEY (maHD) REFERENCES HOADON(maHD) ON DELETE SET NULL
+    CONSTRAINT FK_MAKH_COMBO_HD FOREIGN KEY (maHD) REFERENCES hoadon(maHD) ON DELETE SET NULL
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 
--- Bảng CHUONG_MINITEST: Mini-test theo chương.
+-- Bảng chuong_minitest: Mini-test theo chương.
 
-CREATE TABLE CHUONG_MINITEST (
+CREATE TABLE chuong_minitest (
     maMT INT NOT NULL AUTO_INCREMENT,
     maKH INT NOT NULL,                        -- Liên kết khóa học
     maChuong INT NOT NULL,                    -- Liên kết chương
@@ -527,12 +527,12 @@ CREATE TABLE CHUONG_MINITEST (
     KEY IX_MT_CHUONG (maChuong),
     KEY IX_MT_SKILL (skill_type),
     CONSTRAINT uq_mt_order UNIQUE (maChuong, thuTu),
-    CONSTRAINT FK_MT_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE,
-    CONSTRAINT FK_MT_CH FOREIGN KEY (maChuong) REFERENCES CHUONG(maChuong) ON DELETE CASCADE
+    CONSTRAINT FK_MT_KH FOREIGN KEY (maKH) REFERENCES khoahoc(maKH) ON DELETE CASCADE,
+    CONSTRAINT FK_MT_CH FOREIGN KEY (maChuong) REFERENCES chuong(maChuong) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng MINITEST_TAILIEU: Tài liệu đính kèm mini-test.
-CREATE TABLE MINITEST_TAILIEU (
+-- Bảng minitest_tailieu: Tài liệu đính kèm mini-test.
+CREATE TABLE minitest_tailieu (
     id INT NOT NULL AUTO_INCREMENT,
     maMT INT NOT NULL,                        -- Liên kết mini-test
     tenTL VARCHAR(255) NOT NULL,              -- Tên tài liệu
@@ -544,11 +544,11 @@ CREATE TABLE MINITEST_TAILIEU (
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     KEY IX_MTTL_MT (maMT),
-    CONSTRAINT FK_MTTL_MT FOREIGN KEY (maMT) REFERENCES CHUONG_MINITEST(maMT) ON DELETE CASCADE
+    CONSTRAINT FK_MTTL_MT FOREIGN KEY (maMT) REFERENCES chuong_minitest(maMT) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng MINITEST_QUESTIONS: Câu hỏi trong mini-test.
-CREATE TABLE MINITEST_QUESTIONS (
+-- Bảng minitest_questions: Câu hỏi trong mini-test.
+CREATE TABLE minitest_questions (
     maCauHoi INT NOT NULL AUTO_INCREMENT,
     maMT INT NOT NULL,                        -- Liên kết mini-test
     thuTu INT NOT NULL DEFAULT 1,             -- Thứ tự câu hỏi
@@ -569,11 +569,11 @@ CREATE TABLE MINITEST_QUESTIONS (
     PRIMARY KEY (maCauHoi),
     CONSTRAINT uq_mtq_order UNIQUE (maMT, thuTu),
     KEY IX_MTQ_MT (maMT),
-    CONSTRAINT FK_MTQ_MT FOREIGN KEY (maMT) REFERENCES CHUONG_MINITEST(maMT) ON DELETE CASCADE
+    CONSTRAINT FK_MTQ_MT FOREIGN KEY (maMT) REFERENCES chuong_minitest(maMT) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng KETQUA_MINITEST: Kết quả mini-test của học viên.
-CREATE TABLE KETQUA_MINITEST (
+-- Bảng ketqua_minitest: Kết quả mini-test của học viên.
+CREATE TABLE ketqua_minitest (
     maKQDG INT NOT NULL AUTO_INCREMENT,
     maMT INT NOT NULL,                        -- Liên kết mini-test
     maHV INT NOT NULL,
@@ -599,12 +599,12 @@ CREATE TABLE KETQUA_MINITEST (
     KEY IX_KQDG_MT (maMT),
     KEY IX_KQDG_ENROLL (maHV, maKH),
     KEY IX_KQDG_GRADED (is_fully_graded),
-    CONSTRAINT FK_KQDG_MT     FOREIGN KEY (maMT)        REFERENCES CHUONG_MINITEST(maMT) ON DELETE CASCADE,
+    CONSTRAINT FK_KQDG_MT     FOREIGN KEY (maMT)        REFERENCES chuong_minitest(maMT) ON DELETE CASCADE,
     CONSTRAINT FK_KQDG_ENROLL FOREIGN KEY (maHV, maKH)  REFERENCES HOCVIEN_KHOAHOC(maHV, maKH) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng MINITEST_STUDENT_ANSWERS: Câu trả lời của học viên.
-CREATE TABLE MINITEST_STUDENT_ANSWERS (
+-- Bảng minitest_student_answers: Câu trả lời của học viên.
+CREATE TABLE minitest_student_answers (
     id INT NOT NULL AUTO_INCREMENT,
     maKQDG INT NOT NULL,
     maCauHoi INT NOT NULL,
@@ -630,17 +630,17 @@ CREATE TABLE MINITEST_STUDENT_ANSWERS (
     KEY IX_MSA_CAUHOI (maCauHoi),
     KEY IX_MSA_HV (maHV),
     KEY IX_MSA_GRADER (graded_by),
-    CONSTRAINT FK_MSA_KQDG  FOREIGN KEY (maKQDG)  REFERENCES KETQUA_MINITEST(maKQDG) ON DELETE CASCADE,
-    CONSTRAINT FK_MSA_CAUHOI FOREIGN KEY (maCauHoi) REFERENCES MINITEST_QUESTIONS(maCauHoi) ON DELETE CASCADE,
-    CONSTRAINT FK_MSA_HV    FOREIGN KEY (maHV)     REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
-    CONSTRAINT FK_MSA_GRADER FOREIGN KEY (graded_by) REFERENCES NGUOIDUNG(maND) ON DELETE SET NULL
+    CONSTRAINT FK_MSA_KQDG  FOREIGN KEY (maKQDG)  REFERENCES ketqua_minitest(maKQDG) ON DELETE CASCADE,
+    CONSTRAINT FK_MSA_CAUHOI FOREIGN KEY (maCauHoi) REFERENCES minitest_questions(maCauHoi) ON DELETE CASCADE,
+    CONSTRAINT FK_MSA_HV    FOREIGN KEY (maHV)     REFERENCES hocvien(maHV) ON DELETE CASCADE,
+    CONSTRAINT FK_MSA_GRADER FOREIGN KEY (graded_by) REFERENCES nguoidung(maND) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================
 -- 7) ĐÁNH GIÁ KHÓA HỌC & YÊU THÍCH
 -- =========================================================
--- Bảng DANHGIAKH: Đánh giá khóa học từ học viên.
-CREATE TABLE DANHGIAKH (
+-- Bảng danhgiakh: Đánh giá khóa học từ học viên.
+CREATE TABLE danhgiakh (
     maDG INT NOT NULL AUTO_INCREMENT,
     maHV INT NOT NULL,                        -- Học viên đánh giá
     maKH INT NOT NULL,                        -- Khóa học
@@ -653,25 +653,25 @@ CREATE TABLE DANHGIAKH (
     UNIQUE KEY uq_review (maHV, maKH),
     KEY IX_DGKH_MAHV (maHV),
     KEY IX_DGKH_MAKH (maKH),
-    CONSTRAINT FK_DGKH_HV FOREIGN KEY (maHV) REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
-    CONSTRAINT FK_DGKH_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE
+    CONSTRAINT FK_DGKH_HV FOREIGN KEY (maHV) REFERENCES hocvien(maHV) ON DELETE CASCADE,
+    CONSTRAINT FK_DGKH_KH FOREIGN KEY (maKH) REFERENCES khoahoc(maKH) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng KHOAHOC_YEUTHICH: Khóa học yêu thích của học viên.
-CREATE TABLE KHOAHOC_YEUTHICH (
+-- Bảng khoahoc_yeuthich: Khóa học yêu thích của học viên.
+CREATE TABLE khoahoc_yeuthich (
     maHV INT NOT NULL,
     maKH INT NOT NULL,
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (maHV, maKH),
-    CONSTRAINT FK_YT_HV FOREIGN KEY (maHV) REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
-    CONSTRAINT FK_YT_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE
+    CONSTRAINT FK_YT_HV FOREIGN KEY (maHV) REFERENCES hocvien(maHV) ON DELETE CASCADE,
+    CONSTRAINT FK_YT_KH FOREIGN KEY (maKH) REFERENCES khoahoc(maKH) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================
 -- 8) CHỨNG CHỈ
 -- =========================================================
--- Bảng CHUNGCHI: Chứng chỉ cấp cho học viên sau khóa học.
-CREATE TABLE CHUNGCHI (
+-- Bảng chungchi: Chứng chỉ cấp cho học viên sau khóa học.
+CREATE TABLE chungchi (
     maCC INT NOT NULL AUTO_INCREMENT,
     maHV INT NOT NULL,                        -- Học viên
     maKH INT NOT NULL,                        -- Khóa học
@@ -684,12 +684,12 @@ CREATE TABLE CHUNGCHI (
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (maCC),
     KEY IX_CC_MAHV (maHV),
-    CONSTRAINT FK_CC_HV FOREIGN KEY (maHV) REFERENCES HOCVIEN(maHV) ON DELETE CASCADE,
-    CONSTRAINT FK_CC_KH FOREIGN KEY (maKH) REFERENCES KHOAHOC(maKH) ON DELETE CASCADE
+    CONSTRAINT FK_CC_HV FOREIGN KEY (maHV) REFERENCES hocvien(maHV) ON DELETE CASCADE,
+    CONSTRAINT FK_CC_KH FOREIGN KEY (maKH) REFERENCES khoahoc(maKH) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng CHUNGCHI_DANHGIA: Đánh giá/ghi nhận cho chứng chỉ (nhiều bản ghi).
-CREATE TABLE CHUNGCHI_DANHGIA (
+-- Bảng chungchi_danhgia: Đánh giá/ghi nhận cho chứng chỉ (nhiều bản ghi).
+CREATE TABLE chungchi_danhgia (
     id INT NOT NULL AUTO_INCREMENT,
     maCC INT NOT NULL,                        -- Liên kết chứng chỉ
     diem DECIMAL(5,2),                        -- Điểm
@@ -698,7 +698,7 @@ CREATE TABLE CHUNGCHI_DANHGIA (
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     KEY IX_CCDG_CC (maCC),
-    CONSTRAINT FK_CCDG_CC FOREIGN KEY (maCC) REFERENCES CHUNGCHI(maCC) ON DELETE CASCADE
+    CONSTRAINT FK_CCDG_CC FOREIGN KEY (maCC) REFERENCES chungchi(maCC) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================
@@ -767,8 +767,8 @@ CREATE TABLE job_batches (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- BẢNG CONTACT_REPLIES: Quản lý liên hệ & phản hồi từ học viên
-CREATE TABLE CONTACT_REPLIES (
+-- BẢNG contact_replies: Quản lý liên hệ & phản hồi từ học viên
+CREATE TABLE contact_replies (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(120) NOT NULL,
     email VARCHAR(255) NOT NULL,
@@ -783,7 +783,7 @@ CREATE TABLE CONTACT_REPLIES (
     KEY idx_contact_status (status),
     KEY idx_contact_email (email),
     KEY idx_contact_created (created_at),
-    CONSTRAINT fk_contact_reply_by FOREIGN KEY (reply_by) REFERENCES NGUOIDUNG(maND) ON DELETE SET NULL
+    CONSTRAINT fk_contact_reply_by FOREIGN KEY (reply_by) REFERENCES nguoidung(maND) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Bảng personal_access_tokens: lưu token API cho Laravel Sanctum

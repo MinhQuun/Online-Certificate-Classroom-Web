@@ -90,7 +90,7 @@ class CourseController extends Controller
             }
 
             if (!empty($miniTestIds)) {
-                $scores = DB::table('KETQUA_MINITEST')
+                $scores = DB::table('ketqua_minitest')
                     ->select('maMT', DB::raw('MAX(diem) as best_score'), DB::raw('MAX(is_fully_graded) as is_fully_graded'))
                     ->where('maHV', $studentId)
                     ->whereIn('maMT', $miniTestIds)
@@ -189,7 +189,7 @@ class CourseController extends Controller
 
         $result['isAuthenticated'] = true;
 
-        $student = DB::table('HOCVIEN')->where('maND', $userId)->first();
+        $student = DB::table('hocvien')->where('maND', $userId)->first();
 
         if (!$student) {
             return $result;
@@ -197,8 +197,8 @@ class CourseController extends Controller
 
         $result['student'] = $student;
 
-        // Lấy khóa học đơn lẻ từ HOCVIEN_KHOAHOC
-        $rows = DB::table('HOCVIEN_KHOAHOC')
+        // Láº¥y khÃ³a há»c Ä‘Æ¡n láº» tá»« HOCVIEN_KHOAHOC
+        $rows = DB::table('hocvien_khoahoc')
             ->select('maKH', 'trangThai', 'maGoi')
             ->where('maHV', $student->maHV)
             ->get();
@@ -210,7 +210,7 @@ class CourseController extends Controller
         foreach ($rows as $row) {
             $courseId = (int) $row->maKH;
             
-            // Lưu lại combo đã kích hoạt
+            // LÆ°u láº¡i combo Ä‘Ã£ kÃ­ch hoáº¡t
             if ($row->maGoi && $row->trangThai === 'ACTIVE') {
                 $activeComboIds[] = (int) $row->maGoi;
             }
@@ -222,15 +222,15 @@ class CourseController extends Controller
             }
         }
 
-        // Lấy TẤT CẢ các khóa học trong combo đã kích hoạt
+        // Láº¥y Táº¤T Cáº¢ cÃ¡c khÃ³a há»c trong combo Ä‘Ã£ kÃ­ch hoáº¡t
         if (!empty($activeComboIds)) {
-            $comboCoursesIds = DB::table('GOI_KHOA_HOC_CHITIET')
+            $comboCoursesIds = DB::table('goi_khoa_hoc_chitiet')
                 ->whereIn('maGoi', array_unique($activeComboIds))
                 ->pluck('maKH')
                 ->map(fn($id) => (int) $id)
                 ->toArray();
 
-            // Merge với các khóa học đã active, loại bỏ duplicate
+            // Merge vá»›i cÃ¡c khÃ³a há»c Ä‘Ã£ active, loáº¡i bá» duplicate
             $active = array_unique(array_merge($active, $comboCoursesIds));
         }
 

@@ -46,9 +46,9 @@ class LessonController extends Controller
         $isEnrolled = false;
 
         if ($isAuthenticated) {
-            $student = DB::table('HOCVIEN')->where('maND', $userId)->first();
+            $student = DB::table('hocvien')->where('maND', $userId)->first();
             if ($student) {
-                $isEnrolled = DB::table('HOCVIEN_KHOAHOC')
+                $isEnrolled = DB::table('hocvien_khoahoc')
                     ->where('maHV', $student->maHV)
                     ->where('maKH', $course->maKH)
                     ->where('trangThai', 'ACTIVE')
@@ -87,10 +87,10 @@ class LessonController extends Controller
                 ->where('maBH', $lesson->maBH)
                 ->first();
 
-            // Lấy kết quả tốt nhất của từng mini-test trong chương này
+            // Láº¥y káº¿t quáº£ tá»‘t nháº¥t cá»§a tá»«ng mini-test trong chÆ°Æ¡ng nÃ y
             $chapterMiniTestIds = $lesson->chapter->miniTests->pluck('maMT');
             if ($chapterMiniTestIds->isNotEmpty()) {
-                $miniTestResults = DB::table('KETQUA_MINITEST')
+                $miniTestResults = DB::table('ketqua_minitest')
                     ->whereIn('maMT', $chapterMiniTestIds)
                     ->where('maHV', $student->maHV)
                     ->where('is_fully_graded', 1)

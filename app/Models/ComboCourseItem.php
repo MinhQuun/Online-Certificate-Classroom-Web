@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ComboCourseItem extends Model
 {
-    protected $table = 'GOI_KHOA_HOC_CHITIET';
+    protected $table = 'goi_khoa_hoc_chitiet';
     public $timestamps = false;        // bảng chỉ có created_at (không updated_at)
     public $incrementing = false;      // khóa chính là (maGoi, maKH)
     protected $fillable = ['maGoi','maKH','thuTu','created_at'];

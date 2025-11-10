@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LessonDiscussionReply extends Model
 {
-    protected $table = 'HOIDAP_BAIHOC_PHANHOI';
+    protected $table = 'hoidap_baihoc_phanhoi';
 
     protected $fillable = [
         'discussion_id',

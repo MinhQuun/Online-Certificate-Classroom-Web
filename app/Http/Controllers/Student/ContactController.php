@@ -11,7 +11,7 @@ use Illuminate\Support\Carbon;
 
 class ContactController extends Controller
 {
-    protected string $table = 'CONTACT_REPLIES';
+    protected string $table = 'contact_replies';
 
     public function submit(Request $request): RedirectResponse|JsonResponse
     {

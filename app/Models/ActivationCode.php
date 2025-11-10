@@ -7,7 +7,7 @@ use Illuminate\Support\Carbon;
 
 class ActivationCode extends Model
 {
-    protected $table = 'MA_KICH_HOAT';
+    protected $table = 'ma_kich_hoat';
     protected $primaryKey = 'id';
     public $timestamps = true; // created_at / updated_at
 
@@ -32,19 +32,19 @@ class ActivationCode extends Model
 
     // --- Quan hệ tiện dụng ---
 
-    // Học viên (bảng HOCVIEN) -> trong code bạn đặt là Student.php
+    // Học viên (bảng hocvien) -> trong code bạn đặt là Student.php
     public function student()
     {
         return $this->belongsTo(Student::class, 'maHV', 'maHV');
     }
 
-    // Khóa học (bảng KHOAHOC) -> model của bạn là Course.php
+    // Khóa học (bảng khoahoc) -> model của bạn là Course.php
     public function course()
     {
         return $this->belongsTo(Course::class, 'maKH', 'maKH');
     }
 
-    // Hóa đơn (bảng HOADON) -> model gợi ý đặt tên là Invoice.php
+    // Hóa đơn (bảng hoadon) -> model gợi ý đặt tên là Invoice.php
     public function invoice()
     {
         return $this->belongsTo(Invoice::class, 'maHD', 'maHD');

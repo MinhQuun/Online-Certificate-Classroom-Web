@@ -9,7 +9,7 @@ class LessonProgress extends Model
 {
     use HasFactory;
 
-    protected $table = 'TIENDO_HOCTAP';
+    protected $table = 'tiendo_hoctap';
     protected $primaryKey = 'id';
     public $timestamps = true;
 

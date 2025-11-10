@@ -12,7 +12,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class ContactReplyController extends Controller
 {
-    protected string $table = 'CONTACT_REPLIES';
+    protected string $table = 'contact_replies';
 
     public function index(Request $req)
     {
@@ -21,7 +21,7 @@ class ContactReplyController extends Controller
             return view('Admin.contact-replies', [
                 'items'  => $items,
                 'badges' => ['new' => 0],
-            ])->with('warning', 'Chưa có bảng CONTACT_REPLIES. Vui lòng tạo bảng trước.');
+            ])->with('warning', 'Chưa có bảng contact_replies. Vui lòng tạo bảng trước.');
         }
 
         $q = trim((string) $req->get('q', ''));
@@ -65,7 +65,7 @@ class ContactReplyController extends Controller
     public function update($id, Request $req)
     {
         if (!DB::getSchemaBuilder()->hasTable($this->table)) {
-            return back()->with('error', 'Chưa có bảng CONTACT_REPLIES.');
+            return back()->with('error', 'Chưa có bảng contact_replies.');
         }
 
         $action = $req->input('action');
@@ -133,7 +133,7 @@ class ContactReplyController extends Controller
     public function destroy($id)
     {
         if (!DB::getSchemaBuilder()->hasTable($this->table)) {
-            return back()->with('error', 'Chưa có bảng CONTACT_REPLIES.');
+            return back()->with('error', 'Chưa có bảng contact_replies.');
         }
         DB::table($this->table)->where('id', $id)->delete();
         return back()->with('success', 'Đã xoá liên hệ.');

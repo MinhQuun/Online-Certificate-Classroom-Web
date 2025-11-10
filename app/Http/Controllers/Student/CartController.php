@@ -75,7 +75,7 @@ class CartController extends Controller
     public function storeCombo(Request $request): RedirectResponse|JsonResponse
     {
         $validated = $request->validate([
-            'combo_id' => ['required', 'integer', 'exists:GOI_KHOA_HOC,maGoi'],
+            'combo_id' => ['required', 'integer', 'exists:goi_khoa_hoc,maGoi'],
         ], [
             'combo_id.required' => 'Combo không hợp lệ.',
             'combo_id.exists' => 'Combo không hợp lệ.',
@@ -178,9 +178,9 @@ class CartController extends Controller
     {
         $validated = $request->validate([
             'selected_courses' => ['nullable', 'array'],
-            'selected_courses.*' => ['integer', 'exists:KHOAHOC,maKH'],
+            'selected_courses.*' => ['integer', 'exists:khoahoc,maKH'],
             'selected_combos' => ['nullable', 'array'],
-            'selected_combos.*' => ['integer', 'exists:GOI_KHOA_HOC,maGoi'],
+            'selected_combos.*' => ['integer', 'exists:goi_khoa_hoc,maGoi'],
         ]);
 
         $selectedCourses = $validated['selected_courses'] ?? [];

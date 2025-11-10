@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PromotionCombo extends Model
 {
-    protected $table = 'KHUYEN_MAI_GOI';
+    protected $table = 'khuyen_mai_goi';
     public $timestamps = false;
     public $incrementing = false; // khóa chính (maKM, maGoi)
     protected $fillable = ['maKM','maGoi','giaUuDai','created_at'];

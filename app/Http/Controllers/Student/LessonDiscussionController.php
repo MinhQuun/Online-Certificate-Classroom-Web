@@ -64,21 +64,21 @@ class LessonDiscussionController extends Controller
         ]);
 
         if (!$this->canStudentAskQuestion($user, $lesson)) {
-            abort(403, 'Bạn chưa được quyền đặt câu hỏi cho bài học này.');
+            abort(403, 'Báº¡n chÆ°a Ä‘Æ°á»£c quyá»n Ä‘áº·t cÃ¢u há»i cho bÃ i há»c nÃ y.');
         }
 
         $validated = $request->validate([
             'noi_dung' => ['required', 'string', 'max:5000'],
         ], [
-            'noi_dung.required' => 'Vui lòng nhập nội dung câu hỏi.',
-            'noi_dung.max'      => 'Câu hỏi quá dài, hãy rút gọn dưới 5000 ký tự.',
+            'noi_dung.required' => 'Vui lÃ²ng nháº­p ná»™i dung cÃ¢u há»i.',
+            'noi_dung.max'      => 'CÃ¢u há»i quÃ¡ dÃ i, hÃ£y rÃºt gá»n dÆ°á»›i 5000 kÃ½ tá»±.',
         ]);
 
         $content = $this->sanitizeContent($validated['noi_dung']);
 
         if ($this->visibleCharacterCount($content) < 8) {
             return response()->json([
-                'message' => 'Nội dung câu hỏi cần tối thiểu 8 ký tự để giúp giáo viên hiểu rõ vấn đề.',
+                'message' => 'Ná»™i dung cÃ¢u há»i cáº§n tá»‘i thiá»ƒu 8 kÃ½ tá»± Ä‘á»ƒ giÃºp giÃ¡o viÃªn hiá»ƒu rÃµ váº¥n Ä‘á».',
             ], 422);
         }
 
@@ -102,7 +102,7 @@ class LessonDiscussionController extends Controller
 
         return response()->json([
             'data' => $this->transformDiscussion($discussion, $user),
-            'message' => 'Đã đăng câu hỏi thành công.',
+            'message' => 'ÄÃ£ Ä‘Äƒng cÃ¢u há»i thÃ nh cÃ´ng.',
         ], 201);
     }
 
@@ -123,27 +123,27 @@ class LessonDiscussionController extends Controller
 
         if ($discussion->is_locked) {
             return response()->json([
-                'message' => 'Chủ đề này đã bị khóa bình luận.',
+                'message' => 'Chá»§ Ä‘á» nÃ y Ä‘Ã£ bá»‹ khÃ³a bÃ¬nh luáº­n.',
             ], 423);
         }
 
         if (!$this->canParticipateInDiscussion($user, $lesson)) {
-            abort(403, 'Bạn chưa được quyền phản hồi trong chủ đề này.');
+            abort(403, 'Báº¡n chÆ°a Ä‘Æ°á»£c quyá»n pháº£n há»“i trong chá»§ Ä‘á» nÃ y.');
         }
 
         $validated = $request->validate([
             'noi_dung' => ['required', 'string', 'max:5000'],
             'parent_reply_id' => ['nullable', 'integer'],
         ], [
-            'noi_dung.required' => 'Vui lòng nhập nội dung phản hồi.',
-            'noi_dung.max'      => 'Nội dung phản hồi quá dài (tối đa 5000 ký tự).',
+            'noi_dung.required' => 'Vui lÃ²ng nháº­p ná»™i dung pháº£n há»“i.',
+            'noi_dung.max'      => 'Ná»™i dung pháº£n há»“i quÃ¡ dÃ i (tá»‘i Ä‘a 5000 kÃ½ tá»±).',
         ]);
 
         $content = $this->sanitizeContent($validated['noi_dung']);
 
         if ($this->visibleCharacterCount($content) < 3) {
             return response()->json([
-                'message' => 'Phản hồi cần tối thiểu 3 ký tự.',
+                'message' => 'Pháº£n há»“i cáº§n tá»‘i thiá»ƒu 3 kÃ½ tá»±.',
             ], 422);
         }
 
@@ -156,7 +156,7 @@ class LessonDiscussionController extends Controller
 
             if (!$parentExists) {
                 return response()->json([
-                    'message' => 'Phản hồi gốc không hợp lệ.',
+                    'message' => 'Pháº£n há»“i gá»‘c khÃ´ng há»£p lá»‡.',
                 ], 422);
             }
         }
@@ -195,7 +195,7 @@ class LessonDiscussionController extends Controller
                     $user
                 ),
             ],
-            'message' => 'Đã gửi phản hồi.',
+            'message' => 'ÄÃ£ gá»­i pháº£n há»“i.',
         ], 201);
     }
 
@@ -211,13 +211,13 @@ class LessonDiscussionController extends Controller
         }
 
         if (!$this->canDeleteDiscussion($user, $lesson, $discussion)) {
-            abort(403, 'Bạn không thể xóa chủ đề này.');
+            abort(403, 'Báº¡n khÃ´ng thá»ƒ xÃ³a chá»§ Ä‘á» nÃ y.');
         }
 
         $discussion->hide();
 
         return response()->json([
-            'message' => 'Đã ẩn chủ đề khỏi danh sách hỏi đáp.',
+            'message' => 'ÄÃ£ áº©n chá»§ Ä‘á» khá»i danh sÃ¡ch há»i Ä‘Ã¡p.',
         ]);
     }
 
@@ -233,7 +233,7 @@ class LessonDiscussionController extends Controller
         }
 
         if (!$this->canDeleteReply($user, $lesson, $reply)) {
-            abort(403, 'Bạn không thể xóa phản hồi này.');
+            abort(403, 'Báº¡n khÃ´ng thá»ƒ xÃ³a pháº£n há»“i nÃ y.');
         }
 
         DB::transaction(function () use ($discussion, $reply) {
@@ -248,7 +248,7 @@ class LessonDiscussionController extends Controller
         });
 
         return response()->json([
-            'message' => 'Đã xóa phản hồi.',
+            'message' => 'ÄÃ£ xÃ³a pháº£n há»“i.',
         ]);
     }
 
@@ -413,7 +413,7 @@ class LessonDiscussionController extends Controller
             return false;
         }
 
-        $student = DB::table('HOCVIEN')
+        $student = DB::table('hocvien')
             ->select('maHV')
             ->where('maND', $user->maND)
             ->first();
@@ -422,7 +422,7 @@ class LessonDiscussionController extends Controller
             return false;
         }
 
-        return DB::table('HOCVIEN_KHOAHOC')
+        return DB::table('hocvien_khoahoc')
             ->where('maHV', $student->maHV)
             ->where('maKH', $course->maKH)
             ->where('trangThai', 'ACTIVE')

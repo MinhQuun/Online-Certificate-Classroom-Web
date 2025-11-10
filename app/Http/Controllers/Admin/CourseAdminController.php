@@ -46,7 +46,7 @@ class CourseAdminController extends Controller
         // Danh sách giảng viên theo roles
         $teacherRoleId = RoleResolver::findRoleId(['giang-vien','teacher']);
         $teachers = User::whereHas('roles', function ($q) use ($teacherRoleId) {
-                $q->where('QUYEN.maQuyen', $teacherRoleId);
+                $q->where('quyen.maQuyen', $teacherRoleId);
             })
             ->orderBy('hoTen')
             ->get(['maND','hoTen']);
@@ -65,7 +65,7 @@ class CourseAdminController extends Controller
         // Lấy danh sách giảng viên hợp lệ theo roles
         $teacherRoleId = RoleResolver::findRoleId(['giang-vien','teacher']);
         $teacherIds = User::whereHas('roles', function ($q) use ($teacherRoleId) {
-                $q->where('QUYEN.maQuyen', $teacherRoleId);
+                $q->where('quyen.maQuyen', $teacherRoleId);
             })
             ->pluck('maND')
             ->toArray();
@@ -81,7 +81,7 @@ class CourseAdminController extends Controller
             'ngayKetThuc' => 'nullable|date|after:ngayBatDau',
             'hinhanh'     => 'nullable|image|max:2048',
             'thoiHanNgay' => 'required|integer|min:1',
-            'promotion_id' => ['nullable','integer','exists:KHUYEN_MAI,maKM'],
+            'promotion_id' => ['nullable','integer','exists:khuyen_mai,maKM'],
             'promotion_price' => ['nullable','numeric','min:0'],
             'trangThai'   => 'required|in:DRAFT,PUBLISHED,ARCHIVED',
         ]);
@@ -128,7 +128,7 @@ class CourseAdminController extends Controller
         // Lấy danh sách giảng viên hợp lệ theo roles
         $teacherRoleId = RoleResolver::findRoleId(['giang-vien','teacher']);
         $teacherIds = User::whereHas('roles', function ($q) use ($teacherRoleId) {
-                $q->where('QUYEN.maQuyen', $teacherRoleId);
+                $q->where('quyen.maQuyen', $teacherRoleId);
             })
             ->pluck('maND')
             ->toArray();
@@ -144,7 +144,7 @@ class CourseAdminController extends Controller
             'ngayKetThuc' => 'nullable|date|after:ngayBatDau',
             'hinhanh'     => 'nullable|image|max:2048',
             'thoiHanNgay' => 'required|integer|min:1',
-            'promotion_id' => ['nullable','integer','exists:KHUYEN_MAI,maKM'],
+            'promotion_id' => ['nullable','integer','exists:khuyen_mai,maKM'],
             'promotion_price' => ['nullable','numeric','min:0'],
             'trangThai'   => 'required|in:DRAFT,PUBLISHED,ARCHIVED',
         ]);

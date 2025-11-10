@@ -13,10 +13,10 @@ class RoleResolver
      */
     public static function resolve(User $user): string
     {
-        $role = DB::table('QUYEN_NGUOIDUNG')
-            ->join('QUYEN', 'QUYEN.maQuyen', '=', 'QUYEN_NGUOIDUNG.maQuyen')
-            ->select('QUYEN_NGUOIDUNG.maQuyen as code', 'QUYEN.tenQuyen as name')
-            ->where('QUYEN_NGUOIDUNG.maND', $user->getKey())
+        $role = DB::table('quyen_nguoidung')
+            ->join('quyen', 'quyen.maQuyen', '=', 'quyen_nguoidung.maQuyen')
+            ->select('quyen_nguoidung.maQuyen as code', 'quyen.tenQuyen as name')
+            ->where('quyen_nguoidung.maND', $user->getKey())
             ->first();
 
         if ($role) {
@@ -55,7 +55,7 @@ class RoleResolver
             return null;
         }
 
-        $roles = DB::table('QUYEN')->get();
+        $roles = DB::table('quyen')->get();
 
         foreach ($roles as $role) {
             [$code, $name] = self::extractRoleFields($role);
@@ -113,8 +113,8 @@ class RoleResolver
     {
         $attributes = array_change_key_case((array) $role, CASE_LOWER);
 
-        $code = $attributes['maquyen'] ?? null;
-        $name = $attributes['tenquyen'] ?? null;
+        $code = $attributes['maQUYEN'] ?? null;
+        $name = $attributes['tenQUYEN'] ?? null;
 
         return [
             $code !== null ? (string) $code : null,

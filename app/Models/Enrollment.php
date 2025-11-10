@@ -10,7 +10,7 @@ class Enrollment extends Model
 {
     use HasFactory;
 
-    protected $table = 'HOCVIEN_KHOAHOC';
+    protected $table = 'hocvien_khoahoc';
     public $timestamps = true;
 
     protected $primaryKey = null;

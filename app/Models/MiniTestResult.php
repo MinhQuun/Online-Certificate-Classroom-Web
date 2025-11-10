@@ -9,7 +9,7 @@ class MiniTestResult extends Model
 {
     use HasFactory;
 
-    protected $table = 'KETQUA_MINITEST';
+    protected $table = 'ketqua_minitest';
     protected $primaryKey = 'maKQDG';
     public $timestamps = true;
 

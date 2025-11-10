@@ -291,7 +291,7 @@ class ComboAdminController extends Controller
             'trangThai' => ['required', 'in:DRAFT,PUBLISHED,ARCHIVED'],
             'courses' => ['required', 'array', 'min:2'],
             'courses.*' => ['integer', 'min:1'],
-            'promotion_id' => ['nullable', 'integer', 'exists:KHUYEN_MAI,maKM'],
+            'promotion_id' => ['nullable', 'integer', 'exists:khuyen_mai,maKM'],
             'promotion_price' => ['nullable', 'numeric', 'min:0'],
         ];
 

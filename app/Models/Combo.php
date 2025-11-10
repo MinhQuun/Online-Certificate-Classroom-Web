@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 
 class Combo extends Model
 {
-    protected $table = 'GOI_KHOA_HOC';
+    protected $table = 'goi_khoa_hoc';
     protected $primaryKey = 'maGoi';
     public $incrementing = true;
     protected $keyType = 'int';
@@ -77,14 +77,14 @@ class Combo extends Model
 
     public function courses(): BelongsToMany
     {
-        return $this->belongsToMany(Course::class, 'GOI_KHOA_HOC_CHITIET', 'maGoi', 'maKH')
+        return $this->belongsToMany(Course::class, 'goi_khoa_hoc_chitiet', 'maGoi', 'maKH')
             ->withPivot(['thuTu', 'created_at'])
             ->orderByPivot('thuTu');
     }
 
     public function promotions(): BelongsToMany
     {
-        return $this->belongsToMany(Promotion::class, 'KHUYEN_MAI_GOI', 'maGoi', 'maKM')
+        return $this->belongsToMany(Promotion::class, 'khuyen_mai_goi', 'maGoi', 'maKM')
             ->withPivot(['giaUuDai', 'created_at']);
     }
 
@@ -121,7 +121,7 @@ class Combo extends Model
             }
         }
 
-        if ($resolved = $this->resolveCoverAssetPath('combo_khoahoc.png')) {
+        if ($resolved = $this->resolveCoverAssetPath('combo_KHOAHOC.png')) {
             return $resolved;
         }
 
@@ -339,7 +339,7 @@ class Combo extends Model
         }
 
         $map = [
-            'toeic-combo' => 'combo_khoahoc.png',
+            'toeic-combo' => 'combo_KHOAHOC.png',
             'toeic-foundation-full-pack-405-600' => 'combo_toeic_foundation_405-600.jpg',
             'toeic-intermediate-full-pack-605-780' => 'combo_toeic_intermediate_605-780.jpg',
             'toeic-advanced-full-pack-785-990' => 'combo_toeic_advanced_785-990.jpg',

@@ -18,9 +18,9 @@ class DashboardController extends Controller
 
         $counts = [
             'total'   => (int) User::count(),
-            'admin'   => $adminId ? (int) DB::table('QUYEN_NGUOIDUNG')->where('maQuyen', $adminId)->count() : 0,
-            'teacher' => $teacherId ? (int) DB::table('QUYEN_NGUOIDUNG')->where('maQuyen', $teacherId)->count() : 0,
-            'student' => $studentId ? (int) DB::table('QUYEN_NGUOIDUNG')->where('maQuyen', $studentId)->count() : 0,
+            'admin'   => $adminId ? (int) DB::table('quyen_nguoidung')->where('maQuyen', $adminId)->count() : 0,
+            'teacher' => $teacherId ? (int) DB::table('quyen_nguoidung')->where('maQuyen', $teacherId)->count() : 0,
+            'student' => $studentId ? (int) DB::table('quyen_nguoidung')->where('maQuyen', $studentId)->count() : 0,
         ];
 
         $roleFilters = [

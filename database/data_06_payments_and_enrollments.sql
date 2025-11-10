@@ -5,7 +5,7 @@ START TRANSACTION;
 -- =========================================================
 -- 12) PHƯƠNG THỨC THANH TOÁN (mẫu)
 -- =========================================================
-INSERT INTO PHUONGTHUCTHANHTOAN (maTT, tenPhuongThuc) VALUES
+INSERT INTO phuongthucthanhtoan (maTT, tenPhuongThuc) VALUES
 ('TT01', 'Chuyển khoản ngân hàng'),
 ('TT02', 'Ví điện tử'),
 ('TT03', 'Thẻ tín dụng'),

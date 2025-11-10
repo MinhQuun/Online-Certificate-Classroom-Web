@@ -51,9 +51,9 @@ class ProgressController extends Controller
 
         if ($activeCourse) {
             $query = DB::table('HOCVIEN_KHOAHOC as hk')
-                ->join('HOCVIEN as hv', 'hk.maHV', '=', 'hv.maHV')
-                ->leftJoin('NGUOIDUNG as nd', 'hv.maND', '=', 'nd.maND')
-                ->leftJoin('BAIHOC as lessons', 'hk.last_lesson_id', '=', 'lessons.maBH')
+                ->join('hocvien as hv', 'hk.maHV', '=', 'hv.maHV')
+                ->leftJoin('nguoidung as nd', 'hv.maND', '=', 'nd.maND')
+                ->leftJoin('baihoc as lessons', 'hk.last_lesson_id', '=', 'lessons.maBH')
                 ->where('hk.maKH', $activeCourse->maKH);
 
             if ($filters['status'] && in_array($filters['status'], ['PENDING', 'ACTIVE', 'EXPIRED'], true)) {
@@ -107,9 +107,9 @@ class ProgressController extends Controller
             'filters'       => $filters,
             'metrics'       => $metrics,
             'statusLabels'  => [
-                'PENDING' => 'Chờ kích hoạt',
-                'ACTIVE'  => 'Đang học',
-                'EXPIRED' => 'Hết hạn',
+                'PENDING' => 'Chá» kÃ­ch hoáº¡t',
+                'ACTIVE'  => 'Äang há»c',
+                'EXPIRED' => 'Háº¿t háº¡n',
             ],
             'badges'        => $this->teacherSidebarBadges($teacherId),
         ]);
@@ -136,12 +136,12 @@ class ProgressController extends Controller
 
             if (!$lessonExists) {
                 return back()
-                    ->withErrors(['last_lesson_id' => 'Bài học không thuộc khóa này.'])
+                    ->withErrors(['last_lesson_id' => 'BÃ i há»c khÃ´ng thuá»™c khÃ³a nÃ y.'])
                     ->withInput();
             }
         }
 
-        DB::table('HOCVIEN_KHOAHOC')
+        DB::table('hocvien_khoahoc')
             ->where('maKH', $course->maKH)
             ->where('maHV', $studentId)
             ->update([
@@ -155,6 +155,6 @@ class ProgressController extends Controller
             ->route('Teacher.progress', [
                 'course' => $course->maKH,
             ])
-            ->with('success', 'Đã cập nhật tiến độ học tập.');
+            ->with('success', 'ÄÃ£ cáº­p nháº­t tiáº¿n Ä‘á»™ há»c táº­p.');
     }
 }

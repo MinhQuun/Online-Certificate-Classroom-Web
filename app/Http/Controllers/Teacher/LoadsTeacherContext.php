@@ -11,7 +11,7 @@ trait LoadsTeacherContext
 {
     protected function teacherCourseIds(int $teacherId): Collection
     {
-        return DB::table('KHOAHOC')
+        return DB::table('khoahoc')
             ->where('maND', $teacherId)
             ->orderBy('tenKH')
             ->pluck('maKH');
@@ -31,18 +31,18 @@ trait LoadsTeacherContext
         ];
         }
 
-        $assignments = (int) DB::table('BAIHOC as lessons')
-            ->join('CHUONG as chapters', 'lessons.maChuong', '=', 'chapters.maChuong')
+        $assignments = (int) DB::table('baihoc as lessons')
+            ->join('chuong as chapters', 'lessons.maChuong', '=', 'chapters.maChuong')
             ->whereIn('chapters.maKH', $courseIds)
             ->where('lessons.loai', 'assignment')
             ->count();
 
-        $lowProgress = (int) DB::table('HOCVIEN_KHOAHOC')
+        $lowProgress = (int) DB::table('hocvien_khoahoc')
             ->whereIn('maKH', $courseIds)
             ->where('progress_percent', '<', 40)
             ->count();
 
-        $minitestsActive = (int) DB::table('CHUONG_MINITEST')
+        $minitestsActive = (int) DB::table('chuong_minitest')
             ->whereIn('maKH', $courseIds)
             ->where('is_active', 1)
             ->count();

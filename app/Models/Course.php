@@ -60,7 +60,7 @@ class Course extends Model
     }
     public function promotions(): BelongsToMany
     {
-        return $this->belongsToMany(Promotion::class, 'KHUYEN_MAI_KHOAHOC', 'maKH', 'maKM')
+        return $this->belongsToMany(Promotion::class, 'khuyen_mai_khoahoc', 'maKH', 'maKM')
                     ->withPivot(['giaUuDai','created_at']);
     }
 

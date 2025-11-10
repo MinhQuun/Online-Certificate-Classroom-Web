@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PromotionCourse extends Model
 {
-    protected $table = 'KHUYEN_MAI_KHOAHOC';
+    protected $table = 'khuyen_mai_khoahoc';
     public $timestamps = false;
     public $incrementing = false;
     protected $fillable = ['maKM','maKH','giaUuDai','created_at'];

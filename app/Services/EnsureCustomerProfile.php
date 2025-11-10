@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class EnsureCustomerProfile
 {
     /**
-     * Ensure that the current user has a linked record inside HOCVIEN.
+     * Ensure that the current user has a linked record inside hocvien.
      */
     public function handle(User $user): void
     {
@@ -19,13 +19,13 @@ class EnsureCustomerProfile
 
         $now = Carbon::now();
 
-        $profile = DB::table('HOCVIEN')
+        $profile = DB::table('hocvien')
             ->where('maND', $user->getKey())
             ->first();
 
         if ($profile) {
             // Update cached name in student profile when user renamed in registration form.
-            DB::table('HOCVIEN')
+            DB::table('hocvien')
                 ->where('maND', $user->getKey())
                 ->update([
                     'hoTen' => $user->hoTen,
@@ -35,7 +35,7 @@ class EnsureCustomerProfile
             return;
         }
 
-        DB::table('HOCVIEN')->insert([
+        DB::table('hocvien')->insert([
             'maND' => $user->getKey(),
             'hoTen' => $user->hoTen,
             'ngayNhapHoc' => $now->toDateString(),

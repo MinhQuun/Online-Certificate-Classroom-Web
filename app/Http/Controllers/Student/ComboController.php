@@ -114,7 +114,7 @@ class ComboController extends Controller
 
         $result['isAuthenticated'] = true;
 
-        $student = DB::table('HOCVIEN')->where('maND', $userId)->first();
+        $student = DB::table('hocvien')->where('maND', $userId)->first();
 
         if (!$student) {
             return $result;
@@ -122,8 +122,8 @@ class ComboController extends Controller
 
         $result['student'] = $student;
 
-        // Lấy tất cả combo từ HOCVIEN_KHOAHOC (có maGoi không null)
-        $comboEnrollments = DB::table('HOCVIEN_KHOAHOC')
+        // Láº¥y táº¥t cáº£ combo tá»« HOCVIEN_KHOAHOC (cÃ³ maGoi khÃ´ng null)
+        $comboEnrollments = DB::table('hocvien_khoahoc')
             ->select('maGoi', 'trangThai')
             ->where('maHV', $student->maHV)
             ->whereNotNull('maGoi')

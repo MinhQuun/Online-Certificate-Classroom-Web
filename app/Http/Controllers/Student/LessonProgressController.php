@@ -22,7 +22,7 @@ class LessonProgressController extends Controller
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
 
-        $student = DB::table('HOCVIEN')->where('maND', $userId)->first();
+        $student = DB::table('hocvien')->where('maND', $userId)->first();
         if (!$student) {
             return response()->json(['message' => 'Khong tim thay ho so hoc vien.'], 403);
         }
@@ -153,8 +153,8 @@ class LessonProgressController extends Controller
     {
         $courseId = $enrollment->maKH;
 
-        $lessonTypes = DB::table('BAIHOC as bh')
-            ->join('CHUONG as ch', 'bh.maChuong', '=', 'ch.maChuong')
+        $lessonTypes = DB::table('baihoc as bh')
+            ->join('chuong as ch', 'bh.maChuong', '=', 'ch.maChuong')
             ->where('ch.maKH', $courseId)
             ->pluck('loai', 'maBH')
             ->map(fn($type) => strtolower((string) $type));
@@ -213,7 +213,7 @@ class LessonProgressController extends Controller
             $updatePayload['video_progress_percent'] = $videoPercent;
         }
 
-        DB::table('HOCVIEN_KHOAHOC')
+        DB::table('hocvien_khoahoc')
             ->where('maHV', $enrollment->maHV)
             ->where('maKH', $courseId)
             ->update($updatePayload);

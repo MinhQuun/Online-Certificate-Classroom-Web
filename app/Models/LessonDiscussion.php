@@ -10,7 +10,7 @@ use Illuminate\Support\Carbon;
 
 class LessonDiscussion extends Model
 {
-    protected $table = 'HOIDAP_BAIHOC';
+    protected $table = 'hoidap_baihoc';
 
     protected $fillable = [
         'maBH',

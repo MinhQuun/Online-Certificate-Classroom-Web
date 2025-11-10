@@ -7,7 +7,7 @@ use Illuminate\Support\Carbon;
 
 class ComboActivationCode extends Model
 {
-    protected $table = 'MA_KICH_HOAT_COMBO';
+    protected $table = 'ma_kich_hoat_combo';
     protected $primaryKey = 'id';
     public $timestamps = true;
 

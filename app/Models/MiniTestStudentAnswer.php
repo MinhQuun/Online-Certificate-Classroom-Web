@@ -8,7 +8,7 @@ use App\Models\User;
 
 class MiniTestStudentAnswer extends Model
 {
-    protected $table = 'MINITEST_STUDENT_ANSWERS';
+    protected $table = 'minitest_student_answers';
     protected $primaryKey = 'id';
     public $incrementing = true;
     protected $keyType = 'int';

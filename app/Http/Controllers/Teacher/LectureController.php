@@ -25,7 +25,7 @@ class LectureController extends Controller
     use LoadsTeacherContext;
 
     /**
-     * Các loại tài nguyên được hỗ trợ với thông tin hiển thị.
+     * CÃ¡c loáº¡i tÃ i nguyÃªn Ä‘Æ°á»£c há»— trá»£ vá»›i thÃ´ng tin hiá»ƒn thá»‹.
      *
      * @var array
      */
@@ -34,24 +34,24 @@ class LectureController extends Controller
         'application/pdf' => ['label' => 'PDF (.pdf)', 'default_type' => 'PDF', 'icon' => 'bi-file-earmark-pdf'],
         'application/vnd.ms-powerpoint' => ['label' => 'PowerPoint (.ppt)', 'default_type' => 'PowerPoint', 'icon' => 'bi-easel3'],
         'application/vnd.openxmlformats-officedocument.presentationml.presentation' => ['label' => 'PowerPoint (.pptx)', 'default_type' => 'PowerPoint', 'icon' => 'bi-easel3'],
-        'application/zip' => ['label' => 'Tập tin nén (.zip)', 'default_type' => 'ZIP', 'icon' => 'bi-file-zip'],
+        'application/zip' => ['label' => 'Táº­p tin nÃ©n (.zip)', 'default_type' => 'ZIP', 'icon' => 'bi-file-zip'],
         'audio/mpeg' => ['label' => 'Audio (.mp3)', 'default_type' => 'Audio', 'icon' => 'bi-music-note-beamed'],
-        'text/html' => ['label' => 'Liên kết', 'default_type' => 'Link', 'icon' => 'bi-link-45deg'],
+        'text/html' => ['label' => 'LiÃªn káº¿t', 'default_type' => 'Link', 'icon' => 'bi-link-45deg'],
     ];
 
     /**
-     * Các loại bài giảng được hỗ trợ.
+     * CÃ¡c loáº¡i bÃ i giáº£ng Ä‘Æ°á»£c há»— trá»£.
      *
      * @var array
      */
     protected $lessonTypes = [
-        'video' => ['label' => 'Video bài giảng', 'icon' => 'bi-camera-video'],
-        'doc' => ['label' => 'Tài liệu', 'icon' => 'bi-file-earmark-text'],
-        'assignment' => ['label' => 'Bài tập', 'icon' => 'bi-pencil-square'],
+        'video' => ['label' => 'Video bÃ i giáº£ng', 'icon' => 'bi-camera-video'],
+        'doc' => ['label' => 'TÃ i liá»‡u', 'icon' => 'bi-file-earmark-text'],
+        'assignment' => ['label' => 'BÃ i táº­p', 'icon' => 'bi-pencil-square'],
     ];
 
     /**
-     * Hiển thị danh sách bài giảng của giảng viên.
+     * Hiá»ƒn thá»‹ danh sÃ¡ch bÃ i giáº£ng cá»§a giáº£ng viÃªn.
      */
     public function index(Request $request)
     {
@@ -64,7 +64,7 @@ class LectureController extends Controller
             ->get();
 
         if ($courses->isNotEmpty()) {
-            $studentCounts = DB::table('HOCVIEN_KHOAHOC')
+            $studentCounts = DB::table('hocvien_khoahoc')
                 ->select('maKH', DB::raw('COUNT(DISTINCT maHV) as total'))
                 ->whereIn('maKH', $courses->pluck('maKH'))
                 ->groupBy('maKH')
@@ -159,7 +159,7 @@ class LectureController extends Controller
     }
 
     /**
-     * Lưu bài giảng mới.
+     * LÆ°u bÃ i giáº£ng má»›i.
      */
     public function store(Request $request): RedirectResponse
     {
@@ -183,7 +183,7 @@ class LectureController extends Controller
             $order = $validated['order'] ?? ($chapter->lessons()->max('thuTu') + 1);
 
             if ($order > 1) {
-                DB::table('BAIHOC')
+                DB::table('baihoc')
                     ->where('maChuong', $chapter->maChuong)
                     ->where('thuTu', '>=', $order)
                     ->increment('thuTu');
@@ -197,7 +197,7 @@ class LectureController extends Controller
                 'loai' => $validated['type'],
             ]);
 
-            // Tạo thư mục bài giảng trên R2
+            // Táº¡o thÆ° má»¥c bÃ i giáº£ng trÃªn R2
             $courseDir = Str::slug($chapter->course->tenKH);
             $chapterDir = "{$courseDir}/" . Str::slug($chapter->tenChuong);
             $lessonDir = "{$chapterDir}/" . Str::slug($lesson->tieuDe);
@@ -206,10 +206,10 @@ class LectureController extends Controller
                     Storage::disk('s3')->makeDirectory($lessonDir);
                 }
             } catch (\Exception $e) {
-                Log::error('Lỗi tạo thư mục bài giảng trên R2: ' . $e->getMessage());
+                Log::error('Lá»—i táº¡o thÆ° má»¥c bÃ i giáº£ng trÃªn R2: ' . $e->getMessage());
                 return redirect()
                     ->route('teacher.lectures.index', ['course' => $chapter->maKH])
-                    ->with('error', 'Không thể tạo thư mục bài giảng trên R2. Vui lòng thử lại.');
+                    ->with('error', 'KhÃ´ng thá»ƒ táº¡o thÆ° má»¥c bÃ i giáº£ng trÃªn R2. Vui lÃ²ng thá»­ láº¡i.');
             }
 
             return redirect()
@@ -217,12 +217,12 @@ class LectureController extends Controller
                     'course' => $chapter->maKH,
                     '_fragment' => 'lesson-' . $lesson->maBH,
                 ])
-                ->with('success', 'Đã tạo bài giảng mới.');
+                ->with('success', 'ÄÃ£ táº¡o bÃ i giáº£ng má»›i.');
         });
     }
 
     /**
-     * Cập nhật bài giảng.
+     * Cáº­p nháº­t bÃ i giáº£ng.
      */
     public function update(Request $request, Lesson $lesson): RedirectResponse
     {
@@ -243,7 +243,7 @@ class LectureController extends Controller
             $oldChapterId = $lesson->maChuong;
             $newChapterId = $validated['chapter_id'];
 
-            // Đổi tên thư mục trên R2 nếu tiêu đề thay đổi hoặc chuyển chương
+            // Äá»•i tÃªn thÆ° má»¥c trÃªn R2 náº¿u tiÃªu Ä‘á» thay Ä‘á»•i hoáº·c chuyá»ƒn chÆ°Æ¡ng
             $course = Course::findOrFail($validated['course_id']);
             $oldChapter = Chapter::findOrFail($oldChapterId);
             $newChapter = Chapter::findOrFail($newChapterId);
@@ -269,33 +269,33 @@ class LectureController extends Controller
                         Storage::disk('s3')->makeDirectory($newLessonDir);
                     }
                 } catch (\Exception $e) {
-                    Log::error('Lỗi đổi tên thư mục bài giảng trên R2: ' . $e->getMessage());
+                    Log::error('Lá»—i Ä‘á»•i tÃªn thÆ° má»¥c bÃ i giáº£ng trÃªn R2: ' . $e->getMessage());
                     return redirect()
                         ->route('teacher.lectures.index', ['course' => $lesson->chapter->maKH])
-                        ->with('error', 'Không thể đổi tên thư mục bài giảng trên R2. Vui lòng thử lại.');
+                        ->with('error', 'KhÃ´ng thá»ƒ Ä‘á»•i tÃªn thÆ° má»¥c bÃ i giáº£ng trÃªn R2. Vui lÃ²ng thá»­ láº¡i.');
                 }
             }
 
-            // Cập nhật thứ tự bài giảng
+            // Cáº­p nháº­t thá»© tá»± bÃ i giáº£ng
             if ($newOrder !== $lesson->thuTu || $oldChapterId !== $newChapterId) {
                 if ($oldChapterId === $newChapterId) {
                     if ($newOrder < $lesson->thuTu) {
-                        DB::table('BAIHOC')
+                        DB::table('baihoc')
                             ->where('maChuong', $lesson->maChuong)
                             ->whereBetween('thuTu', [$newOrder, $lesson->thuTu - 1])
                             ->increment('thuTu');
                     } else {
-                        DB::table('BAIHOC')
+                        DB::table('baihoc')
                             ->where('maChuong', $lesson->maChuong)
                             ->whereBetween('thuTu', [$lesson->thuTu + 1, $newOrder])
                             ->decrement('thuTu');
                     }
                 } else {
-                    DB::table('BAIHOC')
+                    DB::table('baihoc')
                         ->where('maChuong', $oldChapterId)
                         ->where('thuTu', '>', $lesson->thuTu)
                         ->decrement('thuTu');
-                    DB::table('BAIHOC')
+                    DB::table('baihoc')
                         ->where('maChuong', $newChapterId)
                         ->where('thuTu', '>=', $newOrder)
                         ->increment('thuTu');
@@ -315,12 +315,12 @@ class LectureController extends Controller
                     'course' => $lesson->chapter->maKH,
                     '_fragment' => 'lesson-' . $lesson->maBH,
                 ])
-                ->with('success', 'Đã cập nhật bài giảng.');
+                ->with('success', 'ÄÃ£ cáº­p nháº­t bÃ i giáº£ng.');
         });
     }
 
     /**
-     * Lưu tài nguyên cho bài giảng.
+     * LÆ°u tÃ i nguyÃªn cho bÃ i giáº£ng.
      */
     public function storeMaterial(Request $request, Lesson $lesson): JsonResponse
     {
@@ -340,18 +340,18 @@ class LectureController extends Controller
                 $file = $request->file('file');
                 $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
 
-                // Tạo đường dẫn thư mục dựa trên course, chapter, và lesson
+                // Táº¡o Ä‘Æ°á»ng dáº«n thÆ° má»¥c dá»±a trÃªn course, chapter, vÃ  lesson
                 $course = $lesson->chapter->course;
                 $courseDir = Str::slug($course->tenKH);
                 $chapterDir = Str::slug($lesson->chapter->tenChuong);
                 $lessonDir = Str::slug($lesson->tieuDe);
                 $fullPath = "{$courseDir}/{$chapterDir}/{$lessonDir}/{$fileName}";
 
-                // Upload file vào thư mục cụ thể
+                // Upload file vÃ o thÆ° má»¥c cá»¥ thá»ƒ
                 $filePath = $file->storeAs('', $fullPath, 's3');
-                Storage::disk('s3')->setVisibility($filePath, 'public'); // Đặt quyền public
+                Storage::disk('s3')->setVisibility($filePath, 'public'); // Äáº·t quyá»n public
 
-                // Tạo URL công khai sử dụng PUBLIC_R2_URL
+                // Táº¡o URL cÃ´ng khai sá»­ dá»¥ng PUBLIC_R2_URL
                 $publicUrl = env('PUBLIC_R2_URL') . '/' . $fullPath;
                 $fileUrl = $publicUrl;
                 Log::info("Uploaded file to R2 with public access: {$fileUrl}");
@@ -372,14 +372,14 @@ class LectureController extends Controller
                 Log::info("Material created successfully for lesson ID: {$lesson->maBH}");
             }
 
-            return response()->json(['success' => true, 'message' => 'Đã thêm tài nguyên cho bài giảng.']);
+            return response()->json(['success' => true, 'message' => 'ÄÃ£ thÃªm tÃ i nguyÃªn cho bÃ i giáº£ng.']);
         } catch (\Exception $e) {
-            Log::error('Lỗi upload tài nguyên: ' . $e->getMessage());
-            return response()->json(['success' => false, 'error' => 'Không thể upload file lên R2. Vui lòng thử lại. ' . $e->getMessage()], 500);
+            Log::error('Lá»—i upload tÃ i nguyÃªn: ' . $e->getMessage());
+            return response()->json(['success' => false, 'error' => 'KhÃ´ng thá»ƒ upload file lÃªn R2. Vui lÃ²ng thá»­ láº¡i. ' . $e->getMessage()], 500);
         }
     }
     /**
-     * Xóa tài nguyên.
+     * XÃ³a tÃ i nguyÃªn.
      */
     public function destroyMaterial(Material $material): RedirectResponse
     {
@@ -390,14 +390,14 @@ class LectureController extends Controller
 
         $courseId = $lesson->chapter->maKH;
 
-        // Xóa file trên R2 nếu tồn tại
+        // XÃ³a file trÃªn R2 náº¿u tá»“n táº¡i
         try {
             $filePath = parse_url($material->public_url, PHP_URL_PATH);
             if ($filePath && Storage::disk('s3')->exists($filePath)) {
                 Storage::disk('s3')->delete($filePath);
             }
         } catch (\Exception $e) {
-            Log::error('Lỗi xóa file trên R2: ' . $e->getMessage());
+            Log::error('Lá»—i xÃ³a file trÃªn R2: ' . $e->getMessage());
         }
 
         $material->delete();
@@ -407,11 +407,11 @@ class LectureController extends Controller
                 'course' => $courseId,
                 '_fragment' => 'lesson-' . $lesson->maBH,
             ])
-            ->with('success', 'Đã xóa tài nguyên.');
+            ->with('success', 'ÄÃ£ xÃ³a tÃ i nguyÃªn.');
     }
 
     /**
-     * Kiểm tra quyền truy cập bài giảng.
+     * Kiá»ƒm tra quyá»n truy cáº­p bÃ i giáº£ng.
      */
     protected function authorizeLesson(Lesson $lesson, int $teacherId): void
     {
@@ -419,17 +419,17 @@ class LectureController extends Controller
             ->course()
             ->value('maND');
 
-        abort_if($courseTeacher !== $teacherId, 403, 'Bạn không có quyền trên bài giảng này.');
+        abort_if($courseTeacher !== $teacherId, 403, 'Báº¡n khÃ´ng cÃ³ quyá»n trÃªn bÃ i giáº£ng nÃ y.');
     }
 
     /**
-     * Tạo tài nguyên từ payload.
+     * Táº¡o tÃ i nguyÃªn tá»« payload.
      */
     protected function createMaterialFromPayload(Lesson $lesson, array $resource): void
     {
         try {
             $name = $resource['name'] ?? $lesson->tieuDe;
-            $type = $resource['type'] ?? 'Tài nguyên';
+            $type = $resource['type'] ?? 'TÃ i nguyÃªn';
             $mime = $resource['mime'] ?? $this->guessMime($type, $resource['url'] ?? '');
 
             $lesson->materials()->create([
@@ -442,13 +442,13 @@ class LectureController extends Controller
                 'visibility' => $resource['visibility'] ?? 'public',
             ]);
         } catch (\Exception $e) {
-            Log::error('Lỗi tạo material: ' . $e->getMessage());
+            Log::error('Lá»—i táº¡o material: ' . $e->getMessage());
             throw $e;
         }
     }
 
     /**
-     * Đoán MIME type dựa trên loại hoặc URL.
+     * ÄoÃ¡n MIME type dá»±a trÃªn loáº¡i hoáº·c URL.
      */
     protected function guessMime(string $type, string $url): string
     {
@@ -476,7 +476,7 @@ class LectureController extends Controller
     }
 
     /**
-     * Định dạng kích thước file.
+     * Äá»‹nh dáº¡ng kÃ­ch thÆ°á»›c file.
      */
     protected function formatFileSize($bytes): string
     {

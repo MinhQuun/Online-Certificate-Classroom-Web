@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CourseReview extends Model
 {
-    protected $table = 'DANHGIAKH';
+    protected $table = 'danhgiakh';
     protected $primaryKey = 'maDG';
     protected $keyType = 'int';
     public $incrementing = true;

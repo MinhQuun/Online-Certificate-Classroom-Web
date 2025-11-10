@@ -64,7 +64,7 @@ class ChapterController extends Controller
             $order = $validated['order'] ?? ($course->chapters()->max('thuTu') + 1);
 
             if ($order > 1) {
-                DB::table('CHUONG')
+                DB::table('chuong')
                     ->where('maKH', $course->maKH)
                     ->where('thuTu', '>=', $order)
                     ->increment('thuTu');
@@ -145,12 +145,12 @@ class ChapterController extends Controller
 
             if ($newOrder !== $chapter->thuTu) {
                 if ($newOrder < $chapter->thuTu) {
-                    DB::table('CHUONG')
+                    DB::table('chuong')
                         ->where('maKH', $chapter->maKH)
                         ->whereBetween('thuTu', [$newOrder, $chapter->thuTu - 1])
                         ->increment('thuTu');
                 } else {
-                    DB::table('CHUONG')
+                    DB::table('chuong')
                         ->where('maKH', $chapter->maKH)
                         ->whereBetween('thuTu', [$chapter->thuTu + 1, $newOrder])
                         ->decrement('thuTu');

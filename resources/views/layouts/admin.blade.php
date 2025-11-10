@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="vi">
 <head>
     <meta charset="utf-8">
@@ -151,8 +151,8 @@
                 @php
                     $newContactCount = 0;
                     try {
-                        if (DB::getSchemaBuilder()->hasTable('CONTACT_REPLIES')) {
-                            $newContactCount = DB::table('CONTACT_REPLIES')->where('status', 'NEW')->count();
+                        if (DB::getSchemaBuilder()->hasTable('contact_replies')) {
+                            $newContactCount = DB::table('contact_replies')->where('status', 'NEW')->count();
                         }
                     } catch (\Exception $e) {
                         // Bỏ qua lỗi nếu chưa có bảng

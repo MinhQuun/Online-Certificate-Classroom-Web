@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PaymentMethod extends Model
 {
-    protected $table = 'PHUONGTHUCTHANHTOAN';
+    protected $table = 'phuongthucthanhtoan';
     protected $primaryKey = 'maTT';
     public $incrementing = false;
     public $timestamps = false;

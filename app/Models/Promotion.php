@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Promotion extends Model
 {
-    protected $table = 'KHUYEN_MAI';
+    protected $table = 'khuyen_mai';
     protected $primaryKey = 'maKM';
     protected $fillable = [
         'tenKM',
@@ -38,13 +38,13 @@ class Promotion extends Model
 
     public function combos(): BelongsToMany
     {
-        return $this->belongsToMany(Combo::class, 'KHUYEN_MAI_GOI', 'maKM', 'maGoi')
+        return $this->belongsToMany(Combo::class, 'khuyen_mai_goi', 'maKM', 'maGoi')
                     ->withPivot(['giaUuDai','created_at']);
     }
 
     public function courses(): BelongsToMany
     {
-        return $this->belongsToMany(Course::class, 'KHUYEN_MAI_KHOAHOC', 'maKM', 'maKH')
+        return $this->belongsToMany(Course::class, 'khuyen_mai_khoahoc', 'maKM', 'maKH')
                     ->withPivot(['giaUuDai','created_at']);
     }
 

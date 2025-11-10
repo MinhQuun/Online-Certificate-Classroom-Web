@@ -11,7 +11,7 @@ class PaymentTransaction extends Model
     public const STATUS_FAILED = 'FAILED';
 
     // T?n b?ng th?c t? trong MySQL
-    protected $table = 'GIAODICH_VNPAY';
+    protected $table = 'giaodich_vnpay';
 
     // Kh?a ch?nh
     protected $primaryKey = 'id';

@@ -80,13 +80,13 @@ class User extends Authenticatable
     }
 
     /**
-     * Roles that belong to the user via QUYEN_NGUOIDUNG pivot.
+     * Roles that belong to the user via quyen_nguoidung pivot.
      */
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(
             Role::class,
-            'QUYEN_NGUOIDUNG',
+            'quyen_nguoidung',
             'maND',
             'maQuyen',
             $this->getKeyName(),
@@ -104,7 +104,7 @@ class User extends Authenticatable
         if (!$this->exists) return;
 
         // 1) Ghi vào bảng pivot
-        DB::table('QUYEN_NGUOIDUNG')->updateOrInsert(
+        DB::table('quyen_nguoidung')->updateOrInsert(
             ['maND' => $this->getKey(), 'maQuyen' => $roleId],
             []
         );
