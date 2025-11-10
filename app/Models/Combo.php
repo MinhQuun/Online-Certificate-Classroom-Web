@@ -121,7 +121,7 @@ class Combo extends Model
             }
         }
 
-        if ($resolved = $this->resolveCoverAssetPath('combo_KHOAHOC.png')) {
+        if ($resolved = $this->resolveCoverAssetPath('combo_khoahoc.png')) {
             return $resolved;
         }
 

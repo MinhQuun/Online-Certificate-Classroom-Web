@@ -79,18 +79,18 @@ class DashboardController extends Controller
     public function placeholder(string $section)
     {
         $messages = [
-            'lectures'         => 'Quáº£n lÃ½ bÃ i giáº£ng Ä‘ang Ä‘Æ°á»£c phÃ¡t triá»ƒn.',
-            'videos'           => 'Quáº£n lÃ½ video Ä‘ang Ä‘Æ°á»£c phÃ¡t triá»ƒn.',
-            'documents'        => 'Quáº£n lÃ½ tÃ i liá»‡u Ä‘ang Ä‘Æ°á»£c phÃ¡t triá»ƒn.',
-            'assignments'      => 'Theo dÃµi bÃ i táº­p Ä‘ang Ä‘Æ°á»£c phÃ¡t triá»ƒn.',
-            'students'         => 'Danh sÃ¡ch há»c viÃªn Ä‘ang Ä‘Æ°á»£c phÃ¡t triá»ƒn.',
-            'progress'         => 'Thá»‘ng kÃª tiáº¿n Ä‘á»™ Ä‘ang Ä‘Æ°á»£c hoÃ n thiá»‡n.',
-            'exams'            => 'Quáº£n lÃ½ ká»³ thi Ä‘ang Ä‘Æ°á»£c triá»ƒn khai.',
-            'reports-progress' => 'BÃ¡o cÃ¡o tiáº¿n Ä‘á»™ Ä‘ang Ä‘Æ°á»£c hoÃ n thiá»‡n.',
-            'reports-exams'    => 'BÃ¡o cÃ¡o ká»³ thi Ä‘ang Ä‘Æ°á»£c bá»• sung.',
+            'lectures'         => 'Quản lý bài giảng đang được phát triển.',
+            'videos'           => 'Quản lý video đang được phát triển.',
+            'documents'        => 'Quản lý tài liệu đang được phát triển.',
+            'assignments'      => 'Theo dõi bài tập đang được phát triển.',
+            'students'         => 'Danh sách học viên đang được phát triển.',
+            'progress'         => 'Thống kê tiến độ đang được hoàn thiện.',
+            'exams'            => 'Quản lý kỳ thi đang được triển khai.',
+            'reports-progress' => 'Báo cáo tiến độ đang được hoàn thiện.',
+            'reports-exams'    => 'Báo cáo kỳ thi đang được bổ sung.',
         ];
 
-        $message = $messages[$section] ?? 'TÃ­nh nÄƒng nÃ y Ä‘ang Ä‘Æ°á»£c phÃ¡t triá»ƒn.';
+        $message = $messages[$section] ?? 'Tính năng này đang được phát triển.';
 
         return redirect()
             ->route('teacher.dashboard')

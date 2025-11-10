@@ -143,7 +143,7 @@ class MiniTestController extends Controller
                 'course' => $course->maKH,
                 '_fragment' => 'minitest-' . $miniTest->maMT,
             ])
-            ->with('success', 'ÄÃ£ táº¡o mini-test má»›i thÃ nh cÃ´ng.');
+            ->with('success', 'Đã tạo mini-test mới thành công.');
     }
 
     public function update(Request $request, MiniTest $miniTest): RedirectResponse
@@ -182,7 +182,7 @@ class MiniTestController extends Controller
             'title' => $validated['title'],
             'skill_type' => $validated['skill_type'],
             'thuTu' => $validated['order'] ?? $miniTest->thuTu,
-            'trongSo' => $validated['weight'] ?? $miniTest->weight,
+            'trongSo' => $validated['weight'] ?? $miniTest->trongSo,
             'time_limit_min' => $validated['time_limit'] ?? $miniTest->time_limit_min,
             'attempts_allowed' => $validated['attempts'] ?? $miniTest->attempts_allowed,
             'is_active' => (bool) ($validated['is_active'] ?? $miniTest->is_active),
@@ -193,13 +193,13 @@ class MiniTestController extends Controller
                 'course' => $course->maKH,
                 '_fragment' => 'minitest-' . $miniTest->maMT,
             ])
-            ->with('success', 'ÄÃ£ cáº­p nháº­t mini-test.');
+            ->with('success', 'Đã cập nhật mini-test.');
     }
 
     public function destroy(MiniTest $miniTest): RedirectResponse
     {
         $teacherId = Auth::id() ?? 0;
-        $this->authorizeMiniTest($miniTest, $teacherId);
+        $this->authorizeMinitest($miniTest, $teacherId);
 
         $courseId = $miniTest->maKH;
 
@@ -228,12 +228,12 @@ class MiniTestController extends Controller
                 'error' => $throwable->getMessage(),
             ]);
 
-            return back()->with('error', 'CÃ³ lá»—i xáº£y ra khi xÃ³a mini-test. Vui lÃ²ng thá»­ láº¡i.');
+            return back()->with('error', 'Có lỗi xảy ra khi xóa mini-test. Vui lòng thử lại.');
         }
 
         return redirect()
             ->route('teacher.minitests.index', ['course' => $courseId])
-            ->with('success', 'ÄÃ£ xÃ³a mini-test.');
+            ->with('success', 'Đã xóa mini-test.');
     }
 
     public function storeQuestions(Request $request, MiniTest $miniTest): JsonResponse
@@ -283,32 +283,32 @@ class MiniTestController extends Controller
                     $options = $this->prepareChoiceOptions($options);
 
                     if (count($options) < 2) {
-                        throw new \InvalidArgumentException('Cáº§n tá»‘i thiá»ƒu 2 Ä‘Ã¡p Ã¡n cho cÃ¢u há»i tráº¯c nghiá»‡m.');
+                        throw new \InvalidArgumentException('Cần tối thiểu 2 đáp án cho câu hỏi trắc nghiệm.');
                     }
 
                     if (empty($correctAnswers)) {
-                        throw new \InvalidArgumentException('Vui lÃ²ng chá»n Ä‘Ã¡p Ã¡n Ä‘Ãºng cho cÃ¢u há»i tráº¯c nghiá»‡m.');
+                        throw new \InvalidArgumentException('Vui lòng chọn đáp án đúng cho câu hỏi trắc nghiệm.');
                     }
 
                     if (
                         $questionType === MiniTestQuestion::TYPE_SINGLE_CHOICE
                         && count($correctAnswers) !== 1
                     ) {
-                        throw new \InvalidArgumentException('CÃ¢u há»i má»™t Ä‘Ã¡p Ã¡n chá»‰ Ä‘Æ°á»£c chá»n má»™t Ä‘Ã¡p Ã¡n Ä‘Ãºng.');
+                        throw new \InvalidArgumentException('Câu hỏi một đáp án chỉ được chọn một đáp án đúng.');
                     }
 
                     foreach ($correctAnswers as $answer) {
                         if (!array_key_exists($answer, $options)) {
-                            throw new \InvalidArgumentException('ÄÃ¡p Ã¡n Ä‘Ãºng khÃ´ng há»£p lá»‡.');
+                            throw new \InvalidArgumentException('Đáp án đúng không hợp lệ.');
                         }
                     }
                 } elseif ($questionType === MiniTestQuestion::TYPE_TRUE_FALSE) {
                     if (empty($correctAnswers)) {
-                        throw new \InvalidArgumentException('Vui lÃ²ng chá»n TRUE hoáº·c FALSE cho cÃ¢u há»i Ä‘Ãºng sai.');
+                        throw new \InvalidArgumentException('Vui lòng chọn TRUE hoặc FALSE cho câu hỏi đúng sai.');
                     }
                     $firstAnswer = strtoupper($correctAnswers[0]);
                     if (!in_array($firstAnswer, ['TRUE', 'FALSE'], true)) {
-                        throw new \InvalidArgumentException('ÄÃ¡p Ã¡n cho cÃ¢u Ä‘Ãºng sai pháº£i lÃ  TRUE hoáº·c FALSE.');
+                        throw new \InvalidArgumentException('Đáp án cho câu đúng sai phải là TRUE hoặc FALSE.');
                     }
                     $correctAnswers = [$firstAnswer];
                     $options = [
@@ -349,7 +349,7 @@ class MiniTestController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'ÄÃ£ lÆ°u cÃ¢u há»i mini-test.',
+                'message' => 'Đã lưu câu hỏi mini-test.',
                 'redirect' => route('teacher.minitests.index', [
                     'course' => $miniTest->maKH,
                     '_fragment' => 'minitest-' . $miniTest->maMT,
@@ -365,7 +365,7 @@ class MiniTestController extends Controller
 
             return response()->json([
                 'success' => false,
-                'error' => $throwable->getMessage() ?: 'ÄÃ£ xáº£y ra lá»—i khi lÆ°u cÃ¢u há»i.',
+                'error' => $throwable->getMessage() ?: 'Đã xảy ra lỗi khi lưu câu hỏi.',
             ], 422);
         }
     }
@@ -383,7 +383,7 @@ class MiniTestController extends Controller
             'url' => ['required_if:source_type,url', 'url', 'max:700'],
             'visibility' => ['required', Rule::in(['public', 'private'])],
         ], [
-            'file.mimetypes' => 'File khÃ´ng Ä‘Ãºng Ä‘á»‹nh dáº¡ng cho phÃ©p.',
+            'file.mimetypes' => 'File không đúng định dạng cho phép.',
         ]);
 
         try {
@@ -420,14 +420,14 @@ class MiniTestController extends Controller
                     'course' => $miniTest->maKH,
                     '_fragment' => 'minitest-' . $miniTest->maMT,
                 ])
-                ->with('success', 'ÄÃ£ thÃªm tÃ i liá»‡u thÃ nh cÃ´ng.');
+                ->with('success', 'Đã thêm tài liệu thành công.');
         } catch (Throwable $throwable) {
             Log::error('Store mini-test material failed', [
                 'mini_test_id' => $miniTest->maMT,
                 'error' => $throwable->getMessage(),
             ]);
 
-            return back()->with('error', 'KhÃ´ng thá»ƒ lÆ°u tÃ i liá»‡u. Vui lÃ²ng thá»­ láº¡i.');
+            return back()->with('error', 'Không thể lưu tài liệu. Vui lòng thử lại.');
         }
     }
 
@@ -441,7 +441,7 @@ class MiniTestController extends Controller
         if ($miniTest->questions_count === 0) {
             return redirect()
                 ->route('teacher.minitests.index', ['course' => $miniTest->maKH])
-                ->with('error', 'Mini-test cáº§n cÃ³ Ã­t nháº¥t má»™t cÃ¢u há»i trÆ°á»›c khi cÃ´ng bá»‘.');
+                ->with('error', 'Mini-test cần có ít nhất một câu hỏi trước khi công bố.');
         }
 
         $miniTest->update(['is_published' => true, 'is_active' => true]);
@@ -451,7 +451,7 @@ class MiniTestController extends Controller
                 'course' => $miniTest->maKH,
                 '_fragment' => 'minitest-' . $miniTest->maMT,
             ])
-            ->with('success', 'ÄÃ£ cÃ´ng bá»‘ mini-test.');
+            ->with('success', 'Đã công bố mini-test.');
     }
 
     public function unpublish(MiniTest $miniTest): RedirectResponse
@@ -466,7 +466,7 @@ class MiniTestController extends Controller
                 'course' => $miniTest->maKH,
                 '_fragment' => 'minitest-' . $miniTest->maMT,
             ])
-            ->with('success', 'ÄÃ£ há»§y cÃ´ng bá»‘ mini-test.');
+            ->with('success', 'Đã hủy công bố mini-test.');
     }
 
     public function destroyMaterial(MiniTestMaterial $material): RedirectResponse
@@ -487,14 +487,14 @@ class MiniTestController extends Controller
                     'course' => $courseId,
                     '_fragment' => 'minitest-' . $miniTest->maMT,
                 ])
-                ->with('success', 'ÄÃ£ xÃ³a tÃ i liá»‡u.');
+                ->with('success', 'Đã xóa tài liệu.');
         } catch (Throwable $throwable) {
             Log::error('Delete mini-test material failed', [
                 'material_id' => $material->id,
                 'error' => $throwable->getMessage(),
             ]);
 
-            return back()->with('error', 'KhÃ´ng thá»ƒ xÃ³a tÃ i liá»‡u. Vui lÃ²ng thá»­ láº¡i.');
+            return back()->with('error', 'Không thể xóa tài liệu. Vui lòng thử lại.');
         }
     }
 
@@ -503,7 +503,7 @@ class MiniTestController extends Controller
         $ownerId = $miniTest->course()
             ->value('maND');
 
-        abort_if($ownerId !== $teacherId, 403, 'Báº¡n khÃ´ng cÃ³ quyá»n truy cáº­p mini-test nÃ y.');
+        abort_if($ownerId !== $teacherId, 403, 'Bạn không có quyền truy cập mini-test này.');
     }
 
     protected function normalizeCorrectAnswers(mixed $raw): array

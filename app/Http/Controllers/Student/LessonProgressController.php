@@ -24,13 +24,13 @@ class LessonProgressController extends Controller
 
         $student = DB::table('hocvien')->where('maND', $userId)->first();
         if (!$student) {
-            return response()->json(['message' => 'Khong tim thay ho so hoc vien.'], 403);
+            return response()->json(['message' => 'Không tim thấy hồ sơ học viên.'], 403);
         }
 
         $lesson->loadMissing('chapter');
         $courseId = optional($lesson->chapter)->maKH;
         if (!$courseId) {
-            return response()->json(['message' => 'Khong xac dinh duoc khoa hoc.'], 422);
+            return response()->json(['message' => 'Không xác định được khóa học.'], 422);
         }
 
         $enrollment = Enrollment::where('maHV', $student->maHV)
@@ -39,7 +39,7 @@ class LessonProgressController extends Controller
             ->first();
 
         if (!$enrollment) {
-            return response()->json(['message' => 'Khoa hoc chua duoc kich hoat.'], 403);
+            return response()->json(['message' => 'Khóa học chưa được kích hoạt.'], 403);
         }
 
         $validated = $this->validatePayload($request);

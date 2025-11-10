@@ -87,7 +87,7 @@ class LessonController extends Controller
                 ->where('maBH', $lesson->maBH)
                 ->first();
 
-            // Láº¥y káº¿t quáº£ tá»‘t nháº¥t cá»§a tá»«ng mini-test trong chÆ°Æ¡ng nÃ y
+  
             $chapterMiniTestIds = $lesson->chapter->miniTests->pluck('maMT');
             if ($chapterMiniTestIds->isNotEmpty()) {
                 $miniTestResults = DB::table('ketqua_minitest')

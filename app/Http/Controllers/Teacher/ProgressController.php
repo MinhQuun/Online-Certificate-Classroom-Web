@@ -107,9 +107,9 @@ class ProgressController extends Controller
             'filters'       => $filters,
             'metrics'       => $metrics,
             'statusLabels'  => [
-                'PENDING' => 'Chá» kÃ­ch hoáº¡t',
-                'ACTIVE'  => 'Äang há»c',
-                'EXPIRED' => 'Háº¿t háº¡n',
+                'PENDING' => 'Chờ kích hoạt',
+                'ACTIVE'  => 'Đang học',
+                'EXPIRED' => 'Hết hạn',
             ],
             'badges'        => $this->teacherSidebarBadges($teacherId),
         ]);
@@ -136,7 +136,7 @@ class ProgressController extends Controller
 
             if (!$lessonExists) {
                 return back()
-                    ->withErrors(['last_lesson_id' => 'BÃ i há»c khÃ´ng thuá»™c khÃ³a nÃ y.'])
+                    ->withErrors(['last_lesson_id' => 'Bài học không thuộc khóa này.'])
                     ->withInput();
             }
         }
@@ -155,6 +155,6 @@ class ProgressController extends Controller
             ->route('Teacher.progress', [
                 'course' => $course->maKH,
             ])
-            ->with('success', 'ÄÃ£ cáº­p nháº­t tiáº¿n Ä‘á»™ há»c táº­p.');
+            ->with('success', 'Đã cập nhật tiến độ học tập.');
     }
 }

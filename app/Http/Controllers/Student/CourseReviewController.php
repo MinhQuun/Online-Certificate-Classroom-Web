@@ -24,7 +24,7 @@ class CourseReviewController extends Controller
         $userId = Auth::id();
         if (!$userId) {
             if ($request->wantsJson()) {
-                return response()->json(['success' => false, 'message' => 'Báº¡n cáº§n Ä‘Äƒng nháº­p Ä‘á»ƒ Ä‘Ã¡nh giÃ¡.'], 403);
+                return response()->json(['success' => false, 'message' => 'Bạn cần đăng nhập để đánh giá.'], 403);
             }
             abort(403);
         }
@@ -32,7 +32,7 @@ class CourseReviewController extends Controller
         $student = Student::where('maND', $userId)->first();
         if (!$student) {
             if ($request->wantsJson()) {
-                return response()->json(['success' => false, 'message' => 'KhÃ´ng tÃ¬m tháº¥y thÃ´ng tin há»c viÃªn.'], 403);
+                return response()->json(['success' => false, 'message' => 'Không tìm thấy thông tin học viên.'], 403);
             }
             abort(403);
         }
@@ -44,7 +44,7 @@ class CourseReviewController extends Controller
             ->exists();
 
         if (!$isEnrolled) {
-            $message = 'Báº¡n cáº§n kÃ­ch hoáº¡t khÃ³a há»c trÆ°á»›c khi Ä‘Ã¡nh giÃ¡.';
+            $message = 'Bạn cần kích hoạt khóa học trước khi đánh giá.';
             
             if ($request->wantsJson()) {
                 return response()->json(['success' => false, 'message' => $message], 200);
@@ -68,7 +68,7 @@ class CourseReviewController extends Controller
             ]
         );
 
-        $message = 'Cáº£m Æ¡n báº¡n Ä‘Ã£ Ä‘Ã¡nh giÃ¡ khÃ³a há»c.';
+        $message = 'Cảm ơn bạn đã đánh giá khóa học.';
         
         if ($request->wantsJson()) {
             return response()->json(['success' => true, 'message' => $message]);
@@ -77,6 +77,6 @@ class CourseReviewController extends Controller
         return redirect()
             ->route('student.courses.show', $course->slug)
             ->with('success', $message)
-            ->with('success_title', 'ÄÃ¡nh giÃ¡ Ä‘Ã£ Ä‘Æ°á»£c ghi nháº­n');
+            ->with('success_title', 'Đánh giá đã được ghi nhận');
     }
 }

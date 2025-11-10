@@ -122,7 +122,7 @@ class ComboController extends Controller
 
         $result['student'] = $student;
 
-        // Láº¥y táº¥t cáº£ combo tá»« HOCVIEN_KHOAHOC (cÃ³ maGoi khÃ´ng null)
+
         $comboEnrollments = DB::table('hocvien_khoahoc')
             ->select('maGoi', 'trangThai')
             ->where('maHV', $student->maHV)

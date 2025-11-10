@@ -197,7 +197,7 @@ class CourseController extends Controller
 
         $result['student'] = $student;
 
-        // Láº¥y khÃ³a há»c Ä‘Æ¡n láº» tá»« HOCVIEN_KHOAHOC
+      
         $rows = DB::table('hocvien_khoahoc')
             ->select('maKH', 'trangThai', 'maGoi')
             ->where('maHV', $student->maHV)
@@ -210,7 +210,7 @@ class CourseController extends Controller
         foreach ($rows as $row) {
             $courseId = (int) $row->maKH;
             
-            // LÆ°u láº¡i combo Ä‘Ã£ kÃ­ch hoáº¡t
+          
             if ($row->maGoi && $row->trangThai === 'ACTIVE') {
                 $activeComboIds[] = (int) $row->maGoi;
             }
@@ -222,7 +222,6 @@ class CourseController extends Controller
             }
         }
 
-        // Láº¥y Táº¤T Cáº¢ cÃ¡c khÃ³a há»c trong combo Ä‘Ã£ kÃ­ch hoáº¡t
         if (!empty($activeComboIds)) {
             $comboCoursesIds = DB::table('goi_khoa_hoc_chitiet')
                 ->whereIn('maGoi', array_unique($activeComboIds))
@@ -230,7 +229,6 @@ class CourseController extends Controller
                 ->map(fn($id) => (int) $id)
                 ->toArray();
 
-            // Merge vá»›i cÃ¡c khÃ³a há»c Ä‘Ã£ active, loáº¡i bá» duplicate
             $active = array_unique(array_merge($active, $comboCoursesIds));
         }
 
