@@ -94,7 +94,7 @@ class UserAdminController extends Controller
             'student' => $studentId ? (int) DB::table('quyen_nguoidung')->where('maQuyen', $studentId)->count() : 0,
         ];
 
-        return view('admin.index', compact(
+        return view('Admin.index', compact(
             'users',
             'roles',
             'q',

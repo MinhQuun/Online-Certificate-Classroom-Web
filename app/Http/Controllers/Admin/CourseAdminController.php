@@ -57,7 +57,7 @@ class CourseAdminController extends Controller
             ->orderByDesc('ngayBatDau')
             ->get(['maKM','tenKM','loaiUuDai','giaTriUuDai','ngayBatDau','ngayKetThuc','trangThai','apDungCho']);
 
-        return view('admin.courses', compact('courses','teachers','categories','promotions'));
+        return view('Admin.courses', compact('courses','teachers','categories','promotions'));
     }
 
     public function store(Request $request)

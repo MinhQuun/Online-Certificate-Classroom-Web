@@ -40,7 +40,7 @@ class CategoryAdminController extends Controller
             'publishedCourses' => Course::published()->count(),
         ];
 
-        return view('admin.categories', compact('categories', 'q', 'summary'));
+        return view('Admin.categories', compact('categories', 'q', 'summary'));
     }
 
     public function store(Request $request)

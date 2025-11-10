@@ -29,6 +29,6 @@ class DashboardController extends Controller
             'student' => 'student',
         ];
 
-        return view('admin.dashboard', compact('counts', 'roleFilters'));
+        return view('Admin.dashboard', compact('counts', 'roleFilters'));
     }
 }
