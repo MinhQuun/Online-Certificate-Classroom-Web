@@ -41,7 +41,13 @@
                     </div>
                 </div>
             @else
-                <form method="post" action="{{ route('student.checkout.start') }}" id="cart-form" hidden>
+                <form
+                    method="post"
+                    action="{{ route('student.checkout.start') }}"
+                    id="cart-form"
+                    data-cart-ajax="off"
+                    hidden
+                >
                     @csrf
                 </form>
                 <div class="cart-layout" data-cart-form-scope>

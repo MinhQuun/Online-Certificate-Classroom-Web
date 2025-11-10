@@ -96,6 +96,16 @@
                 return;
             }
 
+            const cartAjaxFlag = form.dataset.cartAjax;
+            if (
+                cartAjaxFlag &&
+                ["off", "false", "disabled", "no", "0"].includes(
+                    cartAjaxFlag.toLowerCase()
+                )
+            ) {
+                return;
+            }
+
             if (event.defaultPrevented) {
                 return;
             }
