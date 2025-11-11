@@ -29,8 +29,23 @@ class CourseController extends Controller
             ->withCount('lessons')
             ->orderByDesc('maKH');
 
+        $keyword = trim((string) ($request->query('q') ?? $request->query('search', '')));
+        if ($keyword !== '') {
+            $query->where(function ($builder) use ($keyword) {
+                $builder->where('tenKH', 'like', "%{$keyword}%")
+                    ->orWhere('slug', 'like', "%{$keyword}%");
+            });
+        }
+
         if ($request->filled('category_id')) {
             $query->where('maDanhMuc', $request->integer('category_id'));
+        }
+
+        $categorySlug = trim((string) ($request->query('category') ?? $request->query('category_slug', '')));
+        if ($categorySlug !== '') {
+            $query->whereHas('category', function ($builder) use ($categorySlug) {
+                $builder->where('slug', $categorySlug);
+            });
         }
 
         $paginator = $query->paginate($perPage);
@@ -92,7 +107,19 @@ class CourseController extends Controller
             ], 404);
         }
 
-        $enrollments = Enrollment::query()
+        $statusFilter = Str::lower((string) $request->query('status', 'all'));
+        $statusCode = match ($statusFilter) {
+            'active'  => 'ACTIVE',
+            'pending' => 'PENDING',
+            'expired' => 'EXPIRED',
+            default   => null,
+        };
+
+        if (! $statusCode && $statusFilter !== 'all') {
+            $statusFilter = 'all';
+        }
+
+        $query = Enrollment::query()
             ->with([
                 'course' => fn ($courseQuery) => $courseQuery
                     ->with([
@@ -102,10 +129,30 @@ class CourseController extends Controller
                     ->withCount('lessons'),
                 'lastLesson',
             ])
-            ->where('maHV', $student->maHV)
+            ->where('maHV', $student->maHV);
+
+        if ($statusCode) {
+            $query->where('trangThai', $statusCode);
+        }
+
+        $enrollments = $query
             ->orderByDesc('ngayNhapHoc')
             ->orderByDesc('created_at')
             ->get();
+
+        $statusCounts = Enrollment::query()
+            ->where('maHV', $student->maHV)
+            ->selectRaw('trangThai, COUNT(*) as total')
+            ->groupBy('trangThai')
+            ->pluck('total', 'trangThai');
+
+        $summary = [
+            'total'   => (int) $statusCounts->sum(),
+            'active'  => (int) ($statusCounts['ACTIVE'] ?? 0),
+            'pending' => (int) ($statusCounts['PENDING'] ?? 0),
+            'expired' => (int) ($statusCounts['EXPIRED'] ?? 0),
+        ];
+        $summary['all'] = $summary['total'];
 
         $items = $enrollments
             ->map(fn (Enrollment $enrollment) => $this->transformEnrollment($enrollment))
@@ -116,11 +163,9 @@ class CourseController extends Controller
             'message' => 'Lấy danh sách khóa học đã đăng ký thành công.',
             'data'    => [
                 'items' => $items,
-                'summary' => [
-                    'total'      => $enrollments->count(),
-                    'active'     => $enrollments->where('trangThai', 'ACTIVE')->count(),
-                    'pending'    => $enrollments->where('trangThai', 'PENDING')->count(),
-                    'expired'    => $enrollments->where('trangThai', 'EXPIRED')->count(),
+                'summary' => $summary,
+                'filters' => [
+                    'status' => $statusFilter,
                 ],
             ],
         ]);

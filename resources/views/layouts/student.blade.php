@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" href="{{ asset('css/Student/auth.css') }}">
     <link rel="stylesheet" href="{{ asset('css/common/toast.css') }}">
+    <link href="{{ asset('css/Student/dictionary.css') }}" rel="stylesheet">
 
     @stack('styles')
     @php $responsiveStyle = 'css/Student/responsive-overrides.css'; @endphp
@@ -43,6 +44,7 @@
 
     <div class="site-body">
         @yield('content')
+        @include('components.dictionary-widget')
     </div>
 
     @include('partials.footer')
@@ -54,6 +56,7 @@
 
     <script src="{{ asset('js/Student/auth.js') }}" defer></script>
     <script src="{{ asset('js/Student/flash.js') }}" defer></script>
+    <script src="{{ asset('js/Student/dictionary.js') }}" defer></script>
     @stack('scripts')
 </body>
 </html>

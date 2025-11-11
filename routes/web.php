@@ -197,6 +197,9 @@ Route::middleware('auth')->prefix('student')->name('student.')->group(function (
     // Khóa học của tôi & Lịch sử đơn hàng
     Route::get('/my-courses', [MyCoursesController::class, 'index'])->name('my-courses');
     Route::get('/order-history', [OrderHistoryController::class, 'index'])->name('order-history');
+
+    // Dictionary lookup
+    Route::post('/dictionary/lookup', [App\Http\Controllers\Student\DictionaryController::class, 'lookup'])->name('dictionary.lookup');
 });
 
 /*
