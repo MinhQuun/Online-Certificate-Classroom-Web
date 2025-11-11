@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Enrollment;
 use App\Models\Lesson;
 use App\Models\LessonProgress;
+use App\Services\CertificateService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,6 +16,11 @@ use Illuminate\Validation\ValidationException;
 
 class LessonProgressController extends Controller
 {
+    public function __construct(
+        private readonly CertificateService $certificateService
+    ) {
+    }
+
     public function store(Request $request, Lesson $lesson): JsonResponse
     {
         $userId = Auth::id();
@@ -128,6 +134,9 @@ class LessonProgressController extends Controller
                 'enrollment' => $metrics,
             ];
         });
+
+        $enrollment->refresh();
+        $this->certificateService->issueCourseCertificateIfEligible($enrollment);
 
         return response()->json([
             'status' => 'ok',

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 class Combo extends Model
@@ -354,6 +355,11 @@ class Combo extends Model
     public function certificates()
     {
         return $this->hasMany(Certificate::class, 'maGoi', 'maGoi');
+    }
+
+    public function certificateTemplate(): HasOne
+    {
+        return $this->hasOne(CertificateTemplate::class, 'maGoi', 'maGoi');
     }
 
 }

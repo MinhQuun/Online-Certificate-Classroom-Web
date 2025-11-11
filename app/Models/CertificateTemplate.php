@@ -15,6 +15,9 @@ class CertificateTemplate extends Model
 
     protected $guarded = [];
 
+    public const TYPE_COURSE = 'COURSE';
+    public const TYPE_COMBO  = 'COMBO';
+
     protected $casts = [
         'design_json' => 'array',
         'created_at'  => 'datetime',
@@ -35,5 +38,15 @@ class CertificateTemplate extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by', 'maND');
+    }
+
+    public function combo(): BelongsTo
+    {
+        return $this->belongsTo(Combo::class, 'maGoi', 'maGoi');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('trangThai', self::STATUS_ACTIVE);
     }
 }

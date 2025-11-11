@@ -18,8 +18,19 @@ class Course extends Model
     protected $keyType = 'int';
 
     protected $fillable = [
-        'maDanhMuc','maND','tenKH','slug','hocPhi','moTa',
-        'ngayBatDau','ngayKetThuc','hinhanh','thoiHanNgay','trangThai',
+        'maDanhMuc',
+        'maND',
+        'tenKH',
+        'slug',
+        'hocPhi',
+        'moTa',
+        'ngayBatDau',
+        'ngayKetThuc',
+        'hinhanh',
+        'thoiHanNgay',
+        'trangThai',
+        'certificate_enabled',
+        'certificate_progress_required',
     ];
 
     // (tuỳ chọn) giúp format ngày/thời gian & tránh lỗi so sánh
@@ -28,6 +39,8 @@ class Course extends Model
         'ngayKetThuc'=> 'date',
         'hocPhi'     => 'integer',
         'thoiHanNgay'=> 'integer',
+        'certificate_enabled' => 'boolean',
+        'certificate_progress_required' => 'integer',
     ];
 
     /* ---------------- Relations ---------------- */
@@ -173,6 +186,13 @@ class Course extends Model
         }
 
         return null;
+    }
+
+    public function certificateProgressThreshold(): int
+    {
+        $value = $this->certificate_progress_required ?? 100;
+
+        return (int) min(100, max(0, (int) $value));
     }
 
     public function getSalePriceAttribute(): int

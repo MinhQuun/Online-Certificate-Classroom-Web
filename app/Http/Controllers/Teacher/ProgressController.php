@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Teacher\LoadsTeacherContext;
 use App\Models\Course;
+use App\Models\Enrollment;
 use App\Models\Lesson;
+use App\Services\CertificateService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -16,6 +18,11 @@ use Illuminate\Validation\Rule;
 class ProgressController extends Controller
 {
     use LoadsTeacherContext;
+
+    public function __construct(
+        private readonly CertificateService $certificateService
+    ) {
+    }
 
     public function index(Request $request)
     {
@@ -150,6 +157,15 @@ class ProgressController extends Controller
                 'last_lesson_id'   => $validated['last_lesson_id'] ?? null,
                 'updated_at'       => now(),
             ]);
+
+        $enrollment = Enrollment::query()
+            ->where('maHV', $studentId)
+            ->where('maKH', $course->maKH)
+            ->first();
+
+        if ($enrollment) {
+            $this->certificateService->issueCourseCertificateIfEligible($enrollment);
+        }
 
         return redirect()
             ->route('Teacher.progress', [
