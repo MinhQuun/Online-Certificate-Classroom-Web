@@ -1,17 +1,17 @@
 /**
  * Order History Page JavaScript
- * Handles interactive features for the order history page
+ * Handle animations and interactions
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize animations
+    // Initialize entrance animations
     initAnimations();
     
-    // Handle order card interactions
-    initOrderCards();
+    // Setup interactive elements
+    setupInteractiveElements();
     
-    // Handle image loading
-    initLazyLoading();
+    // Track user interactions
+    trackInteractions();
 });
 
 /**
@@ -46,125 +46,80 @@ function initAnimations() {
 }
 
 /**
- * Initialize order card interactions
+ * Setup interactive elements
  */
-function initOrderCards() {
-    const orderCards = document.querySelectorAll('.order-card');
-    
-    orderCards.forEach(card => {
-        // Add click handler for mobile
-        if (window.innerWidth <= 768) {
-            card.addEventListener('click', function(e) {
-                // Don't trigger if clicking on a link
-                if (e.target.tagName === 'A' || e.target.closest('a')) {
-                    return;
-                }
-                
-                // Toggle active state
-                this.classList.toggle('active');
-            });
-        }
+function setupInteractiveElements() {
+    // Add ripple effect to buttons
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+            
+            this.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+        });
     });
-}
-
-/**
- * Initialize lazy loading for images
- */
-function initLazyLoading() {
-    const images = document.querySelectorAll('.item-image img[loading="lazy"]');
     
-    if ('loading' in HTMLImageElement.prototype) {
-        // Native lazy loading supported
-        return;
-    }
-    
-    // Fallback for browsers that don't support native lazy loading
-    const imageObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src || img.src;
-                img.classList.add('loaded');
-                imageObserver.unobserve(img);
+    // Smooth scroll for pagination
+    const paginationLinks = document.querySelectorAll('.pagination a');
+    paginationLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (this.href.includes('#')) {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             }
         });
     });
-    
-    images.forEach(img => imageObserver.observe(img));
 }
 
 /**
- * Format currency
+ * Track user interactions (for analytics)
  */
-function formatCurrency(amount) {
-    return new Intl.NumberFormat('vi-VN', {
-        style: 'currency',
-        currency: 'VND'
-    }).format(amount);
-}
-
-/**
- * Copy order ID to clipboard
- */
-function copyOrderId(orderId) {
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(orderId).then(() => {
-            showNotification('Đã sao chép mã đơn hàng', 'success');
-        }).catch(() => {
-            showNotification('Không thể sao chép', 'error');
+function trackInteractions() {
+    // Track order card clicks
+    const orderCards = document.querySelectorAll('.order-card');
+    orderCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const orderNumber = this.querySelector('.order-number')?.textContent;
+            console.log('Order viewed:', orderNumber);
+            // Add analytics tracking here
         });
-    }
+    });
 }
 
-/**
- * Show notification
- */
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.textContent = message;
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${type === 'success' ? '#10b981' : '#ef4444'};
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        z-index: 9999;
-        animation: slideIn 0.3s ease;
-    `;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease';
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
-}
-
-// Add CSS animations
+// Add ripple effect styles dynamically
 const style = document.createElement('style');
 style.textContent = `
-    @keyframes slideIn {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
+    .btn {
+        position: relative;
+        overflow: hidden;
     }
     
-    @keyframes slideOut {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
+    .ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.6);
+        transform: scale(0);
+        animation: ripple-animation 0.6s ease-out;
+        pointer-events: none;
+    }
+    
+    @keyframes ripple-animation {
         to {
-            transform: translateX(100%);
+            transform: scale(4);
             opacity: 0;
         }
     }
