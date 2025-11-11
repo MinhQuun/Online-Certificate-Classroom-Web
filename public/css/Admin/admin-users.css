@@ -110,6 +110,32 @@
     padding: 0.25rem 0.4rem;
     font-size: 0.8rem;
     line-height: 1.1;
+    border-radius: 999px;
+    font-weight: 600;
+}
+.role-badge {
+    border: 1px solid transparent;
+    letter-spacing: 0.01em;
+}
+.role-badge--admin {
+    background: #ffe5e9;
+    border-color: #f5b1c1;
+    color: #c81d44;
+}
+.role-badge--teacher {
+    background: #fff5dc;
+    border-color: #f6ce85;
+    color: #a86406;
+}
+.role-badge--student {
+    background: #e4f7f3;
+    border-color: #9edfd0;
+    color: #0d7764;
+}
+.role-badge--default {
+    background: #eef2ff;
+    border-color: #cbd5ff;
+    color: #374151;
 }
 .role-select {
     width: 160px;

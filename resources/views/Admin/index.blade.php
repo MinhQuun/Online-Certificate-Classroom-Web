@@ -90,6 +90,13 @@
                         $isAdmin   = ($adminId && $roleId === $adminId);
                         $isTeacher = ($teacherId && $roleId === $teacherId);
                         $isStudent = ($studentId && $roleId === $studentId);
+                        $roleSlug  = \App\Support\RoleResolver::map($roleId, $roleName);
+                        $badgeClass = match ($roleSlug) {
+                            'admin'   => 'role-badge--admin',
+                            'teacher' => 'role-badge--teacher',
+                            'student' => 'role-badge--student',
+                            default   => 'role-badge--default',
+                        };
                     @endphp
                     <tr>
                         <td>{{ $u->id }}</td>
@@ -100,7 +107,7 @@
                             <form action="{{ route('admin.users.updateRole', $u) }}" method="post">
                                 @csrf
                                 <div class="role-wrap">
-                                    <span class="badge rounded-pill {{ $isAdmin ? 'text-bg-danger' : ($isTeacher ? 'text-bg-primary' : 'text-bg-success') }}">
+                                    <span class="badge rounded-pill role-badge {{ $badgeClass }}">
                                         {{ $roleName ?? 'Chưa gán' }}
                                     </span>
 

@@ -113,8 +113,14 @@ class RoleResolver
     {
         $attributes = array_change_key_case((array) $role, CASE_LOWER);
 
-        $code = $attributes['maQUYEN'] ?? null;
-        $name = $attributes['tenQUYEN'] ?? null;
+        $code = $attributes['maquyen']
+            ?? $attributes['ma_quyen']
+            ?? $attributes['code']
+            ?? null;
+        $name = $attributes['tenquyen']
+            ?? $attributes['ten_quyen']
+            ?? $attributes['name']
+            ?? null;
 
         return [
             $code !== null ? (string) $code : null,

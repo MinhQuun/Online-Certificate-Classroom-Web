@@ -18,7 +18,6 @@
         <div class="stats-card__body">
             <span class="stats-label">Tổng người dùng</span>
             <span class="stats-value">{{ number_format($counts['total'] ?? 0) }}</span>
-            <span class="stats-meta">Bao gồm mọi vai trò</span>
         </div>
     </a>
 
@@ -28,7 +27,6 @@
         <div class="stats-card__body">
             <span class="stats-label">Tài khoản Admin</span>
             <span class="stats-value">{{ number_format($counts['admin'] ?? 0) }}</span>
-            <span class="stats-meta">Phân quyền toàn hệ thống</span>
         </div>
     </a>
 
@@ -38,7 +36,6 @@
         <div class="stats-card__body">
             <span class="stats-label">Giảng viên</span>
             <span class="stats-value">{{ number_format($counts['teacher'] ?? 0) }}</span>
-            <span class="stats-meta">Đang giảng dạy</span>
         </div>
     </a>
 
@@ -48,7 +45,6 @@
         <div class="stats-card__body">
             <span class="stats-label">Học viên</span>
             <span class="stats-value">{{ number_format($counts['student'] ?? 0) }}</span>
-            <span class="stats-meta">Đã đăng ký</span>
         </div>
     </a>
 </section>
