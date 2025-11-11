@@ -463,7 +463,6 @@
                                 : null;
                         @endphp
                         <article class="course-card {{ $hasPromotion ? 'course-card--has-promo' : '' }}" data-reveal-scale>
-
                             <div class="course-card__category">
                                 <span class="chip chip--category">{{ $categoryName }}</span>
                             </div>
