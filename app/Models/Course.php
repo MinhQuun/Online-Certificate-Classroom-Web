@@ -324,4 +324,15 @@ class Course extends Model
 
         return (int) round((float) $value);
     }
+
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class, 'maKH', 'maKH');
+    }
+
+    public function certificateTemplate()
+    {
+        return $this->hasOne(CertificateTemplate::class, 'maKH', 'maKH');
+    }
+
 }

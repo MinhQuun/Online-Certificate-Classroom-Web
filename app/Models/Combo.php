@@ -350,4 +350,10 @@ class Combo extends Model
 
         return $map[$slug] ?? null;
     }
+
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class, 'maGoi', 'maGoi');
+    }
+
 }
