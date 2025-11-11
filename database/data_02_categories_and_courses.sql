@@ -174,7 +174,7 @@ VALUES (
     'Gói combo đầy đủ 4 kỹ năng TOEIC cho band 405-600: Speaking, Writing, Listening, Reading. Giá ưu đãi đặc biệt!',
     3000000.00,  -- Giá bán ưu đãi
     4200000.00,  -- Giá gốc (tổng học phí các khóa)
-    'toeic-foundation-pack.png',
+    'combo_toeic_foundation_405-600.jpg',
     '2025-11-01',
     '2025-12-31',
     'PUBLISHED',
@@ -205,7 +205,7 @@ VALUES (
     'Gói combo đầy đủ 4 kỹ năng TOEIC cho band 605-780: Speaking, Writing, Listening, Reading. Nâng cao trình độ trung cấp!',
     3600000.00,  -- Giá bán ưu đãi (giảm ~14% so với mua lẻ)
     5000000.00,  -- Giá gốc: 1,150,000 + 1,100,000 + 1,400,000 + 1,350,000 = 5,000,000
-    'toeic-intermediate-pack.png',
+    'combo_toeic_intermediate_605-780.jpg',
     '2025-11-01',
     '2025-12-31',
     'PUBLISHED',
@@ -236,7 +236,7 @@ VALUES (
     'Gói combo đầy đủ 4 kỹ năng TOEIC cho band 785-990: Speaking, Writing, Listening, Reading. Chinh phục điểm cao tuyệt đối!',
     4200000.00,  -- Giá bán ưu đãi (giảm ~17% so với mua lẻ)
     5800000.00,  -- Giá gốc: 1,350,000 + 1,300,000 + 1,600,000 + 1,550,000 = 5,800,000
-    'toeic-advanced-pack.png',
+    'combo_toeic_advanced_785-990.jpg',
     '2025-11-01',
     '2025-12-31',
     'PUBLISHED',
