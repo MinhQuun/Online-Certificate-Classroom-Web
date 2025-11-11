@@ -91,6 +91,8 @@ CREATE TABLE khoahoc (
     trangThai ENUM('DRAFT','PUBLISHED','ARCHIVED') DEFAULT 'PUBLISHED',  -- Trạng thái khóa học
     rating_avg DECIMAL(3,2) DEFAULT 0.00,     -- Điểm đánh giá trung bình
     rating_count INT DEFAULT 0,               -- Số lượng đánh giá
+    certificate_enabled TINYINT(1) NOT NULL DEFAULT 1 COMMENT '1 = khóa này có cấp chứng chỉ, 0 = không',
+    certificate_progress_required TINYINT UNSIGNED NOT NULL DEFAULT 100 COMMENT 'Yêu cầu % hoàn thành để được cấp chứng chỉ (thường là 100)',
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (maKH),
@@ -335,8 +337,9 @@ CREATE TABLE HOCVIEN_KHOAHOC (
     trangThai ENUM('PENDING','ACTIVE','EXPIRED') DEFAULT 'PENDING',  -- Trạng thái ghi danh
     activated_at DATETIME,                    -- Thời điểm kích hoạt
     expires_at DATETIME,                      -- Thời điểm hết hạn
-    progress_percent TINYINT DEFAULT 0,       -- % tiến độ tổng quát
-    video_progress_percent TINYINT DEFAULT 0, -- % hoàn thành video
+    progress_percent TINYINT UNSIGNED DEFAULT 0,       -- % tiến độ tổng quát
+    completed_at DATETIME NULL COMMENT 'Thời điểm hệ thống xác nhận học viên đã hoàn thành khóa',
+    video_progress_percent TINYINT UNSIGNED DEFAULT 0, -- % hoàn thành video
     avg_minitest_score DECIMAL(5,2) DEFAULT NULL,  -- Điểm trung bình mini-test
     last_lesson_id INT NULL,                  -- Bài học gần nhất
     maGoi INT NULL,                           -- Liên kết với combo (nếu ghi danh từ combo)
@@ -410,7 +413,7 @@ CREATE TABLE tiendo_hoctap (
     lanXemCuoi DATETIME COMMENT 'Lần xem gần nhất',
     soLanXem INT DEFAULT 0 COMMENT 'Số lần truy cập bài học',
     video_progress_seconds INT DEFAULT 0 COMMENT 'Vị trí dừng video (giây)',
-    video_duration_seconds INT COMMENT 'Tổng thời lượng video (giây)',
+    video_duration_seconds INT DEFAULT 0 COMMENT 'Tổng thời lượng video (giây)',
     is_video_completed TINYINT(1) AS (
         CASE
             WHEN video_duration_seconds IS NOT NULL
@@ -674,32 +677,78 @@ CREATE TABLE khoahoc_yeuthich (
 CREATE TABLE chungchi (
     maCC INT NOT NULL AUTO_INCREMENT,
     maHV INT NOT NULL,                        -- Học viên
-    maKH INT NOT NULL,                        -- Khóa học
-    tenCC VARCHAR(100),                       -- Tên chứng chỉ
-    moTa VARCHAR(1000),                       -- Mô tả
-    code VARCHAR(50) UNIQUE,                  -- Mã chứng chỉ
-    trangThai ENUM('PENDING','ISSUED','REVOKED') DEFAULT 'PENDING',  -- Trạng thái
-    issued_at DATETIME,                       -- Thời điểm cấp
+    loaiCC ENUM('COURSE','COMBO') NOT NULL DEFAULT 'COURSE',  -- Loại chứng chỉ
+    maKH INT NULL,                            -- Khóa học (nếu loaiCC = 'COURSE')
+    maGoi INT NULL,                           -- Gói combo (nếu loaiCC = 'COMBO')
+    tenCC VARCHAR(100),                       -- Tên chứng chỉ (hiển thị trên PDF)
+    moTa VARCHAR(1000),                       -- Mô tả (ghi chú thêm, cấp vì hoàn thành khóa gì)
+    code VARCHAR(50) NOT NULL UNIQUE,         -- Mã chứng chỉ dùng để tra cứu public
+    pdf_url VARCHAR(700) NULL COMMENT 'Đường dẫn file PDF chứng chỉ đã render (VD: link trên Cloudflare R2)',
+    trangThai ENUM('PENDING','ISSUED','REVOKED') DEFAULT 'PENDING',  -- Trạng thái chứng chỉ
+    revoked_at DATETIME NULL,                 -- Thời điểm thu hồi (nếu có)
+    revoked_by INT NULL,                      -- Admin thu hồi
+    revoked_reason VARCHAR(255) NULL,         -- Lý do thu hồi
+    issued_at DATETIME,                       -- Thời điểm cấp (ISSUED)
+    issued_by INT NULL,                       -- Người cấp (NULL = hệ thống tự cấp AUTO)
+    issue_mode ENUM('AUTO','MANUAL') NOT NULL DEFAULT 'AUTO',  -- AUTO = hệ thống, MANUAL = admin cấp tay
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (maCC),
+
+    -- Index hỗ trợ báo cáo
     KEY IX_CC_MAHV (maHV),
-    CONSTRAINT FK_CC_HV FOREIGN KEY (maHV) REFERENCES hocvien(maHV) ON DELETE CASCADE,
-    CONSTRAINT FK_CC_KH FOREIGN KEY (maKH) REFERENCES khoahoc(maKH) ON DELETE CASCADE
+    KEY IX_CC_MAKH (maKH),
+    KEY IX_CC_MAGOI (maGoi),
+
+    -- Ràng buộc khóa ngoại
+    CONSTRAINT FK_CC_HV        FOREIGN KEY (maHV)   REFERENCES hocvien(maHV)         ON DELETE CASCADE,
+    CONSTRAINT FK_CC_KH        FOREIGN KEY (maKH)   REFERENCES khoahoc(maKH)         ON DELETE CASCADE,
+    CONSTRAINT FK_CC_GOI       FOREIGN KEY (maGoi)  REFERENCES goi_khoa_hoc(maGoi)   ON DELETE CASCADE,
+    CONSTRAINT FK_CC_ISSUED_BY FOREIGN KEY (issued_by)  REFERENCES nguoidung(maND)   ON DELETE SET NULL,
+    CONSTRAINT FK_CC_REVOKED_BY FOREIGN KEY (revoked_by) REFERENCES nguoidung(maND)  ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Bảng chungchi_danhgia: Đánh giá/ghi nhận cho chứng chỉ (nhiều bản ghi).
+-- Bảng chungchi_danhgia: Đánh giá/ghi nhận thêm cho chứng chỉ (ví dụ: điểm tổng, ghi chú)
 CREATE TABLE chungchi_danhgia (
     id INT NOT NULL AUTO_INCREMENT,
     maCC INT NOT NULL,                        -- Liên kết chứng chỉ
-    diem DECIMAL(5,2),                        -- Điểm
-    ngayCap DATE,                             -- Ngày cấp
-    ghiChu VARCHAR(255),                      -- Ghi chú
+    diem DECIMAL(5,2),                        -- Điểm (nếu có khái niệm điểm cuối cùng)
+    ngayCap DATE,                             -- Ngày ghi nhận / ngày in chứng chỉ
+    ghiChu VARCHAR(255),                      -- Ghi chú (ví dụ: Overall band 6.5, xếp loại Khá, ...)
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     KEY IX_CCDG_CC (maCC),
     CONSTRAINT FK_CCDG_CC FOREIGN KEY (maCC) REFERENCES chungchi(maCC) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- Bảng certificate_template: Mẫu chứng chỉ do admin tạo
+-- Dùng chung cho cả COURSE và COMBO
+CREATE TABLE certificate_template (
+    maTemplate INT NOT NULL AUTO_INCREMENT,
+    loaiTemplate ENUM('COURSE','COMBO') NOT NULL DEFAULT 'COURSE',  -- Mẫu cho khóa hay cho combo
+    maKH INT NULL,                             -- Nếu loaiTemplate = 'COURSE' -> gán vào khóa
+    maGoi INT NULL,                            -- Nếu loaiTemplate = 'COMBO'  -> gán vào combo
+    tenTemplate VARCHAR(150) NOT NULL,         -- Tên mẫu (ví dụ: 'Chứng chỉ Hoàn thành Khóa ABC')
+    moTa VARCHAR(1000),                        -- Mô tả mẫu
+    design_json JSON NULL,                     -- Thiết kế mẫu (layout, {name}, {date}, {course_name}...)
+    template_url VARCHAR(700) NULL,            -- URL file mẫu (PDF/HTML template)
+    created_by INT NOT NULL,                   -- Admin tạo
+    trangThai ENUM('DRAFT','ACTIVE','ARCHIVED') DEFAULT 'ACTIVE',  -- Trạng thái mẫu
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (maTemplate),
+
+    -- Mỗi khóa học/ combo chỉ nên có 1 template chính (theo loại tương ứng)
+    UNIQUE KEY uq_template_course (maKH),
+    UNIQUE KEY uq_template_combo (maGoi),
+
+    -- Ràng buộc khóa ngoại
+    CONSTRAINT FK_CTEMPLATE_KH   FOREIGN KEY (maKH)     REFERENCES khoahoc(maKH)       ON DELETE CASCADE,
+    CONSTRAINT FK_CTEMPLATE_GOI  FOREIGN KEY (maGoi)    REFERENCES goi_khoa_hoc(maGoi) ON DELETE CASCADE,
+    CONSTRAINT FK_CTEMPLATE_ND   FOREIGN KEY (created_by) REFERENCES nguoidung(maND)   ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 -- =========================================================
 -- 9) BẢNG HỆ THỐNG LARAVEL
