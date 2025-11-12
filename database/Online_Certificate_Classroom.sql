@@ -174,6 +174,7 @@ CREATE TABLE goi_khoa_hoc (
     ngayBatDau DATE,
     ngayKetThuc DATE,
     trangThai ENUM('DRAFT','PUBLISHED','ARCHIVED') DEFAULT 'PUBLISHED',
+    certificate_enabled TINYINT(1) NOT NULL DEFAULT 1 COMMENT '1 = Combo này cho phép cấp chứng chỉ %, 0 = tắt',
     rating_avg DECIMAL(3,2) DEFAULT 0.00,
     rating_count INT DEFAULT 0,
     created_by INT NOT NULL,  -- Admin tạo

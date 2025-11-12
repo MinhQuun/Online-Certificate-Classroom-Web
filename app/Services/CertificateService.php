@@ -124,6 +124,10 @@ class CertificateService
         $student->loadMissing('user');
         $combo->loadMissing(['courses', 'certificateTemplate']);
 
+        if ($combo->certificate_enabled === false) {
+            return null;
+        }
+
         if ($combo->courses->isEmpty()) {
             return null;
         }
@@ -234,6 +238,95 @@ class CertificateService
             'combo' => $combo,
             'courseList' => $combo->courses,
             'template' => $template,
+        ]);
+
+        return $certificate->refresh();
+    }
+
+    public function issueManualCourseCertificate(
+        Student $student,
+        Course $course,
+        User $admin,
+        array $options = []
+    ): Certificate {
+        $student->loadMissing('user');
+        $course->loadMissing(['teacher', 'certificateTemplate']);
+
+        $issuedAt = $this->resolveIssuedAt($options['issued_at'] ?? null);
+        $title = $options['title']
+            ?? sprintf('Chứng chỉ khóa "%s"', Str::limit($course->tenKH ?? 'OCC Course', 70));
+        $description = $options['description']
+            ?? sprintf('Hoàn thành khóa %s vào %s', $course->tenKH ?? 'OCC Course', $issuedAt->format('d/m/Y'));
+
+        $certificate = null;
+
+        DB::transaction(function () use (&$certificate, $student, $course, $admin, $issuedAt, $title, $description) {
+            $certificate = Certificate::create([
+                'maHV'      => $student->maHV,
+                'loaiCC'    => Certificate::TYPE_COURSE,
+                'maKH'      => $course->maKH,
+                'maGoi'     => null,
+                'tenCC'     => $title,
+                'moTa'      => Str::limit($description, 240),
+                'code'      => $this->generateCertificateCode(),
+                'pdf_url'   => null,
+                'trangThai' => Certificate::STATUS_ISSUED,
+                'issue_mode'=> Certificate::ISSUE_MODE_MANUAL,
+                'issued_at' => $issuedAt,
+                'issued_by' => $admin->getKey(),
+            ]);
+        });
+
+        $template = $this->resolveCourseTemplate($course);
+        $this->attachPdfToCertificate($certificate, [
+            'student'  => $student,
+            'course'   => $course,
+            'template' => $template,
+        ]);
+
+        return $certificate->refresh();
+    }
+
+    public function issueManualComboCertificate(
+        Student $student,
+        Combo $combo,
+        User $admin,
+        array $options = []
+    ): Certificate {
+        $student->loadMissing('user');
+        $combo->loadMissing(['courses', 'certificateTemplate']);
+
+        $issuedAt = $this->resolveIssuedAt($options['issued_at'] ?? null);
+        $title = $options['title']
+            ?? sprintf('Chứng chỉ Combo "%s"', Str::limit($combo->tenGoi ?? 'Combo OCC', 70));
+        $description = $options['description']
+            ?? sprintf('Hoàn thành đầy đủ combo %s', $combo->tenGoi ?? 'Combo OCC');
+
+        $certificate = null;
+
+        DB::transaction(function () use (&$certificate, $student, $combo, $admin, $issuedAt, $title, $description) {
+            $certificate = Certificate::create([
+                'maHV'      => $student->maHV,
+                'loaiCC'    => Certificate::TYPE_COMBO,
+                'maKH'      => null,
+                'maGoi'     => $combo->maGoi,
+                'tenCC'     => $title,
+                'moTa'      => Str::limit($description, 240),
+                'code'      => $this->generateCertificateCode(),
+                'pdf_url'   => null,
+                'trangThai' => Certificate::STATUS_ISSUED,
+                'issue_mode'=> Certificate::ISSUE_MODE_MANUAL,
+                'issued_at' => $issuedAt,
+                'issued_by' => $admin->getKey(),
+            ]);
+        });
+
+        $template = $this->resolveComboTemplate($combo);
+        $this->attachPdfToCertificate($certificate, [
+            'student'    => $student,
+            'combo'      => $combo,
+            'courseList' => $combo->courses,
+            'template'   => $template,
         ]);
 
         return $certificate->refresh();
@@ -413,11 +506,22 @@ class CertificateService
 
     protected function generateCertificateCode(): string
     {
-        return sprintf(
-            'OCC-%s-%s',
-            Carbon::now($this->timezone())->format('Y'),
-            strtoupper(Str::random(6))
-        );
+        $timezone = $this->timezone();
+        $yearPrefix = Carbon::now($timezone)->format('Y');
+
+        for ($attempt = 0; $attempt < 10; $attempt++) {
+            $code = sprintf('OCC-%s-%s', $yearPrefix, strtoupper(Str::random(6)));
+
+            $exists = Certificate::query()
+                ->where('code', $code)
+                ->exists();
+
+            if (! $exists) {
+                return $code;
+            }
+        }
+
+        throw new \RuntimeException('Unable to generate a unique certificate code after multiple attempts.');
     }
 
     protected function certificateDisk(): string
@@ -428,6 +532,17 @@ class CertificateService
     protected function timezone(): string
     {
         return config('app.timezone', 'Asia/Ho_Chi_Minh');
+    }
+
+    protected function resolveIssuedAt(?string $value): Carbon
+    {
+        $timezone = $this->timezone();
+
+        if ($value) {
+            return Carbon::parse($value, $timezone);
+        }
+
+        return Carbon::now($timezone);
     }
 
     protected function defaultTheme(): array

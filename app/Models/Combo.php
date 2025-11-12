@@ -27,6 +27,7 @@ class Combo extends Model
         'ngayBatDau',
         'ngayKetThuc',
         'trangThai',
+        'certificate_enabled',
         'rating_avg',
         'rating_count',
         'created_by',
@@ -360,6 +361,20 @@ class Combo extends Model
     public function certificateTemplate(): HasOne
     {
         return $this->hasOne(CertificateTemplate::class, 'maGoi', 'maGoi');
+    }
+
+    public function getCertificateEnabledAttribute($value): bool
+    {
+        if ($value === null) {
+            return true;
+        }
+
+        return (bool) $value;
+    }
+
+    public function setCertificateEnabledAttribute($value): void
+    {
+        $this->attributes['certificate_enabled'] = $value ? 1 : 0;
     }
 
 }
