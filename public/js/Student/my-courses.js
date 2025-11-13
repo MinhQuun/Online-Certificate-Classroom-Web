@@ -401,33 +401,7 @@ enhanceCourseCardInteraction();
 /**
  * Add smooth scrolling to top button
  */
-function addScrollToTop() {
-    const scrollBtn = document.createElement('button');
-    scrollBtn.className = 'scroll-to-top';
-    scrollBtn.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
-    scrollBtn.setAttribute('aria-label', 'Scroll to top');
-    document.body.appendChild(scrollBtn);
-    
-    // Show/hide button based on scroll position
-    window.addEventListener('scroll', function() {
-        if (window.pageYOffset > 300) {
-            scrollBtn.classList.add('visible');
-        } else {
-            scrollBtn.classList.remove('visible');
-        }
-    });
-    
-    // Scroll to top on click
-    scrollBtn.addEventListener('click', function() {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-}
 
-// Add scroll to top button
-addScrollToTop();
 
 /**
  * Preload next page images

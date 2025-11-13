@@ -215,11 +215,18 @@
 
 .course-card__body h3 {
     margin: 0;
-    font-size: 19px;
+    font-size: 17px;
     line-height: 1.4;
     color: var(--color-text);
-    min-height: 2.8em;
     transition: color 0.25s ease;
+    text-align: center;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    min-height: 2.4em;
 }
 
 .course-card:hover .course-card__body h3 {
@@ -228,18 +235,54 @@
 
 .course-card__title-link {
     text-decoration: none;
-    color: var(--color-text);
-    transition: color 0.25s ease;
+    color: inherit;
+    background: linear-gradient(
+        135deg,
+        currentColor 0%,
+        currentColor 50%,
+        var(--color-accent) 50%,
+        var(--color-accent) 100%
+    );
+    background-size: 200% 100%;
+    background-position: 0% 0%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: background-position 0.4s ease;
+    display: inline;
+    position: relative;
+}
+
+.course-card__title-link::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 70%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-accent), #60a5fa);
+    border-radius: 2px;
+    transition: transform 0.3s ease;
 }
 
 .course-card:hover .course-card__title-link {
-    color: var(--color-accent);
+    background-position: 100% 0%;
+}
+
+.course-card:hover .course-card__title-link::after {
+    transform: translateX(-50%) scaleX(1);
 }
 
 .course-card__title-link:focus {
     outline: 2px solid #3b82f6;
     outline-offset: 2px;
     border-radius: 4px;
+    background-position: 100% 0%;
+}
+
+.course-card__title-link:focus::after {
+    transform: translateX(-50%) scaleX(1);
 }
 
 .course-card__promo-note {
