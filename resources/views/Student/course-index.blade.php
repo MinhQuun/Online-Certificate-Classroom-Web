@@ -23,8 +23,8 @@
     <section class="hero hero--courses" data-home-index>
         <div class="oc-container hero__grid">
             <div class="hero__text" data-reveal-from-left>
-                <h1>Khởi động lộ trình chứng chỉ trực tuyến</h1>
-                <p>Chương trình được thiết kế bởi đội ngũ chuyên môn, tập trung vào kỹ năng thực hành và hệ thống đánh giá liên tục.</p>
+                <h1>Khởi động lộ trình học ngoại ngữ chuyên sâu</h1>
+                <p>Chương trình được thiết kế bởi đội ngũ giảng viên có chuyên môn, tập trung vào kỹ năng thực hành và hệ thống đánh giá liên tục.</p>
                 <div class="hero__meta">
                     <span>Thư viện tài liệu số</span>
                     <span>Review Exercises từng chương</span>
@@ -144,9 +144,7 @@
                                             <div class="course-card__price-block {{ $hasPromotion ? 'course-card__price-block--promo' : '' }}">
                                                 <div class="course-card__price-label">
                                                     <span>{{ $hasPromotion ? 'Chỉ còn' : 'Học phí' }}</span>
-                                                    <span class="course-card__price-pill {{ $hasPromotion ? 'is-promo' : '' }}">
-                                                        {{ $hasPromotion ? 'Đã giảm ' . $course->saving_percent . '%' : 'Ổn định' }}
-                                                    </span>
+                                                
                                                 </div>
                                                 <div class="course-card__price-value">
                                                     {{ number_format($course->sale_price, 0, ',', '.') }} VND

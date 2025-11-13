@@ -147,15 +147,19 @@
     box-shadow: var(--mc-shadow);
     transition: transform 0.25s ease, 
                 box-shadow 0.25s ease,
-                border-color 0.25s ease;
+                border-color 0.25s ease,
+                z-index 0.25s ease;
     display: flex;
     flex-direction: column;
+    position: relative;
+    z-index: 1;
 }
 
 .course-card:hover {
     transform: translateY(-6px);
     box-shadow: var(--mc-shadow-lg);
     border-color: rgba(37, 99, 235, 0.25);
+    z-index: 10;
 }
 
 /* Course Image */
@@ -611,10 +615,6 @@ html {
     user-select: none;
 }
 
-.course-card:active {
-    transform: translateY(-2px) scale(0.98);
-}
-
 /* Progress Bar Glow */
 .progress-fill {
     box-shadow: 0 0 10px rgba(37, 99, 235, 0.3);
@@ -714,6 +714,7 @@ html {
     opacity: 0;
     transition: opacity 0.3s;
     pointer-events: none;
+    z-index: 1;
 }
 
 .course-card:hover::after {
