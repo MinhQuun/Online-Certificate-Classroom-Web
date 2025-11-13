@@ -43,6 +43,7 @@
 /* Header */
 .my-courses-header {
     margin-bottom: 32px;
+    text-align: center;
 }
 
 .header-content h1 {
@@ -50,20 +51,60 @@
     font-size: clamp(28px, 5vw, 36px);
     font-weight: 800;
     color: var(--mc-text);
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 12px;
     line-height: 1.2;
+    background: linear-gradient(
+        135deg,
+        var(--mc-text) 0%,
+        var(--mc-text) 50%,
+        var(--mc-accent) 50%,
+        var(--mc-accent) 100%
+    );
+    background-size: 200% 100%;
+    background-position: 0% 0%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: background-position 0.5s ease;
+    position: relative;
+}
+
+.header-content h1::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--mc-accent), var(--mc-accent-light));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+}
+
+.header-content:hover h1 {
+    background-position: 100% 0%;
+}
+
+.header-content:hover h1::after {
+    width: 150px;
 }
 
 .header-content h1 i {
     color: var(--mc-accent);
+    -webkit-text-fill-color: var(--mc-accent);
+    background: none;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
 }
 
 .subtitle {
     margin: 0;
     color: var(--mc-muted);
     font-size: 16px;
+    text-align: center;
 }
 
 /* Tabs */
@@ -147,19 +188,15 @@
     box-shadow: var(--mc-shadow);
     transition: transform 0.25s ease, 
                 box-shadow 0.25s ease,
-                border-color 0.25s ease,
-                z-index 0.25s ease;
+                border-color 0.25s ease;
     display: flex;
     flex-direction: column;
-    position: relative;
-    z-index: 1;
 }
 
 .course-card:hover {
     transform: translateY(-6px);
     box-shadow: var(--mc-shadow-lg);
     border-color: rgba(37, 99, 235, 0.25);
-    z-index: 10;
 }
 
 /* Course Image */
@@ -615,6 +652,10 @@ html {
     user-select: none;
 }
 
+.course-card:active {
+    transform: translateY(-2px) scale(0.98);
+}
+
 /* Progress Bar Glow */
 .progress-fill {
     box-shadow: 0 0 10px rgba(37, 99, 235, 0.3);
@@ -714,7 +755,6 @@ html {
     opacity: 0;
     transition: opacity 0.3s;
     pointer-events: none;
-    z-index: 1;
 }
 
 .course-card:hover::after {
