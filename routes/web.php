@@ -18,6 +18,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Admin\CategoryAdminController;
 use App\Http\Controllers\Admin\CourseAdminController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\CertificateAdminController;
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\ContactReplyController;
@@ -237,6 +238,18 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/combos',              [ComboAdminController::class, 'store'])->name('combos.store');
     Route::put('/combos/{combo}',       [ComboAdminController::class, 'update'])->name('combos.update');
     Route::delete('/combos/{combo}',    [ComboAdminController::class, 'destroy'])->name('combos.destroy');
+
+    // Quản lý chứng chỉ & mẫu
+    Route::get('/certificates', [CertificateAdminController::class, 'index'])->name('certificates.index');
+    Route::post('/certificates/manual', [CertificateAdminController::class, 'storeManual'])->name('certificates.manual');
+    Route::post('/certificates/{certificate}/revoke', [CertificateAdminController::class, 'revoke'])->name('certificates.revoke');
+    Route::put('/certificates/policy/courses/{course}', [CertificateAdminController::class, 'updateCoursePolicy'])->name('certificates.courses.policy');
+    Route::put('/certificates/policy/combos/{combo}', [CertificateAdminController::class, 'updateComboPolicy'])->name('certificates.combos.policy');
+    Route::post('/certificates/templates', [CertificateAdminController::class, 'storeTemplate'])->name('certificates.templates.store');
+    Route::put('/certificates/templates/{template}', [CertificateAdminController::class, 'updateTemplate'])->name('certificates.templates.update');
+    Route::get('/certificates/search/students', [CertificateAdminController::class, 'searchStudents'])->name('certificates.search.students');
+    Route::get('/certificates/search/courses', [CertificateAdminController::class, 'searchCourses'])->name('certificates.search.courses');
+    Route::get('/certificates/search/combos', [CertificateAdminController::class, 'searchCombos'])->name('certificates.search.combos');
     // Qu?n l? khuy?n m?i
     Route::get('/promotions',             [PromotionAdminController::class, 'index'])->name('promotions.index');
     Route::post('/promotions',            [PromotionAdminController::class, 'store'])->name('promotions.store');

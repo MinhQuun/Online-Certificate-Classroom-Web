@@ -51,4 +51,10 @@ class Student extends Model
     {
         return $this->hasMany(MiniTestResult::class, 'maHV', 'maHV');
     }
+
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class, 'maHV', 'maHV');
+    }
+
 }

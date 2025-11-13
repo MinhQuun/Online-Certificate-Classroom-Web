@@ -166,9 +166,9 @@
             {{-- Chứng chỉ --}}
             <li class="nav-item mt-3 text-muted small">Chứng chỉ</li>
             <li class="nav-item">
-                {{-- TODO: tạo route admin.certificates.index --}}
+
                 <a class="nav-link {{ request()->routeIs('admin.certificates.*') ? 'active' : '' }}"
-                    href="#"
+                    href="{{ route('admin.certificates.index') }}"
                     title="Cấp & tra cứu chứng chỉ">
                 <i class="bi bi-award me-2"></i> Chứng chỉ
                 </a>

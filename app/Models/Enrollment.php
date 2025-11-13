@@ -33,6 +33,7 @@ class Enrollment extends Model
         'last_lesson_id',
         'maGoi',
         'maKM',
+        'completed_at',
     ];
 
     protected $casts = [
@@ -44,6 +45,7 @@ class Enrollment extends Model
         'expires_at' => 'datetime',
         'maGoi' => 'integer',
         'maKM' => 'integer',
+        'completed_at' => 'datetime',
     ];
 
     public function student()
@@ -82,5 +84,9 @@ class Enrollment extends Model
         return $this->hasMany(MiniTestResult::class, 'maHV', 'maHV')
             ->where('maKH', $this->maKH);
     }
-}
 
+    public function combo()
+    {
+        return $this->belongsTo(Combo::class, 'maGoi', 'maGoi');
+    }
+}

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Enrollment;
 use App\Models\Lesson;
 use App\Models\LessonProgress;
+use App\Services\CertificateService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -16,6 +17,11 @@ use Illuminate\Validation\Rule;
 class LessonProgressController extends Controller
 {
     use HasLessonProgressFormatting;
+
+    public function __construct(
+        private readonly CertificateService $certificateService
+    ) {
+    }
 
     /**
      * Cập nhật tiến độ học tập của một bài học.
@@ -138,6 +144,7 @@ class LessonProgressController extends Controller
 
         $progress->refresh();
         $enrollment->refresh();
+        $this->certificateService->issueCourseCertificateIfEligible($enrollment);
 
         return response()->json([
             'status'  => 'success',

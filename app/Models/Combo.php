@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 class Combo extends Model
@@ -26,6 +27,7 @@ class Combo extends Model
         'ngayBatDau',
         'ngayKetThuc',
         'trangThai',
+        'certificate_enabled',
         'rating_avg',
         'rating_count',
         'created_by',
@@ -350,4 +352,29 @@ class Combo extends Model
 
         return $map[$slug] ?? null;
     }
+
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class, 'maGoi', 'maGoi');
+    }
+
+    public function certificateTemplate(): HasOne
+    {
+        return $this->hasOne(CertificateTemplate::class, 'maGoi', 'maGoi');
+    }
+
+    public function getCertificateEnabledAttribute($value): bool
+    {
+        if ($value === null) {
+            return true;
+        }
+
+        return (bool) $value;
+    }
+
+    public function setCertificateEnabledAttribute($value): void
+    {
+        $this->attributes['certificate_enabled'] = $value ? 1 : 0;
+    }
+
 }
