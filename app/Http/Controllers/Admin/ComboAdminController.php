@@ -129,6 +129,8 @@ class ComboAdminController extends Controller
         $combo->ngayBatDau = $validated['ngayBatDau'] ?? null;
         $combo->ngayKetThuc = $validated['ngayKetThuc'] ?? null;
         $combo->trangThai = $validated['trangThai'];
+        $combo->certificate_enabled = $validated['certificate_enabled'] ? 1 : 0;
+        $combo->certificate_progress_required = (int) $validated['certificate_progress_required'];
         $combo->created_by = Auth::id();
 
         if ($request->hasFile('hinhanh')) {
@@ -194,6 +196,8 @@ class ComboAdminController extends Controller
         $combo->ngayBatDau = $validated['ngayBatDau'] ?? null;
         $combo->ngayKetThuc = $validated['ngayKetThuc'] ?? null;
         $combo->trangThai = $validated['trangThai'];
+        $combo->certificate_enabled = $validated['certificate_enabled'] ? 1 : 0;
+        $combo->certificate_progress_required = (int) $validated['certificate_progress_required'];
 
         if ($request->hasFile('hinhanh')) {
             $combo->hinhanh = $this->storeComboImage($request, $combo);
@@ -293,6 +297,8 @@ class ComboAdminController extends Controller
             'courses.*' => ['integer', 'min:1'],
             'promotion_id' => ['nullable', 'integer', 'exists:khuyen_mai,maKM'],
             'promotion_price' => ['nullable', 'numeric', 'min:0'],
+            'certificate_enabled' => ['required', 'boolean'],
+            'certificate_progress_required' => ['required', 'integer', 'between:0,100'],
         ];
 
         $messages = [
@@ -320,6 +326,8 @@ class ComboAdminController extends Controller
         $validated['courses'] = $request->input('courses', []);
         $validated['promotion_id'] = $request->input('promotion_id');
         $validated['promotion_price'] = $request->input('promotion_price');
+        $validated['certificate_enabled'] = $request->boolean('certificate_enabled');
+        $validated['certificate_progress_required'] = (int) $request->input('certificate_progress_required', 100);
 
         return $validated;
     }

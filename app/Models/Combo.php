@@ -28,6 +28,7 @@ class Combo extends Model
         'ngayKetThuc',
         'trangThai',
         'certificate_enabled',
+        'certificate_progress_required',
         'rating_avg',
         'rating_count',
         'created_by',
@@ -39,6 +40,7 @@ class Combo extends Model
         'ngayBatDau' => 'date',
         'ngayKetThuc' => 'date',
         'rating_avg' => 'decimal:2',
+        'certificate_progress_required' => 'integer',
     ];
 
     /* -------------------------------------------------
@@ -375,6 +377,27 @@ class Combo extends Model
     public function setCertificateEnabledAttribute($value): void
     {
         $this->attributes['certificate_enabled'] = $value ? 1 : 0;
+    }
+
+    public function certificateProgressThreshold(): int
+    {
+        $value = $this->certificate_progress_required ?? 100;
+
+        return (int) min(100, max(0, (int) $value));
+    }
+
+    public function setCertificateProgressRequiredAttribute($value): void
+    {
+        if ($value === null || $value === '') {
+            $this->attributes['certificate_progress_required'] = 100;
+
+            return;
+        }
+
+        $this->attributes['certificate_progress_required'] = (int) min(
+            100,
+            max(0, (int) $value)
+        );
     }
 
 }

@@ -132,6 +132,7 @@ class CertificateService
             return null;
         }
 
+        $comboThreshold = $combo->certificateProgressThreshold();
         $courseIds = $combo->courses->pluck('maKH')->all();
         /** @var \Illuminate\Support\Collection<int, \App\Models\Enrollment> $enrollments */
         $enrollments = Enrollment::query()
@@ -167,7 +168,8 @@ class CertificateService
             $combo,
             $courseIds,
             $requiredMap,
-            $courseCertificates
+            $courseCertificates,
+            $comboThreshold
         ) {
             $lockedEnrollments = Enrollment::query()
                 ->where('maHV', $student->maHV)
@@ -180,6 +182,7 @@ class CertificateService
                 return;
             }
 
+            $completedCourses = 0;
             foreach ($courseIds as $courseId) {
                 $enrollment = $lockedEnrollments->get($courseId);
                 if (!$enrollment) {
@@ -189,9 +192,17 @@ class CertificateService
                 $progress = (int) ($enrollment->progress_percent ?? 0);
                 $hasIssuedCourseCertificate = ($courseCertificates->get($courseId)?->isNotEmpty()) ?? false;
 
-                if (!$hasIssuedCourseCertificate && $progress < ($requiredMap[$courseId] ?? 100)) {
-                    return;
+                if ($hasIssuedCourseCertificate || $progress >= ($requiredMap[$courseId] ?? 100)) {
+                    $completedCourses++;
                 }
+            }
+
+            $completionPercent = count($courseIds) > 0
+                ? (int) round(($completedCourses / count($courseIds)) * 100)
+                : 0;
+
+            if ($completionPercent < $comboThreshold) {
+                return;
             }
 
             $tokens = $this->buildSnapshotTokens($combo->courses, $lockedEnrollments, $courseCertificates);

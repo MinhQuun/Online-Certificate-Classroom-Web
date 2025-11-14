@@ -38,6 +38,7 @@ use App\Http\Controllers\Teacher\MiniTestController as TeacherMiniTestController
 use App\Http\Controllers\Teacher\GradingController;
 use App\Http\Controllers\Teacher\ResultController;
 use App\Http\Controllers\Teacher\LessonDiscussionController as TeacherLessonDiscussionController;
+use App\Http\Controllers\Teacher\CertificateController as TeacherCertificateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +62,7 @@ use App\Http\Controllers\Student\ContactController;
 use App\Http\Controllers\Student\ProfileController;
 use App\Http\Controllers\Student\MyCoursesController;
 use App\Http\Controllers\Student\GoogleAuthController;
+use App\Http\Controllers\Student\CertificateController as StudentCertificateController;
 use App\Http\Controllers\Payment\VNPayController;
 
 /*
@@ -198,6 +200,9 @@ Route::middleware('auth')->prefix('student')->name('student.')->group(function (
     // Khóa học của tôi & Lịch sử đơn hàng
     Route::get('/my-courses', [MyCoursesController::class, 'index'])->name('my-courses');
     Route::get('/order-history', [OrderHistoryController::class, 'index'])->name('order-history');
+    Route::get('/certificates', [StudentCertificateController::class, 'index'])->name('certificates.index');
+    Route::get('/certificates/{certificate}/download', [StudentCertificateController::class, 'download'])->name('certificates.download');
+    Route::get('/certificates/{certificate}', [StudentCertificateController::class, 'show'])->name('certificates.show');
 
     // Dictionary lookup
     Route::post('/dictionary/lookup', [App\Http\Controllers\Student\DictionaryController::class, 'lookup'])->name('dictionary.lookup');
@@ -301,6 +306,7 @@ Route::middleware(['auth', 'teacher'])->prefix('teacher')->name('teacher.')->gro
 
     // Theo dõi tiến độ
     Route::get('/progress', [ProgressController::class, 'index'])->name('progress.index');
+    Route::get('/certificates', [TeacherCertificateController::class, 'index'])->name('certificates.index');
     Route::patch('/progress/{course}/{student}', [ProgressController::class, 'update'])->name('progress.update');
 
     // Mini-tests (giáo viên)

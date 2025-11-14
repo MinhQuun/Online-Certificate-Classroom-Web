@@ -84,6 +84,8 @@ class CourseAdminController extends Controller
             'promotion_id' => ['nullable','integer','exists:khuyen_mai,maKM'],
             'promotion_price' => ['nullable','numeric','min:0'],
             'trangThai'   => 'required|in:DRAFT,PUBLISHED,ARCHIVED',
+            'certificate_enabled' => ['required','boolean'],
+            'certificate_progress_required' => ['required','integer','between:0,100'],
         ]);
 
         $tuition = (float) $request->input('hocPhi');
@@ -96,6 +98,8 @@ class CourseAdminController extends Controller
             $slugInput !== '' ? $slugInput : $data['tenKH']
         );
         $data['trangThai'] = $request->input('trangThai', 'DRAFT');
+        $data['certificate_enabled'] = $request->boolean('certificate_enabled') ? 1 : 0;
+        $data['certificate_progress_required'] = (int) $request->input('certificate_progress_required', 100);
 
         // Upload ảnh -> public/Assets (viết hoa A để khớp accessor)
         if ($request->hasFile('hinhanh')) {
@@ -147,6 +151,8 @@ class CourseAdminController extends Controller
             'promotion_id' => ['nullable','integer','exists:khuyen_mai,maKM'],
             'promotion_price' => ['nullable','numeric','min:0'],
             'trangThai'   => 'required|in:DRAFT,PUBLISHED,ARCHIVED',
+            'certificate_enabled' => ['required','boolean'],
+            'certificate_progress_required' => ['required','integer','between:0,100'],
         ]);
         $tuition = (float) $request->input('hocPhi');
         [$promotion, $promotionPrice] = $this->resolvePromotionInputs($request, $tuition);
@@ -159,6 +165,8 @@ class CourseAdminController extends Controller
             $slugInput !== '' ? $slugInput : $data['tenKH'],
             $course->maKH
         );
+        $data['certificate_enabled'] = $request->boolean('certificate_enabled') ? 1 : 0;
+        $data['certificate_progress_required'] = (int) $request->input('certificate_progress_required', 100);
 
         // Thay ảnh (nếu có)
         if ($request->hasFile('hinhanh')) {

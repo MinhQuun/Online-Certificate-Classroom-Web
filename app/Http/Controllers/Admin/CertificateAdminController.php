@@ -81,7 +81,7 @@ class CertificateAdminController extends Controller
             ->get();
 
         $comboPolicies = Combo::query()
-            ->select(['maGoi', 'tenGoi', 'slug', 'certificate_enabled'])
+            ->select(['maGoi', 'tenGoi', 'slug', 'certificate_enabled', 'certificate_progress_required'])
             ->orderBy('tenGoi')
             ->get();
 
@@ -204,11 +204,13 @@ class CertificateAdminController extends Controller
     public function updateComboPolicy(Request $request, Combo $combo): RedirectResponse
     {
         $data = $request->validate([
-            'certificate_enabled' => ['required', 'boolean'],
+            'certificate_enabled'           => ['required', 'boolean'],
+            'certificate_progress_required' => ['required', 'integer', 'between:0,100'],
         ]);
 
         $combo->forceFill([
-            'certificate_enabled' => $data['certificate_enabled'] ? 1 : 0,
+            'certificate_enabled'           => $data['certificate_enabled'] ? 1 : 0,
+            'certificate_progress_required' => (int) $data['certificate_progress_required'],
         ])->save();
 
         return back()->with('success', 'Đã cập nhật cấu hình chứng chỉ cho combo ' . $combo->tenGoi);

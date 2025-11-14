@@ -164,6 +164,8 @@
                                     data-promotion-price="{{ $promotionPrice }}"
                                     data-image="{{ $course->hinhanh }}"
                                     data-image-url="{{ $course->cover_image_url }}"
+                                    data-certificate-enabled="{{ $course->certificate_enabled ? 1 : 0 }}"
+                                    data-certificate-progress="{{ $course->certificate_progress_required }}"
                                 >
                                     <i class="bi bi-pencil"></i>
                                 </button>
@@ -343,6 +345,40 @@
                         </div>
                     </div>
                     <div class="col-md-6">
+                        <label class="form-label d-block">Chứng chỉ</label>
+                        <div class="form-check form-switch">
+                            <input type="hidden" name="certificate_enabled" value="0">
+                            <input
+                                id="c_certificate_enabled"
+                                class="form-check-input"
+                                type="checkbox"
+                                name="certificate_enabled"
+                                value="1"
+                                {{ old('certificate_enabled', 1) ? 'checked' : '' }}
+                            >
+                            <label class="form-check-label" for="c_certificate_enabled">
+                                Bật tự động cấp chứng chỉ
+                            </label>
+                        </div>
+                        <div class="form-text">Tắt nếu khóa học không cấp chứng chỉ.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="c_certificate_progress" class="form-label">% tiến độ yêu cầu</label>
+                        <div class="input-group">
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="c_certificate_progress"
+                                name="certificate_progress_required"
+                                min="0"
+                                max="100"
+                                value="{{ old('certificate_progress_required', 100) }}"
+                            >
+                            <span class="input-group-text">%</span>
+                        </div>
+                        <div class="form-text">Mặc định 100% hoàn thành khóa.</div>
+                    </div>
+                    <div class="col-md-6">
                         <label for="c_image" class="form-label">Ảnh khóa học</label>
                         <input
                             id="c_image"
@@ -490,6 +526,39 @@
                             >
                             <div class="form-text" data-promotion-help>Để trống để hệ thống tính theo quy tắc khuyến mãi.</div>
                         </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label d-block">Chứng chỉ</label>
+                        <div class="form-check form-switch">
+                            <input type="hidden" name="certificate_enabled" value="0">
+                            <input
+                                id="e_certificate_enabled"
+                                class="form-check-input"
+                                type="checkbox"
+                                name="certificate_enabled"
+                                value="1"
+                            >
+                            <label class="form-check-label" for="e_certificate_enabled">
+                                Bật tự động cấp chứng chỉ
+                            </label>
+                        </div>
+                        <div class="form-text">Tắt nếu khóa học không cấp chứng chỉ.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="e_certificate_progress" class="form-label">% tiến độ yêu cầu</label>
+                        <div class="input-group">
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="e_certificate_progress"
+                                name="certificate_progress_required"
+                                min="0"
+                                max="100"
+                                value="100"
+                            >
+                            <span class="input-group-text">%</span>
+                        </div>
+                        <div class="form-text">Mặc định 100% hoàn thành khóa.</div>
                     </div>
                     <div class="col-12" data-current-image-wrapper>
                         <label class="form-label d-block">Hình ảnh hiện tại</label>
