@@ -1,4 +1,3 @@
-{{-- resources/views/student/course-index.blade.php --}}
 @extends('layouts.student')
 
 @section('title', 'Trang chủ')
@@ -108,7 +107,7 @@
                                     <div class="course-card__category">
                                         <span class="chip chip--category">{{ optional($course->category)->tenDanhMuc ?? 'Chương trình nổi bật' }}</span>
                                     </div>
-                                    
+
                                     <div class="course-card__media">
                                         <div class="course-card__thumb">
                                             <img src="{{ $course->cover_image_url }}" alt="{{ $course->tenKH }}" loading="lazy">
@@ -144,7 +143,7 @@
                                             <div class="course-card__price-block {{ $hasPromotion ? 'course-card__price-block--promo' : '' }}">
                                                 <div class="course-card__price-label">
                                                     <span>{{ $hasPromotion ? 'Chỉ còn' : 'Học phí' }}</span>
-                                                
+
                                                 </div>
                                                 <div class="course-card__price-value">
                                                     {{ number_format($course->sale_price, 0, ',', '.') }} VND

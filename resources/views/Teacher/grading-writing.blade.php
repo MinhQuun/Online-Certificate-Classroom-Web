@@ -1,5 +1,3 @@
-{{-- resources/views/Teacher/grading-writing.blade.php --}}
-
 @extends('layouts.teacher')
 
 @section('title')

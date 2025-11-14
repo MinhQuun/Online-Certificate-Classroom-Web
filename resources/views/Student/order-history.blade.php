@@ -1,6 +1,6 @@
 @extends('layouts.student')
 
-@section('title', 'Lịch sử đơn hàng | Online Certificate Classroom')
+@section('title', 'Lịch sử đơn hàng')
 
 @push('styles')
     @php
@@ -94,8 +94,8 @@
                                             <div class="order-item">
                                                 <div class="item-image">
                                                     <a href="{{ route('student.courses.show', $item->course->slug) }}">
-                                                        <img src="{{ $item->course->cover_image_url }}" 
-                                                             alt="{{ $item->course->tenKH }}" 
+                                                        <img src="{{ $item->course->cover_image_url }}"
+                                                             alt="{{ $item->course->tenKH }}"
                                                              loading="lazy">
                                                     </a>
                                                 </div>

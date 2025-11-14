@@ -181,7 +181,7 @@ class GradingController extends Controller
             DB::rollBack();
             report($throwable);
 
-            return back()->with('error', 'Unable to grade submission. Please try again.');
+            return back()->with('error', 'Không thể chấm điểm bài nộp. Vui lòng thử lại.');
         }
 
         return redirect()
@@ -230,7 +230,7 @@ class GradingController extends Controller
             DB::rollBack();
             report($throwable);
 
-            return back()->with('error', 'Unable to grade submissions in bulk. Please try again.');
+            return back()->with('error', 'Không thể chấm điểm bài nộp. Vui lòng thử lại.');
         }
 
         $message = str_replace('{count}', (string) $gradedCount, $messageTemplate);
@@ -253,7 +253,7 @@ class GradingController extends Controller
                 return false;
             }
 
-            abort(403, 'You are not authorised to grade this submission.');
+            abort(403, 'Bạn không được phép chấm điểm bài nộp này.');
         }
 
         return true;

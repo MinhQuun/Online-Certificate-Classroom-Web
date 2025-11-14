@@ -1,6 +1,6 @@
 @extends('layouts.student')
 
-@section('title', 'Khóa học của tôi | Online Certificate Classroom')
+@section('title', 'Khóa học của tôi')
 
 @push('styles')
     @php
@@ -25,22 +25,22 @@
 
         {{-- Tabs Filter --}}
         <div class="my-courses-tabs">
-            <a href="{{ route('student.my-courses') }}" 
+            <a href="{{ route('student.my-courses') }}"
                class="tab {{ $status === 'all' ? 'active' : '' }}">
                 <span class="tab-label">Tất cả</span>
                 <span class="tab-count">{{ $counts['all'] }}</span>
             </a>
-            <a href="{{ route('student.my-courses', ['status' => 'active']) }}" 
+            <a href="{{ route('student.my-courses', ['status' => 'active']) }}"
                class="tab {{ $status === 'active' ? 'active' : '' }}">
                 <span class="tab-label">Đang học</span>
                 <span class="tab-count">{{ $counts['active'] }}</span>
             </a>
-            <a href="{{ route('student.my-courses', ['status' => 'pending']) }}" 
+            <a href="{{ route('student.my-courses', ['status' => 'pending']) }}"
                class="tab {{ $status === 'pending' ? 'active' : '' }}">
                 <span class="tab-label">Chờ kích hoạt</span>
                 <span class="tab-count">{{ $counts['pending'] }}</span>
             </a>
-            <a href="{{ route('student.my-courses', ['status' => 'expired']) }}" 
+            <a href="{{ route('student.my-courses', ['status' => 'expired']) }}"
                class="tab {{ $status === 'expired' ? 'active' : '' }}">
                 <span class="tab-label">Đã hết hạn</span>
                 <span class="tab-count">{{ $counts['expired'] }}</span>
@@ -66,7 +66,7 @@
                             default => 'Không xác định'
                         };
                     @endphp
-                    
+
                     <article class="course-card" data-course-id="{{ $course->maKH }}">
                         {{-- Course Image --}}
                         <div class="course-card__image">

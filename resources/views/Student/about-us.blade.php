@@ -1,6 +1,6 @@
 @extends('layouts.student')
 
-@section('title', 'Về chúng tôi | Online Certificate Classroom')
+@section('title', 'Về chúng tôi')
 
 @push('styles')
     @php

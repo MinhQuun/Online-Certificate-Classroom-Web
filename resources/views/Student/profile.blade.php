@@ -1,6 +1,6 @@
 @extends('layouts.student')
 
-@section('title', 'Thông tin cá nhân | Online Certificate Classroom')
+@section('title', 'Thông tin cá nhân')
 
 @push('styles')
     @php
@@ -32,11 +32,11 @@
                             <i class="fa-solid fa-id-card"></i>
                             Họ và tên
                         </label>
-                        <input 
-                            type="text" 
-                            class="form-control @error('name') is-invalid @enderror" 
-                            id="name" 
-                            name="name" 
+                        <input
+                            type="text"
+                            class="form-control @error('name') is-invalid @enderror"
+                            id="name"
+                            name="name"
                             value="{{ old('name', $user->hoTen ?? $user->name) }}"
                             placeholder="Nhập họ và tên của bạn"
                         >
@@ -53,11 +53,11 @@
                             <i class="fa-solid fa-envelope"></i>
                             Email
                         </label>
-                        <input 
-                            type="email" 
-                            class="form-control @error('email') is-invalid @enderror" 
-                            id="email" 
-                            name="email" 
+                        <input
+                            type="email"
+                            class="form-control @error('email') is-invalid @enderror"
+                            id="email"
+                            name="email"
                             value="{{ old('email', $user->email) }}"
                             placeholder="email@example.com"
                         >
@@ -74,11 +74,11 @@
                             <i class="fa-solid fa-phone"></i>
                             Số điện thoại
                         </label>
-                        <input 
-                            type="text" 
-                            class="form-control @error('phone') is-invalid @enderror" 
-                            id="phone" 
-                            name="phone" 
+                        <input
+                            type="text"
+                            class="form-control @error('phone') is-invalid @enderror"
+                            id="phone"
+                            name="phone"
                             value="{{ old('phone', $user->sdt ?? $user->phone) }}"
                             placeholder="Nhập số điện thoại"
                         >
@@ -128,10 +128,10 @@
                             <i class="fa-solid fa-lock"></i>
                             Mật khẩu hiện tại
                         </label>
-                        <input 
-                            type="password" 
-                            class="form-control @error('current_password') is-invalid @enderror" 
-                            id="current_password" 
+                        <input
+                            type="password"
+                            class="form-control @error('current_password') is-invalid @enderror"
+                            id="current_password"
                             name="current_password"
                             placeholder="Nhập mật khẩu hiện tại"
                         >
@@ -148,10 +148,10 @@
                             <i class="fa-solid fa-lock"></i>
                             Mật khẩu mới
                         </label>
-                        <input 
-                            type="password" 
-                            class="form-control @error('new_password') is-invalid @enderror" 
-                            id="new_password" 
+                        <input
+                            type="password"
+                            class="form-control @error('new_password') is-invalid @enderror"
+                            id="new_password"
                             name="new_password"
                             placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)"
                         >
@@ -168,10 +168,10 @@
                             <i class="fa-solid fa-lock"></i>
                             Xác nhận mật khẩu mới
                         </label>
-                        <input 
-                            type="password" 
-                            class="form-control" 
-                            id="new_password_confirmation" 
+                        <input
+                            type="password"
+                            class="form-control"
+                            id="new_password_confirmation"
                             name="new_password_confirmation"
                             placeholder="Nhập lại mật khẩu mới"
                         >

@@ -110,7 +110,7 @@ class ActivationController extends Controller
 
         return response()->json([
             'status'  => 'success',
-            'message' => 'Kich hoat khoa hoc thanh cong.',
+            'message' => 'Kích hoạt khóa học thành công.',
             'data'    => [
                 'course_id'   => $result['course_id'],
                 'course_name' => $result['course_name'],
