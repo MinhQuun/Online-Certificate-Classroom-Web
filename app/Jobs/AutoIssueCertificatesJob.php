@@ -19,30 +19,16 @@ class AutoIssueCertificatesJob implements ShouldQueue
      */
     public function handle(CertificateService $certificateService): void
     {
-        $comboPairs = [];
-
         Enrollment::query()
-            ->with(['student', 'course', 'course.certificateTemplate', 'combo'])
+            ->with(['student', 'course', 'course.certificateTemplate'])
             ->where('trangThai', 'ACTIVE')
             ->orderBy('maHV')
             ->orderBy('maKH')
-            ->chunk(200, function ($enrollments) use ($certificateService, &$comboPairs) {
+            ->chunk(200, function ($enrollments) use ($certificateService) {
                 foreach ($enrollments as $enrollment) {
                     /** @var Enrollment $enrollment */
                     $certificateService->issueCourseCertificateIfEligible($enrollment);
-
-                    if ($enrollment->maGoi && $enrollment->student && $enrollment->combo) {
-                        $comboPairs[$enrollment->maHV . ':' . $enrollment->maGoi] = [
-                            $enrollment->student,
-                            $enrollment->combo,
-                        ];
-                    }
                 }
             });
-
-        foreach ($comboPairs as $pair) {
-            [$student, $combo] = $pair;
-            $certificateService->issueComboCertificateIfEligible($student, $combo);
-        }
     }
 }

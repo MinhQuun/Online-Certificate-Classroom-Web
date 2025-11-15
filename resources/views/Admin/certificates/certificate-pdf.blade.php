@@ -2,261 +2,261 @@
     $primary = $theme['primary'] ?? '#2563eb';
     $primaryDark = $theme['primaryDark'] ?? '#1d4ed8';
     $accent = $theme['accent'] ?? '#f97316';
-    $text = $theme['text'] ?? '#0f172a';
-    $muted = $theme['muted'] ?? '#64748b';
-    $studentName = strtoupper($student?->hoTen ?? $certificate->student?->hoTen ?? 'HỌC VIÊN OCC');
-    $targetLabel = $certificate->loaiCC === \App\Models\Certificate::TYPE_COMBO
-        ? ($combo->tenGoi ?? 'Combo OCC')
-        : ($course->tenKH ?? 'Khóa học OCC');
-    $typeLabel = $certificate->loaiCC === \App\Models\Certificate::TYPE_COMBO ? 'COMBO' : 'COURSE';
-    $issuedDate = $issuedDateLabel ?? now()->format('d/m/Y');
-    $courseNames = collect($courseList ?? [])
-        ->pluck('tenKH')
-        ->filter()
-        ->values();
+    $studentName = strtoupper($student?->hoTen ?? $certificate->student?->hoTen ?? 'OCC STUDENT');
+    $courseName = $course->tenKH ?? 'OCC Course';
+    $issuedDate = $issuedDateLabel ?? now()->format('M d, Y');
+    $teacherName = $course->teacher?->hoTen ?? 'OCC Academic Board';
 @endphp
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chứng chỉ OCC - {{ $certificate->code }}</title>
+    <title>OCC Certificate - {{ $certificate->code }}</title>
     <style>
         @page { margin: 0; }
         body {
             margin: 0;
             font-family: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #e3e9fb;
+            background: #0f172a;
         }
-        .canvas {
-            padding: 52px 72px;
-            min-height: 100vh;
+        .wrapper {
+            width: 11.7in;
+            height: 8.3in;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(15,23,42,.92), rgba(15,23,42,.78));
             position: relative;
-            background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent),
-                        radial-gradient(circle at top left, rgba(249, 115, 22, 0.08), transparent),
-                        #f8fafc;
-        }
-        .certificate {
-            position: relative;
-            background: #fff;
-            border-radius: 32px;
-            padding: 64px 80px;
-            box-shadow: 0 40px 80px rgba(15, 23, 42, 0.08);
             overflow: hidden;
         }
-        .certificate::after {
+        .wrapper::after {
             content: '';
             position: absolute;
-            inset: 24px;
-            border: 2px solid rgba(100, 116, 139, 0.2);
-            border-radius: 28px;
+            inset: 0;
+            background:
+                radial-gradient(circle at 18% 22%, rgba(37,99,235,.45), transparent 58%),
+                radial-gradient(circle at 82% 12%, rgba(249,115,22,.35), transparent 48%);
+        }
+        .card {
+            width: 85%;
+            padding: 70px 100px;
+            background: #fbfdff;
+            color: #0f172a;
+            border-radius: 30px;
+            position: relative;
+            box-shadow: 0 35px 70px rgba(15, 23, 42, .25);
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .card::before,
+        .card::after {
+            content: '';
+            position: absolute;
+            inset: 20px;
+            border-radius: 22px;
+            border: 1px solid rgba(15,23,42,.12);
             pointer-events: none;
         }
-        .brand {
+        .card::after {
+            inset: 32px;
+            border-color: rgba(148, 163, 184, .25);
+        }
+        .card > * { position: relative; z-index: 2; }
+        .header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            gap: 16px;
-            margin-bottom: 40px;
-            position: relative;
-            z-index: 2;
-        }
-        .brand__logo {
-            display: flex;
             align-items: center;
-            gap: 14px;
-            font-weight: 600;
-            font-size: 20px;
-            color: {{ $text }};
         }
-        .brand__logo img {
-            width: 56px;
-            height: 56px;
-            object-fit: contain;
+        .branding {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
-        .status-chip {
-            padding: 8px 16px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: 600;
+        .branding span {
+            font-size: 18px;
+            color: #475569;
             letter-spacing: .08em;
+        }
+        .branding strong {
+            font-size: 22px;
+            letter-spacing: .25em;
+            color: {{ $primary }};
+        }
+        .badge {
+            padding: 8px 22px;
+            border-radius: 999px;
             background: {{ $primary }};
             color: #fff;
+            letter-spacing: .25em;
+            font-size: 12px;
         }
-        .headline {
+        .title-block {
             text-align: center;
-            margin-bottom: 36px;
-            color: {{ $text }};
-            position: relative;
-            z-index: 2;
         }
-        .headline span {
-            display: inline-block;
-            font-size: 16px;
-            letter-spacing: .4em;
-            color: {{ $muted }};
+        .title-block p {
+            margin: 0;
+            letter-spacing: .55em;
+            color: #94a3b8;
+            font-size: 15px;
         }
-        .headline h1 {
-            margin: 12px 0 0;
-            font-size: 48px;
+        .title-block h1 {
+            margin: 8px 0 0;
+            font-size: 52px;
             letter-spacing: .08em;
-            font-weight: 700;
         }
         .recipient {
             text-align: center;
-            margin-bottom: 48px;
-            position: relative;
-            z-index: 2;
         }
-        .recipient .label {
-            font-size: 15px;
-            text-transform: uppercase;
-            letter-spacing: .3em;
-            color: {{ $muted }};
+        .recipient label {
+            letter-spacing: .5em;
+            color: #94a3b8;
+            font-size: 13px;
         }
-        .recipient .name {
-            font-size: 42px;
-            font-weight: 700;
-            margin-top: 12px;
+        .recipient h2 {
+            margin: 10px 0 0;
+            font-size: 46px;
             color: {{ $primaryDark }};
         }
-        .description {
-            position: relative;
-            z-index: 2;
+        .statement {
             text-align: center;
-            margin-bottom: 48px;
-            color: {{ $text }};
             font-size: 18px;
-            line-height: 1.7;
+            color: #475569;
+            line-height: 1.8;
         }
-        .description strong {
+        .statement strong {
             color: {{ $primary }};
         }
-        .courses-list {
-            margin-top: 18px;
-            font-size: 15px;
-            color: {{ $muted }};
-        }
-        .meta {
+        .details {
             display: flex;
-            justify-content: space-between;
-            gap: 32px;
-            margin-top: 48px;
-            position: relative;
-            z-index: 2;
+            justify-content: center;
+            gap: 28px;
         }
-        .meta__block {
-            flex: 1;
-            padding: 18px 20px;
+        .details .item {
+            padding: 16px 24px;
             border-radius: 16px;
-            background: rgba(37, 99, 235, 0.05);
-            border: 1px solid rgba(37, 99, 235, 0.12);
+            background: rgba(37, 99, 235, .08);
+            min-width: 200px;
+            text-align: center;
         }
-        .meta__label {
-            font-size: 13px;
-            letter-spacing: .3em;
-            color: {{ $muted }};
+        .details .item span {
+            display: block;
+            letter-spacing: .4em;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 6px;
         }
-        .meta__value {
-            margin-top: 10px;
+        .details .item strong {
             font-size: 20px;
-            font-weight: 600;
-            color: {{ $text }};
+            color: #0f172a;
+            letter-spacing: .08em;
         }
-        .signature {
-            margin-top: 56px;
+        .footer {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            position: relative;
-            z-index: 2;
         }
-        .signature__line {
-            width: 240px;
+        .signature-block {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .signature-line {
+            width: 260px;
             height: 1px;
-            background: rgba(15, 23, 42, 0.2);
-            margin-bottom: 8px;
+            background: rgba(15,23,42,.3);
         }
-        .signature__label {
-            font-size: 14px;
-            color: {{ $muted }};
-            text-transform: uppercase;
-            letter-spacing: .2em;
+        .signature-label {
+            letter-spacing: .3em;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+        .seal {
+            padding: 18px 30px;
+            border-radius: 18px;
+            border: 2px solid {{ $primary }};
+            text-align: center;
+        }
+        .seal span {
+            display: block;
+            letter-spacing: .4em;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+        .seal strong {
+            font-size: 18px;
+            color: #0f172a;
         }
         .watermark {
             position: absolute;
             inset: 0;
             opacity: 0.08;
-            z-index: 1;
             display: flex;
             align-items: center;
             justify-content: center;
         }
         .watermark img {
-            max-width: 80%;
+            max-width: 55%;
             filter: grayscale(1);
         }
     </style>
 </head>
 <body>
-    <div class="canvas">
-        <div class="certificate">
-            <div class="watermark">
-                @if(!empty($template?->template_url))
-                    <img src="{{ $template->template_url }}" alt="Certificate watermark">
-                @else
-                    <svg width="520" height="520" viewBox="0 0 520 520" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="260" cy="260" r="240" stroke="{{ $primary }}" stroke-width="12" stroke-opacity="0.4" fill="none"/>
-                        <circle cx="260" cy="260" r="200" stroke="{{ $accent }}" stroke-width="8" stroke-opacity="0.25" fill="none"/>
-                        <circle cx="260" cy="260" r="160" stroke="{{ $primaryDark }}" stroke-width="6" stroke-opacity="0.18" fill="none"/>
-                    </svg>
-                @endif
-            </div>
-            <div class="brand">
-                <div class="brand__logo">
-                    <img src="{{ asset('Assets/logo.png') }}" alt="OCC Logo">
+    <div class="wrapper">
+        <div class="watermark">
+            @if(!empty($template?->template_url))
+                <img src="{{ $template->template_url }}" alt="Certificate watermark">
+            @else
+                <svg width="420" height="420" viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="210" cy="210" r="180" stroke="{{ $primary }}" stroke-width="10" stroke-opacity="0.3" fill="none"/>
+                    <circle cx="210" cy="210" r="140" stroke="{{ $accent }}" stroke-width="7" stroke-opacity="0.2" fill="none"/>
+                    <circle cx="210" cy="210" r="100" stroke="{{ $primaryDark }}" stroke-width="5" stroke-opacity="0.15" fill="none"/>
+                </svg>
+            @endif
+        </div>
+        <div class="card">
+            <div class="header">
+                <div class="branding">
                     <span>Online Certificate Classroom</span>
+                    <strong>OCC</strong>
                 </div>
-                <span class="status-chip">ISSUED {{ $typeLabel }}</span>
+                <span class="badge">ISSUED COURSE</span>
             </div>
-            <div class="headline">
-                <span>CHỨNG NHẬN</span>
-                <h1>Certificate of Achievement</h1>
+            <div class="title-block">
+                <p>THIS CERTIFIES</p>
+                <h1>CERTIFICATE OF ACHIEVEMENT</h1>
             </div>
             <div class="recipient">
-                <div class="label">TRAO TẶNG CHO</div>
-                <div class="name">{{ $studentName }}</div>
+                <label>AWARDED TO</label>
+                <h2>{{ $studentName }}</h2>
             </div>
-            <div class="description">
-                <p>
-                    Chứng nhận đã hoàn thành xuất sắc
-                    <strong>{{ $certificate->loaiCC === \App\Models\Certificate::TYPE_COMBO ? 'combo' : 'khóa học' }}</strong>
-                    <strong>{{ $targetLabel }}</strong>
-                    và đáp ứng đầy đủ tiêu chí do OCC thiết lập.
-                </p>
-                @if($courseNames->isNotEmpty())
-                    <div class="courses-list">
-                        Bao gồm: {{ $courseNames->implode(', ') }}.
-                    </div>
-                @endif
+            <div class="statement">
+                This certificate recognizes outstanding completion of the <strong>{{ $courseName }}</strong> program
+                and meeting every proficiency standard established by Online Certificate Classroom.
             </div>
-            <div class="meta">
-                <div class="meta__block">
-                    <div class="meta__label">MÃ CHỨNG CHỈ</div>
-                    <div class="meta__value">{{ $certificate->code }}</div>
+            <div class="details">
+                <div class="item">
+                    <span>CERT NO.</span>
+                    <strong>{{ $certificate->code }}</strong>
                 </div>
-                <div class="meta__block">
-                    <div class="meta__label">NGÀY CẤP</div>
-                    <div class="meta__value">{{ $issuedDate }}</div>
+                <div class="item">
+                    <span>ISSUED</span>
+                    <strong>{{ $issuedDate }}</strong>
+                </div>
+                <div class="item">
+                    <span>PROGRAM</span>
+                    <strong>{{ Str::upper($courseName) }}</strong>
                 </div>
             </div>
-            <div class="signature">
-                <div>
-                    <div class="signature__line"></div>
-                    <div class="signature__label">HỆ THỐNG OCC</div>
+            <div class="footer">
+                <div class="signature-block">
+                    <div class="signature-line"></div>
+                    <div class="signature-label">{{ Str::upper($teacherName) }}</div>
+                    <div class="signature-label">Instructor / Academic Board</div>
                 </div>
-                <div class="meta__block" style="flex:0 0 auto;">
-                    <div class="meta__label">NGƯỜI KÝ</div>
-                    <div class="meta__value">Online Certificate Classroom</div>
+                <div class="seal">
+                    <span>AUTHORIZED BY</span>
+                    <strong>Online Certificate Classroom</strong>
                 </div>
             </div>
         </div>

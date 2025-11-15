@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Certificate;
 use App\Models\CertificateTemplate;
-use App\Models\Combo;
 use App\Models\Course;
+use App\Models\Enrollment;
 use App\Models\Student;
 use App\Services\CertificateService;
 use Illuminate\Http\JsonResponse;
@@ -26,17 +26,13 @@ class CertificateAdminController extends Controller
     public function index(Request $request)
     {
         $filters = [
-            'type'       => strtoupper((string) $request->query('type', '')),
             'status'     => strtoupper((string) $request->query('status', '')),
             'issue_mode' => strtoupper((string) $request->query('issue_mode', '')),
             'search'     => trim((string) $request->query('search', '')),
         ];
 
         $certificatesQuery = Certificate::query()
-            ->with(['student.user', 'course', 'combo'])
-            ->when(in_array($filters['type'], [Certificate::TYPE_COURSE, Certificate::TYPE_COMBO], true), function ($query) use ($filters) {
-                $query->where('loaiCC', $filters['type']);
-            })
+            ->with(['student.user', 'course'])
             ->when(in_array($filters['status'], [
                 Certificate::STATUS_PENDING,
                 Certificate::STATUS_ISSUED,
@@ -57,8 +53,7 @@ class CertificateAdminController extends Controller
                         ->orWhere('tenCC', 'like', $keyword)
                         ->orWhereHas('student', fn ($sub) => $sub->where('hoTen', 'like', $keyword))
                         ->orWhereHas('student.user', fn ($sub) => $sub->where('email', 'like', $keyword))
-                        ->orWhereHas('course', fn ($sub) => $sub->where('tenKH', 'like', $keyword))
-                        ->orWhereHas('combo', fn ($sub) => $sub->where('tenGoi', 'like', $keyword));
+                        ->orWhereHas('course', fn ($sub) => $sub->where('tenKH', 'like', $keyword));
                 });
             })
             ->orderByDesc('issued_at')
@@ -80,13 +75,8 @@ class CertificateAdminController extends Controller
             ->orderBy('tenKH')
             ->get();
 
-        $comboPolicies = Combo::query()
-            ->select(['maGoi', 'tenGoi', 'slug', 'certificate_enabled', 'certificate_progress_required'])
-            ->orderBy('tenGoi')
-            ->get();
-
         $templates = CertificateTemplate::query()
-            ->with(['course', 'combo', 'creator'])
+            ->with(['course', 'creator'])
             ->orderByDesc('updated_at')
             ->get();
 
@@ -94,11 +84,6 @@ class CertificateAdminController extends Controller
             Certificate::STATUS_PENDING => 'Chờ xử lý',
             Certificate::STATUS_ISSUED  => 'Đã cấp',
             Certificate::STATUS_REVOKED => 'Đã thu hồi',
-        ];
-
-        $typeLabels = [
-            Certificate::TYPE_COURSE => 'Khóa học',
-            Certificate::TYPE_COMBO  => 'Combo',
         ];
 
         $issueModeLabels = [
@@ -117,10 +102,8 @@ class CertificateAdminController extends Controller
             'filters'          => $filters,
             'stats'            => $stats,
             'statusLabels'     => $statusLabels,
-            'typeLabels'       => $typeLabels,
             'issueModeLabels'  => $issueModeLabels,
             'coursePolicies'   => $coursePolicies,
-            'comboPolicies'    => $comboPolicies,
             'templates'        => $templates,
             'templateStatuses' => $templateStatuses,
         ]);
@@ -129,9 +112,8 @@ class CertificateAdminController extends Controller
     public function storeManual(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'issue_type'  => ['required', Rule::in([Certificate::TYPE_COURSE, Certificate::TYPE_COMBO])],
             'student_id'  => ['required', 'integer', 'exists:hocvien,maHV'],
-            'target_id'   => ['required', 'integer'],
+            'course_id'   => ['required', 'integer', 'exists:khoahoc,maKH'],
             'issued_at'   => ['nullable', 'date'],
             'title'       => ['nullable', 'string', 'max:100'],
             'description' => ['nullable', 'string', 'max:500'],
@@ -141,21 +123,12 @@ class CertificateAdminController extends Controller
         $student = Student::with('user')->findOrFail($data['student_id']);
 
         try {
-            if ($data['issue_type'] === Certificate::TYPE_COURSE) {
-                $course = Course::findOrFail($data['target_id']);
-                $this->certificateService->issueManualCourseCertificate($student, $course, $admin, [
-                    'issued_at'   => $data['issued_at'] ?? null,
-                    'title'       => $data['title'] ?? null,
-                    'description' => $data['description'] ?? null,
-                ]);
-            } else {
-                $combo = Combo::with('courses')->findOrFail($data['target_id']);
-                $this->certificateService->issueManualComboCertificate($student, $combo, $admin, [
-                    'issued_at'   => $data['issued_at'] ?? null,
-                    'title'       => $data['title'] ?? null,
-                    'description' => $data['description'] ?? null,
-                ]);
-            }
+            $course = Course::findOrFail($data['course_id']);
+            $this->certificateService->issueManualCourseCertificate($student, $course, $admin, [
+                'issued_at'   => $data['issued_at'] ?? null,
+                'title'       => $data['title'] ?? null,
+                'description' => $data['description'] ?? null,
+            ]);
         } catch (Throwable $exception) {
             report($exception);
 
@@ -198,31 +171,28 @@ class CertificateAdminController extends Controller
             'certificate_progress_required' => (int) $data['certificate_progress_required'],
         ])->save();
 
+        $course->refresh();
+
+        if ($course->certificate_enabled) {
+            Enrollment::query()
+                ->where('maKH', $course->maKH)
+                ->where('progress_percent', '>=', $course->certificateProgressThreshold())
+                ->orderBy('maHV')
+                ->chunk(100, function ($enrollments) {
+                    foreach ($enrollments as $enrollment) {
+                        $this->certificateService->issueCourseCertificateIfEligible($enrollment);
+                    }
+                });
+        }
+
         return back()->with('success', 'Đã cập nhật cấu hình chứng chỉ cho khóa ' . $course->tenKH);
-    }
-
-    public function updateComboPolicy(Request $request, Combo $combo): RedirectResponse
-    {
-        $data = $request->validate([
-            'certificate_enabled'           => ['required', 'boolean'],
-            'certificate_progress_required' => ['required', 'integer', 'between:0,100'],
-        ]);
-
-        $combo->forceFill([
-            'certificate_enabled'           => $data['certificate_enabled'] ? 1 : 0,
-            'certificate_progress_required' => (int) $data['certificate_progress_required'],
-        ])->save();
-
-        return back()->with('success', 'Đã cập nhật cấu hình chứng chỉ cho combo ' . $combo->tenGoi);
     }
 
     public function storeTemplate(Request $request): RedirectResponse
     {
         $data = $request->validate([
             'tenTemplate'   => ['required', 'string', 'max:150'],
-            'loaiTemplate'  => ['required', Rule::in([CertificateTemplate::TYPE_COURSE, CertificateTemplate::TYPE_COMBO])],
             'maKH'          => ['nullable', 'integer', 'exists:khoahoc,maKH'],
-            'maGoi'         => ['nullable', 'integer', 'exists:goi_khoa_hoc,maGoi'],
             'template_url'  => ['nullable', 'string', 'max:700'],
             'design_json'   => ['nullable', 'string'],
             'moTa'          => ['nullable', 'string', 'max:500'],
@@ -233,19 +203,13 @@ class CertificateAdminController extends Controller
             ])],
         ]);
 
-        if ($data['loaiTemplate'] === CertificateTemplate::TYPE_COURSE) {
-            $data['maGoi'] = null;
-        } else {
-            $data['maKH'] = null;
-        }
-
         $designPayload = $this->decodeDesignJson($data['design_json'] ?? null);
 
         CertificateTemplate::create([
             'tenTemplate'  => $data['tenTemplate'],
-            'loaiTemplate' => $data['loaiTemplate'],
+            'loaiTemplate' => CertificateTemplate::TYPE_COURSE,
             'maKH'         => $data['maKH'],
-            'maGoi'        => $data['maGoi'],
+            'maGoi'        => null,
             'template_url' => $data['template_url'],
             'design_json'  => $designPayload,
             'moTa'         => $data['moTa'] ?? null,
@@ -260,9 +224,7 @@ class CertificateAdminController extends Controller
     {
         $data = $request->validate([
             'tenTemplate'   => ['required', 'string', 'max:150'],
-            'loaiTemplate'  => ['required', Rule::in([CertificateTemplate::TYPE_COURSE, CertificateTemplate::TYPE_COMBO])],
             'maKH'          => ['nullable', 'integer', 'exists:khoahoc,maKH'],
-            'maGoi'         => ['nullable', 'integer', 'exists:goi_khoa_hoc,maGoi'],
             'template_url'  => ['nullable', 'string', 'max:700'],
             'design_json'   => ['nullable', 'string'],
             'moTa'          => ['nullable', 'string', 'max:500'],
@@ -273,19 +235,13 @@ class CertificateAdminController extends Controller
             ])],
         ]);
 
-        if ($data['loaiTemplate'] === CertificateTemplate::TYPE_COURSE) {
-            $data['maGoi'] = null;
-        } else {
-            $data['maKH'] = null;
-        }
-
         $designPayload = $this->decodeDesignJson($data['design_json'] ?? null);
 
         $template->forceFill([
             'tenTemplate'  => $data['tenTemplate'],
-            'loaiTemplate' => $data['loaiTemplate'],
+            'loaiTemplate' => CertificateTemplate::TYPE_COURSE,
             'maKH'         => $data['maKH'],
-            'maGoi'        => $data['maGoi'],
+            'maGoi'        => null,
             'template_url' => $data['template_url'],
             'design_json'  => $designPayload,
             'moTa'         => $data['moTa'] ?? null,
@@ -348,35 +304,6 @@ class CertificateAdminController extends Controller
                     'id'    => $course->maKH,
                     'label' => $course->tenKH,
                     'slug'  => $course->slug,
-                ];
-            }),
-        ]);
-    }
-
-    public function searchCombos(Request $request): JsonResponse
-    {
-        $keyword = trim((string) $request->query('q', ''));
-
-        if (mb_strlen($keyword) < 2) {
-            return response()->json(['data' => []]);
-        }
-
-        $combos = Combo::query()
-            ->select(['maGoi', 'tenGoi', 'slug'])
-            ->where(function ($query) use ($keyword) {
-                $query->where('tenGoi', 'like', "%{$keyword}%")
-                    ->orWhere('slug', 'like', "%{$keyword}%");
-            })
-            ->orderBy('tenGoi')
-            ->limit(10)
-            ->get();
-
-        return response()->json([
-            'data' => $combos->map(function (Combo $combo) {
-                return [
-                    'id'    => $combo->maGoi,
-                    'label' => $combo->tenGoi,
-                    'slug'  => $combo->slug,
                 ];
             }),
         ]);

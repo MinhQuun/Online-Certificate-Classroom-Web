@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Certificate;
+use App\Models\Enrollment;
 use App\Models\Student;
+use App\Services\CertificateService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,26 +14,27 @@ use Illuminate\View\View;
 
 class CertificateController extends Controller
 {
+    public function __construct(
+        private readonly CertificateService $certificateService
+    ) {
+    }
+
     public function index(Request $request): View
     {
         $student = $this->resolveStudent();
+        $this->ensureCertificatesAreSynced($student);
 
         $filters = [
             'status' => strtoupper((string) $request->query('status', '')),
-            'type'   => strtoupper((string) $request->query('type', '')),
             'search' => trim((string) $request->query('q', '')),
         ];
 
         $query = Certificate::query()
-            ->with(['course', 'combo'])
+            ->with(['course'])
             ->where('maHV', $student->maHV);
 
         if (in_array($filters['status'], array_keys($this->statusLabels()), true)) {
             $query->where('trangThai', $filters['status']);
-        }
-
-        if (in_array($filters['type'], array_keys($this->typeLabels()), true)) {
-            $query->where('loaiCC', $filters['type']);
         }
 
         if ($filters['search'] !== '') {
@@ -39,8 +42,7 @@ class CertificateController extends Controller
             $query->where(function ($builder) use ($keyword) {
                 $builder->where('code', 'like', $keyword)
                     ->orWhere('tenCC', 'like', $keyword)
-                    ->orWhereHas('course', fn ($sub) => $sub->where('tenKH', 'like', $keyword))
-                    ->orWhereHas('combo', fn ($sub) => $sub->where('tenGoi', 'like', $keyword));
+                    ->orWhereHas('course', fn ($sub) => $sub->where('tenKH', 'like', $keyword));
             });
         }
 
@@ -70,8 +72,28 @@ class CertificateController extends Controller
             'metrics'        => $metrics,
             'statusLabels'   => $this->statusLabels(),
             'statusBadges'   => $this->statusBadges(),
-            'typeLabels'     => $this->typeLabels(),
         ]);
+    }
+
+    protected function ensureCertificatesAreSynced(Student $student): void
+    {
+        Enrollment::query()
+            ->with('course')
+            ->where('maHV', $student->maHV)
+            ->whereNotNull('progress_percent')
+            ->get()
+            ->each(function (Enrollment $enrollment) {
+                $course = $enrollment->course;
+                if (!$course || !$course->certificate_enabled) {
+                    return;
+                }
+
+                if ((int) ($enrollment->progress_percent ?? 0) < $course->certificateProgressThreshold()) {
+                    return;
+                }
+
+                $this->certificateService->issueCourseCertificateIfEligible($enrollment);
+            });
     }
 
     public function show(Certificate $certificate): View
@@ -79,14 +101,13 @@ class CertificateController extends Controller
         $student = $this->resolveStudent();
         $this->ensureOwnership($certificate, $student);
 
-        $certificate->loadMissing(['course', 'combo', 'student.user']);
+        $certificate->loadMissing(['course', 'student.user']);
 
         return view('Student.certificate-detail', [
             'student'      => $student,
             'certificate'  => $certificate,
             'statusLabels' => $this->statusLabels(),
             'statusBadges' => $this->statusBadges(),
-            'typeLabels'   => $this->typeLabels(),
         ]);
     }
 
@@ -141,11 +162,4 @@ class CertificateController extends Controller
         ];
     }
 
-    protected function typeLabels(): array
-    {
-        return [
-            Certificate::TYPE_COURSE => 'Khóa học',
-            Certificate::TYPE_COMBO  => 'Combo',
-        ];
-    }
 }

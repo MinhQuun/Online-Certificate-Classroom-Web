@@ -25,7 +25,7 @@
                     Chứng chỉ của tôi
                 </h1>
                 <p class="subtitle">
-                    Tổng hợp toàn bộ chứng chỉ nội bộ OCC mà bạn đã được cấp sau khi hoàn thành khóa học hoặc combo.
+                    Tổng hợp toàn bộ chứng chỉ nội bộ OCC mà bạn đã được cấp sau khi hoàn thành khóa học.
                 </p>
             </div>
             <div class="hero-metrics">
@@ -59,15 +59,6 @@
                 </select>
             </div>
             <div class="filter-group">
-                <label for="filter-type">Loại chứng chỉ</label>
-                <select id="filter-type" class="form-select" name="type" data-auto-submit>
-                    <option value="">Tất cả</option>
-                    @foreach ($typeLabels as $key => $label)
-                        <option value="{{ $key }}" {{ $filters['type'] === $key ? 'selected' : '' }}>{{ $label }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="filter-group">
                 <label for="filter-search">Từ khóa</label>
                 <input
                     type="text"
@@ -94,13 +85,13 @@
                     @php
                         $status = $certificate->trangThai;
                         $statusClass = $statusBadges[$status] ?? 'status-pending';
-                        $subjectName = $certificate->course?->tenKH ?? $certificate->combo?->tenGoi ?? $certificate->tenCC;
+                        $subjectName = $certificate->course?->tenKH ?? $certificate->tenCC;
                         $canDownload = $certificate->trangThai === Certificate::STATUS_ISSUED && $certificate->pdf_url;
                     @endphp
                     <article class="certificate-card">
                         <div class="card-top">
                             <div>
-                                <span class="chip chip-type">{{ $typeLabels[$certificate->loaiCC] ?? strtoupper($certificate->loaiCC) }}</span>
+                                <span class="chip chip-type">Khóa học</span>
                                 <h3 class="card-title">{{ $subjectName }}</h3>
                                 <p class="card-desc">{{ Str::limit($certificate->moTa ?? 'Hoàn thành theo yêu cầu của OCC', 140) }}</p>
                             </div>
@@ -146,7 +137,7 @@
             <div class="certificates-empty card">
                 <i class="fa-solid fa-inbox"></i>
                 <h3>Chưa có chứng chỉ nào</h3>
-                <p>Hoàn thành các khóa học hoặc combo của bạn để nhận chứng chỉ từ OCC.</p>
+                <p>Hoàn thành các khóa học của bạn để nhận chứng chỉ từ OCC.</p>
                 <a href="{{ route('student.courses.index') }}" class="btn btn-primary">
                     <i class="fa-solid fa-compass me-1"></i> Khám phá khóa học
                 </a>

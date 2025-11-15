@@ -22,8 +22,8 @@
 
         <section class="certificate-detail card">
             <header class="detail-header">
-                <span class="chip chip-type">{{ $typeLabels[$certificate->loaiCC] ?? $certificate->loaiCC }}</span>
-                <h1>{{ $certificate->course?->tenKH ?? $certificate->combo?->tenGoi ?? $certificate->tenCC }}</h1>
+                <span class="chip chip-type">Khóa học</span>
+                <h1>{{ $certificate->course?->tenKH ?? $certificate->tenCC }}</h1>
                 @if ($certificate->moTa)
                     <p class="subtitle">{{ $certificate->moTa }}</p>
                 @endif
@@ -77,10 +77,6 @@
                 @if ($certificate->course?->slug)
                     <a href="{{ route('student.courses.show', $certificate->course->slug) }}" class="btn btn-light">
                         Xem khóa học
-                    </a>
-                @elseif ($certificate->combo?->slug)
-                    <a href="{{ route('student.combos.show', $certificate->combo->slug) }}" class="btn btn-light">
-                        Xem combo
                     </a>
                 @endif
             </div>

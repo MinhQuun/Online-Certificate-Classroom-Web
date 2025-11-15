@@ -11,8 +11,7 @@ function initManualIssue() {
         return;
     }
 
-    const typeSelect = document.getElementById('manual-issue-type');
-    const studentField = buildSearchField({
+    buildSearchField({
         input: document.getElementById('manual-student-search'),
         hidden: document.getElementById('manual-student-id'),
         meta: document.getElementById('manual-student-meta'),
@@ -25,18 +24,19 @@ function initManualIssue() {
         }),
     });
 
-    const targetField = buildSearchField({
-        input: document.getElementById('manual-target-search'),
-        hidden: document.getElementById('manual-target-id'),
-        meta: document.getElementById('manual-target-meta'),
-        wrapper: document.querySelector('.cert-search[data-scope="target"]'),
-        suggestions: form.querySelector('.cert-search__suggestions[data-scope="target"]'),
+    const courseField = buildSearchField({
+        input: document.getElementById('manual-course-search'),
+        hidden: document.getElementById('manual-course-id'),
+        meta: document.getElementById('manual-course-meta'),
+        wrapper: document.querySelector('.cert-search[data-scope="course"]'),
+        suggestions: form.querySelector('.cert-search__suggestions[data-scope="course"]'),
         endpoint: form.dataset.courseSource,
         formatter: (item) => ({
             label: item.label,
             meta: item.slug ? `Slug: ${item.slug}` : '',
         }),
     });
+    courseField.setPlaceholder('Nhập tên khóa học');
 
     const resetButtons = form.querySelectorAll('.cert-search__clear');
     resetButtons.forEach((button) => {
@@ -52,7 +52,7 @@ function initManualIssue() {
             if (input) input.value = '';
             if (hidden) hidden.value = '';
             if (meta) {
-                meta.textContent = wrapper?.dataset.scope === 'student' ? 'Chưa chọn học viên' : 'Chưa chọn đối tượng';
+                meta.textContent = wrapper?.dataset.scope === 'student' ? 'Chưa chọn học viên' : 'Chưa chọn khóa học';
             }
             const suggestionBox = wrapper?.querySelector('.cert-search__suggestions');
             if (suggestionBox) {
@@ -61,19 +61,6 @@ function initManualIssue() {
             }
         });
     });
-
-    const updateTargetPlaceholder = () => {
-        const isCourse = typeSelect?.value !== 'COMBO';
-        targetField.setEndpoint(isCourse ? form.dataset.courseSource : form.dataset.comboSource);
-        targetField.setPlaceholder(isCourse ? 'Nhập tên khóa học' : 'Nhập tên combo');
-        const meta = document.getElementById('manual-target-meta');
-        if (meta) meta.textContent = 'Chưa chọn đối tượng';
-        const hidden = document.getElementById('manual-target-id');
-        if (hidden) hidden.value = '';
-    };
-
-    typeSelect?.addEventListener('change', updateTargetPlaceholder);
-    updateTargetPlaceholder();
 }
 
 function buildSearchField({ input, hidden, meta, suggestions, endpoint, formatter, wrapper }) {
@@ -149,7 +136,7 @@ function buildSearchField({ input, hidden, meta, suggestions, endpoint, formatte
 
     input.addEventListener('input', (event) => {
         hidden.value = '';
-        meta.textContent = wrapper?.dataset.scope === 'student' ? 'Chưa chọn học viên' : 'Chưa chọn đối tượng';
+        meta.textContent = wrapper?.dataset.scope === 'student' ? 'Chưa chọn học viên' : 'Chưa chọn khóa học';
         search(event.target.value.trim());
     });
 
@@ -213,11 +200,6 @@ function initRevokeModal() {
 }
 
 function initTemplateModals() {
-    document.querySelectorAll('.template-type-select').forEach((select) => {
-        updateTemplateTargets(select);
-        select.addEventListener('change', () => updateTemplateTargets(select));
-    });
-
     const editModal = document.getElementById('editTemplateModal');
     if (!editModal) {
         return;
@@ -231,38 +213,11 @@ function initTemplateModals() {
         form?.setAttribute('action', button.getAttribute('data-action') || '#');
 
         setInputValue('edit-template-name', button.getAttribute('data-template-name'));
-        setSelectValue('edit-template-type', button.getAttribute('data-template-type'));
         setSelectValue('edit-template-status', button.getAttribute('data-template-status'));
         setSelectValue('edit-template-course', button.getAttribute('data-template-course'));
-        setSelectValue('edit-template-combo', button.getAttribute('data-template-combo'));
         setInputValue('edit-template-url', button.getAttribute('data-template-url'));
         setTextareaValue('edit-template-description', button.getAttribute('data-template-description'));
         setTextareaValue('edit-template-design', normaliseJson(button.getAttribute('data-template-design')));
-
-        const typeSelect = document.getElementById('edit-template-type');
-        updateTemplateTargets(typeSelect);
-    });
-}
-
-function updateTemplateTargets(select) {
-    if (!select) return;
-    const group = select.dataset.group;
-    const isCourse = select.value !== 'COMBO';
-    const modal = select.closest('.modal');
-    if (!modal) return;
-
-    modal.querySelectorAll(`.template-target[data-group="${group}"]`).forEach((block) => {
-        const target = block.dataset.target;
-        const control = block.querySelector('select');
-        if (!control) return;
-        if ((isCourse && target === 'course') || (!isCourse && target === 'combo')) {
-            block.classList.remove('d-none');
-            control.disabled = false;
-        } else {
-            block.classList.add('d-none');
-            control.disabled = true;
-            control.value = '';
-        }
     });
 }
 

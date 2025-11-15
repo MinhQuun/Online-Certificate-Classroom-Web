@@ -83,17 +83,6 @@
         <div class="card-body">
             <form class="row g-3 align-items-end" action="{{ route('admin.certificates.index') }}" method="get">
                 <div class="col-md-3">
-                    <label for="filter-type" class="form-label">Loại chứng chỉ</label>
-                    <select class="form-select" id="filter-type" name="type">
-                        <option value="">— Tất cả —</option>
-                        @foreach ($typeLabels as $key => $label)
-                            <option value="{{ $key }}" {{ $filters['type'] === $key ? 'selected' : '' }}>
-                                {{ $label }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-3">
                     <label for="filter-status" class="form-label">Trạng thái</label>
                     <select class="form-select" id="filter-status" name="status">
                         <option value="">— Tất cả —</option>
@@ -174,21 +163,12 @@
                                 </div>
                             </td>
                             <td>
-                                @if ($certificate->loaiCC === Certificate::TYPE_COURSE)
-                                    <div class="badge rounded-pill bg-light text-dark mb-1">
-                                        Khóa học
-                                    </div>
-                                    <div class="fw-medium">
-                                        {{ $certificate->course?->tenKH ?? 'Đã xóa' }}
-                                    </div>
-                                @else
-                                    <div class="badge rounded-pill bg-light text-dark mb-1">
-                                        Combo
-                                    </div>
-                                    <div class="fw-medium">
-                                        {{ $certificate->combo?->tenGoi ?? 'Đã xóa' }}
-                                    </div>
-                                @endif
+                                <div class="badge rounded-pill bg-light text-dark mb-1">
+                                    Khóa học
+                                </div>
+                                <div class="fw-medium">
+                                    {{ $certificate->course?->tenKH ?? 'Đã xóa' }}
+                                </div>
                             </td>
                             <td>
                                 <span class="badge {{ $certificate->issue_mode === Certificate::ISSUE_MODE_AUTO ? 'bg-primary-subtle text-primary-emphasis' : 'bg-warning-subtle text-warning-emphasis' }}">
@@ -258,7 +238,7 @@
     </div>
 
     <div class="row g-4 mt-4">
-        <div class="col-12 col-xxl-7">
+        <div class="col-12">
             <section class="card certificate-policy">
                 <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
                     <div>
@@ -333,86 +313,13 @@
                 </div>
             </section>
         </div>
-        <div class="col-12 col-xxl-5">
-            <section class="card certificate-policy">
-                <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
-                    <div>
-                        <h2 class="card-title mb-0">Chính sách combo</h2>
-                        <small class="text-muted">Bật/tắt cấp chứng chỉ combo</small>
-                    </div>
-                    <div class="policy-search">
-                        <input
-                            type="text"
-                            class="form-control cert-policy-search"
-                            placeholder="Tìm combo..."
-                            data-policy-target="#combo-policy-table"
-                        >
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table align-middle" id="combo-policy-table">
-                        <thead>
-                            <tr>
-                                <th>Combo</th>
-                                <th>Cho phép cấp</th>
-                                <th class="text-end">Cập nhật</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($comboPolicies as $combo)
-                                <tr data-policy-row data-name="{{ Str::lower($combo->tenGoi . ' ' . $combo->slug) }}">
-                                    <td>
-                                        <div class="fw-semibold">{{ $combo->tenGoi }}</div>
-                                        <div class="text-muted small">{{ $combo->slug }}</div>
-                                    </td>
-                                    <td>
-                                        <form
-                                            class="d-flex align-items-center justify-content-between gap-3 flex-wrap"
-                                            action="{{ route('admin.certificates.combos.policy', $combo) }}"
-                                            method="post"
-                                        >
-                                            @csrf
-                                            @method('PUT')
-                                            <div class="form-check form-switch m-0">
-                                                <input type="hidden" name="certificate_enabled" value="0">
-                                                <input
-                                                    type="checkbox"
-                                                    class="form-check-input"
-                                                    name="certificate_enabled"
-                                                    value="1"
-                                                    {{ $combo->certificate_enabled ? 'checked' : '' }}
-                                                >
-                                            </div>
-                                            <div class="d-flex align-items-center gap-2 flex-grow-1">
-                                                <input
-                                                    type="number"
-                                                    class="form-control form-control-sm"
-                                                    name="certificate_progress_required"
-                                                    min="0"
-                                                    max="100"
-                                                    value="{{ $combo->certificate_progress_required }}"
-                                                >
-                                                <span class="text-muted small">%</span>
-                                            </div>
-                                            <button class="btn btn-sm btn-outline-primary ms-auto">
-                                                Lưu
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        </div>
     </div>
 
     <section class="card certificate-templates mt-4">
         <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-3">
             <div>
                 <h2 class="card-title mb-0">Thư viện mẫu chứng chỉ</h2>
-                <small class="text-muted">Quản lý template cho khóa học và combo</small>
+                <small class="text-muted">Quản lý template cho khóa học</small>
             </div>
             <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createTemplateModal">
                 <i class="bi bi-plus-circle me-1"></i> Thêm mẫu mới
@@ -423,7 +330,6 @@
                 <thead>
                     <tr>
                         <th>Mẫu</th>
-                        <th>Loại</th>
                         <th>Áp dụng</th>
                         <th>Trạng thái</th>
                         <th>Cập nhật</th>
@@ -438,16 +344,7 @@
                                 <div class="text-muted small">{{ $template->moTa }}</div>
                             </td>
                             <td>
-                                <span class="badge bg-light text-dark">
-                                    {{ $typeLabels[$template->loaiTemplate] ?? $template->loaiTemplate }}
-                                </span>
-                            </td>
-                            <td>
-                                @if ($template->loaiTemplate === CertificateTemplate::TYPE_COURSE)
-                                    {{ $template->course?->tenKH ?? 'Mặc định cho tất cả khóa' }}
-                                @else
-                                    {{ $template->combo?->tenGoi ?? 'Mặc định cho tất cả combo' }}
-                                @endif
+                                {{ $template->course?->tenKH ?? 'Mặc định cho tất cả khóa' }}
                             </td>
                             <td>
                                 <span class="badge bg-secondary-subtle text-secondary-emphasis">
@@ -471,9 +368,7 @@
                                     data-action="{{ route('admin.certificates.templates.update', $template) }}"
                                     data-template-id="{{ $template->maTemplate }}"
                                     data-template-name="{{ $template->tenTemplate }}"
-                                    data-template-type="{{ $template->loaiTemplate }}"
                                     data-template-course="{{ $template->maKH }}"
-                                    data-template-combo="{{ $template->maGoi }}"
                                     data-template-status="{{ $template->trangThai }}"
                                     data-template-url="{{ $template->template_url }}"
                                     data-template-description="{{ $template->moTa }}"
@@ -502,7 +397,6 @@
                 id="manual-issue-form"
                 data-student-source="{{ route('admin.certificates.search.students') }}"
                 data-course-source="{{ route('admin.certificates.search.courses') }}"
-                data-combo-source="{{ route('admin.certificates.search.combos') }}"
             >
                 @csrf
                 <div class="modal-header">
@@ -511,18 +405,11 @@
                 </div>
                 <div class="modal-body">
                     <div class="row g-3">
-                        <div class="col-md-4">
-                            <label class="form-label" for="manual-issue-type">Loại chứng chỉ</label>
-                            <select class="form-select" id="manual-issue-type" name="issue_type">
-                                <option value="{{ Certificate::TYPE_COURSE }}">Khóa học</option>
-                                <option value="{{ Certificate::TYPE_COMBO }}">Combo</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label class="form-label" for="manual-issued-at">Ngày cấp</label>
                             <input type="datetime-local" class="form-control" name="issued_at" id="manual-issued-at">
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label class="form-label" for="manual-title">Tiêu đề</label>
                             <input type="text" class="form-control" name="title" id="manual-title" maxlength="100">
                         </div>
@@ -551,25 +438,25 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Khóa học / Combo</label>
-                            <div class="cert-search" data-scope="target">
+                            <label class="form-label">Khóa học</label>
+                            <div class="cert-search" data-scope="course">
                                 <div class="cert-search__control">
                                     <input
                                         type="text"
                                         class="form-control"
-                                        id="manual-target-search"
+                                        id="manual-course-search"
                                         placeholder="Nhập tên khóa học"
                                         autocomplete="off"
                                     >
-                                    <button type="button" class="btn btn-link cert-search__clear" data-target="manual-target-search" aria-label="Xóa đối tượng">
+                                    <button type="button" class="btn btn-link cert-search__clear" data-target="manual-course-search" aria-label="Xóa khóa học">
                                         <i class="bi bi-x-lg"></i>
                                     </button>
                                 </div>
-                                <input type="hidden" name="target_id" id="manual-target-id">
-                                <div class="cert-search__meta text-muted small" id="manual-target-meta">
-                                    Chưa chọn đối tượng
+                                <input type="hidden" name="course_id" id="manual-course-id">
+                                <div class="cert-search__meta text-muted small" id="manual-course-meta">
+                                    Chưa chọn khóa học
                                 </div>
-                                <div class="cert-search__suggestions" data-scope="target"></div>
+                                <div class="cert-search__suggestions" data-scope="course"></div>
                             </div>
                         </div>
                     </div>
@@ -620,14 +507,7 @@
                             <label class="form-label" for="create-template-name">Tên mẫu</label>
                             <input type="text" class="form-control" name="tenTemplate" id="create-template-name" required maxlength="150">
                         </div>
-                        <div class="col-md-3">
-                            <label class="form-label" for="create-template-type">Loại</label>
-                            <select class="form-select template-type-select" id="create-template-type" name="loaiTemplate" data-group="create">
-                                <option value="{{ CertificateTemplate::TYPE_COURSE }}">Khóa học</option>
-                                <option value="{{ CertificateTemplate::TYPE_COMBO }}">Combo</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                             <label class="form-label" for="create-template-status">Trạng thái</label>
                             <select class="form-select" id="create-template-status" name="trangThai">
                                 @foreach ($templateStatuses as $value => $label)
@@ -637,21 +517,12 @@
                         </div>
                     </div>
                     <div class="row g-3 mt-1">
-                        <div class="col-md-6 template-target" data-group="create" data-target="course">
+                        <div class="col-md-6">
                             <label class="form-label" for="create-template-course">Khóa học áp dụng</label>
                             <select class="form-select" id="create-template-course" name="maKH">
-                                <option value="">— Tất cả khóa học —</option>
+                                <option value="">- Tất cả khóa học -</option>
                                 @foreach ($coursePolicies as $course)
                                     <option value="{{ $course->maKH }}">{{ $course->tenKH }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6 template-target d-none" data-group="create" data-target="combo">
-                            <label class="form-label" for="create-template-combo">Combo áp dụng</label>
-                            <select class="form-select" id="create-template-combo" name="maGoi" disabled>
-                                <option value="">— Tất cả combo —</option>
-                                @foreach ($comboPolicies as $combo)
-                                    <option value="{{ $combo->maGoi }}">{{ $combo->tenGoi }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -692,14 +563,7 @@
                             <label class="form-label" for="edit-template-name">Tên mẫu</label>
                             <input type="text" class="form-control" name="tenTemplate" id="edit-template-name" required maxlength="150">
                         </div>
-                        <div class="col-md-3">
-                            <label class="form-label" for="edit-template-type">Loại</label>
-                            <select class="form-select template-type-select" id="edit-template-type" name="loaiTemplate" data-group="edit">
-                                <option value="{{ CertificateTemplate::TYPE_COURSE }}">Khóa học</option>
-                                <option value="{{ CertificateTemplate::TYPE_COMBO }}">Combo</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                             <label class="form-label" for="edit-template-status">Trạng thái</label>
                             <select class="form-select" id="edit-template-status" name="trangThai">
                                 @foreach ($templateStatuses as $value => $label)
@@ -709,21 +573,12 @@
                         </div>
                     </div>
                     <div class="row g-3 mt-1">
-                        <div class="col-md-6 template-target" data-group="edit" data-target="course">
+                        <div class="col-md-6">
                             <label class="form-label" for="edit-template-course">Khóa học áp dụng</label>
                             <select class="form-select" id="edit-template-course" name="maKH">
-                                <option value="">— Tất cả khóa học —</option>
+                                <option value="">- Tất cả khóa học -</option>
                                 @foreach ($coursePolicies as $course)
                                     <option value="{{ $course->maKH }}">{{ $course->tenKH }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6 template-target d-none" data-group="edit" data-target="combo">
-                            <label class="form-label" for="edit-template-combo">Combo áp dụng</label>
-                            <select class="form-select" id="edit-template-combo" name="maGoi" disabled>
-                                <option value="">— Tất cả combo —</option>
-                                @foreach ($comboPolicies as $combo)
-                                    <option value="{{ $combo->maGoi }}">{{ $combo->tenGoi }}</option>
                                 @endforeach
                             </select>
                         </div>

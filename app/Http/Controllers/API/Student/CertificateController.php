@@ -21,7 +21,6 @@ class CertificateController extends Controller
 
         $filters = [
             'status' => strtoupper((string) $request->query('status', '')),
-            'type'   => strtoupper((string) $request->query('type', '')),
             'search' => trim((string) $request->query('q', '')),
         ];
 
@@ -29,7 +28,7 @@ class CertificateController extends Controller
         $perPage = max(5, min(30, $perPage));
 
         $query = Certificate::query()
-            ->with(['course', 'combo'])
+            ->with(['course'])
             ->where('maHV', $user->student->maHV);
 
         if (in_array($filters['status'], [
@@ -40,20 +39,12 @@ class CertificateController extends Controller
             $query->where('trangThai', $filters['status']);
         }
 
-        if (in_array($filters['type'], [
-            Certificate::TYPE_COURSE,
-            Certificate::TYPE_COMBO,
-        ], true)) {
-            $query->where('loaiCC', $filters['type']);
-        }
-
         if ($filters['search'] !== '') {
             $keyword = '%' . $filters['search'] . '%';
             $query->where(function ($builder) use ($keyword) {
                 $builder->where('code', 'like', $keyword)
                     ->orWhere('tenCC', 'like', $keyword)
-                    ->orWhereHas('course', fn ($sub) => $sub->where('tenKH', 'like', $keyword))
-                    ->orWhereHas('combo', fn ($sub) => $sub->where('tenGoi', 'like', $keyword));
+                    ->orWhereHas('course', fn ($sub) => $sub->where('tenKH', 'like', $keyword));
             });
         }
 
@@ -88,7 +79,7 @@ class CertificateController extends Controller
             ], 404);
         }
 
-        $certificate->loadMissing(['course', 'combo']);
+        $certificate->loadMissing(['course']);
 
         return response()->json([
             'status'  => 'success',
@@ -140,13 +131,6 @@ class CertificateController extends Controller
                     'id'   => $certificate->course->maKH,
                     'name' => $certificate->course->tenKH,
                     'slug' => $certificate->course->slug,
-                ]
-                : null,
-            'combo'         => $certificate->combo
-                ? [
-                    'id'   => $certificate->combo->maGoi,
-                    'name' => $certificate->combo->tenGoi,
-                    'slug' => $certificate->combo->slug,
                 ]
                 : null,
             'can_download'  => $certificate->trangThai === Certificate::STATUS_ISSUED && (bool) $certificate->pdf_url,
