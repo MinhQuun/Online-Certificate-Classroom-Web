@@ -1,6 +1,5 @@
 ﻿<?php
 
-use App\Http\Controllers\API\Student\ActivationController;
 use App\Http\Controllers\API\Student\AuthController;
 use App\Http\Controllers\API\Student\CartController as StudentCartController;
 use App\Http\Controllers\API\Student\CheckoutController as StudentCheckoutController;
@@ -35,8 +34,6 @@ Route::prefix('v1')->group(function () {
 
         Route::middleware('auth:sanctum')->group(function () {
             Route::post('logout', [AuthController::class, 'logout']);
-            Route::post('activations', [ActivationController::class, 'store']);
-
             Route::get('profile', [ProfileController::class, 'me']);
             Route::put('profile', [ProfileController::class, 'update']);
 

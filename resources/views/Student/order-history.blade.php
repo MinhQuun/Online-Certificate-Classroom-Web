@@ -110,11 +110,6 @@
                                                                     <i class="fa-solid fa-circle-check"></i>
                                                                     Đã kích hoạt
                                                                 </span>
-                                                            @elseif($item->enrollment->trangThai === 'PENDING')
-                                                                <span class="status-badge status-pending">
-                                                                    <i class="fa-solid fa-clock"></i>
-                                                                    Chờ kích hoạt
-                                                                </span>
                                                             @elseif($item->enrollment->trangThai === 'EXPIRED')
                                                                 <span class="status-badge status-expired">
                                                                     <i class="fa-solid fa-circle-xmark"></i>

@@ -1,4 +1,4 @@
-/* Course detail styling - Modern & Enhanced */
+﻿/* Course detail styling - Modern & Enhanced */
 .course-hero {
     position: relative;
     padding: 40px 0 60px; /* Giảm padding-top xuống 40px */
@@ -1866,20 +1866,6 @@
     font-size: 18px;
 }
 
-/* Note cho pending - đã có, giữ nguyên hoặc điều chỉnh nhẹ */
-.course-sidebar__note--pending {
-    background: rgba(250, 204, 21, 0.12);
-    color: #b45309;
-    border-radius: 12px;
-    padding: 12px 14px;
-    font-size: 14px;
-}
-
-.course-sidebar__note--pending a {
-    color: #b45309;
-    text-decoration: underline;
-}
-/* === CTA trạng thái khóa học trong sidebar === */
 
 /* ĐÃ KÍCH HOẠT (xanh lá) */
 .course-sidebar__cta .btn--primary.btn--owned,

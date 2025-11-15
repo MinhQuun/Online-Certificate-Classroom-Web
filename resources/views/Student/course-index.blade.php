@@ -110,11 +110,10 @@
                                 @php
                                     $inCart = in_array($course->maKH, $cartIds ?? [], true);
                                     $isActive = in_array($course->maKH, $activeCourseIds ?? [], true);
-                                    $isPending = in_array($course->maKH, $pendingCourseIds ?? [], true);
-                                    if ($isActive || $isPending) {
+                                    if ($isActive) {
                                         $inCart = false;
                                     }
-                                    $ctaClass = $isActive ? 'course-card__cta--active' : ($isPending ? 'course-card__cta--pending' : ($inCart ? 'course-card__cta--in-cart' : ''));
+                                    $ctaClass = $isActive ? 'course-card__cta--active' : ($inCart ? 'course-card__cta--in-cart' : '');
                                     $promotion = $course->active_promotion;
                                     $hasPromotion = $course->saving_amount > 0;
                                     $promotionLabel = $promotion?->tenKM;
@@ -184,24 +183,32 @@
                                                 </div>
                                             </div>
 
-                                            {{-- NÚT CTA: RIÊNG BIỆT, KHÔNG NẰM TRONG <a> --}}
+                                            @php
+                                                $ariaLabel = $isActive 
+                                                    ? 'Đã kích hoạt' 
+                                                    : ($inCart 
+                                                        ? 'Đã trong giỏ hàng' 
+                                                        : 'Thêm ' . $course->tenKH . ' vào giỏ hàng'
+                                                    );
+                                            @endphp
+
                                             <button
                                                 type="button"
                                                 class="course-card__cta {{ $ctaClass }}"
-                                                @if($isActive || $isPending || $inCart) disabled @endif
+                                                @if($isActive || $inCart) disabled @endif
                                                 data-add-to-cart="{{ $course->maKH }}"
                                                 data-cart-adding-label="Đang thêm..."
                                                 data-cart-added-label="Đã trong giỏ hàng"
-                                                aria-label="{{ $isActive ? 'Đã kích hoạt' : ($isPending ? 'Chờ kích hoạt' : ($inCart ? 'Đã trong giỏ hàng' : 'Thêm ' . $course->tenKH . ' vào giỏ hàng')) }}"
+                                                aria-label="{{ $ariaLabel }}"
                                             >
-                                                {{ $isActive ? 'Đã kích hoạt' : ($isPending ? 'Chờ kích hoạt' : ($inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng')) }}
+                                                {{ $isActive ? 'Đã kích hoạt' : ($inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng') }}
                                             </button>
                                         </div>
                                     </div>
                                 </article>
 
                                 {{-- FORM ẨN: NẰM NGOÀI CARD --}}
-                                @if (!$isActive && !$isPending && !$inCart)
+                                @if (!$isActive && !$inCart)
                                     <form method="post" action="{{ route('student.cart.store') }}" class="cart-form d-none" data-course-id="{{ $course->maKH }}">
                                         @csrf
                                         <input type="hidden" name="course_id" value="{{ $course->maKH }}">
@@ -230,3 +237,4 @@
     <script src="{{ asset('js/Student/course-index.js') }}" defer></script>
     <script src="{{ asset('js/Student/home-index.js') }}"></script>
 @endpush
+

@@ -150,26 +150,12 @@ class VNPayController extends Controller
                 $overrides
             );
 
-            if (
-                !empty($finalized['course_activation_packages']) ||
-                !empty($finalized['combo_activation_packages'])
-            ) {
-                $this->orderService->dispatchActivationEmails(
-                    $finalized['user'],
-                    $finalized['student'],
-                    $finalized['course_activation_packages'] ?? [],
-                    $finalized['combo_activation_packages'] ?? []
-                );
-            }
-
             $transaction->trangThai = PaymentTransaction::STATUS_PAID;
             $transaction->paid_at = now();
             $transaction->maHD = $finalized['invoice']->maHD ?? null;
             $transaction->vnp_response_code = $payload['vnp_ResponseCode'] ?? null;
             $transaction->vnp_transaction_no = $payload['vnp_TransactionNo'] ?? null;
 
-            $snapshot['pending_activation_courses'] = $finalized['pending_activation_courses'] ?? [];
-            $snapshot['pending_activation_combos'] = $finalized['pending_activation_combos'] ?? [];
             $snapshot['already_active_courses'] = $finalized['already_active_courses'] ?? [];
             $snapshot['course_total'] = $snapshot['course_total'] ?? ($finalized['course_total'] ?? 0);
             $snapshot['combo_total'] = $snapshot['combo_total'] ?? ($finalized['combo_total'] ?? 0);
@@ -179,8 +165,6 @@ class VNPayController extends Controller
         } else {
             $finalized = [
                 'invoice' => $transaction->invoice,
-                'pending_activation_courses' => $snapshot['pending_activation_courses'] ?? [],
-                'pending_activation_combos' => $snapshot['pending_activation_combos'] ?? [],
                 'already_active_courses' => $snapshot['already_active_courses'] ?? [],
                 'course_total' => $snapshot['course_total'] ?? 0,
                 'combo_total' => $snapshot['combo_total'] ?? 0,

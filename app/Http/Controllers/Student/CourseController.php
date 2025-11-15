@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Category;
 use App\Models\CourseReview;
 use App\Support\Cart\StudentCart;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -45,7 +46,6 @@ class CourseController extends Controller
             'currentCategory'    => $currentCategory,
             'enrolledCourseIds'  => $enrollment['enrolledCourseIds'],
             'activeCourseIds'    => $enrollment['activeCourseIds'],
-            'pendingCourseIds'   => $enrollment['pendingCourseIds'],
         ]);
     }
 
@@ -72,10 +72,8 @@ class CourseController extends Controller
         $cartIds = StudentCart::ids();
         $enrollment = $this->resolveStudentEnrollment();
         $activeCourseIds = $enrollment['activeCourseIds'];
-        $pendingCourseIds = $enrollment['pendingCourseIds'];
         $isAuthenticated = $enrollment['isAuthenticated'];
         $isEnrolled = in_array($course->maKH, $activeCourseIds, true);
-        $isPending = in_array($course->maKH, $pendingCourseIds, true);
 
         // Load student's best scores for each minitest
         $miniTestScores = [];
@@ -156,10 +154,8 @@ class CourseController extends Controller
             'relatedCourses'  => $relatedCourses,
             'isAuthenticated' => $isAuthenticated,
             'isEnrolled'      => $isEnrolled,
-            'isPending'       => $isPending,
             'enrolledCourseIds' => $activeCourseIds,
             'activeCourseIds'   => $activeCourseIds,
-            'pendingCourseIds'  => $pendingCourseIds,
             'miniTestScores'  => $miniTestScores,
             'courseReviews'   => $courseReviews,
             'ratingSummary'   => [
@@ -178,7 +174,6 @@ class CourseController extends Controller
             'student'           => null,
             'enrolledCourseIds' => [],
             'activeCourseIds'   => [],
-            'pendingCourseIds'  => [],
         ];
 
         $userId = Auth::id();
@@ -197,28 +192,27 @@ class CourseController extends Controller
 
         $result['student'] = $student;
 
-      
         $rows = DB::table('hocvien_khoahoc')
-            ->select('maKH', 'trangThai', 'maGoi')
+            ->select('maKH', 'trangThai', 'maGoi', 'ngayNhapHoc', 'activated_at')
             ->where('maHV', $student->maHV)
             ->get();
 
         $active = [];
-        $pending = [];
         $activeComboIds = [];
+        $pendingRows = [];
 
         foreach ($rows as $row) {
             $courseId = (int) $row->maKH;
-            
-          
+
             if ($row->maGoi && $row->trangThai === 'ACTIVE') {
                 $activeComboIds[] = (int) $row->maGoi;
             }
-            
+
             if ($row->trangThai === 'ACTIVE') {
                 $active[] = $courseId;
             } elseif ($row->trangThai === 'PENDING') {
-                $pending[] = $courseId;
+                $pendingRows[$courseId] = $row;
+                $active[] = $courseId;
             }
         }
 
@@ -232,10 +226,54 @@ class CourseController extends Controller
             $active = array_unique(array_merge($active, $comboCoursesIds));
         }
 
+        if (!empty($pendingRows)) {
+            $this->activatePendingEnrollments($student->maHV, $pendingRows);
+        }
+
+        $active = array_values(array_unique($active));
+
         $result['enrolledCourseIds'] = $active;
         $result['activeCourseIds'] = $active;
-        $result['pendingCourseIds'] = $pending;
 
         return $result;
+    }
+
+    /**
+     * Convert legacy pending enrollments to ACTIVE so students can learn immediately.
+     *
+     * @param  int  $studentId
+     * @param  array<int,object>  $pendingRows
+     */
+    private function activatePendingEnrollments(int $studentId, array $pendingRows): void
+    {
+        $courseIds = array_keys($pendingRows);
+
+        if (empty($courseIds)) {
+            return;
+        }
+
+        $durations = DB::table('khoahoc')
+            ->whereIn('maKH', $courseIds)
+            ->pluck('thoiHanNgay', 'maKH')
+            ->map(fn($value) => (int) $value);
+
+        $now = Carbon::now();
+
+        foreach ($pendingRows as $courseId => $row) {
+            $start = $row->ngayNhapHoc ? Carbon::parse($row->ngayNhapHoc) : $now->copy();
+            $activatedAt = $row->activated_at ? Carbon::parse($row->activated_at) : $start->copy();
+            $durationDays = (int) ($durations[$courseId] ?? 0);
+            $expiresAt = $durationDays > 0 ? $activatedAt->copy()->addDays($durationDays) : null;
+
+            DB::table('hocvien_khoahoc')
+                ->where('maHV', $studentId)
+                ->where('maKH', $courseId)
+                ->update([
+                    'trangThai' => 'ACTIVE',
+                    'activated_at' => $activatedAt->toDateTimeString(),
+                    'expires_at' => $expiresAt?->toDateTimeString(),
+                    'updated_at' => $now->toDateTimeString(),
+                ]);
+        }
     }
 }

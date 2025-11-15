@@ -34,7 +34,7 @@ Laravel web platform + REST API (shared with the Flutter app [Online-Certificate
 
 ### Student
 - Browse courses/combos, preview free lessons, favorite, and read reviews.
-- Persistent cart (courses + combos) synced across devices, VNPay checkout, activation-code redemption.
+- Persistent cart (courses + combos) synced across devices and instant VNPay checkout access.
 - Lesson progress tracking, mini-tests (multiple choice, writing, speaking uploads), attempt history, result review.
 - Lesson discussions with threaded replies, soft-delete, permissions per role.
 - Profile management, password update, order history, my courses dashboard.
@@ -47,7 +47,7 @@ Laravel web platform + REST API (shared with the Flutter app [Online-Certificate
 ### Admin
 - Catalog management: categories, courses, combos, promotions.
 - User management with role assignment (Spatie Permission), contact center replies.
-- Order/invoice overview, VNPay transaction logs, activation code handling.
+- Order/invoice overview, VNPay transaction logs, enrollment + combo management.
 
 ### Shared Services
 - Laravel Sanctum API for both web SPA features and Flutter app.

@@ -194,18 +194,6 @@ class CheckoutController extends Controller
                 ->with('error', 'Hệ thống đang bận, vui lòng thử lại sau ít phút.');
         }
 
-        if (
-            !empty($finalized['course_activation_packages']) ||
-            !empty($finalized['combo_activation_packages'])
-        ) {
-            $this->orderService->dispatchActivationEmails(
-                $finalized['user'],
-                $finalized['student'],
-                $finalized['course_activation_packages'] ?? [],
-                $finalized['combo_activation_packages'] ?? []
-            );
-        }
-
         $courseTotal = (int) ($finalized['course_total'] ?? $courses->sum('hocPhi'));
         $comboTotal = (int) ($finalized['combo_total'] ?? $combos->sum(fn (Combo $combo) => $combo->sale_price));
 
@@ -338,8 +326,6 @@ class CheckoutController extends Controller
             'total' => $courseTotal + $comboTotal,
             'payment_method' => $method,
             'invoice_id' => $finalized['invoice']->maHD ?? null,
-            'pending_activation_courses' => $finalized['pending_activation_courses'] ?? [],
-            'pending_activation_combos' => $finalized['pending_activation_combos'] ?? [],
             'already_active_courses' => $finalized['already_active_courses'] ?? [],
         ];
     }

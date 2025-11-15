@@ -519,75 +519,43 @@
     color: var(--checkout-accent);
 }
 
-.checkout-activation {
-    background: rgba(59, 130, 246, 0.08);
+.checkout-status-block {
+    background: rgba(59, 130, 246, 0.06);
     border-radius: 14px;
-    padding: 14px;
+    padding: 16px 18px;
+    border: 1px solid rgba(59, 130, 246, 0.18);
 }
 
-.checkout-activation--muted {
+.checkout-status-block--muted {
     background: rgba(148, 163, 184, 0.12);
+    border-color: rgba(148, 163, 184, 0.3);
 }
 
-.checkout-activation h4 {
-    margin: 0 0 8px;
+.checkout-status-block h4 {
+    margin: 0 0 10px;
     font-size: 0.95rem;
+    color: #0f172a;
 }
 
-.checkout-activation ul {
+.checkout-status-block ul {
     margin: 0;
-    padding-left: 20px;
-    color: #1e293b;
-    font-size: 0.9rem;
-}
-
-.checkout-activation li {
-    margin-bottom: 6px;
-}
-
-.checkout-activation__combos {
+    padding-left: 0;
     list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 12px;
-}
-
-.checkout-activation__combo-item {
-    background: rgba(37, 99, 235, 0.08);
-    border-radius: 12px;
-    padding: 12px 14px;
-    border: 1px solid rgba(37, 99, 235, 0.14);
-}
-
-.checkout-activation__combo-item .combo-name {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 600;
-    color: #1e3a8a;
-    margin-bottom: 8px;
-}
-
-.checkout-activation__courses {
-    list-style: none;
-    margin: 0;
-    padding: 0;
     display: grid;
     gap: 6px;
-    color: #1e293b;
     font-size: 0.9rem;
+    color: #1e293b;
 }
 
-.checkout-activation__courses li {
+.checkout-status-block li {
     display: flex;
+    gap: 10px;
     align-items: center;
-    gap: 8px;
 }
 
-.checkout-activation__courses i {
+.checkout-status-block li i {
     color: var(--checkout-accent);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
 }
 
 .checkout-note {

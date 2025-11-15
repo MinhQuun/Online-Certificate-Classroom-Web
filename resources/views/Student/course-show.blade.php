@@ -1,4 +1,4 @@
-@extends('layouts.student')
+﻿@extends('layouts.student')
 
 @section('title', $course->tenKH)
 
@@ -88,7 +88,6 @@
     <div id="courseAccessFlags"
          data-authenticated="{{ $isAuthenticated ? '1' : '0' }}"
          data-enrolled="{{ $isEnrolled ? '1' : '0' }}"
-         data-pending="{{ $isPending ? '1' : '0' }}"
          data-free-lesson="{{ $freeLessonId ?? '' }}"
          data-free-minitest="{{ $freeMiniTestId ?? '' }}"
          hidden></div>
@@ -99,13 +98,8 @@
             @if (!$isEnrolled)
                 <div id="lockedNotice" class="course-locked-notice" role="alert" hidden>
                     <div class="course-locked-notice__content">
-                        @if($isPending)
-                            <strong>Khóa học đang chờ kích hoạt.</strong>
-                            <span>Kiểm tra email để lấy mã kích hoạt hoặc truy cập <a href="{{ route('student.activations.form') }}">Mã kích hoạt</a> để kích hoạt ngay.</span>
-                        @else
-                            <strong>Khóa học chưa được kích hoạt.</strong>
-                            <span>Bạn cần mua khóa học để mở khóa toàn bộ tài nguyên.</span>
-                        @endif
+                        <strong>Khóa học chưa được mở.</strong>
+                        <span>Bạn cần đăng ký khóa học để học toàn bộ nội dung.</span>
                     </div>
                     <button type="button" class="course-locked-notice__close" aria-label="Đóng thông báo">
                         <span aria-hidden="true">&times;</span>
@@ -281,21 +275,18 @@
                                 @endif
                             </div>
                         </div>
-                    </div>
-                    <form method="post" action="{{ route('student.cart.store') }}" class="course-sidebar__cta">
+                    </div>                    <form method="post" action="{{ route('student.cart.store') }}" class="course-sidebar__cta">
                         @csrf
                         <input type="hidden" name="course_id" value="{{ $course->maKH }}">
                         <button type="submit"
-                                class="btn btn--primary {{ $isEnrolled ? 'btn--owned' : ($isPending ? 'btn--pending' : ($isInCart ? 'btn--in-cart' : '')) }}"
+                                class="btn btn--primary {{ $isEnrolled ? 'btn--owned' : ($isInCart ? 'btn--in-cart' : '') }}"
                                 style="text-align: center; padding: 16px 24px; font-weight: 700; font-size: 16px; border-radius: 12px;"
-                                @if($isEnrolled || $isPending || $isInCart) disabled @endif>
-                            {{ $isEnrolled ? 'Đã kích hoạt' : ($isPending ? 'Chờ kích hoạt' : ($isInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng')) }}
+                                @if($isEnrolled || $isInCart) disabled @endif>
+                            {{ $isEnrolled ? 'Đã sở hữu' : ($isInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng') }}
                         </button>
                     </form>
                     @if($isEnrolled)
                         <p class="course-sidebar__note course-sidebar__note--owned">Bạn đã sở hữu khóa học này. Tất cả tài nguyên đã được mở khóa.</p>
-                    @elseif($isPending)
-                        <p class="course-sidebar__note course-sidebar__note--pending">Khóa học đang chờ kích hoạt. Hãy nhập mã tại <a href="{{ route('student.activations.form') }}">Mã kích hoạt</a> để bắt đầu học.</p>
                     @elseif($isInCart)
                         <a class="course-sidebar__link" href="{{ route('student.cart.index') }}">Đến giỏ hàng</a>
                     @endif
@@ -437,24 +428,19 @@
                 </div>
                 <div class="card-grid">
                     @foreach ($relatedCourses as $related)
-                        @php
+                                                @php
                             $categoryName = optional($related->category)->tenDanhMuc ?? 'Chương trình nổi bật';
                             $inCart = in_array($related->maKH, $cartIds ?? [], true);
                             $isActive = in_array($related->maKH, $activeCourseIds ?? [], true);
-                            $isPending = in_array($related->maKH, $pendingCourseIds ?? [], true);
-                            if ($isActive || $isPending) {
+                            if ($isActive) {
                                 $inCart = false;
                             }
                             $ctaClass = $isActive
                                 ? 'course-card__cta--active'
-                                : ($isPending
-                                    ? 'course-card__cta--pending'
-                                    : ($inCart ? 'course-card__cta--in-cart' : ''));
+                                : ($inCart ? 'course-card__cta--in-cart' : '');
                             $ctaText = $isActive
-                                ? 'Đã kích hoạt'
-                                : ($isPending
-                                    ? 'Chờ kích hoạt'
-                                    : ($inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng'));
+                                ? 'Đã sở hữu'
+                                : ($inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng');
                             $promotion = $related->active_promotion;
                             $hasPromotion = $related->saving_amount > 0;
                             $promotionLabel = $promotion?->tenKM;
@@ -522,7 +508,7 @@
                                         <button
                                             type="submit"
                                             class="course-card__cta {{ $ctaClass }}"
-                                            @if($isActive || $isPending || $inCart) disabled aria-disabled="true" @endif
+                                            @if($isActive || $inCart) disabled aria-disabled="true" @endif
                                         >
                                             {{ $ctaText }}
                                         </button>
@@ -615,9 +601,9 @@
             <div class="modal-footer border-top-0">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
                 @if($isEnrolled)
-                    <button type="button" class="btn btn-secondary px-4" disabled><i class="fas fa-check me-2"></i> Đã kích hoạt</button>
-                @elseif($isPending)
-                    <button type="button" class="btn btn-warning px-4 text-white" disabled><i class="fas fa-hourglass-half me-2"></i> Chờ kích hoạt</button>
+                    <button type="button" class="btn btn-secondary px-4" disabled><i class="fas fa-check me-2"></i> Đã sở hữu</button>
+                @elseif($isInCart)
+                    <button type="button" class="btn btn-warning px-4 text-white" disabled><i class="fas fa-hourglass-half me-2"></i> Đã trong giỏ hàng</button>
                 @else
                     <form method="post" action="{{ route('student.cart.store') }}" style="display: inline;">
                         @csrf

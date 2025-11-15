@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
@@ -60,7 +59,6 @@ class ComboController extends Controller
             'spotlightCombos' => $spotlightCombos,
             'comboCartIds' => StudentComboCart::ids(),
             'activeComboIds' => $enrollment['activeComboIds'],
-            'pendingComboIds' => $enrollment['pendingComboIds'],
         ]);
     }
 
@@ -90,7 +88,6 @@ class ComboController extends Controller
             'relatedCombos' => $relatedCombos,
             'comboInCart' => StudentComboCart::has($combo->maGoi),
             'activeComboIds' => $enrollment['activeComboIds'],
-            'pendingComboIds' => $enrollment['pendingComboIds'],
         ]);
     }
 
@@ -103,7 +100,6 @@ class ComboController extends Controller
             'isAuthenticated'  => false,
             'student'          => null,
             'activeComboIds'   => [],
-            'pendingComboIds'  => [],
         ];
 
         $userId = Auth::id();
@@ -130,20 +126,16 @@ class ComboController extends Controller
             ->get();
 
         $active = [];
-        $pending = [];
 
         foreach ($comboEnrollments as $enrollment) {
             $comboId = (int) $enrollment->maGoi;
             
-            if ($enrollment->trangThai === 'ACTIVE') {
+            if ($enrollment->trangThai === 'ACTIVE' || $enrollment->trangThai === 'PENDING') {
                 $active[] = $comboId;
-            } elseif ($enrollment->trangThai === 'PENDING') {
-                $pending[] = $comboId;
             }
         }
 
         $result['activeComboIds'] = array_unique($active);
-        $result['pendingComboIds'] = array_unique($pending);
 
         return $result;
     }

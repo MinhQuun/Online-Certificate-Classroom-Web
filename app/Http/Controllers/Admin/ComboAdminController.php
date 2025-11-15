@@ -1,10 +1,7 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
-
 use App\Http\Controllers\Controller;
 use App\Models\Combo;
-use App\Models\ComboActivationCode;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\PaymentTransaction;
@@ -233,10 +230,6 @@ class ComboAdminController extends Controller
                 $parts[] = $usage['transaction'] . ' giao dịch thanh toán';
             }
 
-            if ($usage['activation'] > 0) {
-                $parts[] = $usage['activation'] . ' mã kích hoạt combo';
-            }
-
             $reason = !empty($parts)
                 ? 'Phát sinh: ' . implode(', ', $parts) . '.'
                 : '';
@@ -270,16 +263,11 @@ class ComboAdminController extends Controller
         $transactionCount = PaymentTransaction::where('maGoi', $combo->maGoi)
             ->whereIn('trangThai', [PaymentTransaction::STATUS_PENDING, PaymentTransaction::STATUS_PAID])
             ->count();
-        $activationCount = ComboActivationCode::where('maGoi', $combo->maGoi)
-            ->whereIn('trangThai', ['CREATED', 'SENT', 'USED'])
-            ->count();
-
         return [
             'invoice' => $invoiceCount,
             'enrollment' => $enrollmentCount,
             'transaction' => $transactionCount,
-            'activation' => $activationCount,
-            'locked' => ($invoiceCount + $enrollmentCount + $transactionCount + $activationCount) > 0,
+            'locked' => ($invoiceCount + $enrollmentCount + $transactionCount) > 0,
         ];
     }
 

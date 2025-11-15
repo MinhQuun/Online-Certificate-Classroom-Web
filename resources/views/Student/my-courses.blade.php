@@ -1,4 +1,4 @@
-@extends('layouts.student')
+﻿@extends('layouts.student')
 
 @section('title', 'Khóa học của tôi')
 
@@ -35,11 +35,6 @@
                 <span class="tab-label">Đang học</span>
                 <span class="tab-count">{{ $counts['active'] }}</span>
             </a>
-            <a href="{{ route('student.my-courses', ['status' => 'pending']) }}"
-               class="tab {{ $status === 'pending' ? 'active' : '' }}">
-                <span class="tab-label">Chờ kích hoạt</span>
-                <span class="tab-count">{{ $counts['pending'] }}</span>
-            </a>
             <a href="{{ route('student.my-courses', ['status' => 'expired']) }}"
                class="tab {{ $status === 'expired' ? 'active' : '' }}">
                 <span class="tab-label">Đã hết hạn</span>
@@ -53,15 +48,15 @@
                 @foreach($enrollments as $enrollment)
                     @php
                         $course = $enrollment->course;
-                        $statusClass = match($enrollment->trangThai) {
+                                                $statusClass = match($enrollment->trangThai) {
                             'ACTIVE' => 'active',
-                            'PENDING' => 'pending',
+                            'PENDING' => 'active',
                             'EXPIRED' => 'expired',
                             default => 'unknown'
                         };
-                        $statusLabel = match($enrollment->trangThai) {
+                                                $statusLabel = match($enrollment->trangThai) {
                             'ACTIVE' => 'Đang học',
-                            'PENDING' => 'Chờ kích hoạt',
+                            'PENDING' => 'Đang học',
                             'EXPIRED' => 'Đã hết hạn',
                             default => 'Không xác định'
                         };
@@ -128,24 +123,19 @@
                                 @endif
                             </div>
 
-                            {{-- Actions --}}
-                            <div class="course-actions">
-                                @if($enrollment->trangThai === 'ACTIVE')
-                                    <a href="{{ route('student.courses.show', $course->slug) }}" class="btn btn-primary">
-                                        <i class="fa-solid fa-play"></i>
-                                        Tiếp tục học
-                                    </a>
-                                @elseif($enrollment->trangThai === 'PENDING')
-                                    <a href="{{ route('student.activations.form') }}" class="btn btn-warning">
-                                        <i class="fa-solid fa-key"></i>
-                                        Kích hoạt ngay
-                                    </a>
-                                @else
-                                    <a href="{{ route('student.courses.show', $course->slug) }}" class="btn btn-secondary">
-                                        <i class="fa-solid fa-eye"></i>
+            {{-- Actions --}}
+            <div class="course-actions">
+                @if(in_array($enrollment->trangThai, ['ACTIVE', 'PENDING'], true))
+                    <a href="{{ route('student.courses.show', $course->slug) }}" class="btn btn-primary">
+                        <i class="fa-solid fa-play"></i>
+                        Tiếp tục học
+                    </a>
+                @else
+                    <a href="{{ route('student.courses.show', $course->slug) }}" class="btn btn-secondary">
+                        <i class="fa-solid fa-eye"></i>
                                         Xem chi tiết
-                                    </a>
-                                @endif
+                    </a>
+                @endif  
                             </div>
                         </div>
                     </article>
@@ -170,8 +160,6 @@
                         Bạn chưa đăng ký khóa học nào. Khám phá và đăng ký ngay để bắt đầu hành trình học tập!
                     @elseif($status === 'active')
                         Bạn chưa có khóa học nào đang hoạt động.
-                    @elseif($status === 'pending')
-                        Bạn chưa có khóa học nào đang chờ kích hoạt.
                     @else
                         Bạn chưa có khóa học nào đã hết hạn.
                     @endif

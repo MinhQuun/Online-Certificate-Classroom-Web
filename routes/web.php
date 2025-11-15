@@ -52,7 +52,6 @@ use App\Http\Controllers\Student\LessonController as StudentLessonController;
 use App\Http\Controllers\Student\LessonProgressController as StudentLessonProgressController;
 use App\Http\Controllers\Student\CartController as StudentCartController;
 use App\Http\Controllers\Student\CheckoutController;
-use App\Http\Controllers\Student\ActivationController;
 use App\Http\Controllers\Student\ProgressController as StudentProgressController;
 use App\Http\Controllers\Student\MiniTestController as StudentMiniTestController;
 use App\Http\Controllers\Student\CourseReviewController as StudentCourseReviewController;
@@ -161,9 +160,6 @@ Route::name('password.')->group(function () {
 */
 Route::middleware('auth')->prefix('student')->name('student.')->group(function () {
     // Mã kích hoạt khóa học
-    Route::get('/activation-codes', [ActivationController::class, 'showForm'])->name('activations.form');
-    Route::post('/activation-codes', [ActivationController::class, 'redeem'])->name('activations.redeem');
-
     // Tiến độ học tập & tiến độ bài học
     Route::get('/progress', [StudentProgressController::class, 'index'])->name('progress.index');
     Route::post('/lessons/{lesson}/progress', [StudentLessonProgressController::class, 'store'])

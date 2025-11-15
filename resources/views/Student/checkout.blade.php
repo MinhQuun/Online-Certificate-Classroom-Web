@@ -14,9 +14,6 @@
     $comboCount = $combos instanceof \Illuminate\Support\Collection ? $combos->count() : collect($combos)->count();
     $currentUser = auth()->user();
     $successMethod = $successPayload['payment_method'] ?? null;
-    $pendingActivations = $successPayload['pending_activation_courses'] ?? [];
-    $pendingComboActivations = $successPayload['pending_activation_combos'] ?? [];
-    $pendingCourseActivations = array_values(array_filter($pendingActivations, fn ($item) => empty($item['combo_id'] ?? null)));
     $alreadyActiveCourses = $successPayload['already_active_courses'] ?? [];
 
     $methodLabels = [
@@ -79,7 +76,7 @@
                             <div class="checkout-card checkout-card--primary">
                                 <header class="checkout-card__header">
                                     <h2>Đơn hàng của bạn</h2>
-                                    <p>Vui lòng kiểm tra lại combos và khóa học trước khi tiếp tục.</p>
+                                    <p>Vui lòng kiểm tra lại combo và khóa học trước khi tiếp tục.</p>
                                 </header>
 
                                 @if($comboCount > 0)
@@ -248,7 +245,7 @@
                                             <li>
                                                 <span>02</span>
                                                 <div>
-                                                    <strong>Chuyển hướng tới VNPay</strong>
+                                                    <strong>Chuyển hướng tới VNPAY</strong>
                                                     <p>Hệ thống tạo HMAC SHA512, truyền cả vnp_ReturnUrl và vnp_IpnUrl.</p>
                                                 </div>
                                             </li>
@@ -256,14 +253,14 @@
                                                 <span>03</span>
                                                 <div>
                                                     <strong>Nhận kết quả</strong>
-                                                    <p>VNPay gọi IPN ngay khi ngân hàng xác nhận để kích hoạt khóa học tức thời.</p>
+                                                    <p>VNPAY gọi IPN ngay khi ngân hàng xác nhận để kích hoạt khóa học tức thời.</p>
                                                 </div>
                                             </li>
                                         </ul>
                                         <div class="vnpay-trust">
                                             <div>
                                                 <i class="fa-solid fa-shield"></i>
-                                                <span>Mã hóa SHA512 &amp; kiểm tra chữ ký </span>
+                                                <span>Mã hóa SHA512 &amp; kiểm tra chữ ký</span>
                                             </div>
                                             <div>
                                                 <i class="fa-solid fa-receipt"></i>
@@ -375,91 +372,12 @@
 
                             <div class="checkout-grid">
                                 <div class="checkout-success-block">
-                                    <h3>Đơn hàng</h3>
-                                    <ul class="checkout-list checkout-list--small">
-                                        @foreach($successPayload['combos'] ?? [] as $combo)
-                                            <li class="checkout-item checkout-item--mini">
-                                                <div class="checkout-item__media">
-                                                    <img src="{{ $combo['cover_image_url'] ?? asset('Assets/logo.png') }}" alt="{{ $combo['tenGoi'] }}">
-                                                </div>
-                                                <div class="checkout-item__body">
-                                                    <h4>{{ $combo['tenGoi'] }}</h4>
-                                                    <span>Combo ưu đãi</span>
-                                                </div>
-                                                <strong class="checkout-item__price">{{ number_format((int) $combo['sale_price'], 0, ',', '.') }} VND</strong>
-                                            </li>
-                                        @endforeach
-                                        @foreach($successPayload['courses'] ?? [] as $course)
-                                            <li class="checkout-item checkout-item--mini">
-                                                <div class="checkout-item__media">
-                                                    <img src="{{ $course['cover_image_url'] ?? asset('Assets/logo.png') }}" alt="{{ $course['tenKH'] }}">
-                                                </div>
-                                                <div class="checkout-item__body">
-                                                    <h4>{{ $course['tenKH'] }}</h4>
-                                                    <span>Khóa học lẻ</span>
-                                                </div>
-                                                <strong class="checkout-item__price">{{ number_format((int) $course['hocPhi'], 0, ',', '.') }} VND</strong>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-
-                                    <div class="checkout-summary">
-                                        <div>
-                                            <span>Tổng combo</span>
-                                            <strong>{{ number_format((int) ($successPayload['combo_total'] ?? 0), 0, ',', '.') }} VND</strong>
-                                        </div>
-                                        <div>
-                                            <span>Tổng khóa học</span>
-                                            <strong>{{ number_format((int) ($successPayload['course_total'] ?? 0), 0, ',', '.') }} VND</strong>
-                                        </div>
-                                        <div class="checkout-summary__total">
-                                            <span>Đã thanh toán</span>
-                                            <strong>{{ number_format((int) ($successPayload['total'] ?? 0), 0, ',', '.') }} VND</strong>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="checkout-success-block">
-                                    <h3>Mã kích hoạt</h3>
-                                    <p>Chúng tôi đã gửi mã kích hoạt đến email {{ $currentUser?->email ?? 'của bạn' }}. Bạn có thể kích hoạt khóa học trong mục “Mã kích hoạt”.</p>
-
-                                    @if(!empty($pendingComboActivations))
-                                        <div class="checkout-activation">
-                                            <h4>Combo chờ kích hoạt ({{ count($pendingComboActivations) }})</h4>
-                                            <ul class="checkout-activation__combos">
-                                                @foreach($pendingComboActivations as $combo)
-                                                    <li class="checkout-activation__combo-item">
-                                                        <div class="combo-name">
-                                                            <i class="fa-solid fa-layer-group"></i>
-                                                            {{ $combo['tenGoi'] ?? ('Combo #' . ($combo['maGoi'] ?? '')) }}
-                                                        </div>
-                                                        @if(!empty($combo['courses']))
-                                                            <ul class="checkout-activation__courses">
-                                                                @foreach($combo['courses'] as $course)
-                                                                    <li><i class="fa-solid fa-key"></i> {{ $course['tenKH'] ?? '' }}</li>
-                                                                @endforeach
-                                                            </ul>
-                                                        @endif
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    @endif
-
-                                    @if(!empty($pendingCourseActivations))
-                                        <div class="checkout-activation">
-                                            <h4>Khóa học chờ kích hoạt ({{ count($pendingCourseActivations) }})</h4>
-                                            <ul>
-                                                @foreach($pendingCourseActivations as $item)
-                                                    <li><i class="fa-solid fa-key"></i> {{ $item['tenKH'] ?? '' }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    @endif
+                                    <h3>Truy cập khóa học</h3>
+                                    <p>Khóa học/combo bạn vừa thanh toán đã được mở ngay lập tức. Hãy vào <strong>Khóa học của tôi</strong> để bắt đầu học hoặc xem chi tiết khóa học bạn vừa mua.</p>
 
                                     @if(!empty($alreadyActiveCourses))
-                                        <div class="checkout-activation checkout-activation--muted">
-                                            <h4>Đã kích hoạt trước đó</h4>
+                                        <div class="checkout-status-block checkout-status-block--muted">
+                                            <h4>Khóa học đã sở hữu</h4>
                                             <ul>
                                                 @foreach($alreadyActiveCourses as $item)
                                                     <li><i class="fa-solid fa-circle-check"></i> {{ $item['tenKH'] ?? '' }}</li>

@@ -26,6 +26,9 @@ class MyCoursesController extends Controller
 
         // Lấy filter status từ query string
         $status = $request->get('status', 'all');
+        if ($status === 'pending') {
+            $status = 'active';
+        }
         
         // Query enrollments
         $query = Enrollment::with(['course.category', 'course.teacher'])
@@ -33,7 +36,11 @@ class MyCoursesController extends Controller
         
         // Filter theo status
         if ($status !== 'all') {
-            $query->where('trangThai', strtoupper($status));
+            if ($status === 'active') {
+                $query->whereIn('trangThai', ['ACTIVE', 'PENDING']);
+            } else {
+                $query->where('trangThai', strtoupper($status));
+            }
         }
         
         // Sắp xếp theo ngày nhập học mới nhất
@@ -44,8 +51,7 @@ class MyCoursesController extends Controller
         // Đếm số lượng theo từng trạng thái
         $counts = [
             'all' => Enrollment::where('maHV', $student->maHV)->count(),
-            'active' => Enrollment::where('maHV', $student->maHV)->where('trangThai', 'ACTIVE')->count(),
-            'pending' => Enrollment::where('maHV', $student->maHV)->where('trangThai', 'PENDING')->count(),
+            'active' => Enrollment::where('maHV', $student->maHV)->whereIn('trangThai', ['ACTIVE', 'PENDING'])->count(),
             'expired' => Enrollment::where('maHV', $student->maHV)->where('trangThai', 'EXPIRED')->count(),
         ];
         
