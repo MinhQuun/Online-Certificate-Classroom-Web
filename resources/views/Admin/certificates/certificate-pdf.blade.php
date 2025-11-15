@@ -1,4 +1,4 @@
-@php
+﻿@php
     $primary = $theme['primary'] ?? '#2563eb';
     $primaryDark = $theme['primaryDark'] ?? '#1d4ed8';
     $accent = $theme['accent'] ?? '#f97316';
@@ -38,7 +38,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, rgba(15,23,42,.92), rgba(15,23,42,.78));
+            background: linear-gradient(145deg, rgba(15,23,42,.95), rgba(15,23,42,.75));
             position: relative;
             overflow: hidden;
         }
@@ -51,29 +51,30 @@
                 radial-gradient(circle at 82% 12%, rgba(249,115,22,.35), transparent 48%);
         }
         .card {
-            width: 85%;
-            padding: 70px 100px;
+            width: 80%;
+            min-height: 6.5in;
+            padding: 50px 70px;
             background: #fbfdff;
             color: #0f172a;
-            border-radius: 30px;
+            border-radius: 28px;
             position: relative;
-            box-shadow: 0 35px 70px rgba(15, 23, 42, .25);
+            box-shadow: 0 20px 60px rgba(15, 23, 42, .3);
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            gap: 20px;
         }
         .card::before,
         .card::after {
             content: '';
             position: absolute;
-            inset: 20px;
+            inset: 18px;
             border-radius: 22px;
-            border: 1px solid rgba(15,23,42,.12);
+            border: 1px solid rgba(15,23,42,.1);
             pointer-events: none;
         }
         .card::after {
-            inset: 32px;
-            border-color: rgba(148, 163, 184, .25);
+            inset: 30px;
+            border-color: rgba(148, 163, 184, .2);
         }
         .card > * { position: relative; z-index: 2; }
         .header {
@@ -109,26 +110,26 @@
         }
         .title-block p {
             margin: 0;
-            letter-spacing: .55em;
+            letter-spacing: .45em;
             color: #94a3b8;
-            font-size: 15px;
+            font-size: 13px;
         }
         .title-block h1 {
-            margin: 8px 0 0;
-            font-size: 52px;
+            margin: 6px 0 0;
+            font-size: 42px;
             letter-spacing: .08em;
         }
         .recipient {
             text-align: center;
         }
         .recipient label {
-            letter-spacing: .5em;
+            letter-spacing: .4em;
             color: #94a3b8;
-            font-size: 13px;
+            font-size: 12px;
         }
         .recipient h2 {
-            margin: 10px 0 0;
-            font-size: 46px;
+            margin: 8px 0 0;
+            font-size: 38px;
             color: {{ $primaryDark }};
         }
         .statement {
@@ -143,13 +144,13 @@
         .details {
             display: flex;
             justify-content: center;
-            gap: 28px;
+            gap: 20px;
         }
         .details .item {
-            padding: 16px 24px;
-            border-radius: 16px;
+            padding: 14px 18px;
+            border-radius: 14px;
             background: rgba(37, 99, 235, .08);
-            min-width: 200px;
+            min-width: 180px;
             text-align: center;
         }
         .details .item span {
@@ -160,29 +161,14 @@
             margin-bottom: 6px;
         }
         .details .item strong {
-            font-size: 20px;
+            font-size: 18px;
             color: #0f172a;
             letter-spacing: .08em;
         }
         .footer {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-        .signature-block {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .signature-line {
-            width: 260px;
-            height: 1px;
-            background: rgba(15,23,42,.3);
-        }
-        .signature-label {
-            letter-spacing: .3em;
-            font-size: 13px;
-            color: #94a3b8;
+            justify-content: center;
+            margin-top: 10px;
         }
         .seal {
             padding: 18px 30px;
@@ -262,11 +248,6 @@
                 </div>
             </div>
             <div class="footer">
-                <div class="signature-block">
-                    <div class="signature-line"></div>
-                    <div class="signature-label">{{ Str::upper($teacherName) }}</div>
-                    <div class="signature-label">Instructor / Academic Board</div>
-                </div>
                 <div class="seal">
                     <span>AUTHORIZED BY</span>
                     <strong>Online Certificate Classroom</strong>
@@ -276,3 +257,4 @@
     </div>
 </body>
 </html>
+
