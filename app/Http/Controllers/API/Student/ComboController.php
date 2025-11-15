@@ -18,7 +18,22 @@ class ComboController extends Controller
         $query = Combo::query()
             ->available()
             ->with(['promotions', 'courses' => function ($courseQuery) {
-                $courseQuery->select('maKH', 'tenKH', 'hocPhi', 'slug', 'maND', 'maDanhMuc');
+                $courseQuery->select(
+                    'khoahoc.maKH',
+                    'khoahoc.tenKH',
+                    'khoahoc.hocPhi',
+                    'khoahoc.slug',
+                    'khoahoc.maND',
+                    'khoahoc.maDanhMuc',
+
+                    // *** BẮT BUỘC THÊM CÁC CỘT PIVOT ***
+                    // Cột 'maGoi' để Laravel liên kết lại với Combo
+                    'goi_khoa_hoc_chitiet.maGoi',
+                    // Cột 'thuTu' từ withPivot và orderByPivot
+                    'goi_khoa_hoc_chitiet.thuTu',
+                    // Cột 'created_at' từ withPivot
+                    'goi_khoa_hoc_chitiet.created_at'
+                );
             }])
             ->withCount('courses')
             ->orderByDesc('maGoi');
@@ -32,7 +47,7 @@ class ComboController extends Controller
             });
         }
 
-        $paginator = $query->paginate($perPage);
+        $paginator = $query->paginate($perPage); // Lỗi xảy ra khi thực thi dòng này
         $items = $paginator->getCollection()
             ->map(fn (Combo $combo) => $this->transformCombo($combo))
             ->values();
@@ -58,7 +73,23 @@ class ComboController extends Controller
             ->with([
                 'courses' => function ($courseQuery) {
                     $courseQuery
-                        ->select('maKH', 'tenKH', 'slug', 'hocPhi', 'maND', 'maDanhMuc', 'thoiHanNgay')
+                    ->select(
+                        'khoahoc.maKH',
+                        'khoahoc.tenKH',
+                        'khoahoc.slug',
+                        'khoahoc.hocPhi',
+                        'khoahoc.maND',
+                        'khoahoc.maDanhMuc',
+                        'khoahoc.thoiHanNgay',
+
+                        // *** BẮT BUỘC THÊM CÁC CỘT PIVOT ***
+                        // Cột 'maGoi' để Laravel liên kết lại với Combo
+                        'goi_khoa_hoc_chitiet.maGoi',
+                        // Cột 'thuTu' từ withPivot và orderByPivot
+                        'goi_khoa_hoc_chitiet.thuTu',
+                        // Cột 'created_at' từ withPivot
+                        'goi_khoa_hoc_chitiet.created_at'
+                    )
                         ->with([
                             'teacher:maND,hoTen',
                             'category:maDanhMuc,tenDanhMuc',
