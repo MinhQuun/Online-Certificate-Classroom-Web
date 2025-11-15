@@ -13,10 +13,23 @@
     <meta charset="UTF-8">
     <title>OCC Certificate - {{ $certificate->code }}</title>
     <style>
+        @font-face {
+        font-family: 'Inter';
+        src: url("{{ storage_path('fonts/Inter_18pt-Regular.ttf') }}") format('truetype');
+        font-weight: 400;
+        font-style: normal;
+        }
+        @font-face {
+        font-family: 'Inter';
+        src: url("{{ storage_path('fonts/Inter_18pt-Bold.ttf') }}") format('truetype');
+        font-weight: 700;
+        font-style: normal;
+        }
+        
         @page { margin: 0; }
         body {
             margin: 0;
-            font-family: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: "Inter", sans-serif;
             background: #0f172a;
         }
         .wrapper {
