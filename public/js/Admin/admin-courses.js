@@ -58,6 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 e_status: "data-status",
                 e_promotion: "data-promotion-id",
                 e_promotion_price: "data-promotion-price",
+                e_certificate_enabled: "data-certificate-enabled",
+                e_certificate_progress: "data-certificate-progress",
             };
 
             Object.entries(fieldMap).forEach(([id, attr]) => {
@@ -77,6 +79,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     } else {
                         el.value = "";
                     }
+                } else if (el.type === "checkbox") {
+                    const normalized = String(value).toLowerCase();
+                    el.checked = normalized === "1" || normalized === "true";
                 } else if (el.tagName === "TEXTAREA") {
                     el.value = value || "";
                 } else if (id === "e_fee") {
@@ -86,6 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else if (id === "e_duration") {
                     el.value = value ? Number(value) : "";
                 } else if (id === "e_promotion_price") {
+                    el.value = value ? Number(value) : "";
+                } else if (id === "e_certificate_progress") {
                     el.value = value ? Number(value) : "";
                 } else {
                     el.value = value || "";

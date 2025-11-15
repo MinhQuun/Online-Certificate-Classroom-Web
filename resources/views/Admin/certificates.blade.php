@@ -383,6 +383,17 @@
                                                     {{ $combo->certificate_enabled ? 'checked' : '' }}
                                                 >
                                             </div>
+                                            <div class="d-flex align-items-center gap-2 flex-grow-1">
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control-sm"
+                                                    name="certificate_progress_required"
+                                                    min="0"
+                                                    max="100"
+                                                    value="{{ $combo->certificate_progress_required }}"
+                                                >
+                                                <span class="text-muted small">%</span>
+                                            </div>
                                             <button class="btn btn-sm btn-outline-primary ms-auto">
                                                 Lưu
                                             </button>

@@ -1,4 +1,4 @@
-﻿@extends('layouts.admin')
+@extends('layouts.admin')
 @section('title', 'Quản lý combo khóa học')
 
 @push('styles')
@@ -172,9 +172,9 @@
                                 'status' => $combo->trangThai,
                                 'image' => $combo->cover_image_url,
                                 'promotion_id' => $activePromotion?->maKM,
-                                'promotion_price' => $activePromotion && $activePromotion->pivot
-                                    ? (int) $activePromotion->pivot->giaUuDai
-                                    : null,
+                                
+                                'certificate_enabled' => (bool) $combo->certificate_enabled,
+                                'certificate_progress_required' => (int) $combo->certificate_progress_required,
                                 'courses' => $combo->courses->map(fn ($courseItem) => [
                                     'id' => $courseItem->maKH,
                                     'name' => $courseItem->tenKH,
@@ -390,88 +390,53 @@
                                             <option value="ARCHIVED" {{ old('trangThai') === 'ARCHIVED' ? 'selected' : '' }}>Lưu trữ</option>
                                         </select>
                                     </div>
-                                </div>
-                                <div class="row g-3 mt-0">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Ngày bắt đầu</label>
-                                        <input
-                                            type="date"
-                                            name="ngayBatDau"
-                                            class="form-control"
-                                            value="{{ old('ngayBatDau') }}"
-                                        >
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Ngày kết thúc</label>
-                                        <input
-                                            type="date"
-                                            name="ngayKetThuc"
-                                            class="form-control"
-                                            value="{{ old('ngayKetThuc') }}"
-                                        >
-                                    </div>
-                                </div>
-                                <div class="mt-3">
-                                    <label class="form-label">Khuyến mãi áp dụng</label>
-                                    <select name="promotion_id" class="form-select" data-promotion-select>
-                                        <option value="">-- Không áp dụng --</option>
-                                        @foreach ($promotions as $promotion)
-                                            <option
-                                                value="{{ $promotion->maKM }}"
-                                                data-type="{{ $promotion->loaiUuDai }}"
-                                                data-target="{{ $promotion->apDungCho }}"
-                                                data-value="{{ (int) round($promotion->giaTriUuDai) }}"
-                                                data-start="{{ optional($promotion->ngayBatDau)->format('Y-m-d') }}"
-                                                data-end="{{ optional($promotion->ngayKetThuc)->format('Y-m-d') }}"
+                                </div>                                <div class=\"row g-3 mt-0\">
+                                    <div class=\"col-md-6\">
+                                        <label class=\"form-label d-block\">Ch?ng ch? combo</label>
+                                        <div class=\"form-check form-switch\">
+                                            <input type=\"hidden\" name=\"certificate_enabled\" value=\"0\">
+                                            <input
+                                                type=\"checkbox\"
+                                                class=\"form-check-input\"
+                                                id=\"combo-create-certificate-enabled\"
+                                                name=\"certificate_enabled\"
+                                                value=\"1\"
+                                                {{ old('certificate_enabled', 1) ? 'checked' : '' }}
                                             >
-                                                {{ $promotion->tenKM }} ({{ $promotion->trangThai }})
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="mt-2 collapse" data-promotion-price-wrapper>
-                                    <label class="form-label">Giá ưu đãi</label>
-                                    <input
-                                        type="number"
-                                        name="promotion_price"
-                                        class="form-control"
-                                        min="0"
-                                        step="1000"
-                                        value="{{ old('promotion_price') }}"
-                                        placeholder="Giá sau ưu đãi"
-                                        data-promotion-price-input
-                                        readonly
-                                    >
-                                    <div class="form-text" data-promotion-help>
-                                        Có thể để trống để hệ thống tự tính từ loại ưu đãi.
+                                            <label class=\"form-check-label\" for=\"combo-create-certificate-enabled\">
+                                                B?t c?p ch?ng ch? khi d? di?u ki?n
+                                            </label>
+                                        </div>
+                                        <div class=\"form-text\">T?t n?u combo kh�ng c?p ch?ng ch?.</div>
+                                    </div>
+                                    <div class=\"col-md-6\">
+                                        <label class=\"form-label\" for=\"combo-create-certificate-progress\">% ti?n d? y�u c?u</label>
+                                        <div class=\"input-group\">
+                                            <input
+                                                type=\"number\"
+                                                class=\"form-control\"
+                                                id=\"combo-create-certificate-progress\"
+                                                name=\"certificate_progress_required\"
+                                                min=\"0\"
+                                                max=\"100\"
+                                                value=\"{{ old('certificate_progress_required', 100) }}\"
+                                            >
+                                            <span class=\"input-group-text\">%</span>
+                                        </div>
+                                        <div class=\"form-text\">T�nh theo % s? kh�a h?c ph?i ho�n th�nh.</div>
                                     </div>
                                 </div>
-                                <div class="combo-price-summary mt-4" data-combo-summary>
-                                    <div>
-                                        <span>Tổng học phí</span>
-                                        <strong data-combo-original>0 VND</strong>
-                                    </div>
-                                    <div>
-                                        <span>Giá combo</span>
-                                        <strong data-combo-sale>0 VND</strong>
-                                    </div>
-                                    <div>
-                                        <span>Tiết kiệm</span>
-                                        <strong data-combo-saving>0 VND</strong>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-7">
+                            <div class=\"col-lg-7\">
                                 <div class="combo-course-picker card shadow-sm">
                                     <div class="card-body">
                                         <h6 class="card-title d-flex justify-content-between align-items-center">
-                                            <span>Khóa học trong combo <span class="text-danger">*</span></span>
-                                            <span class="badge bg-primary" data-course-count>0 khóa học</span>
+                                            <span>Kh�a h?c trong combo <span class="text-danger">*</span></span>
+                                            <span class="badge bg-primary" data-course-count>0 kh�a h?c</span>
                                         </h6>
                                         <div class="row g-2 align-items-center mb-3">
                                             <div class="col-md-8">
                                                 <select class="form-select" data-course-picker>
-                                                    <option value="">-- Chọn khóa học --</option>
+                                                    <option value="">-- Ch?n kh�a h?c --</option>
                                                     @foreach ($courses as $course)
                                                         <option
                                                             value="{{ $course->maKH }}"
@@ -484,12 +449,12 @@
                                             </div>
                                             <div class="col-md-4 d-grid">
                                                 <button type="button" class="btn btn-primary" data-course-add>
-                                                    Thêm khóa học
+                                                    Th�m kh�a h?c
                                                 </button>
                                             </div>
                                         </div>
                                         <div class="combo-course-empty" data-course-empty>
-                                            <i class="bi bi-collection me-2"></i> Chưa có khóa học nào trong combo.
+                                            <i class="bi bi-collection me-2"></i> Chua c� kh�a h?c n�o trong combo.
                                         </div>
                                         <ul class="combo-course-selected" data-course-list></ul>
                                     </div>
@@ -498,10 +463,10 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">��ng</button>
                         <div class="d-flex flex-wrap gap-2">
                             <button type="submit" class="btn btn-primary" data-form-action="save_close">
-                                Lưu combo
+                                Luu combo
                             </button>
                         </div>
                     </div>
@@ -527,16 +492,16 @@
                 <input type="hidden" name="_action" value="save_close" data-action-field="combo-edit">
                     <div class="modal-header">
                         <h5 class="modal-title">
-                            <i class="bi bi-pencil-square me-2 text-primary"></i> Chỉnh sửa combo
+                            <i class="bi bi-pencil-square me-2 text-primary"></i> Ch?nh s?a combo
                         </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="��ng"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row g-4">
                             <div class="col-lg-5">
                                 <input type="hidden" name="combo_id" data-combo-id>
                                 <div class="mb-3">
-                                    <label class="form-label">Tên combo <span class="text-danger">*</span></label>
+                                    <label class="form-label">T�n combo <span class="text-danger">*</span></label>
                                     <input type="text" name="tenGoi" class="form-control" maxlength="150" required data-slug-source>
                                 </div>
                                 <div class="mb-3">
@@ -549,23 +514,23 @@
                                         data-slug-target
                                         autocomplete="off"
                                     >
-                                    <div class="form-text">Giữ nguyên nếu muốn bảo toàn đường dẫn hiện tại.</div>
+                                    <div class="form-text">Gi? nguy�n n?u mu?n b?o to�n du?ng d?n hi?n t?i.</div>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Mô tả</label>
+                                    <label class="form-label">M� t?</label>
                                     <textarea name="moTa" class="form-control" rows="4" maxlength="2000"></textarea>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Ảnh đại diện</label>
+                                    <label class="form-label">?nh d?i di?n</label>
                                     <input type="file" name="hinhanh" class="form-control" accept="image/*">
-                                    <div class="form-text">Tải ảnh mới để thay thế ảnh hiện tại.</div>
+                                    <div class="form-text">T?i ?nh m?i d? thay th? ?nh hi?n t?i.</div>
                                     <div class="mt-2 d-none" data-current-image>
                                         <img src="" alt="Preview" class="img-thumbnail" width="160">
                                     </div>
                                 </div>
                                 <div class="row g-3">
                                     <div class="col-md-6">
-                                        <label class="form-label">Giá bán combo <span class="text-danger">*</span></label>
+                                        <label class="form-label">Gi� b�n combo <span class="text-danger">*</span></label>
                                         <input
                                             type="number"
                                             name="gia"
@@ -576,31 +541,31 @@
                                             required
                                             readonly
                                         >
-                                        <div class="form-text">Tự động bằng tổng học phí các khóa đã chọn.</div>
+                                        <div class="form-text">T? d?ng b?ng t?ng h?c ph� c�c kh�a d� ch?n.</div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Trạng thái</label>
+                                        <label class="form-label">Tr?ng th�i</label>
                                         <select name="trangThai" class="form-select">
-                                            <option value="PUBLISHED">Đang mở bán</option>
-                                            <option value="DRAFT">Bản nháp</option>
-                                            <option value="ARCHIVED">Lưu trữ</option>
+                                            <option value="PUBLISHED">�ang m? b�n</option>
+                                            <option value="DRAFT">B?n nh�p</option>
+                                            <option value="ARCHIVED">Luu tr?</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="row g-3 mt-0">
                                     <div class="col-md-6">
-                                        <label class="form-label">Ngày bắt đầu</label>
+                                        <label class="form-label">Ng�y b?t d?u</label>
                                         <input type="date" name="ngayBatDau" class="form-control">
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Ngày kết thúc</label>
+                                        <label class="form-label">Ng�y k?t th�c</label>
                                         <input type="date" name="ngayKetThuc" class="form-control">
                                     </div>
                                 </div>
                                 <div class="mt-3">
-                                    <label class="form-label">Khuyến mãi áp dụng</label>
+                                    <label class="form-label">Khuy?n m�i �p d?ng</label>
                                     <select name="promotion_id" class="form-select" data-promotion-select>
-                                        <option value="">-- Không áp dụng --</option>
+                                        <option value="">-- Kh�ng �p d?ng --</option>
                                         @foreach ($promotions as $promotion)
                                             <option
                                                 value="{{ $promotion->maKM }}"
@@ -616,47 +581,81 @@
                                     </select>
                                 </div>
                                 <div class="mt-2 collapse" data-promotion-price-wrapper>
-                                    <label class="form-label">Giá ưu đãi</label>
+                                    <label class="form-label">Gi� uu d�i</label>
                                     <input
                                         type="number"
                                         name="promotion_price"
                                         class="form-control"
                                         min="0"
                                         step="1000"
-                                        placeholder="Giá sau ưu đãi"
+                                        placeholder="Gi� sau uu d�i"
                                         data-promotion-price-input
                                         readonly
                                     >
                                     <div class="form-text" data-promotion-help>
-                                        Có thể để trống để hệ thống tự tính từ loại ưu đãi.
+                                        C� th? d? tr?ng d? h? th?ng t? t�nh t? lo?i uu d�i.
                                     </div>
                                 </div>
                                 <div class="combo-price-summary mt-4" data-combo-summary>
                                     <div>
-                                        <span>Tổng học phí</span>
+                                        <span>T?ng h?c ph�</span>
                                         <strong data-combo-original>0 VND</strong>
                                     </div>
                                     <div>
-                                        <span>Giá combo</span>
+                                        <span>Gi� combo</span>
                                         <strong data-combo-sale>0 VND</strong>
                                     </div>
                                     <div>
-                                        <span>Tiết kiệm</span>
+                                        <span>Ti?t ki?m</span>
                                         <strong data-combo-saving>0 VND</strong>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-7">
+                                                        <div class=\"row g-3 mt-0\">
+                                <div class=\"col-md-6\">
+                                    <label class=\"form-label d-block\">Ch?ng ch? combo</label>
+                                    <div class=\"form-check form-switch\">
+                                        <input type=\"hidden\" name=\"certificate_enabled\" value=\"0\">
+                                        <input
+                                            type=\"checkbox\"
+                                            class=\"form-check-input\"
+                                            id=\"combo-edit-certificate-enabled\"
+                                            name=\"certificate_enabled\"
+                                            value=\"1\"
+                                        >
+                                        <label class=\"form-check-label\" for=\"combo-edit-certificate-enabled\">
+                                            B?t c?p ch?ng ch? khi d? di?u ki?n
+                                        </label>
+                                    </div>
+                                    <div class=\"form-text\">T?t n?u combo kh�ng c?p ch?ng ch?.</div>
+                                </div>
+                                <div class=\"col-md-6\">
+                                    <label class=\"form-label\" for=\"combo-edit-certificate-progress\">% ti?n d? y�u c?u</label>
+                                    <div class=\"input-group\">
+                                            <input
+                                                type=\"number\"
+                                                class=\"form-control\"
+                                                id=\"combo-edit-certificate-progress\"
+                                                name=\"certificate_progress_required\"
+                                                min=\"0\"
+                                                max=\"100\"
+                                                value=\"100\"
+                                            >
+                                        <span class=\"input-group-text\">%</span>
+                                    </div>
+                                    <div class=\"form-text\">T�nh theo % s? kh�a h?c ph?i ho�n th�nh.</div>
+                                </div>
+                            </div><div class="col-lg-7">
                                 <div class="combo-course-picker card shadow-sm">
                                     <div class="card-body">
                                         <h6 class="card-title d-flex justify-content-between align-items-center">
-                                            <span>Khóa học trong combo <span class="text-danger">*</span></span>
-                                            <span class="badge bg-primary" data-course-count>0 khóa học</span>
+                                            <span>Kh�a h?c trong combo <span class="text-danger">*</span></span>
+                                            <span class="badge bg-primary" data-course-count>0 kh�a h?c</span>
                                         </h6>
                                         <div class="row g-2 align-items-center mb-3">
                                             <div class="col-md-8">
                                                 <select class="form-select" data-course-picker>
-                                                    <option value="">-- Chọn khóa học --</option>
+                                                    <option value="">-- Ch?n kh�a h?c --</option>
                                                     @foreach ($courses as $course)
                                                         <option
                                                             value="{{ $course->maKH }}"
@@ -669,12 +668,12 @@
                                             </div>
                                             <div class="col-md-4 d-grid">
                                                 <button type="button" class="btn btn-primary" data-course-add>
-                                                    Thêm khóa học
+                                                    Th�m kh�a h?c
                                                 </button>
                                             </div>
                                         </div>
                                         <div class="combo-course-empty" data-course-empty>
-                                            <i class="bi bi-collection me-2"></i> Chưa có khóa học nào trong combo.
+                                            <i class="bi bi-collection me-2"></i> Chua c� kh�a h?c n�o trong combo.
                                         </div>
                                         <ul class="combo-course-selected" data-course-list></ul>
                                     </div>
@@ -683,10 +682,10 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">��ng</button>
                         <div class="d-flex flex-wrap gap-2">
                             <button type="submit" class="btn btn-primary" data-form-action="save_close">
-                                Lưu combo
+                                Luu combo
                             </button>
                         </div>
                     </div>
@@ -725,3 +724,7 @@
     <script src="{{ asset('js/Admin/slug-helper.js') }}" defer></script>
     <script src="{{ asset('js/Admin/combos.js') }}" defer></script>
 @endpush
+
+
+
+

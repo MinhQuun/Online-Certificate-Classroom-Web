@@ -428,6 +428,25 @@
                     : "";
         }
 
+        const certificateToggle = form.querySelector(
+            "#combo-edit-certificate-enabled"
+        );
+        if (certificateToggle) {
+            certificateToggle.checked = Boolean(payload.certificate_enabled);
+        }
+
+        const certificateProgressField = form.querySelector(
+            "#combo-edit-certificate-progress"
+        );
+        if (certificateProgressField) {
+            const progressValue =
+                payload.certificate_progress_required === null ||
+                payload.certificate_progress_required === undefined
+                    ? 100
+                    : payload.certificate_progress_required;
+            certificateProgressField.value = progressValue;
+        }
+
         const promotionWrapper = form.querySelector(
             "[data-promotion-price-wrapper]"
         );

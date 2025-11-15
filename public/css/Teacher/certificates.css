@@ -1,0 +1,126 @@
+.teacher-certificate-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.certificate-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border: none;
+    border-radius: 1.5rem;
+}
+
+.certificate-header .course-selector {
+    min-width: 320px;
+}
+
+.certificate-header .form-select {
+    border-radius: 0.85rem;
+}
+
+.certificate-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.stat-card {
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
+    background: #f8fafc;
+    border: 1px solid #edf2f7;
+}
+
+.stat-card .label {
+    font-size: 0.85rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.stat-card strong {
+    display: block;
+    font-size: 1.4rem;
+    margin-top: 0.3rem;
+}
+
+.certificate-filters {
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+}
+
+.certificate-filters .form-select,
+.certificate-filters .form-control {
+    border-radius: 0.85rem;
+}
+
+.certificate-table thead th {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: #94a3b8;
+    letter-spacing: 0.05em;
+    border-bottom-width: 1px;
+}
+
+.certificate-table td {
+    vertical-align: middle;
+}
+
+.certificate-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.2rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.status-issued {
+    color: #0f5132;
+    background: #d1fae5;
+}
+
+.status-pending {
+    color: #92400e;
+    background: #fef3c7;
+}
+
+.status-revoked {
+    color: #b91c1c;
+    background: #fee2e2;
+}
+
+.status-none {
+    color: #334155;
+    background: #e2e8f0;
+}
+
+.progress-chip {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-weight: 600;
+}
+
+.empty-state .card-body i {
+    font-size: 2.25rem;
+    color: #94a3b8;
+}
+
+@media (max-width: 768px) {
+    .certificate-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .certificate-header .course-selector {
+        width: 100%;
+    }
+}

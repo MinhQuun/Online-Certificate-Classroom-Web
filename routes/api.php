@@ -9,6 +9,7 @@ use App\Http\Controllers\API\Student\ContactController;
 use App\Http\Controllers\API\Student\DictionaryController;
 use App\Http\Controllers\API\Student\CourseController;
 use App\Http\Controllers\API\Student\CourseReviewController;
+use App\Http\Controllers\API\Student\CertificateController as ApiStudentCertificateController;
 use App\Http\Controllers\API\Student\LessonController;
 use App\Http\Controllers\API\Student\LessonDiscussionController as StudentLessonDiscussionController;
 use App\Http\Controllers\API\Student\LessonProgressController;
@@ -55,6 +56,10 @@ Route::prefix('v1')->group(function () {
 
             Route::post('checkout/preview', [StudentCheckoutController::class, 'preview']);
             Route::post('checkout/complete', [StudentCheckoutController::class, 'complete']);
+
+            Route::get('certificates', [ApiStudentCertificateController::class, 'index']);
+            Route::get('certificates/{certificate}/download', [ApiStudentCertificateController::class, 'download']);
+            Route::get('certificates/{certificate}', [ApiStudentCertificateController::class, 'show']);
 
             Route::post('lessons/{lesson}/discussions', [StudentLessonDiscussionController::class, 'store']);
             Route::post('lessons/{lesson}/discussions/{discussion}/replies', [StudentLessonDiscussionController::class, 'storeReply']);

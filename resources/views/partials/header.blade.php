@@ -150,10 +150,12 @@
                                 <i class="fa-solid fa-cart-shopping"></i>
                                 <span> Lịch sử đơn hàng</span>
                             </a>
-                            <a href="#">
-                                <i class="fa-solid fa-download"></i>
-                                <span> Bảo lưu</span>
-                            </a>
+                            @if (Auth::user()?->student)
+                                <a href="{{ route('student.certificates.index') }}">
+                                    <i class="fa-solid fa-award"></i>
+                                    <span> Chứng chỉ của tôi</span>
+                                </a>
+                            @endif
                         </nav>
 
                         <form action="{{ route('logout') }}" method="post" class="header-profile__logout">
@@ -202,5 +204,3 @@
 @push('scripts')
     <script src="{{ asset('js/Student/dropdown.js') }}" defer></script>
 @endpush
-
-

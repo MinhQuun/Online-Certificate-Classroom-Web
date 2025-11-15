@@ -102,6 +102,12 @@
                     @endif
                 </a>
                 </li>
+                <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('teacher.certificates.*') ? 'active' : '' }}"
+                    href="{{ route('teacher.certificates.index') }}">
+                    <i class="bi bi-award me-2"></i> Chứng chỉ
+                </a>
+                </li>
 
                 {{-- ĐÁNH GIÁ --}}
                 <li class="nav-item mt-2 text-muted small">Đánh giá</li>
@@ -161,5 +167,4 @@
         @stack('scripts')
     </body>
 </html>
-
 
