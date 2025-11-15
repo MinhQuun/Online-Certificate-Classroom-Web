@@ -1,4 +1,4 @@
-@extends('layouts.student')
+﻿@extends('layouts.student')
 
 @section('title', 'Trang chủ')
 
@@ -17,6 +17,11 @@
 @section('content')
     @php
         $firstCourse = $courses->first();
+        $isCategoryView = isset($currentCategory) && $currentCategory;
+        $headingTitle = $isCategoryView ? $currentCategory->tenDanhMuc : 'Tất cả khóa học';
+        $headingDescription = $isCategoryView
+            ? 'Khám phá các khóa học nổi bật thuộc chuyên đề ' . $currentCategory->tenDanhMuc . '.'
+            : 'Lộ trình rõ ràng, tài nguyên phong phú và bài kiểm tra cuối kỳ giúp bạn tự tin đạt mục tiêu chứng chỉ.';
     @endphp
 
     <section class="hero hero--courses" data-home-index>
@@ -55,14 +60,25 @@
 
     <section class="section">
         <div class="oc-container">
-            <div class="section__header">
-                @if (isset($currentCategory) && $currentCategory)
-                    <h2>{{ $currentCategory->tenDanhMuc }}</h2>
-                    <p>Khám phá các khóa học nổi bật thuộc chuyên đề {{ $currentCategory->tenDanhMuc }}.</p>
-                @else
-                    <h2>Tất cả khóa học</h2>
-                    <p>Lộ trình rõ ràng, tài nguyên phong phú và bài kiểm tra cuối kỳ giúp bạn tự tin đạt mục tiêu chứng chỉ.</p>
-                @endif
+            <div
+                class="courses-heading-bar"
+                data-sticky-heading
+                data-heading-default-title="{{ $headingTitle }}"
+            >
+                <div class="section__header">
+                    <h2 data-heading-title>{{ $headingTitle }}</h2>
+                    <p>{{ $headingDescription }}</p>
+                </div>
+
+                <div class="courses-heading-bar__status" data-heading-indicator>
+                    <span class="courses-heading-bar__status-label">
+                        <i class="fa-regular fa-compass" aria-hidden="true"></i>
+                        Đang xem
+                    </span>
+                    <span class="courses-heading-bar__status-value" data-heading-indicator-text>
+                        {{ $headingTitle }}
+                    </span>
+                </div>
             </div>
 
             @if ($courses->isEmpty())
@@ -79,7 +95,12 @@
                 @endphp
 
                 @foreach ($grouped as $bandName => $groupCourses)
-                    <section class="course-band" data-band="{{ $bandName }}" data-reveal-on-scroll>
+                    <section
+                        class="course-band"
+                        data-band="{{ $bandName }}"
+                        data-band-title="{{ $bandName }}"
+                        data-reveal-on-scroll
+                    >
                         <h3 class="course-band__title">
                             <span class="course-band__title-text">{{ $bandName }}</span>
                             <span class="course-band__count">({{ $groupCourses->count() }} khóa học)</span>
@@ -169,6 +190,8 @@
                                                 class="course-card__cta {{ $ctaClass }}"
                                                 @if($isActive || $isPending || $inCart) disabled @endif
                                                 data-add-to-cart="{{ $course->maKH }}"
+                                                data-cart-adding-label="Đang thêm..."
+                                                data-cart-added-label="Đã trong giỏ hàng"
                                                 aria-label="{{ $isActive ? 'Đã kích hoạt' : ($isPending ? 'Chờ kích hoạt' : ($inCart ? 'Đã trong giỏ hàng' : 'Thêm ' . $course->tenKH . ' vào giỏ hàng')) }}"
                                             >
                                                 {{ $isActive ? 'Đã kích hoạt' : ($isPending ? 'Chờ kích hoạt' : ($inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng')) }}
@@ -204,44 +227,6 @@
 @push('scripts')
     <script src="{{ asset('js/Student/hero-banner.js') }}" defer></script>
     <script src="{{ asset('js/Student/ajax-forms.js') }}"></script>
+    <script src="{{ asset('js/Student/course-index.js') }}" defer></script>
     <script src="{{ asset('js/Student/home-index.js') }}"></script>
-
-    {{-- JS XỬ LÝ NÚT THÊM GIỎ HÀNG & CARD CLICK --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Xử lý button thêm giỏ hàng
-            document.querySelectorAll('[data-add-to-cart]').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    if (this.disabled) return;
-
-                    const courseId = this.getAttribute('data-add-to-cart');
-                    const form = document.querySelector(`.cart-form[data-course-id="${courseId}"]`);
-                    if (form) {
-                        form.submit();
-                    }
-                });
-            });
-
-            // Xử lý click toàn card (ngoại trừ button & link)
-            document.querySelectorAll('.course-card').forEach(card => {
-                card.addEventListener('click', function(e) {
-                    // Bỏ qua click trên button hoặc link
-                    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || e.target.closest('a') || e.target.closest('button')) {
-                        return;
-                    }
-
-                    const slug = this.getAttribute('data-course-slug');
-                    if (slug) {
-                        window.location.href = `/student/courses/${slug}`;
-                    }
-                });
-
-                // Thêm cursor pointer
-                card.style.cursor = 'pointer';
-            });
-        });
-    </script>
 @endpush

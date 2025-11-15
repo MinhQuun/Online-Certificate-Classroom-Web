@@ -105,9 +105,12 @@
     );
     box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
     padding: 20px;
-    transition: transform 0.25s ease, 
-                box-shadow 0.25s ease,
-                border-color 0.25s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.course-card--clickable {
+    cursor: pointer;
 }
 
 .course-card:hover {
@@ -190,7 +193,11 @@
     position: absolute;
     top: 14px;
     right: 14px;
-    background: linear-gradient(135deg, rgba(239, 68, 68, 0.92), rgba(220, 38, 38, 0.92));
+    background: linear-gradient(
+        135deg,
+        rgba(239, 68, 68, 0.92),
+        rgba(220, 38, 38, 0.92)
+    );
     color: #fff;
     padding: 6px 12px;
     border-radius: 12px;
@@ -254,7 +261,7 @@
 }
 
 .course-card__title-link::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: -8px;
     left: 50%;
@@ -398,7 +405,11 @@
 }
 
 .course-card__price-block--promo {
-    background: linear-gradient(145deg, rgba(248, 250, 255, 0.9), rgba(219, 234, 254, 0.85));
+    background: linear-gradient(
+        145deg,
+        rgba(248, 250, 255, 0.9),
+        rgba(219, 234, 254, 0.85)
+    );
     border: 1px solid rgba(37, 99, 235, 0.18);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
@@ -445,6 +456,12 @@
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     width: 100%;
+}
+
+.course-card__cta.is-busy {
+    opacity: 0.75;
+    cursor: progress;
+    pointer-events: none;
 }
 
 .course-card__cta:hover:not([disabled]) {
@@ -986,4 +1003,92 @@ html {
     background: #475569;
     color: #ffffff;
     box-shadow: 0 6px 16px rgba(71, 86, 105, 0.28);
+}
+
+/* === STICKY HEADING CHO DANH SÁCH KHÓA HỌC === */
+.courses-heading-bar {
+    position: sticky;
+    top: calc(var(--course-heading-offset, var(--header-height, 72px)) + 8px);
+    z-index: 90;
+    padding: 16px 0 14px;
+    background: linear-gradient(
+        180deg,
+        rgba(248, 250, 252, 0.98),
+        rgba(241, 245, 249, 0.9)
+    );
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.courses-heading-bar.is-stuck {
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
+    border-bottom-color: rgba(148, 163, 184, 0.5);
+}
+
+.courses-heading-bar__sentinel {
+    display: block;
+    height: 1px;
+    margin-top: -1px;
+}
+
+.courses-heading-bar__status {
+    margin-top: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: rgba(59, 130, 246, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(96, 165, 250, 0.28);
+    font-weight: 600;
+    color: #1d4ed8;
+    font-size: 0.92rem;
+    transition: background 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+}
+
+.courses-heading-bar.is-stuck .courses-heading-bar__status {
+    background: rgba(15, 23, 42, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.12);
+    color: #0f172a;
+}
+
+.courses-heading-bar__status-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.72rem;
+    color: inherit;
+}
+
+.courses-heading-bar__status-value {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: inherit;
+}
+
+.courses-heading-bar__status.is-hidden {
+    display: none;
+}
+
+.course-band.is-current-band .course-band__title {
+    border-color: rgba(37, 99, 235, 0.25);
+    box-shadow: 0 18px 40px rgba(37, 99, 235, 0.08);
+}
+
+.course-band.is-current-band .course-band__title-text {
+    color: #1d4ed8;
+}
+
+/* Giữ layout đẹp như section__header gốc nhưng bỏ bớt khoảng trống */
+.courses-heading-bar .section__header {
+    margin: 0 auto;
+}
+
+.courses-heading-bar .section__header p {
+    margin-top: 4px;
+    margin-bottom: 0;
 }

@@ -84,6 +84,10 @@
         }
     };
 
+    const dispatchCartEvent = (type, detail = {}) => {
+        document.dispatchEvent(new CustomEvent(type, { detail }));
+    };
+
     function setupCartHandlers() {
         document.addEventListener("submit", (event) => {
             const form = event.target;
@@ -119,10 +123,19 @@
 
     async function handleCartRequest(form) {
         const submitButton = form.querySelector('button[type="submit"]');
+        const finishedDetail = {
+            form,
+            success: false,
+            response: null,
+            error: null,
+        };
+
         if (submitButton) {
             submitButton.disabled = true;
             submitButton.setAttribute("aria-disabled", "true");
         }
+
+        dispatchCartEvent("cart:request:started", { form });
 
         try {
             const response = await fetch(form.action, {
@@ -135,6 +148,7 @@
             });
 
             const data = await parseJson(response);
+            finishedDetail.response = data;
 
             if (typeof data.cartCount === "number") {
                 updateCartBadge(data.cartCount);
@@ -143,16 +157,12 @@
             const firstError = extractFirstError(data.errors);
             if (firstError) {
                 toast.push(firstError, "error");
-                if (submitButton) {
-                    submitButton.disabled = false;
-                    submitButton.removeAttribute("aria-disabled");
-                }
                 return;
             }
 
             if (data.success) {
-                toast.queue(data.message || CART_SUCCESS_FALLBACK, "success");
-                window.location.reload();
+                finishedDetail.success = true;
+                toast.push(data.message || CART_SUCCESS_FALLBACK, "success");
                 return;
             }
 
@@ -163,7 +173,9 @@
         } catch (error) {
             console.error("[AJAX Cart] Error:", error);
             toast.push(CART_ERROR_FALLBACK, "error");
+            finishedDetail.error = error;
         } finally {
+            dispatchCartEvent("cart:request:finished", finishedDetail);
             if (submitButton) {
                 submitButton.disabled = false;
                 submitButton.removeAttribute("aria-disabled");

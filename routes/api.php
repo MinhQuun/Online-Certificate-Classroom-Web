@@ -6,6 +6,7 @@ use App\Http\Controllers\API\Student\CartController as StudentCartController;
 use App\Http\Controllers\API\Student\CheckoutController as StudentCheckoutController;
 use App\Http\Controllers\API\Student\ComboController;
 use App\Http\Controllers\API\Student\ContactController;
+use App\Http\Controllers\API\Student\DictionaryController;
 use App\Http\Controllers\API\Student\CourseController;
 use App\Http\Controllers\API\Student\CourseReviewController;
 use App\Http\Controllers\API\Student\LessonController;
@@ -42,6 +43,7 @@ Route::prefix('v1')->group(function () {
             Route::post('courses/{course}/reviews', [CourseReviewController::class, 'store']);
             Route::get('orders', [OrderController::class, 'index']);
             Route::get('progress/overview', [ProgressController::class, 'overview']);
+            Route::post('dictionary/lookup', [DictionaryController::class, 'lookup']);
 
             Route::get('cart', [StudentCartController::class, 'index']);
             Route::post('cart/courses', [StudentCartController::class, 'storeCourse']);

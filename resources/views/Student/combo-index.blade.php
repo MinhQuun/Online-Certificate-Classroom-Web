@@ -147,16 +147,16 @@
                                         <span>Chờ kích hoạt</span>
                                     </button>
                                 @else
-                                    <form method="post" action="{{ route('student.cart.store-combo') }}" class="combo-card__action">
+                                    <form method="post" action="{{ route('student.cart.store-combo') }}" class="combo-card__action" data-combo-add-form data-combo-id="{{ $combo->maGoi }}">
                                         @csrf
                                         <input type="hidden" name="combo_id" value="{{ $combo->maGoi }}">
                                         <button
                                             type="submit"
-                                            class="combo-card__cta {{ $comboInCart ? 'combo-card__cta--in-cart' : '' }}"
+                                            class="combo-card__cta {{ $comboInCart ? 'combo-card__cta--in-cart' : '' }}" data-combo-add-btn data-combo-id="{{ $combo->maGoi }}" data-label-default="Thêm vào giỏ hàng" data-label-added="Đã trong giỏ hàng" data-label-adding="Đang thêm..." data-icon-default="fa-cart-plus" data-icon-added="fa-check" data-icon-adding="fa-spinner fa-spin"
                                             @if($comboInCart) disabled aria-disabled="true" @endif
                                         >
-                                            <i class="fa-solid {{ $comboInCart ? 'fa-check' : 'fa-cart-plus' }}" aria-hidden="true"></i>
-                                            <span>{{ $comboInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng' }}</span>
+                                            <i class="fa-solid {{ $comboInCart ? 'fa-check' : 'fa-cart-plus' }}" aria-hidden="true" data-combo-add-icon></i>
+                                            <span data-combo-add-text>{{ $comboInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng' }}</span>
                                         </button>
                                     </form>
                                 @endif
@@ -221,16 +221,16 @@
                                         <span>Chờ kích hoạt</span>
                                     </button>
                                 @else
-                                    <form method="post" action="{{ route('student.cart.store-combo') }}" class="combo-card__action">
+                                    <form method="post" action="{{ route('student.cart.store-combo') }}" class="combo-card__action" data-combo-add-form data-combo-id="{{ $combo->maGoi }}">
                                         @csrf
                                         <input type="hidden" name="combo_id" value="{{ $combo->maGoi }}">
                                         <button
                                             type="submit"
-                                            class="combo-card__cta {{ $comboInCart ? 'combo-card__cta--in-cart' : '' }}"
+                                            class="combo-card__cta {{ $comboInCart ? 'combo-card__cta--in-cart' : '' }}" data-combo-add-btn data-combo-id="{{ $combo->maGoi }}" data-label-default="Thêm vào giỏ hàng" data-label-added="Đã trong giỏ hàng" data-label-adding="Đang thêm..." data-icon-default="fa-cart-plus" data-icon-added="fa-check" data-icon-adding="fa-spinner fa-spin"
                                             @if($comboInCart) disabled aria-disabled="true" @endif
                                         >
-                                            <i class="fa-solid {{ $comboInCart ? 'fa-check' : 'fa-cart-plus' }}" aria-hidden="true"></i>
-                                            <span>{{ $comboInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng' }}</span>
+                                            <i class="fa-solid {{ $comboInCart ? 'fa-check' : 'fa-cart-plus' }}" aria-hidden="true" data-combo-add-icon></i>
+                                            <span data-combo-add-text>{{ $comboInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng' }}</span>
                                         </button>
                                     </form>
                                 @endif
@@ -279,4 +279,5 @@
 
 @push('scripts')
     <script src="{{ asset('js/Student/ajax-forms.js') }}"></script>
+    <script src="{{ asset('js/Student/combo-index.js') }}" defer></script>
 @endpush

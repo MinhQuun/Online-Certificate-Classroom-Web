@@ -605,6 +605,12 @@
     cursor: not-allowed;
 }
 
+.combo-card__cta.is-busy {
+    opacity: 0.75;
+    cursor: progress;
+    pointer-events: none;
+}
+
 /* Nút trạng thái: Đã trong giỏ hàng (Màu hồng/rose - nổi bật và khác biệt) */
 .combo-card__cta--in-cart {
     background: rgba(244, 63, 94, 0.15);

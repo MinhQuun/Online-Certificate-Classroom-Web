@@ -23,44 +23,48 @@
                 <span aria-hidden="true">></span>
                 <span>Giỏ hàng</span>
             </p>
-            <h1>Giỏ hàng của bạn ({{ $courseCount + $comboCount }})</h1>
+            <h1>Giỏ hàng của bạn (<span data-cart-count-total>{{ $courseCount + $comboCount }}</span>)</h1>
             <p>Chọn combo hoặc khóa học để thanh toán. Hệ thống sẽ giữ nguyên trạng thái giỏ hàng khi bạn đăng nhập.</p>
         </div>
     </section>
 
     <section class="cart-section">
         <div class="oc-container">
-            @if($isEmpty)
-                <div class="cart-empty">
-                    <div class="cart-empty__icon" aria-hidden="true">🛒</div>
-                    <h2>Giỏ hàng đang trống</h2>
+            <div class="cart-empty" data-cart-empty-state @if(!$isEmpty) hidden @endif>
+                <div class="cart-empty__icon" aria-hidden="true">🛒</div>
+                <h2>Giỏ hàng đang trống</h2>
                     <p>Khám phá các combo ưu đãi hoặc khóa học để bắt đầu hành trình học tập ngay hôm nay.</p>
-                    <div class="cart-empty__actions">
+                <div class="cart-empty__actions">
                         <a class="btn btn--primary" href="{{ route('student.combos.index') }}">Combo ưu đãi</a>
                         <a class="btn btn--ghost" href="{{ route('student.courses.index') }}">Thư viện khóa học</a>
                     </div>
                 </div>
-            @else
-                <form
-                    method="post"
-                    action="{{ route('student.checkout.start') }}"
-                    id="cart-form"
-                    data-cart-ajax="off"
-                    hidden
-                >
-                    @csrf
-                </form>
-                <div class="cart-layout" data-cart-form-scope>
+            </div>
+
+            <form
+                method="post"
+                action="{{ route('student.checkout.start') }}"
+                id="cart-form"
+                data-cart-ajax="off"
+                hidden
+            >
+                @csrf
+            </form>
+
+            <div class="cart-layout" data-cart-form-scope @if($isEmpty) hidden @endif>
                     <div class="cart-board">
                         <div class="cart-board__header">
                             <div class="cart-board__header-main">
                                 <label class="cart-checkbox">
                                     <input type="checkbox" data-cart-select-all>
-                                    <span>Chọn tất cả ({{ $courseCount + $comboCount }})</span>
+                                    <span data-cart-total-count>Chọn tất cả ({{ $courseCount + $comboCount }})</span>
                                 </label>
-                                <span class="cart-board__meta">
-                                    {{ $comboCount }} combo · {{ $courseCount }} khóa học
-                                </span>
+                                <div class="cart-board__chips">
+                                    <span class="cart-board__meta" data-cart-meta>
+                                        {{ $comboCount }} combo · {{ $courseCount }} khóa học
+                                    </span>
+                                    <span class="cart-board__selection is-empty" data-cart-selected-count>Chưa chọn mục nào</span>
+                                </div>
                             </div>
                             <div class="cart-board__actions">
                                 <form
@@ -68,6 +72,7 @@
                                     action="{{ route('student.cart.destroy-selected') }}"
                                     class="cart-board__remove-form"
                                     data-cart-remove-form
+                                    data-cart-action="remove-selected"
                                     data-confirm="Bạn chắc chắn muốn xoá các mục đã chọn?"
                                 >
                                     @csrf
@@ -89,6 +94,7 @@
                                     action="{{ route('student.cart.destroy-all') }}"
                                     class="cart-board__clear-form"
                                     data-cart-clear-form
+                                    data-cart-action="clear-all"
                                     data-confirm="Bạn có chắc chắn muốn xoá toàn bộ giỏ hàng?"
                                 >
                                     @csrf
@@ -130,7 +136,7 @@
                                             </div>
                                         </div>
                                         <div class="cart-item__actions">
-                                            <form method="post" action="{{ route('student.cart.destroy-combo', $combo->maGoi) }}">
+                                            <form method="post" action="{{ route('student.cart.destroy-combo', $combo->maGoi) }}" data-cart-item-remove>
                                                 @csrf
                                                 @method('delete')
                                                 <button type="submit" class="cart-item__remove">Xoá combo</button>
@@ -174,7 +180,7 @@
                                             </div>
                                         </div>
                                         <div class="cart-item__actions">
-                                            <form method="post" action="{{ route('student.cart.destroy', $course->maKH) }}">
+                                            <form method="post" action="{{ route('student.cart.destroy', $course->maKH) }}" data-cart-item-remove>
                                                 @csrf
                                                 @method('delete')
                                                 <button type="submit" class="cart-item__remove">Xoá</button>
@@ -224,7 +230,6 @@
                         </div>
                     </aside>
                 </div>
-            @endif
         </div>
     </section>
 @endsection
