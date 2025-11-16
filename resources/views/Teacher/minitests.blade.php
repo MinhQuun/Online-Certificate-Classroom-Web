@@ -1,4 +1,4 @@
-﻿@php
+@php
     use App\Models\MiniTest;
     use App\Models\MiniTestQuestion;
     use Illuminate\Support\Str;
