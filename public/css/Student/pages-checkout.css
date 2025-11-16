@@ -279,180 +279,353 @@
     width: 100%;
 }
 
-.checkout-methods {
-    display: grid;
-    gap: 14px;
-}
-
-.checkout-method-panels {
-    margin-top: 20px;
-    display: grid;
-    gap: 18px;
-}
-
-.checkout-method-panel {
-    display: none;
-    border: 1px solid var(--checkout-border);
-    border-radius: 20px;
-    padding: 20px;
-    background: #fff;
-    box-shadow: 0 18px 35px rgba(15, 23, 42, 0.08);
-}
-
-.checkout-method-panel.is-active {
-    display: block;
-}
-
-.vnpay-hero {
+.checkout-card--payment {
     display: flex;
-    gap: 18px;
-    align-items: center;
-    padding: 16px 18px;
-    border-radius: 18px;
-    background: linear-gradient(135deg, #1f64b5, #ed1c24);
-    color: #fff;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.vnpay-badge {
-    font-weight: 700;
-    font-size: 1.4rem;
-    letter-spacing: 0.08em;
-}
-
-.vnpay-badge span {
-    color: #ffd966;
-}
-
-.vnpay-hero small {
-    display: block;
-    margin-top: 4px;
-    opacity: 0.8;
-}
-
-.vnpay-steps {
-    list-style: none;
-    padding: 0;
-    margin: 18px 0;
-    display: grid;
-    gap: 14px;
-}
-
-.vnpay-steps li {
+.checkout-card__header--inline {
     display: flex;
-    gap: 12px;
+    justify-content: space-between;
     align-items: flex-start;
+    gap: 18px;
+    flex-wrap: wrap;
 }
 
-.vnpay-steps li span {
-    width: 34px;
-    height: 34px;
-    border-radius: 12px;
-    background: rgba(31, 100, 181, 0.12);
-    color: #1f64b5;
-    font-weight: 600;
+.checkout-eyebrow {
+    margin: 0 0 6px;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--checkout-muted);
+    font-weight: 700;
+}
+
+.payment-assurance {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    border: 1px dashed rgba(37, 99, 235, 0.22);
+    background: rgba(37, 99, 235, 0.06);
+    color: #0f172a;
+}
+
+.payment-assurance i {
+    margin-right: 8px;
+    color: var(--checkout-accent);
+}
+
+.payment-methods {
+    display: grid;
+    gap: 14px;
+}
+
+.payment-options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.payment-option {
+    position: relative;
+    border: 1px solid var(--checkout-border);
+    border-radius: 18px;
+    padding: 14px 16px;
+    display: grid;
+    gap: 8px;
+    background: #fff;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.15s ease;
+}
+
+.payment-option input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.payment-option:hover {
+    transform: translateY(-1px);
+    border-color: rgba(37, 99, 235, 0.35);
+    box-shadow: 0 14px 28px rgba(37, 99, 235, 0.12);
+}
+
+.payment-option.is-active {
+    border-color: var(--checkout-accent);
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.06), rgba(14, 165, 233, 0.04));
+    box-shadow: 0 18px 36px rgba(37, 99, 235, 0.14);
+}
+
+.payment-option__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.payment-option__title {
+    display: grid;
+    gap: 4px;
+}
+
+.payment-option__badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(99, 102, 241, 0.12);
+    color: #3730a3;
+    font-size: 0.75rem;
+    font-weight: 700;
+    width: fit-content;
+}
+
+.payment-option__icon i {
+    color: var(--checkout-accent);
+    font-size: 1.5rem;
+}
+
+.payment-option__desc {
+    margin: 2px 0 0;
+    color: var(--checkout-muted);
+}
+
+.payment-option__footer {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    gap: 6px;
+    color: var(--checkout-accent);
+    font-weight: 700;
+    font-size: 0.9rem;
 }
 
-.vnpay-steps strong {
-    display: block;
-    margin-bottom: 4px;
+.payment-panels {
+    display: grid;
+    gap: 10px;
 }
 
-.vnpay-trust {
-    display: flex;
-    flex-wrap: wrap;
+.payment-panel {
+    display: none;
+    border: 1px solid var(--checkout-border);
+    border-radius: 22px;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 22px 42px rgba(15, 23, 42, 0.08);
+}
+
+.payment-panel.is-active {
+    display: grid;
     gap: 12px;
 }
 
-.vnpay-trust div {
-    flex: 1 1 150px;
-    background: rgba(15, 23, 42, 0.04);
-    border-radius: 12px;
-    padding: 10px 12px;
+.payment-panel__hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    border-radius: 14px;
+    background: rgba(59, 130, 246, 0.08);
+}
+
+.payment-panel__hero--brand {
+    background: linear-gradient(135deg, rgba(31, 100, 181, 0.18), rgba(14, 165, 233, 0.18));
+    color: #0f172a;
+}
+
+.payment-panel__eyebrow {
+    margin: 0 0 4px;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--checkout-muted);
+}
+
+.payment-panel__lead {
+    margin: 4px 0 0;
+    color: #0f172a;
+}
+
+.payment-panel__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.payment-panel__tags span {
+    padding: 4px 10px;
+    border-radius: 10px;
+    background: rgba(37, 99, 235, 0.08);
+    color: #0f172a;
     font-size: 0.85rem;
+}
+
+.payment-panel__branding {
     display: flex;
     align-items: center;
     gap: 8px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #0f172a;
 }
 
-.vnpay-trust i {
-    color: #1f64b5;
+.payment-panel__branding i {
+    color: inherit;
 }
 
-.method-tip {
-    background: rgba(37, 99, 235, 0.08);
-    border-radius: 18px;
-    padding: 16px;
-    border: 1px dashed rgba(37, 99, 235, 0.2);
+.payment-panel__brand-text {
+    font-weight: 800;
+    font-size: 1.3rem;
+    letter-spacing: 0.08em;
 }
 
-.method-tip h4 {
-    margin: 0 0 6px;
+.payment-panel__brand-text span {
+    color: #ffd966;
 }
 
-.method-perks {
+.payment-hero {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(59, 130, 246, 0.06));
+    border: 1px solid rgba(59, 130, 246, 0.14);
+}
+
+.payment-hero__emoji {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    font-size: 1.5rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.12);
+}
+
+.payment-hero__eyebrow {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--checkout-muted);
+}
+
+.payment-panel__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+}
+
+.payment-panel__block {
+    background: rgba(248, 250, 252, 0.9);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    border-radius: 14px;
+    padding: 14px;
+    display: grid;
+    gap: 10px;
+}
+
+.payment-panel__block--stack {
+    align-content: start;
+}
+
+.payment-steps {
     list-style: none;
-    margin: 16px 0 0;
+    margin: 0;
     padding: 0;
     display: grid;
     gap: 10px;
 }
 
-.method-perks li {
+.payment-steps li {
     display: flex;
-    gap: 8px;
-    align-items: center;
-    color: #475569;
-    font-size: 0.9rem;
+    gap: 10px;
+    align-items: flex-start;
 }
 
-.method-perks i {
+.payment-steps li span {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    background: rgba(37, 99, 235, 0.1);
+    color: #1f64b5;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.payment-steps strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.payment-checklist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+}
+
+.payment-checklist li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    color: #0f172a;
+}
+
+.payment-checklist i {
+    color: var(--checkout-accent);
+    margin-top: 4px;
+}
+
+.payment-infobox {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(37, 99, 235, 0.08);
+    border: 1px solid rgba(37, 99, 235, 0.16);
+    color: #0f172a;
+}
+
+.payment-infobox i {
     color: var(--checkout-accent);
 }
 
-.checkout-method {
-    border: 1px solid var(--checkout-border);
-    border-radius: 18px;
-    padding: 16px;
-    display: flex;
-    gap: 14px;
-    cursor: pointer;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+.payment-panel__hero--brand .payment-panel__branding {
+    color: #fff;
 }
 
-.checkout-method:hover {
-    border-color: rgba(37, 99, 235, 0.4);
-    box-shadow: 0 16px 32px rgba(37, 99, 235, 0.12);
+.payment-panel__hero--brand .payment-panel__tags span {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.15);
 }
 
-.checkout-method input {
-    margin-top: 6px;
-    accent-color: var(--checkout-accent);
+.payment-panel__hero--brand .payment-panel__eyebrow {
+    color: rgba(255, 255, 255, 0.82);
 }
 
-.checkout-method__content {
-    flex: 1;
+.checkout-sidebar__head--pill {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 16px;
 }
 
-.checkout-method__content h3 {
-    margin: 0 0 4px;
-}
-
-.checkout-method__content p {
-    margin: 0;
-    color: var(--checkout-muted);
-    font-size: 0.9rem;
-}
-
-.checkout-method__icon {
-    font-size: 1.6rem;
-    color: var(--checkout-accent);
+.checkout-pill {
+    padding: 6px 12px;
+    border-radius: 14px;
+    background: rgba(37, 99, 235, 0.08);
+    color: #0f172a;
+    border: 1px solid rgba(37, 99, 235, 0.2);
 }
 
 .checkout-card--success {
@@ -620,12 +793,13 @@
         flex-direction: column;
     }
 
-    .vnpay-hero {
+    .checkout-card__header--inline {
         flex-direction: column;
-        text-align: center;
+        align-items: flex-start;
     }
 
-    .vnpay-trust {
+    .payment-panel__hero {
         flex-direction: column;
+        align-items: flex-start;
     }
 }

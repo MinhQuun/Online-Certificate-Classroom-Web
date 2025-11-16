@@ -14,6 +14,7 @@
     const isLocked = root.dataset.locked === "true";
     const methodLabelTarget = root.querySelector("[data-checkout-method-label]");
     const methodRadios = root.querySelectorAll('input[name="payment_method"]');
+    const methodCards = root.querySelectorAll("[data-checkout-method-card]");
     const methodPanels = root.querySelectorAll("[data-checkout-method-panel]");
 
     const activateMethodPanel = (key) => {
@@ -21,6 +22,23 @@
             const panelKey = panel.dataset.checkoutMethodPanel;
             panel.classList.toggle("is-active", panelKey === key);
         });
+    };
+
+    const activateMethodCard = (key) => {
+        methodCards.forEach((card) => {
+            const input = card.querySelector('input[name="payment_method"]');
+            card.classList.toggle("is-active", input?.value === key);
+        });
+    };
+
+    const updateMethodLabel = (input) => {
+        if (!methodLabelTarget || !input) {
+            return;
+        }
+        const card = input.closest("[data-checkout-method-card]");
+        const heading = card?.querySelector("[data-payment-title]");
+        const label = input.dataset.methodLabel || heading?.textContent || methodLabelTarget.textContent;
+        methodLabelTarget.textContent = label.trim();
     };
 
     const clampStage = (stage) => Math.min(3, Math.max(1, stage));
@@ -66,12 +84,8 @@
         const checkedRadio = root.querySelector('input[name="payment_method"]:checked');
         if (checkedRadio) {
             activateMethodPanel(checkedRadio.value);
-            if (methodLabelTarget) {
-                methodLabelTarget.textContent = checkedRadio
-                    .closest(".checkout-method")
-                    ?.querySelector("h3")
-                    ?.textContent.trim() ?? methodLabelTarget.textContent;
-            }
+            activateMethodCard(checkedRadio.value);
+            updateMethodLabel(checkedRadio);
         }
 
         methodRadios.forEach((radio) => {
@@ -79,12 +93,9 @@
                 if (!radio.checked) {
                     return;
                 }
-                const method = radio.closest(".checkout-method");
-                const heading = method ? method.querySelector("h3") : null;
-                if (heading && methodLabelTarget) {
-                    methodLabelTarget.textContent = heading.textContent.trim();
-                }
+                updateMethodLabel(radio);
                 activateMethodPanel(radio.value);
+                activateMethodCard(radio.value);
             });
         });
     }
