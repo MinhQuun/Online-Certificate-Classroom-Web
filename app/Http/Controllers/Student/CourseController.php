@@ -21,7 +21,15 @@ class CourseController extends Controller
 
         $currentCategory = null;
 
-        $query = Course::published()->with(['category', 'promotions']);
+        $query = Course::published()
+            ->select('khoahoc.*')
+            ->with(['category', 'promotions'])
+            ->withCount('reviews as rating_count')
+            ->selectSub(
+                CourseReview::selectRaw('AVG(diemSo)')
+                    ->whereColumn('danhgiakh.maKH', 'khoahoc.maKH'),
+                'rating_avg'
+            );
 
         $query->when($q, function ($query) use ($q) {
             $query->where('tenKH', 'like', "%$q%");

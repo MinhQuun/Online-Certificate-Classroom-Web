@@ -146,6 +146,30 @@
                                                 {{ $course->tenKH }}
                                             </a>
                                         </h3>
+                                        @php
+                                            $ratingValue = $course->rating_avg ?? $course->average_rating ?? null;
+                                            $ratingCount = (int) ($course->rating_count ?? $course->total_reviews ?? 0);
+                                            $ratingDisplay = $ratingValue !== null
+                                                ? number_format((float) $ratingValue, 1, ',', '.')
+                                                : '--';
+                                        @endphp
+                                        <div class="course-card__rating" aria-label="Danh gia {{ $ratingDisplay }} tren 5 tu {{ $ratingCount }} luot">
+                                            <i class="fa-solid fa-star course-card__rating-icon" aria-hidden="true"></i>
+                                            <span class="course-card__rating-value">{{ $ratingDisplay }}</span>
+                                            @if ($ratingCount > 0)
+                                                @php
+                                                    $ratingCountCompact = $ratingCount >= 1_000_000
+                                                        ? rtrim(rtrim(number_format($ratingCount / 1_000_000, 1, ',', '.'), '0'), ',') . 'm'
+                                                        : ($ratingCount >= 1_000
+                                                            ? rtrim(rtrim(number_format($ratingCount / 1_000, 1, ',', '.'), '0'), ',') . 'k'
+                                                            : number_format($ratingCount, 0, ',', '.'));
+                                                @endphp
+                                                
+                                                <span class="course-card__rating-count">({{ $ratingCountCompact }} lượt đánh giá)</span>
+                                            @else
+                                                <span class="course-card__rating-count">Chưa có đánh giá</span>
+                                            @endif
+                                        </div>
                                         <p class="course-card__promo-note {{ $hasPromotion ? 'is-active' : '' }}">
                                             <i class="fa-regular {{ $hasPromotion ? 'fa-clock' : 'fa-circle-check' }}" aria-hidden="true"></i>
                                             <span>
@@ -237,4 +261,3 @@
     <script src="{{ asset('js/Student/course-index.js') }}" defer></script>
     <script src="{{ asset('js/Student/home-index.js') }}"></script>
 @endpush
-
