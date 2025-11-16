@@ -8,7 +8,7 @@
 .dictionary-toggle-btn {
     position: fixed;
     bottom: 30px;
-    right: 30px;
+    left: 30px;
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -60,6 +60,7 @@
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -191,7 +192,7 @@
     accent-color: var(--color-accent);
 }
 
-.search-option input[type="radio"]:checked + span {
+.search-option input[type="radio"]:checked+span {
     color: var(--color-accent);
     font-weight: 600;
 }
@@ -252,6 +253,7 @@
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);

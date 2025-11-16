@@ -25,13 +25,28 @@
             headingBar.parentElement.insertBefore(sentinel, headingBar);
         }
 
+        const setStuckState = (isStuck) => {
+            const alreadyStuck = headingBar.classList.contains('is-stuck');
+            if (alreadyStuck === isStuck) {
+                return;
+            }
+
+            headingBar.classList.toggle('is-stuck', isStuck);
+            headingBar.dispatchEvent(
+                new CustomEvent('stickychange', {
+                    detail: { isStuck },
+                })
+            );
+        };
+
         const observer = new IntersectionObserver(
             (entries) => {
                 const entry = entries[0];
                 if (!entry) {
                     return;
                 }
-                headingBar.classList.toggle('is-stuck', !entry.isIntersecting);
+
+                setStuckState(!entry.isIntersecting);
             },
             { threshold: [0] }
         );
@@ -43,6 +58,7 @@
         const headingBar = document.querySelector('[data-sticky-heading]');
         const indicator = document.querySelector('[data-heading-indicator]');
         const indicatorValue = document.querySelector('[data-heading-indicator-text]');
+        const headingTitle = headingBar?.querySelector('[data-heading-title]');
 
         if (!headingBar || !indicator || !indicatorValue) {
             return;
@@ -52,18 +68,35 @@
         const defaultTitle =
             headingBar.getAttribute('data-heading-default-title') ||
             indicatorValue.textContent.trim() ||
-            'Tất cả khóa học';
+            'Tat ca khoa hoc';
 
         indicatorValue.textContent = defaultTitle;
+        let currentTitle = defaultTitle;
+        let isSticky = headingBar.classList.contains('is-stuck');
 
         if (!bands.length) {
             indicator.classList.add('is-hidden');
             return;
         }
 
+        const syncHeadingTitle = () => {
+            if (!headingTitle) {
+                return;
+            }
+
+            headingTitle.textContent = isSticky ? currentTitle : defaultTitle;
+        };
+
+        const syncIndicatorVisibility = () => {
+            const shouldShow = isSticky && bands.length > 0;
+            indicator.classList.toggle('is-collapsed', !shouldShow);
+        };
+
         const updateIndicator = (target) => {
             const nextTitle = target?.getAttribute('data-band-title') || defaultTitle;
+            currentTitle = nextTitle;
             indicatorValue.textContent = nextTitle;
+            syncHeadingTitle();
 
             bands.forEach((band) => {
                 band.classList.toggle('is-current-band', band === target);
@@ -73,7 +106,10 @@
         const pickCurrentBand = () => {
             let candidate = null;
             let smallestDistance = Number.POSITIVE_INFINITY;
-            const anchor = window.innerHeight * 0.28;
+            const stickyBottom = headingBar.getBoundingClientRect().bottom;
+            const anchor = isSticky
+                ? stickyBottom + 14
+                : Math.max(window.innerHeight * 0.3, stickyBottom + 40);
 
             bands.forEach((band) => {
                 const rect = band.getBoundingClientRect();
@@ -105,8 +141,17 @@
             });
         };
 
+        headingBar.addEventListener('stickychange', (event) => {
+            isSticky = Boolean(event.detail?.isStuck);
+            syncHeadingTitle();
+            syncIndicatorVisibility();
+            requestPick();
+        });
+
         window.addEventListener('scroll', requestPick, { passive: true });
         window.addEventListener('resize', requestPick);
+        syncHeadingTitle();
+        syncIndicatorVisibility();
         pickCurrentBand();
     }
 
@@ -158,14 +203,14 @@
 
                 const form = document.querySelector(`.cart-form[data-course-id="${courseId}"]`);
                 if (!form) {
-                    console.warn('[Course Index] Không tìm thấy form giỏ hàng cho', courseId);
+                    console.warn('[Course Index] Khong tim thay form gio hang cho', courseId);
                     return;
                 }
 
                 const originalLabel = button.dataset.originalLabel || button.textContent.trim();
                 button.dataset.originalLabel = originalLabel;
 
-                const addingLabel = button.dataset.cartAddingLabel || 'Đang thêm...';
+                const addingLabel = button.dataset.cartAddingLabel || 'Dang them...';
                 button.textContent = addingLabel;
                 button.disabled = true;
                 button.classList.add('is-busy');
@@ -209,7 +254,7 @@
     }
 
     function resetCartButton(button) {
-        const original = button.dataset.originalLabel || 'Thêm vào giỏ hàng';
+        const original = button.dataset.originalLabel || 'Them vao gio hang';
         button.textContent = original;
         button.disabled = false;
         button.classList.remove('is-busy');
@@ -218,7 +263,7 @@
     }
 
     function finalizeCartButton(button) {
-        const addedLabel = button.dataset.cartAddedLabel || 'Đã trong giỏ hàng';
+        const addedLabel = button.dataset.cartAddedLabel || 'Da trong gio hang';
         button.textContent = addedLabel;
         button.disabled = true;
         button.classList.remove('is-busy');
