@@ -73,7 +73,8 @@ class CertificateAdminController extends Controller
         $coursePolicies = Course::query()
             ->select(['maKH', 'tenKH', 'slug', 'certificate_enabled', 'certificate_progress_required'])
             ->orderBy('tenKH')
-            ->get();
+            ->paginate(10)
+            ->withQueryString();
 
         $templates = CertificateTemplate::query()
             ->with(['course', 'creator'])
@@ -133,7 +134,7 @@ class CertificateAdminController extends Controller
             report($exception);
 
             return back()
-                ->withErrors(['manual_issue' => 'Không thể cấp chứng chỉ. Vui lòng thử lại.'])
+                ->withErrors(['manual_issue' => 'Kh├┤ng thß╗â cß║Ñp chß╗⌐ng chß╗ë. Vui l├▓ng thß╗¡ lß║íi.'])
                 ->withInput();
         }
 
@@ -254,6 +255,7 @@ class CertificateAdminController extends Controller
     public function searchStudents(Request $request): JsonResponse
     {
         $keyword = trim((string) $request->query('q', ''));
+        $courseId = (int) $request->query('course_id', 0);
 
         if (mb_strlen($keyword) < 2) {
             return response()->json(['data' => []]);
@@ -264,6 +266,9 @@ class CertificateAdminController extends Controller
             ->where(function ($query) use ($keyword) {
                 $query->where('hoTen', 'like', "%{$keyword}%")
                     ->orWhereHas('user', fn ($sub) => $sub->where('email', 'like', "%{$keyword}%"));
+            })
+            ->when($courseId > 0, function ($query) use ($courseId) {
+                $query->whereHas('enrollments', fn ($q) => $q->where('maKH', $courseId));
             })
             ->orderBy('hoTen')
             ->limit(10)
@@ -326,3 +331,4 @@ class CertificateAdminController extends Controller
         return $decoded;
     }
 }
+

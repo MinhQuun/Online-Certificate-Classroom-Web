@@ -1,0 +1,24 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">OCC Ribbon Watermark</title>
+  <desc id="desc">Diagonal ribbons in OCC brand colors</desc>
+  <defs>
+    <linearGradient id="ribbonBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1d4ed8" stop-opacity="0.65"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0.22"/>
+    </linearGradient>
+    <linearGradient id="ribbonAmber" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f97316" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.45"/>
+    </linearGradient>
+    <linearGradient id="ribbonTeal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0.15"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="#0f172a" opacity="0.04"/>
+  <polygon points="-120,120 320,-40 1320,360 880,520" fill="url(#ribbonBlue)"/>
+  <polygon points="-140,500 260,340 1180,700 780,850" fill="url(#ribbonAmber)"/>
+  <polygon points="220,-60 720,120 520,960 20,780" fill="url(#ribbonTeal)"/>
+  <circle cx="980" cy="200" r="120" fill="#22d3ee" opacity="0.08"/>
+  <circle cx="180" cy="620" r="140" fill="#2563eb" opacity="0.06"/>
+</svg>

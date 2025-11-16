@@ -1,0 +1,20 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">OCC Orbit Watermark</title>
+  <desc id="desc">Concentric orbits with OCC accent colors</desc>
+  <defs>
+    <radialGradient id="orbitGlow" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.5"/>
+      <stop offset="60%" stop-color="#1d4ed8" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.08"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="800" fill="#0f172a" opacity="0.05"/>
+  <circle cx="600" cy="380" r="320" fill="url(#orbitGlow)"/>
+  <circle cx="600" cy="380" r="260" fill="none" stroke="#22d3ee" stroke-width="24" stroke-opacity="0.25"/>
+  <circle cx="600" cy="380" r="200" fill="none" stroke="#2563eb" stroke-width="18" stroke-opacity="0.2"/>
+  <circle cx="600" cy="380" r="130" fill="none" stroke="#f97316" stroke-width="14" stroke-opacity="0.18"/>
+  <circle cx="820" cy="260" r="34" fill="#22d3ee" opacity="0.6"/>
+  <circle cx="400" cy="520" r="28" fill="#f59e0b" opacity="0.55"/>
+  <circle cx="930" cy="520" r="22" fill="#2563eb" opacity="0.4"/>
+  <circle cx="360" cy="240" r="18" fill="#0ea5e9" opacity="0.4"/>
+</svg>

@@ -239,79 +239,93 @@
 
     <div class="row g-4 mt-4">
         <div class="col-12">
-            <section class="card certificate-policy">
-                <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
-                    <div>
-                        <h2 class="card-title mb-0">Chính sách khóa học</h2>
-                        <small class="text-muted">Bật/tắt cấp chứng chỉ và yêu cầu % hoàn thành</small>
-                    </div>
-                    <div class="policy-search">
-                        <input
-                            type="text"
-                            class="form-control cert-policy-search"
-                            placeholder="Tìm khóa học..."
-                            data-policy-target="#course-policy-table"
-                        >
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table align-middle" id="course-policy-table">
-                        <thead>
-                            <tr>
-                                <th>Khóa học</th>
-                                <th>Cho phép cấp</th>
-                                <th>Tiến độ yêu cầu</th>
-                                <th class="text-end">Cập nhật</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($coursePolicies as $course)
-                                <tr data-policy-row data-name="{{ Str::lower($course->tenKH . ' ' . $course->slug) }}">
-                                    <td>
-                                        <div class="fw-semibold">{{ $course->tenKH }}</div>
-                                        <div class="text-muted small">{{ $course->slug }}</div>
-                                    </td>
-                                    <td>
-                                        <form
-                                            class="d-flex align-items-center justify-content-between gap-2 flex-wrap"
-                                            action="{{ route('admin.certificates.courses.policy', $course) }}"
-                                            method="post"
+    <section class="card certificate-policy">
+        <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <div>
+                <h2 class="card-title mb-0">Chính sách khóa học</h2>
+                <small class="text-muted">Bật/tắt cấp chứng chỉ và yêu cầu % hoàn thành</small>
+            </div>
+            <div class="policy-search">
+                <input
+                    type="text"
+                    class="form-control cert-policy-search"
+                    placeholder="Tìm khóa học..."
+                    data-policy-target="#course-policy-table"
+                >
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-middle" id="course-policy-table">
+                <thead>
+                    <tr>
+                        <th class="w-50">Khóa học</th>
+                        <th class="w-10">Cho phép cấp</th>
+                        <th class="w-25 text-center">Tiến độ yêu cầu</th>
+                        <th class="text-end w-15">Cập nhật</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($coursePolicies as $course)
+                        <tr data-policy-row data-name="{{ Str::lower($course->tenKH . ' ' . $course->slug) }}">
+                            <form
+                                class="row align-items-center gy-2"
+                                action="{{ route('admin.certificates.courses.policy', $course) }}"
+                                method="post"
+                            >
+                                @csrf
+                                @method('PUT')
+                                <td class="col-12 col-md-6">
+                                    <div class="fw-semibold">{{ $course->tenKH }}</div>
+                                    <div class="text-muted small">{{ $course->slug }}</div>
+                                </td>
+                                <td class="col-4 col-md-2">
+                                    <div class="form-check form-switch m-0">
+                                        <input type="hidden" name="certificate_enabled" value="0">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            role="switch"
+                                            name="certificate_enabled"
+                                            value="1"
+                                            {{ $course->certificate_enabled ? 'checked' : '' }}
                                         >
-                                            @csrf
-                                            @method('PUT')
-                                            <div class="form-check form-switch m-0">
-                                                <input type="hidden" name="certificate_enabled" value="0">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    role="switch"
-                                                    name="certificate_enabled"
-                                                    value="1"
-                                                    {{ $course->certificate_enabled ? 'checked' : '' }}
-                                                >
-                                            </div>
-                                            <div class="d-flex align-items-center gap-2 flex-grow-1">
-                                                <input
-                                                    type="number"
-                                                    class="form-control form-control-sm"
-                                                    name="certificate_progress_required"
-                                                    min="0"
-                                                    max="100"
-                                                    value="{{ $course->certificate_progress_required }}"
-                                                >
-                                                <span class="text-muted small">%</span>
-                                            </div>
-                                            <button class="btn btn-sm btn-outline-primary">
-                                                Lưu
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+                                    </div>
+                                </td>
+                                <td class="col-8 col-md-3">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <input
+                                            type="number"
+                                            class="form-control form-control-sm"
+                                            name="certificate_progress_required"
+                                            min="0"
+                                            max="100"
+                                            value="{{ $course->certificate_progress_required }}"
+                                        >
+                                        <span class="text-muted small">%</span>
+                                    </div>
+                                </td>
+                                <td class="col-12 col-md-1 text-end">
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        Lưu
+                                    </button>
+                                </td>
+                            </form>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        @if ($coursePolicies->hasPages())
+            <div class="card-footer">
+                @include('components.pagination', [
+                    'paginator' => $coursePolicies,
+                    'ariaLabel' => 'Dieu huong chinh sach khoa hoc',
+                    'containerClass' => '',
+                    'alignClass' => 'justify-content-end',
+                ])
+            </div>
+        @endif
+    </section>
         </div>
     </div>
 
@@ -457,6 +471,7 @@
                                     Chưa chọn khóa học
                                 </div>
                                 <div class="cert-search__suggestions" data-scope="course"></div>
+                                <div class="text-muted small mt-1">Mẫu áp dụng: <span class="fw-semibold" id="manual-template-label">---</span></div>
                             </div>
                         </div>
                     </div>

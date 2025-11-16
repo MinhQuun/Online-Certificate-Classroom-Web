@@ -174,16 +174,26 @@ class CertificateService
     protected function attachPdfToCertificate(Certificate $certificate, array $context = []): void
     {
         $disk = $this->certificateDisk();
+        $template = $context['template'] ?? null;
+
+        $theme = $this->defaultTheme();
+        if ($template && is_array($template->design_json) && !empty($template->design_json)) {
+            foreach ($template->design_json as $key => $value) {
+                if (is_string($key) && is_string($value) && $value !== '') {
+                    $theme[$key] = $value;
+                }
+            }
+        }
 
         $viewData = array_merge([
             'certificate' => $certificate->loadMissing(['student.user', 'course']),
             'student' => $certificate->student ?? $context['student'] ?? null,
             'course' => $context['course'] ?? $certificate->course,
-            'template' => $context['template'] ?? null,
+            'template' => $template,
             'issuedDateLabel' => optional($certificate->issued_at)
                 ? $certificate->issued_at->copy()->timezone($this->timezone())->format('d/m/Y')
                 : Carbon::now($this->timezone())->format('d/m/Y'),
-            'theme' => $this->defaultTheme(),
+            'theme' => $theme,
         ], $context);
 
         try {

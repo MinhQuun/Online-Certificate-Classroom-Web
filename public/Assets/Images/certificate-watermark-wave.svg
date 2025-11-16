@@ -1,0 +1,19 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">OCC Wave Watermark</title>
+  <desc id="desc">Soft wave background in OCC primary blue</desc>
+  <defs>
+    <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0" stop-color="#2563eb" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#1d4ed8" stop-opacity="0.25"/>
+    </linearGradient>
+    <filter id="blur" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="28"/>
+    </filter>
+  </defs>
+  <rect x="0" y="0" width="1200" height="800" fill="url(#waveGradient)" opacity="0.35"/>
+  <path d="M-80 520 C200 420 420 480 620 560 C820 640 1020 660 1280 520 L1280 820 L-80 820 Z" fill="#2563eb" opacity="0.15" filter="url(#blur)"/>
+  <path d="M-60 420 C220 340 420 380 640 470 C900 570 1060 560 1260 420 L1260 820 L-60 820 Z" fill="#22d3ee" opacity="0.12" filter="url(#blur)"/>
+  <circle cx="260" cy="180" r="120" fill="#f97316" opacity="0.08"/>
+  <circle cx="940" cy="160" r="160" fill="#22d3ee" opacity="0.08"/>
+  <circle cx="1060" cy="560" r="120" fill="#1e293b" opacity="0.06"/>
+</svg>

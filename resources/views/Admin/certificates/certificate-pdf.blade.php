@@ -1,4 +1,4 @@
-﻿@php
+@php
     $primary = $theme['primary'] ?? '#2563eb';
     $primaryDark = $theme['primaryDark'] ?? '#1d4ed8';
     $accent = $theme['accent'] ?? '#f97316';
@@ -6,6 +6,12 @@
     $courseName = $course->tenKH ?? 'OCC Course';
     $issuedDate = $issuedDateLabel ?? now()->format('M d, Y');
     $teacherName = $course->teacher?->hoTen ?? 'OCC Academic Board';
+    $templatePath = null;
+    if (!empty($template?->template_url)) {
+        $templatePath = Str::startsWith($template->template_url, ['http://', 'https://'])
+            ? $template->template_url
+            : public_path(trim($template->template_url, '/'));
+    }
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -203,8 +209,8 @@
 <body>
     <div class="wrapper">
         <div class="watermark">
-            @if(!empty($template?->template_url))
-                <img src="{{ $template->template_url }}" alt="Certificate watermark">
+            @if(!empty($templatePath))
+                <img src="{{ $templatePath }}" alt="Certificate watermark">
             @else
                 <svg width="420" height="420" viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="210" cy="210" r="180" stroke="{{ $primary }}" stroke-width="10" stroke-opacity="0.3" fill="none"/>
@@ -257,4 +263,3 @@
     </div>
 </body>
 </html>
-
