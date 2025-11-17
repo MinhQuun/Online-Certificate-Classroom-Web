@@ -254,7 +254,7 @@
 
                                             @php
                                                 $ariaLabel = $isActive
-                                                    ? 'Đã kích hoạt'
+                                                    ? 'Đã sở hữu'
                                                     : ($inCart
                                                         ? 'Đã trong giỏ hàng'
                                                         : 'Thêm ' . $course->tenKH . ' vào giỏ hàng'
@@ -270,7 +270,7 @@
                                                 data-cart-added-label="Đã trong giỏ hàng"
                                                 aria-label="{{ $ariaLabel }}"
                                             >
-                                                {{ $isActive ? 'Đã kích hoạt' : ($inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng') }}
+                                                {{ $isActive ? 'Đã sở hữu' : ($inCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng') }}
                                             </button>
                                         </div>
                                     </div>

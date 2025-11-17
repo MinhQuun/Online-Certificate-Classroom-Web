@@ -1,4 +1,115 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const pendingCartButtons = new Map();
+
+    const submitCartForm = (form) => {
+        if (typeof form.requestSubmit === "function") {
+            form.requestSubmit();
+            return true;
+        }
+
+        const event = new Event("submit", { bubbles: true, cancelable: true });
+        return form.dispatchEvent(event);
+    };
+
+    const resetCartButton = (button) => {
+        if (!button) {
+            return;
+        }
+
+        const original =
+            button.dataset.originalLabel || button.textContent.trim();
+        button.textContent = original;
+        button.disabled = false;
+        button.classList.remove("is-busy");
+        button.classList.remove("course-card__cta--in-cart");
+        button.setAttribute("aria-label", original);
+    };
+
+    const finalizeCartButton = (button) => {
+        if (!button) {
+            return;
+        }
+
+        const addedLabel =
+            button.dataset.cartAddedLabel || "Đã trong giỏ hàng";
+        button.textContent = addedLabel;
+        button.disabled = true;
+        button.classList.remove("is-busy");
+        button.classList.add("course-card__cta--in-cart");
+        button.setAttribute("aria-label", addedLabel);
+    };
+
+    const initAddToCartButtons = () => {
+        const buttons = document.querySelectorAll("[data-add-to-cart]");
+        if (!buttons.length) {
+            return;
+        }
+
+        buttons.forEach((button) => {
+            button.addEventListener("click", (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+
+                if (button.disabled) {
+                    return;
+                }
+
+                const courseId = button.getAttribute("data-add-to-cart");
+                if (!courseId) {
+                    return;
+                }
+
+                const form = document.querySelector(
+                    `.cart-form[data-course-id="${courseId}"]`
+                );
+                if (!form) {
+                    console.warn(
+                        "[Course Show] Không tìm thấy form giỏ hàng cho",
+                        courseId
+                    );
+                    return;
+                }
+
+                const originalLabel =
+                    button.dataset.originalLabel || button.textContent.trim();
+                button.dataset.originalLabel = originalLabel;
+
+                const addingLabel =
+                    button.dataset.cartAddingLabel || "Đang thêm...";
+                button.textContent = addingLabel;
+                button.disabled = true;
+                button.classList.add("is-busy");
+
+                pendingCartButtons.set(form, button);
+
+                const submitted = submitCartForm(form);
+                if (!submitted) {
+                    pendingCartButtons.delete(form);
+                    resetCartButton(button);
+                }
+            });
+        });
+
+        document.addEventListener("cart:request:finished", (event) => {
+            const detail = event.detail || {};
+            const { form, success } = detail;
+            if (!form || !pendingCartButtons.has(form)) {
+                return;
+            }
+
+            const button = pendingCartButtons.get(form);
+            pendingCartButtons.delete(form);
+
+            if (success) {
+                finalizeCartButton(button);
+            } else {
+                resetCartButton(button);
+            }
+        });
+    };
+
+    initAddToCartButtons();
+
     const flags = document.getElementById("courseAccessFlags");
     const isAuthenticated = flags?.dataset.authenticated === "1";
     const isEnrolled = flags?.dataset.enrolled === "1";

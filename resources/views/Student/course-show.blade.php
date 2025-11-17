@@ -78,6 +78,100 @@
 
                 </div>
             </div>
+
+            <div class="course-hero__actions" data-reveal-from-right>
+                <div class="course-price-card {{ $courseHasPromotion ? 'course-price-card--promo' : '' }}">
+                    <div class="course-price-card__header">
+                        <span class="course-price-card__eyebrow">{{ $coursePriceEyebrow }}</span>
+                        <span class="course-price-card__pill {{ $courseHasPromotion ? 'is-promo' : '' }}">{{ $coursePricePill }}</span>
+                    </div>
+                    <div class="course-price-card__value">{{ $courseSalePrice }} VND</div>
+                    <div class="course-price-card__meta">
+                        @if ($courseHasPromotion)
+                            <span class="course-price-card__origin">{{ $courseOriginalPrice }} VND</span>
+                            <span class="course-price-card__saving">
+                                <i class="fa-solid fa-arrow-trend-down" aria-hidden="true"></i>
+                                {{ $coursePriceNote }}
+                            </span>
+                            @if ($activePromotionEnds)
+                                <span class="course-price-card__expiry">
+                                    <i class="fa-regular fa-clock" aria-hidden="true"></i>
+                                    Ưu đãi đến {{ $activePromotionEnds }}
+                                </span>
+                            @endif
+                        @else
+                            <span class="course-price-card__note">
+                                <i class="fa-regular fa-file-lines" aria-hidden="true"></i>
+                                {{ $coursePriceNote }}
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                @php
+                    $primaryCtaClass = $isEnrolled
+                        ? 'course-card__cta--active'
+                        : ($isInCart ? 'course-card__cta--in-cart' : '');
+                    $primaryCtaText = $isEnrolled
+                        ? 'Đã sở hữu'
+                        : ($isInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng');
+                    $primaryCtaAria = $isEnrolled
+                        ? 'Bạn đã sở hữu khóa học này'
+                        : ($isInCart
+                            ? 'Khóa học đã trong giỏ hàng'
+                            : 'Thêm ' . $course->tenKH . ' vào giỏ hàng');
+                @endphp
+
+                <div class="course-hero__cta">
+                    <button
+                        type="button"
+                        class="course-card__cta course-card__cta--hero {{ $primaryCtaClass }}"
+                        data-add-to-cart="{{ $course->maKH }}"
+                        data-cart-adding-label="Đang thêm..."
+                        data-cart-added-label="Đã trong giỏ hàng"
+                        aria-label="{{ $primaryCtaAria }}"
+                        @if($isEnrolled || $isInCart) disabled aria-disabled="true" @endif
+                    >
+                        {{ $primaryCtaText }}
+                    </button>
+
+                    @if($isEnrolled)
+                        <p class="course-hero__cta-note">
+                            Bạn đã sở hữu khóa học này. Tất cả tài nguyên đã được mở khóa.
+                        </p>
+                    @elseif($isInCart)
+                        <a class="course-hero__cta-link" href="{{ route('student.cart.index') }}">
+                            Đến giỏ hàng để thanh toán
+                        </a>
+                    @else
+                        <p class="course-hero__cta-note">
+                            OCC hoàn tiền 100% nếu bạn không hài lòng trong 7 ngày đầu.
+                        </p>
+                    @endif
+                </div>
+
+                <ul class="course-hero__assurance">
+                    <li>
+                        <i class="fa-solid fa-book-open" aria-hidden="true"></i>
+                        Tài liệu được cập nhật hằng tuần
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-headset" aria-hidden="true"></i>
+                        Mentor OCC đồng hành trong suốt lộ trình
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-certificate" aria-hidden="true"></i>
+                        Nhận chứng chỉ hoàn thành được OCC xác thực
+                    </li>
+                </ul>
+            </div>
+
+            @if(!$isEnrolled && !$isInCart)
+                <form method="post" action="{{ route('student.cart.store') }}" class="cart-form d-none" data-course-id="{{ $course->maKH }}">
+                    @csrf
+                    <input type="hidden" name="course_id" value="{{ $course->maKH }}">
+                </form>
+            @endif
         </div>
     </section>
 
@@ -244,65 +338,27 @@
             <!-- Sidebar -->
             <aside class="course-sidebar" data-reveal-from-right>
                 <div class="course-sidebar__card">
-                    <div class="course-sidebar__price">
-                        <div class="course-price-card {{ $courseHasPromotion ? 'course-price-card--promo' : '' }} course-price-card--compact">
-                            <div class="course-price-card__header">
-                                <span class="course-price-card__eyebrow">{{ $coursePriceEyebrow }}</span>
-                                <span class="course-price-card__pill {{ $courseHasPromotion ? 'is-promo' : '' }}">{{ $coursePricePill }}</span>
-                            </div>
-                            <div class="course-price-card__value">{{ $courseSalePrice }} VND</div>
-                            <div class="course-price-card__meta">
-                                @if ($courseHasPromotion)
-                                    <span class="course-price-card__origin">{{ $courseOriginalPrice }} VND</span>
-                                    <span class="course-price-card__saving">
-                                        <i class="fa-solid fa-arrow-trend-down" aria-hidden="true"></i>
-                                        {{ $coursePriceNote }}
-                                    </span>
-                                    @if ($activePromotionEnds)
-                                        <span class="course-price-card__expiry">
-                                            <i class="fa-regular fa-clock" aria-hidden="true"></i>
-                                            Ưu đãi đến {{ $activePromotionEnds }}
-                                        </span>
-                                    @endif
-                                @else
-                                    <span class="course-price-card__note">
-                                        <i class="fa-regular fa-file-lines" aria-hidden="true"></i>
-                                        {{ $coursePriceNote }}
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>                    <form method="post" action="{{ route('student.cart.store') }}" class="course-sidebar__cta">
-                        @csrf
-                        <input type="hidden" name="course_id" value="{{ $course->maKH }}">
-                        <button type="submit"
-                                class="btn btn--primary {{ $isEnrolled ? 'btn--owned' : ($isInCart ? 'btn--in-cart' : '') }}"
-                                style="text-align: center; padding: 16px 24px; font-weight: 700; font-size: 16px; border-radius: 12px;"
-                                @if($isEnrolled || $isInCart) disabled @endif>
-                            {{ $isEnrolled ? 'Đã sở hữu' : ($isInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng') }}
-                        </button>
-                    </form>
-                    @if($isEnrolled)
-                        <p class="course-sidebar__note course-sidebar__note--owned">Bạn đã sở hữu khóa học này. Tất cả tài nguyên đã được mở khóa.</p>
-                    @elseif($isInCart)
-                        <a class="course-sidebar__link" href="{{ route('student.cart.index') }}">Đến giỏ hàng</a>
-                    @endif
+                    <h4>Trọn gói bao gồm</h4>
                     <ul class="course-sidebar__list">
-                        <li>Tài liệu định dạng sẵn</li>
+                        <li>Tài liệu đính kèm sẵn sàng</li>
                         <li>Review Exercises từng chương</li>
                         <li>Chứng chỉ hoàn thành</li>
+                        <li>Cập nhật nội dung trọn đời</li>
                     </ul>
                 </div>
 
-                {{-- <div class="course-sidebar__card course-sidebar__card--muted">
-                    <h4>Thông tin lịch học</h4>
-                    <ul>
-                        <li>Bắt đầu: {{ $startDate }}</li>
-                        <li>Kết thúc: {{ $endDate }}</li>
-                        <li>Hỗ trợ 24/7</li>
-                        <li>support@occ.edu.vn</li>
-                    </ul>
-                </div> --}}
+                <div class="course-sidebar__card">
+                    <h4>Cần trợ giúp?</h4>
+                    <p>Team OCC luôn sẵn sàng tư vấn khóa học & hỗ trợ đăng ký.</p>
+                    <a class="btn btn--ghost" href="mailto:support@occ.edu.vn">
+                        <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+                        support@occ.edu.vn
+                    </a>
+                    <a class="course-sidebar__support-phone" href="tel:0968000000">
+                        <i class="fa-solid fa-phone" aria-hidden="true"></i>
+                        0968 000 000
+                    </a>
+                </div>
             </aside>
         </div>
     </section>
@@ -499,17 +555,30 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <form method="post" action="{{ route('student.cart.store') }}">
-                                        @csrf
-                                        <input type="hidden" name="course_id" value="{{ $related->maKH }}">
-                                        <button
-                                            type="submit"
-                                            class="course-card__cta {{ $ctaClass }}"
-                                            @if($isActive || $inCart) disabled aria-disabled="true" @endif
-                                        >
-                                            {{ $ctaText }}
-                                        </button>
-                                    </form>
+                                    @php
+                                        $relatedCtaAria = $isActive
+                                            ? 'Đã sở hữu khóa học này'
+                                            : ($inCart
+                                                ? 'Khóa học đã trong giỏ hàng'
+                                                : 'Thêm ' . $related->tenKH . ' vào giỏ hàng');
+                                    @endphp
+                                    <button
+                                        type="button"
+                                        class="course-card__cta {{ $ctaClass }}"
+                                        data-add-to-cart="{{ $related->maKH }}"
+                                        data-cart-adding-label="Đang thêm..."
+                                        data-cart-added-label="Đã trong giỏ hàng"
+                                        aria-label="{{ $relatedCtaAria }}"
+                                        @if($isActive || $inCart) disabled aria-disabled="true" @endif
+                                    >
+                                        {{ $ctaText }}
+                                    </button>
+                                    @if(!$isActive && !$inCart)
+                                        <form method="post" action="{{ route('student.cart.store') }}" class="cart-form d-none" data-course-id="{{ $related->maKH }}">
+                                            @csrf
+                                            <input type="hidden" name="course_id" value="{{ $related->maKH }}">
+                                        </form>
+                                    @endif
                                 </div>
                             </div>
                         </article>
