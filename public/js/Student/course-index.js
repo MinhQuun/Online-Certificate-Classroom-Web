@@ -65,6 +65,15 @@
         }
 
         const bands = Array.from(document.querySelectorAll('.course-band[data-band-title]'));
+        const bandNav = document.querySelector('[data-course-band-nav]');
+        const bandNavItems = bandNav
+            ? Array.from(bandNav.querySelectorAll('[data-band-target]'))
+            : [];
+        const bandProgressCurrent = bandNav?.querySelector('[data-course-band-progress-current]');
+        const bandProgressTotal = bandNav?.querySelector('[data-course-band-progress-total]');
+        const bandTotal = Number(bandNav?.getAttribute('data-band-total')) || bands.length;
+        const reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const getScrollBehavior = () => (reduceMotionQuery.matches ? 'auto' : 'smooth');
         const defaultTitle =
             headingBar.getAttribute('data-heading-default-title') ||
             indicatorValue.textContent.trim() ||
@@ -79,12 +88,75 @@
             return;
         }
 
+        if (bandProgressTotal) {
+            bandProgressTotal.textContent = bandTotal;
+        }
+
         const syncHeadingTitle = () => {
             if (!headingTitle) {
                 return;
             }
 
             headingTitle.textContent = isSticky ? currentTitle : defaultTitle;
+        };
+
+        const updateBandProgress = (target) => {
+            if (!bandProgressCurrent) {
+                return;
+            }
+
+            const bandIndex = Number(target?.getAttribute('data-band-index')) || 1;
+            bandProgressCurrent.textContent = bandIndex;
+        };
+
+        const syncNavState = (target) => {
+            if (!bandNavItems.length) {
+                updateBandProgress(target);
+                return;
+            }
+
+            const targetName =
+                target?.getAttribute('data-band') || target?.getAttribute('data-band-title') || '';
+
+            bandNavItems.forEach((item) => {
+                const matches = item.getAttribute('data-band-target') === targetName;
+                item.classList.toggle('is-active', matches);
+
+                if (matches) {
+                    item.setAttribute('aria-current', 'true');
+                } else {
+                    item.removeAttribute('aria-current');
+                }
+            });
+
+            updateBandProgress(target);
+        };
+
+        const scrollToBand = (band) => {
+            if (!band) {
+                return;
+            }
+
+            const behavior = getScrollBehavior();
+
+            if (typeof band.scrollIntoView === 'function') {
+                band.scrollIntoView({
+                    behavior,
+                    block: 'start',
+                    inline: 'nearest',
+                });
+                return;
+            }
+
+            const rect = band.getBoundingClientRect();
+            const pageOffset = window.pageYOffset || document.documentElement.scrollTop || 0;
+            const fallbackOffset = (headingBar.offsetHeight || 0) + 24;
+            const targetTop = rect.top + pageOffset - fallbackOffset;
+
+            window.scrollTo({
+                top: Math.max(targetTop, 0),
+                behavior,
+            });
         };
 
         const syncIndicatorVisibility = () => {
@@ -101,7 +173,34 @@
             bands.forEach((band) => {
                 band.classList.toggle('is-current-band', band === target);
             });
+
+            syncNavState(target);
         };
+
+        if (bandNavItems.length) {
+            bandNavItems.forEach((button) => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+
+                    const targetName = button.getAttribute('data-band-target');
+                    if (!targetName) {
+                        return;
+                    }
+
+                    const targetBand = bands.find((band) => {
+                        const name = band.getAttribute('data-band') || band.getAttribute('data-band-title');
+                        return name === targetName;
+                    });
+
+                    if (!targetBand) {
+                        return;
+                    }
+
+                    updateIndicator(targetBand);
+                    scrollToBand(targetBand);
+                });
+            });
+        }
 
         const pickCurrentBand = () => {
             let candidate = null;

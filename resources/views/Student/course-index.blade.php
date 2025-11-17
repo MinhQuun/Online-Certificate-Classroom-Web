@@ -22,6 +22,12 @@
         $headingDescription = $isCategoryView
             ? 'Khám phá các khóa học nổi bật thuộc chuyên đề ' . $currentCategory->tenDanhMuc . '.'
             : 'Lộ trình rõ ràng, tài nguyên phong phú và bài kiểm tra cuối kỳ giúp bạn tự tin đạt mục tiêu chứng chỉ.';
+        $groupedCourses = !$courses->isEmpty()
+            ? $courses->getCollection()->groupBy(function ($c) {
+                return optional($c->category)->tenDanhMuc ?? 'Chưa có danh mục';
+            })
+            : collect();
+        $bandTotal = $groupedCourses->count();
     @endphp
 
     <section class="hero hero--courses" data-home-index>
@@ -79,6 +85,40 @@
                         {{ $headingTitle }}
                     </span>
                 </div>
+
+                @if ($bandTotal > 1)
+                    <div
+                        class="course-band-nav"
+                        data-course-band-nav
+                        data-band-total="{{ $bandTotal }}"
+                    >
+                        <div class="course-band-nav__headline">
+                            <span class="course-band-nav__label">
+                                <i class="fa-solid fa-list-ul" aria-hidden="true"></i>
+                                Mục lục danh mục
+                            </span>
+                            <span class="course-band-nav__progress" aria-live="polite">
+                                <span data-course-band-progress-current>1</span>
+                                <span aria-hidden="true">/</span>
+                                <span data-course-band-progress-total>{{ $bandTotal }}</span>
+                            </span>
+                        </div>
+                        <div class="course-band-nav__items" role="tablist" aria-label="Đi tới danh mục khóa học">
+                            @foreach ($groupedCourses as $bandName => $groupCourses)
+                                <button
+                                    type="button"
+                                    class="course-band-nav__item {{ $loop->first ? 'is-active' : '' }}"
+                                    data-band-target="{{ $bandName }}"
+                                    data-band-index="{{ $loop->iteration }}"
+                                    @if($loop->first) aria-current="true" @endif
+                                >
+                                    <span class="course-band-nav__item-label">{{ $bandName }}</span>
+                                    <span class="course-band-nav__count">{{ $groupCourses->count() }}</span>
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
             </div>
 
             @if ($courses->isEmpty())
@@ -88,18 +128,17 @@
                     <p class="empty-state__description">Hiện tại chưa có khóa học nào trong danh mục này. Vui lòng quay lại sau.</p>
                 </div>
             @else
-                @php
-                    $grouped = $courses->getCollection()->groupBy(function ($c) {
-                        return optional($c->category)->tenDanhMuc ?? 'Chưa có danh mục';
-                    });
-                @endphp
-
-                @foreach ($grouped as $bandName => $groupCourses)
+                @foreach ($groupedCourses as $bandName => $groupCourses)
+                    @php
+                        $bandAnchor = \Illuminate\Support\Str::slug($bandName) ?: 'band-' . $loop->iteration;
+                    @endphp
                     <section
-                        class="course-band"
+                        id="band-{{ $bandAnchor }}"
+                        class="course-band {{ $loop->first ? 'course-band--initial' : '' }}"
                         data-band="{{ $bandName }}"
                         data-band-title="{{ $bandName }}"
-                        data-reveal-on-scroll
+                        data-band-index="{{ $loop->iteration }}"
+                        @unless($loop->first) data-reveal-on-scroll @endunless
                     >
                         <h3 class="course-band__title">
                             <span class="course-band__title-text">{{ $bandName }}</span>
@@ -108,6 +147,7 @@
                         <div class="card-grid">
                             @foreach ($groupCourses as $course)
                                 @php
+                                    $isFirstBand = optional($loop->parent)->first ?? false;
                                     $inCart = in_array($course->maKH, $cartIds ?? [], true);
                                     $isActive = in_array($course->maKH, $activeCourseIds ?? [], true);
                                     if ($isActive) {
@@ -123,7 +163,12 @@
                                 @endphp
 
                                 {{-- CARD KHÔNG CÓ <a> WRAPPER --}}
-                                <article class="course-card {{ $hasPromotion ? 'course-card--has-promo' : '' }}" data-reveal-scale data-course-id="{{ $course->maKH }}" data-course-slug="{{ $course->slug }}">
+                                <article
+                                    class="course-card {{ $hasPromotion ? 'course-card--has-promo' : '' }}"
+                                    {{ $isFirstBand ? '' : 'data-reveal-scale' }}
+                                    data-course-id="{{ $course->maKH }}"
+                                    data-course-slug="{{ $course->slug }}"
+                                >
                                     <div class="course-card__category">
                                         <span class="chip chip--category">{{ optional($course->category)->tenDanhMuc ?? 'Chương trình nổi bật' }}</span>
                                     </div>
@@ -164,7 +209,7 @@
                                                             ? rtrim(rtrim(number_format($ratingCount / 1_000, 1, ',', '.'), '0'), ',') . 'k'
                                                             : number_format($ratingCount, 0, ',', '.'));
                                                 @endphp
-                                                
+
                                                 <span class="course-card__rating-count">({{ $ratingCountCompact }} lượt đánh giá)</span>
                                             @else
                                                 <span class="course-card__rating-count">Chưa có đánh giá</span>
@@ -208,10 +253,10 @@
                                             </div>
 
                                             @php
-                                                $ariaLabel = $isActive 
-                                                    ? 'Đã kích hoạt' 
-                                                    : ($inCart 
-                                                        ? 'Đã trong giỏ hàng' 
+                                                $ariaLabel = $isActive
+                                                    ? 'Đã kích hoạt'
+                                                    : ($inCart
+                                                        ? 'Đã trong giỏ hàng'
                                                         : 'Thêm ' . $course->tenKH . ' vào giỏ hàng'
                                                     );
                                             @endphp

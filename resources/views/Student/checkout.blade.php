@@ -43,7 +43,7 @@
 @endphp
 
 @section('content')
-    <section class="page-hero page-hero--soft">
+    <section class="page-hero page-hero--soft page-hero--checkout">
         <div class="oc-container">
             <p class="page-hero__breadcrumb">
                 <a href="{{ route('student.cart.index') }}">Giỏ hàng</a>
@@ -172,12 +172,6 @@
                                         <strong>{{ number_format($total, 0, ',', '.') }} VND</strong>
                                     </div>
                                 </div>
-
-                                <ul class="checkout-perks">
-                                    <li><i class="fa-solid fa-shield-heart"></i> Bảo mật thanh toán chuẩn VNPAY</li>
-                                    <li><i class="fa-solid fa-bolt"></i> Kích hoạt khóa học ngay sau khi thanh toán</li>
-                                    <li><i class="fa-solid fa-headset"></i> Mentor OCC hỗ trợ xuyên suốt</li>
-                                </ul>
 
                                 <div class="checkout-actions checkout-actions--stacked">
                                     <button type="button" class="btn btn--primary btn--lg" data-checkout-next>

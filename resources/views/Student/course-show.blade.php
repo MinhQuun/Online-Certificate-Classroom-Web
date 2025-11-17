@@ -75,11 +75,8 @@
                             <p>{{ $teacherSpeciality }}</p>
                         </div>
                     </div>
-                    
+
                 </div>
-            </div>
-            <div class="course-hero__media">
-                <img src="{{ $courseCover }}" alt="{{ $course->tenKH }}" loading="lazy">
             </div>
         </div>
     </section>
@@ -135,7 +132,7 @@
                                         @foreach ($chapter->lessons as $lesson)
                                             @php
                                                 $isFreeLesson = $freeLessonId && $lesson->maBH == $freeLessonId;
-                                                
+
                                                 if ($isEnrolled) {
                                                     $labelClass = 'label--unlocked';
                                                     $labelText = 'Unlocked';
@@ -190,7 +187,7 @@
                                                             $scoreData = $miniTestScores[$miniTest->maMT] ?? null;
                                                             $bestScore = $scoreData['best_score'] ?? null;
                                                             $isGraded = $scoreData['is_fully_graded'] ?? false;
-                                                        @endphp                                                        
+                                                        @endphp
                                                         <li class="mini-test-item" data-mini-test-id="{{ $miniTest->maMT }}">
                                                             <span class="label {{ $labelClass }}">{{ $labelText }}</span>
                                                             @if($isEnrolled || $isFreeMiniTest)
@@ -297,7 +294,7 @@
                     </ul>
                 </div>
 
-                <div class="course-sidebar__card course-sidebar__card--muted">
+                {{-- <div class="course-sidebar__card course-sidebar__card--muted">
                     <h4>Thông tin lịch học</h4>
                     <ul>
                         <li>Bắt đầu: {{ $startDate }}</li>
@@ -305,7 +302,7 @@
                         <li>Hỗ trợ 24/7</li>
                         <li>support@occ.edu.vn</li>
                     </ul>
-                </div>
+                </div> --}}
             </aside>
         </div>
     </section>

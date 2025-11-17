@@ -15,10 +15,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
+            const shouldRepeat = entry.target.hasAttribute('data-reveal-repeat');
+
             if (entry.isIntersecting) {
                 entry.target.classList.add('is-visible');
-            } else {
-                // Remove class when scrolling back up for re-animation
+
+                if (!shouldRepeat) {
+                    observer.unobserve(entry.target);
+                }
+            } else if (shouldRepeat) {
                 entry.target.classList.remove('is-visible');
             }
         });
