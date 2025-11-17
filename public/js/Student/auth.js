@@ -554,6 +554,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const resetForm = qs("#resetPasswordForm");
     const otpEmailInput = qs("#otpEmail");
     const resetEmailInput = qs("#resetEmail");
+    const resetTokenInput = qs("#resetToken");
 
     const backToLogin = qs("#backToLogin");
     const backToEmail = qs("#backToEmail");
@@ -594,6 +595,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 verifyOtpForm.classList.add("d-none");
                 resetForm.classList.remove("d-none");
                 resetEmailInput.value = formData.get("email");
+                resetTokenInput.value = formData.get("token");
                 showToast("OTP hợp lệ, nhập mật khẩu mới!", "success");
             });
         });
@@ -621,6 +623,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 container.classList.remove("forgot-password-mode");
                 resetForm.reset();
                 forgotForm.reset();
+                verifyOtpForm?.classList.add("d-none");
+                resetTokenInput.value = "";
             });
         });
     }
@@ -633,10 +637,13 @@ document.addEventListener("DOMContentLoaded", function () {
     backToEmail?.addEventListener("click", () => {
         verifyOtpForm?.classList.add("d-none");
         forgotForm?.classList.remove("d-none");
+        resetTokenInput.value = "";
+        resetEmailInput.value = "";
     });
     backToOtp?.addEventListener("click", () => {
         resetForm?.classList.add("d-none");
         verifyOtpForm?.classList.remove("d-none");
+        resetTokenInput.value = "";
     });
     toForgotPassword?.addEventListener("click", (e) => {
         e.preventDefault();

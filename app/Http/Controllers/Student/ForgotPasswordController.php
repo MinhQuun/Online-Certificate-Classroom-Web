@@ -8,10 +8,12 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 
 class ForgotPasswordController extends Controller
 {
+    private const OTP_TTL_MINUTES = 10;
+    private const OTP_RESEND_COOLDOWN_SECONDS = 60;
+
     public function showRequestForm()
     {
         return view('auth.forgot-password');
@@ -23,30 +25,54 @@ class ForgotPasswordController extends Controller
             'email' => 'required|email|exists:nguoidung,email',
         ]);
 
-        // Có thể dùng số 6 chữ số: $token = (string) random_int(100000, 999999);
-        $token = Str::random(6);
+        $now = Carbon::now();
+        $existingRequest = DB::table('password_resets')
+            ->where('email', $request->email)
+            ->first();
+
+        if ($existingRequest) {
+            $availableAt = Carbon::parse($existingRequest->created_at)
+                ->addSeconds(self::OTP_RESEND_COOLDOWN_SECONDS);
+
+            if ($availableAt->isFuture()) {
+                $secondsLeft = $now->diffInSeconds($availableAt);
+
+                return response()->json([
+                    'status' => false,
+                    'message' => "Vui lòng chờ {$secondsLeft}s trước khi yêu cầu mã OTP mới.",
+                ], 429);
+            }
+        }
+
+        $token = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $expiresAt = (clone $now)->addMinutes(self::OTP_TTL_MINUTES);
 
         DB::table('password_resets')->updateOrInsert(
             ['email' => $request->email],
             [
                 'token' => Hash::make($token),
-                'created_at' => now(),
+                'created_at' => $now,
             ]
         );
 
-        Mail::raw(
-            "Mã OTP đặt lại mật khẩu của bạn là: {$token} (hiệu lực 10 phút).",
-            function ($message) use ($request) {
-                $message->to($request->email)->subject('Mã OTP đặt lại mật khẩu');
-            }
-        );
+        Mail::send('emails.ResetPassMail', [
+            'otp' => $token,
+            'email' => $request->email,
+            'expiresAt' => $expiresAt,
+            'sentAt' => $now,
+            'appName' => config('app.name', 'Online Certificate Classroom'),
+            'supportEmail' => config('mail.from.address'),
+        ], function ($message) use ($request) {
+            $message->to($request->email)->subject('Mã OTP đặt lại mật khẩu');
+        });
 
         return response()->json([
             'status' => true,
             'message' => 'Mã OTP đã được gửi tới email của bạn.',
+            'expires_at' => $expiresAt->toIso8601String(),
+            'cooldown' => self::OTP_RESEND_COOLDOWN_SECONDS,
         ]);
     }
-
     public function verifyOtp(Request $request)
     {
         $request->validate([
@@ -58,7 +84,7 @@ class ForgotPasswordController extends Controller
             ->where('email', $request->email)
             ->first();
 
-        if (!$record || Carbon::parse($record->created_at)->lt(now()->subMinutes(10))) {
+        if (!$record || Carbon::parse($record->created_at)->lt(now()->subMinutes(self::OTP_TTL_MINUTES))) {
             return response()->json([
                 'status' => false,
                 'message' => 'Mã OTP không hợp lệ hoặc đã hết hạn.',
@@ -92,7 +118,7 @@ class ForgotPasswordController extends Controller
 
         if (
             !$record ||
-            Carbon::parse($record->created_at)->lt(now()->subMinutes(10)) ||
+            Carbon::parse($record->created_at)->lt(now()->subMinutes(self::OTP_TTL_MINUTES)) ||
             !Hash::check($request->token, $record->token)
         ) {
             return response()->json([

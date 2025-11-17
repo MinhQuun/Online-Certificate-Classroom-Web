@@ -37,6 +37,14 @@ CREATE TABLE nguoidung (
     PRIMARY KEY (maND)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Bang password_resets: Lưu mã OTP quên mật khẩu (mỗi email một bản ghi)
+CREATE TABLE password_resets (
+    email VARCHAR(255) NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Bảng quyen_nguoidung: Liên kết quyền với người dùng (nhiều-nhiều).
 CREATE TABLE quyen_nguoidung (
     maND INT NOT NULL,
