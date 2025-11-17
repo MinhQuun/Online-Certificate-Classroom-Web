@@ -19,87 +19,19 @@
             $paymentMethods = [
         'vnpay' => [
             'label' => 'Cổng thanh toán VNPAY',
-            'description' => 'Chuẩn 2.1.0, hỗ trợ QR/ATM/Thẻ quốc tế & ví điện tử.',
-            'badge' => 'Khuyến nghị',
             'icon' => 'fa-wallet',
-            'panel' => [
-                'eyebrow' => 'Luồng ưu tiên',
-                'title' => 'VNPAY Smart Checkout',
-                'lead' => 'Sinh vnp_TxnRef duy nhất, ký vnp_SecureHash và nhận IPN tự động từ VNPAY.',
-                'steps' => [
-                    ['title' => 'Tạo phiên thanh toán', 'text' => 'Gắn tổng tiền, mã đơn vào vnp_OrderInfo và ký SHA512.'],
-                    ['title' => 'Chuyển hướng & xác thực', 'text' => 'Truyền vnp_ReturnUrl + vnp_IpnUrl để nhận kết quả chuẩn 2.1.0.'],
-                    ['title' => 'Kích hoạt ngay', 'text' => 'IPN hợp lệ sẽ mở khóa học tức thì và ghi biên nhận.'],
-                ],
-                'highlights' => [
-                    ['icon' => 'fa-shield-heart', 'title' => 'Bảo mật', 'text' => 'TLS + HMAC SHA512, không lưu thông tin thẻ.'],
-                    ['icon' => 'fa-bolt', 'title' => 'Tự động', 'text' => 'Theo dõi PaymentTransaction để đối soát và kiểm tra mã đơn.'],
-                ],
-                'note' => 'Thông số khớp tài liệu sandbox.vnpayment.vn, sẵn sàng lên production.',
-            ],
         ],
         'qr' => [
             'label' => 'Quét mã VietQR',
-            'description' => 'Thanh toán ngay qua mã QR động trên app ngân hàng.',
-            'badge' => 'Nhanh',
             'icon' => 'fa-qrcode',
-            'panel' => [
-                'eyebrow' => 'Tức thì',
-                'title' => 'Mã VietQR động',
-                'lead' => 'Mã chứa sẵn giá trị và nội dung OCC để đối soát nhanh.',
-                'steps' => [
-                    ['title' => 'Quét & kiểm tra', 'text' => 'Xác nhận đúng số tiền và nội dung VietQR hiển thị.'],
-                    ['title' => 'Thanh toán', 'text' => 'Hoàn tất OTP/FaceID theo hướng dẫn của ngân hàng.'],
-                    ['title' => 'Nhận biên nhận', 'text' => 'Email biên nhận và kích hoạt diễn ra sau khi ngân hàng phản hồi.'],
-                ],
-                'highlights' => [
-                    ['icon' => 'fa-mobile-screen', 'title' => 'Phổ biến', 'text' => 'Tương thích hầu hết ứng dụng ngân hàng hỗ trợ VietQR.'],
-                    ['icon' => 'fa-envelope-circle-check', 'title' => 'Đối soát mềm', 'text' => 'Nội dung chuyển khoản chứa mã đơn OCC.'],
-                ],
-                'note' => 'Giữ màn hình cho tới khi giao dịch báo thành công để tránh timeout.',
-            ],
         ],
         'bank' => [
             'label' => 'Chuyển khoản ngân hàng',
-            'description' => 'Internet Banking hoặc quầy giao dịch với nội dung chuẩn OCC.',
-            'badge' => 'Truyền thống',
             'icon' => 'fa-building-columns',
-            'panel' => [
-                'eyebrow' => 'Đối soát thủ công',
-                'title' => 'Chuyển khoản ngân hàng',
-                'lead' => 'Phù hợp doanh nghiệp hoặc yêu cầu chứng từ gốc.',
-                'steps' => [
-                    ['title' => 'Nhập nội dung chuẩn', 'text' => 'OCC-[MÃ ĐƠN]-[SĐT] để hệ thống nhận diện nhanh.'],
-                    ['title' => 'Xác nhận lệnh', 'text' => 'Thực hiện lệnh và lưu ủy nhiệm chi/biên lai.'],
-                    ['title' => 'Đợi đối soát', 'text' => 'Đơn giữ 24h; kích hoạt ngay khi tiền vào tài khoản OCC.'],
-                ],
-                'highlights' => [
-                    ['icon' => 'fa-clipboard-list', 'title' => 'Chứng từ', 'text' => 'Có ủy nhiệm chi/biên lai phục vụ xuất hóa đơn.'],
-                    ['icon' => 'fa-user-shield', 'title' => 'Ưu tiên hỗ trợ', 'text' => 'Đối soát theo mã đơn và số điện thoại.'],
-                ],
-                'note' => 'Giữ biên lai để được hỗ trợ nhanh nếu cần.',
-            ],
         ],
         'visa' => [
             'label' => 'Thẻ quốc tế / Ví điện tử',
-            'description' => 'Visa/Master/JCB hoặc ví điện tử nội địa/ngoại.',
-            'badge' => 'Thẻ & Ví',
             'icon' => 'fa-credit-card',
-            'panel' => [
-                'eyebrow' => 'Thẻ & Ví',
-                'title' => 'Thanh toán linh hoạt',
-                'lead' => 'Xác thực qua 3-D Secure hoặc OTP tùy ngân hàng/nhà cung cấp.',
-                'steps' => [
-                    ['title' => 'Nhập thông tin', 'text' => 'Điền số thẻ/ngày hiệu lực hoặc chọn ví Momo/ZaloPay tương thích.'],
-                    ['title' => 'Xác thực', 'text' => 'Hoàn tất OTP/3-D Secure theo hướng dẫn.'],
-                    ['title' => 'Kích hoạt', 'text' => 'Giao dịch thành công → khóa học mở ngay, gửi biên nhận email.'],
-                ],
-                'highlights' => [
-                    ['icon' => 'fa-shield', 'title' => 'Không lưu thẻ', 'text' => 'OCC không lưu trữ thông tin thẻ của bạn.'],
-                    ['icon' => 'fa-earth-asia', 'title' => 'Đa tiền tệ', 'text' => 'Thanh toán VND, ngân hàng tự quy đổi nếu dùng thẻ ngoại.'],
-                ],
-                'note' => 'Một số ngân hàng có thể tính phí quy đổi/OTP tùy chính sách.',
-            ],
         ],
     ];
 
@@ -280,11 +212,6 @@
                                     </div>
                                 </div>
 
-                                <div class="payment-assurance">
-                                    <div><i class="fa-solid fa-lock"></i>Chuẩn HMAC SHA512, không lưu thẻ.</div>
-                                    <div><i class="fa-solid fa-circle-check"></i>Kích hoạt khóa học ngay khi xác thực.</div>
-                                </div>
-
                                 <div class="payment-methods">
                                     <div class="payment-options">
                                         @foreach(collect($paymentMethods)->only(['vnpay', 'qr']) as $methodKey => $method)
@@ -315,83 +242,8 @@
                                                         @endswitch
                                                     </span>
                                                 </div>
-                                                <p class="payment-option__desc">{{ $method['description'] }}</p>
-                                                <div class="payment-option__footer">
-                                                    <span>Hiển thị hướng dẫn chi tiết</span>
-                                                    <i class="fa-solid fa-angles-right"></i>
-                                                </div>
+                                                <p class="payment-option__desc"></p>
                                             </label>
-                                        @endforeach
-                                    </div>
-
-                                    <div class="payment-panels">
-                                        @foreach(collect($paymentMethods)->only(['vnpay', 'qr']) as $methodKey => $method)
-                                            @php $panel = $method['panel'] ?? []; @endphp
-                                            <article class="payment-panel {{ $activeMethodKey === $methodKey ? 'is-active' : '' }}" data-checkout-method-panel="{{ $methodKey }}">
-                                                <div class="payment-panel__hero {{ $methodKey === 'vnpay' ? 'payment-panel__hero--brand' : '' }}">
-                                                    <div>
-                                                        <p class="payment-panel__eyebrow">{{ $panel['eyebrow'] ?? 'Hướng dẫn' }}</p>
-                                                        <h3>{{ $panel['title'] ?? ($method['label'] ?? '') }}</h3>
-                                                        @if(!empty($panel['lead']))
-                                                            <p class="payment-panel__lead">{{ $panel['lead'] }}</p>
-                                                        @endif
-                                                        @if(!empty($panel['tags']))
-                                                            <div class="payment-panel__tags">
-                                                                @foreach($panel['tags'] as $tag)
-                                                                    <span>{{ $tag }}</span>
-                                                                @endforeach
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                    <div class="payment-panel__branding">
-                                                        @if($methodKey === 'vnpay')
-                                                            <span class="payment-panel__brand-text">VN<span>PAY</span></span>
-                                                        @else
-                                                            <i class="fa-solid {{ $method['icon'] ?? 'fa-shield-halved' }}"></i>
-                                                        @endif
-                                                    </div>
-                                                </div>
-
-                                                <div class="payment-panel__grid">
-                                                    <div class="payment-panel__block">
-                                                        <h4>Quy trình</h4>
-                                                        <ol class="payment-steps">
-                                                            @foreach($panel['steps'] ?? [] as $step)
-                                                                <li>
-                                                                    <span>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                                                                    <div>
-                                                                        <strong>{{ $step['title'] }}</strong>
-                                                                        <p>{{ $step['text'] }}</p>
-                                                                    </div>
-                                                                </li>
-                                                            @endforeach
-                                                        </ol>
-                                                    </div>
-                                                    <div class="payment-panel__block payment-panel__block--stack">
-                                                        <h4>Ghi chú &amp; cam kết</h4>
-                                                        <ul class="payment-checklist">
-                                                            @foreach($panel['highlights'] ?? [] as $highlight)
-                                                                <li>
-                                                                    <i class="fa-solid {{ $highlight['icon'] }}"></i>
-                                                                    <div>
-                                                                        <strong>{{ $highlight['title'] }}</strong>
-                                                                        <p>{{ $highlight['text'] }}</p>
-                                                                    </div>
-                                                                </li>
-                                                            @endforeach
-                                                        </ul>
-                                                        @if(!empty($panel['note']))
-                                                            <div class="payment-infobox">
-                                                                <i class="fa-solid fa-circle-info"></i>
-                                                                <div>
-                                                                    <strong>Lưu ý</strong>
-                                                                    <p>{{ $panel['note'] }}</p>
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </article>
                                         @endforeach
                                     </div>
                                 </div>
@@ -403,7 +255,6 @@
                                         <p class="checkout-eyebrow">Tóm tắt</p>
                                         <h3>Đơn hàng của bạn</h3>
                                     </div>
-                                    <span class="checkout-pill">Bảo lưu trạng thái</span>
                                 </div>
 
                                 <div class="checkout-summary checkout-summary--panel">
@@ -423,11 +274,6 @@
                                         <span>Cần thanh toán</span>
                                         <strong>{{ number_format($total, 0, ',', '.') }} VND</strong>
                                     </div>
-                                </div>
-
-                                <div class="checkout-note">
-                                    <i class="fa-solid fa-receipt"></i>
-                                    <span>Hóa đơn và mã kích hoạt sẽ gửi tới email {{ $currentUser?->email ?? 'của bạn' }} ngay khi thanh toán thành công.</span>
                                 </div>
 
                                 <div class="checkout-actions checkout-actions--stacked">
