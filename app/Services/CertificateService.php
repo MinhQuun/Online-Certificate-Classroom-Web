@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Student;
 use App\Models\User;
+use App\Services\StudentNotificationService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
@@ -112,6 +113,12 @@ class CertificateService
             'template' => $template,
         ]);
 
+        try {
+            app(StudentNotificationService::class)->notifyCertificateIssued($certificate);
+        } catch (Throwable $exception) {
+            report($exception);
+        }
+
         return $certificate->refresh();
     }
 
@@ -155,6 +162,12 @@ class CertificateService
             'course'   => $course,
             'template' => $template,
         ]);
+
+        try {
+            app(StudentNotificationService::class)->notifyCertificateIssued($certificate);
+        } catch (Throwable $exception) {
+            report($exception);
+        }
 
         return $certificate->refresh();
     }

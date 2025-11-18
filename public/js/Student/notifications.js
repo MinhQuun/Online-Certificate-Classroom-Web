@@ -142,14 +142,14 @@ document.addEventListener("DOMContentLoaded", () => {
         if (item?.is_read) {
             const status = document.createElement("span");
             status.className = "notification-card__status";
-            status.textContent = "Da doc";
+            status.textContent = "Đã đọc";
             actions.appendChild(status);
         } else {
             const markBtn = document.createElement("button");
             markBtn.type = "button";
             markBtn.className = "notification-card__mark";
             markBtn.dataset.action = "mark-read";
-            markBtn.textContent = "Danh dau da doc";
+            markBtn.textContent = "Đánh dấu đã đọc";
             actions.appendChild(markBtn);
         }
 
@@ -228,7 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const btn = card?.querySelector("[data-action='mark-read']");
             if (btn) {
-                btn.textContent = "Da doc";
+                btn.textContent = "Đã đọc";
                 btn.disabled = true;
                 btn.removeAttribute("data-action");
                 btn.classList.remove("notification-card__mark");
@@ -264,7 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     card.classList.remove("is-unread");
                     const btn = card.querySelector("[data-action='mark-read']");
                     if (btn) {
-                        btn.textContent = "Da doc";
+                        btn.textContent = "Đã đọc";
                         btn.disabled = true;
                         btn.removeAttribute("data-action");
                         btn.classList.remove("notification-card__mark");

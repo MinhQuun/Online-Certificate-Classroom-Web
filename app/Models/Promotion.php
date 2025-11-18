@@ -36,6 +36,19 @@ class Promotion extends Model
     const TARGET_COURSE = 'COURSE';
     const TARGET_BOTH   = 'BOTH';
 
+    public function scopeActive($query)
+    {
+        $today = now()->toDateString();
+
+        return $query->where('trangThai', 'ACTIVE')
+            ->where(function ($q) use ($today) {
+                $q->whereNull('ngayBatDau')->orWhere('ngayBatDau', '<=', $today);
+            })
+            ->where(function ($q) use ($today) {
+                $q->whereNull('ngayKetThuc')->orWhere('ngayKetThuc', '>=', $today);
+            });
+    }
+
     public function combos(): BelongsToMany
     {
         return $this->belongsToMany(Combo::class, 'khuyen_mai_goi', 'maKM', 'maGoi')

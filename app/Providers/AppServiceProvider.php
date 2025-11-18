@@ -3,12 +3,15 @@
 namespace App\Providers;
 
 use App\Models\Category;
+use App\Models\Enrollment;
 use App\Models\StudentNotification;
 use App\Support\Cart\StudentCart;
 use App\Support\Cart\StudentComboCart;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use App\Services\StudentNotificationService;
+use App\Services\CertificateService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,6 +45,27 @@ class AppServiceProvider extends ServiceProvider
 
             if (Auth::check() && Auth::user()?->student) {
                 try {
+                    $notifier = app(StudentNotificationService::class);
+                    $user = Auth::user();
+
+                    // Tự động cấp chứng chỉ nếu đủ điều kiện khi học viên tải bất kỳ trang nào
+                    try {
+                        $certificateService = app(CertificateService::class);
+                        $enrollments = Enrollment::query()
+                            ->where('maHV', $user->student->maHV)
+                            ->with(['course', 'student', 'course.certificateTemplate'])
+                            ->get();
+
+                        foreach ($enrollments as $enrollment) {
+                            $certificateService->issueCourseCertificateIfEligible($enrollment);
+                        }
+                    } catch (\Throwable $exception) {
+                        report($exception);
+                    }
+
+                    $notifier->syncActivePromotionsForUser($user);
+                    $notifier->syncCertificatesForUser($user);
+
                     $notificationPreview = StudentNotification::with(['course', 'combo'])
                         ->forUser(Auth::id())
                         ->latestFirst()

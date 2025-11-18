@@ -14,10 +14,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Throwable;
+use App\Services\StudentNotificationService;
 
 class GradingController extends Controller
 {
     use LoadsTeacherContext;
+
+    public function __construct(
+        private readonly StudentNotificationService $studentNotifier
+    ) {}
 
     public function writingIndex(Request $request): View
     {
@@ -75,7 +80,7 @@ class GradingController extends Controller
 
         $answersConstraint = function ($query) use ($mode) {
             $query->whereNull('graded_at')
-                ->whereHas('question', fn ($q) => $q->where('loai', MiniTestQuestion::TYPE_ESSAY));
+                ->whereHas('question', fn($q) => $q->where('loai', MiniTestQuestion::TYPE_ESSAY));
 
             if ($mode === 'speaking') {
                 $query->whereNotNull('answer_audio_url');
@@ -92,9 +97,9 @@ class GradingController extends Controller
             ->whereIn('status', [MiniTestResult::STATUS_SUBMITTED, MiniTestResult::STATUS_EXPIRED])
             ->whereHas('miniTest', function ($query) use ($teacherId, $skillType) {
                 $query->where('skill_type', $skillType)
-                    ->whereHas('course', fn ($courseQuery) => $courseQuery->where('maND', $teacherId));
+                    ->whereHas('course', fn($courseQuery) => $courseQuery->where('maND', $teacherId));
             })
-            ->when($selectedCourseId, fn ($query) => $query->where('maKH', $selectedCourseId))
+            ->when($selectedCourseId, fn($query) => $query->where('maKH', $selectedCourseId))
             ->whereHas('studentAnswers', $answersConstraint)
             ->with([
                 'miniTest.chapter',
@@ -125,7 +130,7 @@ class GradingController extends Controller
         $this->guardResultOwnership($result, $teacherId, $skillType);
 
         $answersScope = function ($query) use ($mode) {
-            $query->whereHas('question', fn ($q) => $q->where('loai', MiniTestQuestion::TYPE_ESSAY))
+            $query->whereHas('question', fn($q) => $q->where('loai', MiniTestQuestion::TYPE_ESSAY))
                 ->with('question')
                 ->orderBy('maCauHoi');
 
@@ -181,7 +186,13 @@ class GradingController extends Controller
             DB::rollBack();
             report($throwable);
 
-            return back()->with('error', 'Không thể chấm điểm bài nộp. Vui lòng thử lại.');
+            return back()->with('error', 'Khong the cham diem bai nop. Vui long thu lai.');
+        }
+
+        try {
+            $this->studentNotifier->notifyGradedResult($result->fresh());
+        } catch (Throwable $exception) {
+            report($exception);
         }
 
         return redirect()
@@ -196,6 +207,7 @@ class GradingController extends Controller
         $requiresListening = $skillType === MiniTest::SKILL_SPEAKING;
         $validated = $this->validateBulkGrades($request, $requiresListening);
         $gradedCount = 0;
+        $notifiableResults = [];
 
         try {
             DB::beginTransaction();
@@ -223,6 +235,7 @@ class GradingController extends Controller
                 ]);
 
                 $gradedCount++;
+                $notifiableResults[] = $result;
             }
 
             DB::commit();
@@ -230,16 +243,23 @@ class GradingController extends Controller
             DB::rollBack();
             report($throwable);
 
-            return back()->with('error', 'Không thể chấm điểm bài nộp. Vui lòng thử lại.');
+            return back()->with('error', 'Khong the cham diem bai nop. Vui long thu lai.');
         }
 
         $message = str_replace('{count}', (string) $gradedCount, $messageTemplate);
+
+        foreach ($notifiableResults as $gradedResult) {
+            try {
+                $this->studentNotifier->notifyGradedResult($gradedResult->fresh());
+            } catch (Throwable $exception) {
+                report($exception);
+            }
+        }
 
         return redirect()
             ->route($this->routePrefix($skillType) . '.index')
             ->with('success', $message);
     }
-
     protected function guardResultOwnership(MiniTestResult $result, int $teacherId, string $skillType, bool $suppress = false): bool
     {
         $result->loadMissing('miniTest.course');
@@ -253,7 +273,7 @@ class GradingController extends Controller
                 return false;
             }
 
-            abort(403, 'Bạn không được phép chấm điểm bài nộp này.');
+            abort(403, 'Báº¡n khÃ´ng Ä‘Æ°á»£c phÃ©p cháº¥m Ä‘iá»ƒm bÃ i ná»™p nÃ y.');
         }
 
         return true;
