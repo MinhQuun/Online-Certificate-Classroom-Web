@@ -62,6 +62,7 @@ use App\Http\Controllers\Student\ProfileController;
 use App\Http\Controllers\Student\MyCoursesController;
 use App\Http\Controllers\Student\GoogleAuthController;
 use App\Http\Controllers\Student\CertificateController as StudentCertificateController;
+use App\Http\Controllers\Student\NotificationController;
 use App\Http\Controllers\Payment\VNPayController;
 
 /*
@@ -159,6 +160,11 @@ Route::name('password.')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->prefix('student')->name('student.')->group(function () {
+    // Thong bao cho hoc vien
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::patch('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+    Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+
     // Mã kích hoạt khóa học
     // Tiến độ học tập & tiến độ bài học
     Route::get('/progress', [StudentProgressController::class, 'index'])->name('progress.index');
@@ -336,3 +342,4 @@ Route::middleware(['auth', 'teacher'])->prefix('teacher')->name('teacher.')->gro
     Route::get('/results',            [ResultController::class, 'index'])->name('results.index');
     Route::get('/results/{result}',   [ResultController::class, 'show'])->name('results.show');
 });
+

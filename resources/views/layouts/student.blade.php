@@ -3,12 +3,14 @@
         'css/Student/foundation.css',
         'css/Student/layout.css',
         'css/Student/elements.css',
+        'css/Student/notifications.css',
     ];
 
     $studentCoreScripts = [
         'js/Student/main.js',
         'js/Student/dropdown.js',
         'js/Student/accordion-toggle.js',
+        'js/Student/notifications.js',
     ];
 @endphp
 <!DOCTYPE html>

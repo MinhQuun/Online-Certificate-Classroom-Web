@@ -1,5 +1,8 @@
 ﻿@php
     $categories = $studentNavCategories ?? collect();
+    $notificationPreview = $studentNotificationPreview ?? collect();
+    $notificationUnread = $studentNotificationUnread ?? 0;
+    $notificationBadge = $notificationUnread > 9 ? '9+' : $notificationUnread;
 @endphp
 
 <header class="site-header" data-site-header>
@@ -98,6 +101,30 @@
 
         <div class="header-right">
             <div class="header-actions">
+                <button
+                    type="button"
+                    class="header-icon header-icon--notify"
+                    aria-label="Thong bao"
+                    data-notification-trigger
+                    data-endpoint="{{ route('student.notifications.index') }}"
+                    data-read-template="{{ route('student.notifications.read', ['notification' => '__ID__']) }}"
+                    data-mark-all-endpoint="{{ route('student.notifications.read-all') }}"
+                    data-authenticated="{{ Auth::check() ? '1' : '0' }}"
+                    data-unread-count="{{ $notificationUnread }}"
+                    data-fallback-image="{{ asset('Assets/logo.png') }}"
+                    @guest
+                        data-action="open-login"
+                        data-open="login"
+                        data-redirect="{{ request()->fullUrl() }}"
+                    @endguest
+                >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 3a5.5 5.5 0 0 0-5.5 5.5V13l-1.22 2.72A1 1 0 0 0 6.18 17h11.64a1 1 0 0 0 .9-1.4L17.5 13V8.5A5.5 5.5 0 0 0 12 3Zm0 18a2.5 2.5 0 0 1-2.45-2h4.9A2.5 2.5 0 0 1 12 21Z"/>
+                    </svg>
+                    <span class="header-icon__badge {{ $notificationUnread > 0 ? '' : 'is-hidden' }}" data-notification-badge>
+                        {{ $notificationBadge }}
+                    </span>
+                </button>
             @auth
                 @php
                     $fullName = Auth::user()->name ?? 'User';
@@ -193,10 +220,125 @@
     </div>
 </header>
 
+<div class="notification-overlay" data-notification-overlay aria-hidden="true">
+    <div class="notification-modal" role="dialog" aria-modal="true" aria-labelledby="notificationCenterTitle">
+        <div class="notification-modal__header">
+            <div>
+                <p class="notification-modal__eyebrow">Thông báo</p>
+                <h3 id="notificationCenterTitle">Trung tâm thông báo</h3>
+                <p class="notification-modal__subtitle">
+                    Cập nhật nhanh điểm số, lịch học và ưu đãi đang diễn ra cho tài khoản của bạn.
+                </p>
+            </div>
+            <div class="notification-modal__header-actions">
+                <button type="button" class="notification-icon-btn" data-notification-refresh aria-label="Lam moi thong bao">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+                <button type="button" class="notification-icon-btn" data-notification-close aria-label="Dong thong bao">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="notification-modal__actions">
+            <div class="notification-modal__status">
+                <span class="notification-dot"></span>
+                <span class="notification-modal__status-count" data-notification-unread>{{ $notificationUnread }}</span>
+                <span> Thông báo chưa đọc</span>
+            </div>
+            <button
+                type="button"
+                class="notification-mark-all"
+                data-notification-mark-all
+                {{ $notificationUnread ? '' : 'disabled' }}
+            >
+                Đánh dấu đã đọc
+            </button>
+        </div>
+
+        <div class="notification-modal__body">
+            <div class="notification-error is-hidden" data-notification-error>
+                <p>Không thể tải thông báo lúc này. Thử lại sau vào giây.</p>
+            </div>
+
+            <div class="notification-empty {{ $notificationPreview->isEmpty() ? '' : 'is-hidden' }}" data-notification-empty>
+                <div class="notification-empty__icon"><i class="fa-regular fa-bell"></i></div>
+                <p>Chưa có thông báo mới. Khi có thông báo về khóa học và ưu đãi chúng tôi sẽ cập nhật ở đây</p>
+            </div>
+
+            <div class="notification-empty {{ Auth::check() ? 'is-hidden' : '' }}" data-notification-guest>
+                <div class="notification-empty__icon"><i class="fa-regular fa-circle-user"></i></div>
+                <p>Đăng nhập để xem thông báo cá nhân của bạn.</p>
+                <button
+                    type="button"
+                    class="notification-card__cta"
+                    data-action="open-login"
+                    data-open="login"
+                    data-redirect="{{ request()->fullUrl() }}"
+                >
+                    Đăng nhập
+                </button>
+            </div>
+
+            <div class="notification-loading is-hidden" data-notification-loading>
+                @for($i = 0; $i < 3; $i++)
+                    <div class="notification-skeleton-card">
+                        <div class="notification-skeleton__media"></div>
+                        <div class="notification-skeleton__lines">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                @endfor
+            </div>
+
+            <div class="notification-list" data-notification-list>
+                @foreach($notificationPreview as $notification)
+                    <article
+                        class="notification-card {{ $notification->is_read ? 'is-read' : 'is-unread' }}"
+                        data-notification-id="{{ $notification->maTB }}"
+                    >
+                        <div class="notification-card__media">
+                            <img src="{{ $notification->thumbnail_url }}" alt="Minh hoa thong bao" loading="lazy">
+                        </div>
+                        <div class="notification-card__content">
+                            <div class="notification-card__top">
+                                <span class="notification-pill notification-pill--{{ $notification->badge_tone }}">
+                                    {{ $notification->type_label }}
+                                </span>
+                                <span class="notification-card__time">{{ $notification->time_label }}</span>
+                            </div>
+                            <h4 class="notification-card__title">{{ $notification->tieuDe }}</h4>
+                            <p class="notification-card__desc">{{ \Illuminate\Support\Str::limit($notification->noiDung, 150) }}</p>
+                            <div class="notification-card__actions">
+                                @if($notification->resolved_action_url)
+                                    <a href="{{ $notification->resolved_action_url }}" class="notification-card__cta">Xem chi tiết</a>
+                                @endif
+                                @if(!$notification->is_read)
+                                    <button type="button" class="notification-card__mark" data-action="mark-read">
+                                        Đánh dấu đã đọc
+                                    </button>
+                                @else
+                                    <span class="notification-card__status">Đã đọc</span>
+                                @endif
+                            </div>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('styles')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{ asset('css/Student/notifications.css') }}?v={{ student_asset_version('css/Student/notifications.css') }}">
 @endpush
 
 @push('scripts')
     <script src="{{ asset('js/Student/dropdown.js') }}" defer></script>
+    <script src="{{ asset('js/Student/notifications.js') }}" defer></script>
 @endpush
+
+

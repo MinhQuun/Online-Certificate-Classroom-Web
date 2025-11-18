@@ -159,6 +159,7 @@ CREATE TABLE tailieuhoctap (
     CONSTRAINT FK_TL_BH FOREIGN KEY (maBH) REFERENCES baihoc(maBH) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 -- =========================================================
 -- 3) COMBO / KHUYẾN MÃI / THANH TOÁN
 -- =========================================================
@@ -759,6 +760,31 @@ CREATE TABLE certificate_template (
     CONSTRAINT FK_CTEMPLATE_ND   FOREIGN KEY (created_by) REFERENCES nguoidung(maND)   ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- bảng thongbao
+CREATE TABLE thongbao (
+    maTB INT NOT NULL AUTO_INCREMENT,
+    maND INT NOT NULL,                                 
+    maKH INT NULL,                                     
+    maGoi INT NULL,                                    
+    tieuDe VARCHAR(200) NOT NULL,                      
+    noiDung VARCHAR(1200) NOT NULL,                    
+    loai ENUM('COURSE','GRADE','PROMOTION','SYSTEM') DEFAULT 'SYSTEM',
+    action_url VARCHAR(500) NULL,                      
+    action_label VARCHAR(120) DEFAULT 'Xem chi tiết',
+    hinhAnh VARCHAR(300) NULL,                         
+    metadata JSON NULL,                                
+    is_read TINYINT(1) NOT NULL DEFAULT 0,             
+    read_at DATETIME NULL,                             
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (maTB),
+    KEY idx_tb_user (maND),
+    KEY idx_tb_status (is_read, read_at),
+    KEY idx_tb_type (loai),
+    CONSTRAINT fk_tb_nd FOREIGN KEY (maND) REFERENCES nguoidung(maND) ON DELETE CASCADE,
+    CONSTRAINT fk_tb_kh FOREIGN KEY (maKH) REFERENCES khoahoc(maKH) ON DELETE SET NULL,
+    CONSTRAINT fk_tb_goi FOREIGN KEY (maGoi) REFERENCES goi_khoa_hoc(maGoi) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================
 -- 9) BẢNG HỆ THỐNG LARAVEL
