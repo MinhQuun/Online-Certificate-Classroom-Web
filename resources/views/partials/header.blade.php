@@ -231,10 +231,10 @@
                 </p>
             </div>
             <div class="notification-modal__header-actions">
-                <button type="button" class="notification-icon-btn" data-notification-refresh aria-label="Lam moi thong bao">
+                <button type="button" class="notification-icon-btn" data-notification-refresh aria-label="Làm mới thông báo">
                     <i class="fa-solid fa-rotate-right"></i>
                 </button>
-                <button type="button" class="notification-icon-btn" data-notification-close aria-label="Dong thong bao">
+                <button type="button" class="notification-icon-btn" data-notification-close aria-label="Đóng thông báo">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -300,7 +300,7 @@
                         data-notification-id="{{ $notification->maTB }}"
                     >
                         <div class="notification-card__media">
-                            <img src="{{ $notification->thumbnail_url }}" alt="Minh hoa thong bao" loading="lazy">
+                            <img src="{{ $notification->thumbnail_url }}" alt="Minh hoạ thông báo" loading="lazy">
                         </div>
                         <div class="notification-card__content">
                             <div class="notification-card__top">

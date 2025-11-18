@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
         media.className = "notification-card__media";
         const img = document.createElement("img");
         img.src = item?.thumbnail || trigger.dataset.fallbackImage || "";
-        img.alt = "Minh hoa thong bao";
+        img.alt = "Minh hoạ thông báo";
         img.loading = "lazy";
         media.appendChild(img);
 
@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const pill = document.createElement("span");
         const tone = item?.badge_tone || "accent";
         pill.className = `notification-pill notification-pill--${tone}`;
-        pill.textContent = item?.type_label || "Thong bao";
+        pill.textContent = item?.type_label || "Thông báo";
 
         const time = document.createElement("span");
         time.className = "notification-card__time";
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const title = document.createElement("h4");
         title.className = "notification-card__title";
-        title.textContent = item?.title || "Thong bao moi";
+        title.textContent = item?.title || "Thông báo mới";
 
         const desc = document.createElement("p");
         desc.className = "notification-card__desc";

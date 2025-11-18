@@ -186,7 +186,7 @@ class GradingController extends Controller
             DB::rollBack();
             report($throwable);
 
-            return back()->with('error', 'Khong the cham diem bai nop. Vui long thu lai.');
+            return back()->with('error', 'Không thể chấm điểm bài nộp. Vui lòng thử lại.');
         }
 
         try {
@@ -243,7 +243,7 @@ class GradingController extends Controller
             DB::rollBack();
             report($throwable);
 
-            return back()->with('error', 'Khong the cham diem bai nop. Vui long thu lai.');
+            return back()->with('error', 'Không thể chấm điểm bài nộp. Vui lòng thử lại.');
         }
 
         $message = str_replace('{count}', (string) $gradedCount, $messageTemplate);
@@ -273,7 +273,7 @@ class GradingController extends Controller
                 return false;
             }
 
-            abort(403, 'Báº¡n khÃ´ng Ä‘Æ°á»£c phÃ©p cháº¥m Ä‘iá»ƒm bÃ i ná»™p nÃ y.');
+            abort(403, 'Bạn không được phép chấm điểm bài nộp này.');
         }
 
         return true;

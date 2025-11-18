@@ -160,12 +160,11 @@ Route::name('password.')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->prefix('student')->name('student.')->group(function () {
-    // Thong bao cho hoc vien
+    // Thông báo cho học viên
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::patch('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
     Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
 
-    // Mã kích hoạt khóa học
     // Tiến độ học tập & tiến độ bài học
     Route::get('/progress', [StudentProgressController::class, 'index'])->name('progress.index');
     Route::post('/lessons/{lesson}/progress', [StudentLessonProgressController::class, 'store'])
@@ -255,12 +254,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('/certificates/templates/{template}', [CertificateAdminController::class, 'updateTemplate'])->name('certificates.templates.update');
     Route::get('/certificates/search/students', [CertificateAdminController::class, 'searchStudents'])->name('certificates.search.students');
     Route::get('/certificates/search/courses', [CertificateAdminController::class, 'searchCourses'])->name('certificates.search.courses');
-    // Qu?n l? khuy?n m?i
+
+    // Quản lý khuyến mãi
     Route::get('/promotions',             [PromotionAdminController::class, 'index'])->name('promotions.index');
     Route::post('/promotions',            [PromotionAdminController::class, 'store'])->name('promotions.store');
     Route::put('/promotions/{promotion}', [PromotionAdminController::class, 'update'])->name('promotions.update');
     Route::delete('/promotions/{promotion}', [PromotionAdminController::class, 'destroy'])->name('promotions.destroy');
-
 
     // Quản lý hoá đơn
     Route::get('/invoices',                 [InvoiceController::class, 'index'])->name('invoices.index');
@@ -312,13 +311,13 @@ Route::middleware(['auth', 'teacher'])->prefix('teacher')->name('teacher.')->gro
     // Mini-tests (giáo viên)
     Route::get('/minitests',                         [TeacherMiniTestController::class, 'index'])->name('minitests.index');
     Route::post('/minitests',                        [TeacherMiniTestController::class, 'store'])->name('minitests.store');
-    
+
     Route::post('/minitests/{miniTest}/questions',   [TeacherMiniTestController::class, 'storeQuestions'])->name('minitests.questions.store');
 
     Route::patch('/minitests/{miniTest}',            [TeacherMiniTestController::class, 'update'])->name('minitests.update');
     Route::delete('/minitests/{miniTest}',           [TeacherMiniTestController::class, 'destroy'])->name('minitests.destroy');
     Route::get('/minitests/{miniTest}/questions',    [TeacherMiniTestController::class, 'showQuestionForm'])->name('minitests.questions.form');
-    
+
     Route::post('/minitests/{miniTest}/materials',   [TeacherMiniTestController::class, 'storeMaterial'])->name('minitests.materials.store');
     Route::delete('/minitests/materials/{material}', [TeacherMiniTestController::class, 'destroyMaterial'])->name('minitests.materials.destroy');
     Route::post('/minitests/{miniTest}/publish',     [TeacherMiniTestController::class, 'publish'])->name('minitests.publish');
@@ -342,4 +341,3 @@ Route::middleware(['auth', 'teacher'])->prefix('teacher')->name('teacher.')->gro
     Route::get('/results',            [ResultController::class, 'index'])->name('results.index');
     Route::get('/results/{result}',   [ResultController::class, 'show'])->name('results.show');
 });
-
