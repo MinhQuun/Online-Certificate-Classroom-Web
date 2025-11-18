@@ -259,6 +259,42 @@
     transform: translateX(20%);
 }
 
+/* ====== Mobile panel tabs ====== */
+.auth-mobile-nav {
+    display: none;
+    width: 100%;
+    margin: 0 auto 12px;
+    padding: 4px;
+    gap: 8px;
+    border-radius: 999px;
+    background: rgba(241, 245, 255, 0.9);
+}
+.auth-mobile-tab {
+    flex: 1;
+    border: 0;
+    border-radius: 999px;
+    padding: 10px 12px;
+    background: transparent;
+    color: #475569;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+.auth-mobile-tab:focus-visible {
+    outline: 2px solid rgba(59, 130, 246, 0.4);
+    outline-offset: 2px;
+}
+.auth-mobile-tab.is-active {
+    background: linear-gradient(135deg, #3b82f6, #8ec5ff);
+    color: #fff;
+    box-shadow: 0 12px 24px rgba(59, 130, 246, 0.28);
+}
+.auth-container.forgot-password-mode .auth-mobile-nav {
+    display: none !important;
+}
+
 /* ====== Social ====== */
 .auth-social-container {
     margin: 20px 0;
@@ -346,9 +382,16 @@
 }
 
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-4px); }
-    75% { transform: translateX(4px); }
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-4px);
+    }
+    75% {
+        transform: translateX(4px);
+    }
 }
 
 /* Thông báo nhỏ dưới input (success/info) */
@@ -434,76 +477,78 @@
 @media (max-width: 992px) {
     .auth-container {
         max-width: 720px;
+        width: calc(100vw - 48px);
         min-height: 520px;
     }
 }
 
 @media (max-width: 768px) {
+    .auth-modal .modal-dialog {
+        margin: 1.25rem auto;
+    }
+
     .auth-container {
-        max-width: 95vw;
-        min-height: 560px;
-        border-radius: 12px;
-    }
-
-    /* Stack dọc 2 form, overlay lên trên cùng */
-    .auth-form-container,
-    .sign-in-container,
-    .sign-up-container {
-        position: absolute;
+        max-width: 100%;
         width: 100%;
+        min-height: 0;
+        height: auto;
+        border-radius: 20px;
+        padding: 20px 18px 28px;
+        overflow: visible;
     }
 
-    .sign-in-container {
-        transform: translateX(0) !important;
-        z-index: 3;
-    }
-    .auth-container.right-panel-active .sign-in-container {
-        transform: translateY(-100%) !important;
-    }
-
-    .sign-up-container {
-        transform: translateY(100%);
-        opacity: 0;
-        z-index: 2;
-    }
-    .auth-container.right-panel-active .sign-up-container {
-        transform: translateY(0);
-        opacity: 1;
-        z-index: 4;
-    }
-
-    .auth-overlay-container {
-        left: 0;
-        width: 100%;
-        height: 40%;
-        transform: none !important;
-    }
-    .auth-container.right-panel-active .auth-overlay-container {
-        transform: none !important;
-    }
-
-    .auth-overlay {
-        left: 0;
-        width: 100%;
-        height: 200%;
-        transform: translateY(0);
-    }
-    .auth-container.right-panel-active .auth-overlay {
-        transform: translateY(-50%);
-    }
-
-    .auth-overlay-panel {
-        width: 100%;
-        height: 50%;
-        padding: 0 24px;
+    .auth-mobile-nav {
+        display: flex;
     }
 
     .auth-form {
-        padding: 20px 24px 28px;
+        padding: 16px 6px 26px;
+        height: auto;
+        text-align: left;
+        align-items: stretch;
+    }
+
+    .auth-form .auth-title,
+    .auth-form .auth-subtitle {
+        text-align: left;
+        width: 100%;
+    }
+
+    .auth-form-container {
+        position: relative;
+        width: 100%;
+        left: 0;
+        height: auto;
+    }
+
+    .sign-in-container,
+    .sign-up-container {
+        width: 100%;
+        max-width: 100%;
+        position: relative;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(18px);
+        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+        z-index: 1;
+    }
+
+    .auth-container:not(.right-panel-active) .sign-in-container,
+    .auth-container.right-panel-active .sign-up-container {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+        z-index: 2;
+    }
+
+    .auth-overlay-container,
+    .auth-overlay,
+    .auth-overlay-panel {
+        display: none;
     }
 }
-
-/* ====== Giảm animation nếu người dùng không thích chuyển động ====== */
 @media (prefers-reduced-motion: reduce) {
     .auth-form-container,
     .auth-overlay,
