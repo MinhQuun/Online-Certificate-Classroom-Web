@@ -507,7 +507,7 @@
         height: auto;
         text-align: left;
         align-items: stretch;
-        justify-content: center;
+        justify-content: flex-start;;
         min-height: auto;
         overflow-y: visible;
     }
@@ -536,6 +536,7 @@
         transform: translateY(18px);
         transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
         z-index: 1;
+        display: none;
     }
 
     .auth-container:not(.right-panel-active) .sign-in-container,
@@ -545,6 +546,7 @@
         pointer-events: auto;
         transform: translateY(0);
         z-index: 2;
+        display: block;
     }
 
     .auth-overlay-container,
