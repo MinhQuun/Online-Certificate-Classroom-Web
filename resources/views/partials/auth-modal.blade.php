@@ -8,6 +8,27 @@
             <div class="modal-body p-0 auth-modal-body">
                 <div class="auth-container" id="authContainer">
 
+                    <div class="auth-mobile-nav" role="tablist" aria-label="Lua chon bieu mau dang nhap/dang ky">
+                        <button type="button"
+                                class="auth-mobile-tab is-active"
+                                data-auth-panel="login"
+                                aria-controls="loginForm"
+                                aria-selected="true"
+                                tabindex="0"
+                                role="tab">
+                            Đăng nhập
+                        </button>
+                        <button type="button"
+                                class="auth-mobile-tab"
+                                data-auth-panel="register"
+                                aria-controls="signupForm"
+                                aria-selected="false"
+                                tabindex="-1"
+                                role="tab">
+                            Đăng ký
+                        </button>
+                    </div>
+
                 <!-- Sign Up Form -->
                 <div class="auth-form-container sign-up-container">
                     <form class="auth-form" id="signupForm" action="{{ route('users.store') }}" method="post" novalidate>
@@ -238,6 +259,5 @@
         </div>
     </div>
 </div>
-
 
 

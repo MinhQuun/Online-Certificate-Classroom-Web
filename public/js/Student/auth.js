@@ -83,26 +83,45 @@ function clearFormErrors() {
     const container = qs("#authContainer");
     if (!signUpButton || !signInButton || !container) return;
 
-    signUpButton.addEventListener("click", () => {
-        clearFormErrors();
-        container.classList.add("right-panel-active");
-    });
+    signUpButton.addEventListener("click", () => setPanel("register"));
 
-    signInButton.addEventListener("click", () => {
-        clearFormErrors();
-        container.classList.remove("right-panel-active");
-    });
+    signInButton.addEventListener("click", () => setPanel("login"));
 })();
 
-function setPanel(panel) {
+function syncPanelState(panel, container) {
+    const normalized = panel === "register" ? "register" : "login";
+    const targetContainer = container || qs("#authContainer");
+    if (targetContainer) {
+        targetContainer.dataset.activePanel = normalized;
+    }
+
+    qsa(".auth-mobile-tab").forEach((tab) => {
+        const target = (tab.dataset.authPanel || "").toLowerCase();
+        const isActive = target === normalized;
+        tab.classList.toggle("is-active", isActive);
+        tab.setAttribute("aria-selected", isActive ? "true" : "false");
+        tab.setAttribute("tabindex", isActive ? "0" : "-1");
+    });
+}
+
+function setPanel(panel, options = {}) {
     const container = qs("#authContainer");
     if (!container) return;
-    clearFormErrors();
-    container.classList.remove("forgot-password-mode");
-    panel === "register"
-        ? container.classList.add("right-panel-active")
-        : container.classList.remove("right-panel-active");
+    const normalized = panel === "register" ? "register" : "login";
+    if (!options.skipClear) {
+        clearFormErrors();
+        container.classList.remove("forgot-password-mode");
+    }
+    container.classList.toggle("right-panel-active", normalized === "register");
+    syncPanelState(normalized, container);
 }
+
+document.addEventListener("click", (event) => {
+    const tab = event.target.closest(".auth-mobile-tab");
+    if (!tab) return;
+    const targetPanel = (tab.dataset.authPanel || "").toLowerCase();
+    setPanel(targetPanel === "register" ? "register" : "login");
+});
 
 // ===================== Show/hide password =====================
 document.addEventListener("click", (e) => {
@@ -131,17 +150,11 @@ document.addEventListener("click", (e) => {
 // ===================== Modal defaults & form validation =====================
 document.addEventListener("DOMContentLoaded", () => {
     const authModalEl = qs("#authModal");
-    const authContainer = qs("#authContainer");
     const defaultPanel = (
         authModalEl?.dataset.defaultPanel || "login"
     ).toLowerCase();
 
-    if (authContainer) {
-        authContainer.classList.toggle(
-            "right-panel-active",
-            defaultPanel === "register"
-        );
-    }
+    setPanel(defaultPanel, { skipClear: true });
 
     if (authModalEl?.dataset.openOnLoad === "true") {
         if (typeof openLoginModal === "function") {

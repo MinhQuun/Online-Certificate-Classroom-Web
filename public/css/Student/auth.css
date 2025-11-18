@@ -493,19 +493,23 @@
         min-height: 0;
         height: auto;
         border-radius: 20px;
-        padding: 20px 18px 28px;
+        padding: 12px 18px 20px;
         overflow: visible;
     }
 
     .auth-mobile-nav {
         display: flex;
+        margin: 0 auto 8px;
     }
 
     .auth-form {
-        padding: 16px 6px 26px;
+        padding: 0 12px 20px;
         height: auto;
         text-align: left;
         align-items: stretch;
+        justify-content: center;
+        min-height: auto;
+        overflow-y: visible;
     }
 
     .auth-form .auth-title,
