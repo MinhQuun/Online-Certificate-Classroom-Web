@@ -109,20 +109,6 @@
                                 </div>
                             @endif
 
-                            {{-- Meta Info --}}
-                            <div class="course-meta">
-                                <div class="meta-item">
-                                    <i class="fa-regular fa-calendar"></i>
-                                    <span>{{ $enrollment->ngayNhapHoc ? $enrollment->ngayNhapHoc->format('d/m/Y') : 'N/A' }}</span>
-                                </div>
-                                @if($enrollment->expires_at)
-                                    <div class="meta-item">
-                                        <i class="fa-regular fa-clock"></i>
-                                        <span>Hết hạn: {{ $enrollment->expires_at->format('d/m/Y') }}</span>
-                                    </div>
-                                @endif
-                            </div>
-
             {{-- Actions --}}
             <div class="course-actions">
                 @if(in_array($enrollment->trangThai, ['ACTIVE', 'PENDING'], true))

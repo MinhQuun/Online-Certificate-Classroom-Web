@@ -39,7 +39,7 @@
                     <i class="fa-solid fa-wallet"></i>
                 </div>
                 <div class="stat-info">
-                    <span class="stat-label">Tổng chi tiêu (Đã kích hoạt)</span>
+                    <span class="stat-label">Tổng chi tiêu</span>
                     <span class="stat-value">{{ number_format($totalAmount, 0, ',', '.') }}₫</span>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                     <i class="fa-solid fa-book"></i>
                 </div>
                 <div class="stat-info">
-                    <span class="stat-label">Khóa học đã kích hoạt</span>
+                    <span class="stat-label">Khóa học đã sở hữu</span>
                     <span class="stat-value">{{ $activatedCoursesCount }}</span>
                 </div>
             </div>

@@ -21,14 +21,13 @@ class ProgressController extends Controller
 
     public function __construct(
         private readonly CertificateService $certificateService
-    ) {
-    }
+    ) {}
 
     public function index(Request $request)
     {
         $teacherId = Auth::id() ?? 0;
 
-        $courses = Course::with(['chapters.lessons' => fn ($query) => $query->orderBy('thuTu')])
+        $courses = Course::with(['chapters.lessons' => fn($query) => $query->orderBy('thuTu')])
             ->where('maND', $teacherId)
             ->orderBy('tenKH')
             ->get();
@@ -114,7 +113,7 @@ class ProgressController extends Controller
             'filters'       => $filters,
             'metrics'       => $metrics,
             'statusLabels'  => [
-                'PENDING' => 'Chờ kích hoạt',
+                
                 'ACTIVE'  => 'Đang học',
                 'EXPIRED' => 'Hết hạn',
             ],
@@ -138,7 +137,7 @@ class ProgressController extends Controller
 
         if (!empty($validated['last_lesson_id'])) {
             $lessonExists = Lesson::where('maBH', $validated['last_lesson_id'])
-                ->whereHas('chapter', fn ($query) => $query->where('maKH', $course->maKH))
+                ->whereHas('chapter', fn($query) => $query->where('maKH', $course->maKH))
                 ->exists();
 
             if (!$lessonExists) {

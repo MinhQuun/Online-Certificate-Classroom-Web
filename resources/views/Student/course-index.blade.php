@@ -33,7 +33,7 @@
     <section class="hero hero--courses" data-home-index>
         <div class="oc-container hero__grid">
             <div class="hero__text" data-reveal-from-left>
-                <h1>Khởi động lộ trình học ngoại ngữ chuyên sâu</h1>
+                <h1>Online Certificate Classroom</h1>
                 <p>Chương trình được thiết kế bởi đội ngũ giảng viên có chuyên môn, tập trung vào kỹ năng thực hành và hệ thống đánh giá liên tục.</p>
                 <div class="hero__meta">
                     <span>Thư viện tài liệu số</span>
@@ -123,8 +123,7 @@
 
             @if ($courses->isEmpty())
                 <div class="empty-state">
-                    <div class="empty-state__icon">Sách</div>
-                    <h3 class="empty-state__title">Chưa có khóa học</h3>
+                    <div class="empty-state__icon">Chưa có khóa học</div>
                     <p class="empty-state__description">Hiện tại chưa có khóa học nào trong danh mục này. Vui lòng quay lại sau.</p>
                 </div>
             @else

@@ -126,7 +126,7 @@
         <div class="email-wrapper">
             <div class="email-card">
                 <header class="email-header">
-                    <h1>{{ $appName ?? 'Online Certificate Classroom' }}</h1>
+                    <h1>Online Certificate Classroom</h1>
                     <p>Yêu cầu đặt lại mật khẩu của bạn</p>
                 </header>
                 <main class="email-body">

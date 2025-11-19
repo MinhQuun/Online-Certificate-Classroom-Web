@@ -97,9 +97,9 @@
                 <a class="nav-link {{ request()->routeIs('teacher.progress.*') ? 'active' : '' }}"
                     href="{{ route('teacher.progress.index') }}">
                     <i class="bi bi-graph-up me-2"></i> Tiến độ học tập
-                    @if(($badges['low_progress'] ?? 0) > 0)
+                    {{-- @if(($badges['low_progress'] ?? 0) > 0)
                     <span class="badge text-bg-danger ms-2">{{ $badges['low_progress'] }}</span>
-                    @endif
+                    @endif --}}
                 </a>
                 </li>
                 <li class="nav-item">
