@@ -30,8 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const addedLabel =
-            button.dataset.cartAddedLabel || "Đã trong giỏ hàng";
+        const addedLabel = button.dataset.cartAddedLabel || "Đã trong giỏ hàng";
         button.textContent = addedLabel;
         button.disabled = true;
         button.classList.remove("is-busy");
@@ -109,6 +108,54 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     initAddToCartButtons();
+
+    const scrollToSelector = (selector) => {
+        if (!selector) {
+            return;
+        }
+
+        const target = document.querySelector(selector);
+        if (!target) {
+            return;
+        }
+
+        const header = document.querySelector("[data-site-header]");
+        const headerHeight = header ? header.offsetHeight : 0;
+        const targetTop = target.getBoundingClientRect().top + window.scrollY;
+        const offset = Math.max(targetTop - headerHeight - 24, 0);
+        window.scrollTo({
+            top: offset,
+            behavior: "smooth",
+        });
+    };
+
+    const initScrollTriggers = () => {
+        const triggers = document.querySelectorAll("[data-scroll-target]");
+        if (!triggers.length) {
+            return;
+        }
+
+        triggers.forEach((trigger) => {
+            const selector = trigger.dataset.scrollTarget;
+            if (!selector) {
+                return;
+            }
+
+            trigger.addEventListener("click", (event) => {
+                event.preventDefault();
+                scrollToSelector(selector);
+            });
+
+            trigger.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    scrollToSelector(selector);
+                }
+            });
+        });
+    };
+
+    initScrollTriggers();
 
     const flags = document.getElementById("courseAccessFlags");
     const isAuthenticated = flags?.dataset.authenticated === "1";
@@ -255,8 +302,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const hiddenInput = form?.querySelector('input[name="diemSo"]');
         if (!form || !hiddenInput) return;
 
-        const stars = Array.from(wrapper.querySelectorAll(".review-form__star"));
-        let committed = parseInt(hiddenInput.value || wrapper.dataset.initial || "0", 10) || 0;
+        const stars = Array.from(
+            wrapper.querySelectorAll(".review-form__star")
+        );
+        let committed =
+            parseInt(hiddenInput.value || wrapper.dataset.initial || "0", 10) ||
+            0;
 
         const applyState = (value) => {
             stars.forEach((star) => {
@@ -327,7 +378,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const reviewSection = document.getElementById("course-reviews");
     if (reviewSection && reviewSection.querySelector(".alert")) {
         window.setTimeout(() => {
-            reviewSection.scrollIntoView({ behavior: "smooth", block: "start" });
+            reviewSection.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
         }, 150);
     }
 
@@ -362,9 +416,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 });
             },
-            { 
+            {
                 threshold: 0.15, // Trigger khi 15% element vào view
-                rootMargin: "0px 0px -50px 0px" // Trigger sớm hơn một chút
+                rootMargin: "0px 0px -50px 0px", // Trigger sớm hơn một chút
             }
         );
 

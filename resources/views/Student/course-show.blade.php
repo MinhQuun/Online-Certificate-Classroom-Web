@@ -53,30 +53,40 @@
                 <h1>{{ $course->tenKH }}</h1>
                 <p>{{ $course->moTa }}</p>
                 <ul class="course-hero__stats">
-                    <li><strong>{{ $course->thoiHanNgay }}</strong> <span>Ngày học</span></li>
-                    <li><strong>{{ $course->chapters->count() }}</strong> <span>Chương học</span></li>
-                    <li><strong>{{ $averageRating !== null ? number_format((float) $averageRating, 1, ",", ".") : "--" }}
-                        <div class="course-rating-summary__stars">
-                            @for ($star = 1; $star <= 5; $star++)
-                                @php
-                                    $starFill = $averageRating !== null ? max(min($averageRating - ($star - 1), 1), 0) : 0;
-                                @endphp
-                                <i class="@if($starFill >= 1) fas fa-star @elseif($starFill >= 0.5) fas fa-star-half-alt @else far fa-star @endif"></i>
-                            @endfor
-                        </div>
-                        </strong> <span>Đánh giá ({{ $totalReviews }})</span></li>
+                    <li class="course-hero__stat">
+                        <strong>{{ $course->thoiHanNgay }}</strong> <span>Ngày học</span>
+                    </li>
+                    <li
+                        class="course-hero__stat course-hero__stat--link"
+                        data-scroll-target="#course-content"
+                        role="button"
+                        tabindex="0"
+                        aria-label="Xem chi tiết {{ $course->chapters->count() }} chương học"
+                        aria-controls="course-content"
+                    >
+                        <strong>{{ $course->chapters->count() }}</strong> <span>Chương học</span>
+                    </li>
+                    <li
+                        class="course-hero__stat course-hero__stat--link"
+                        data-scroll-target="#course-reviews"
+                        role="button"
+                        tabindex="0"
+                        aria-label="Đi tới đánh giá khóa học ({{ $totalReviews }} đánh giá)"
+                        aria-controls="course-reviews"
+                    >
+                        <strong>{{ $averageRating !== null ? number_format((float) $averageRating, 1, ",", ".") : "--" }}
+                            <div class="course-rating-summary__stars">
+                                @for ($star = 1; $star <= 5; $star++)
+                                    @php
+                                        $starFill = $averageRating !== null ? max(min($averageRating - ($star - 1), 1), 0) : 0;
+                                    @endphp
+                                    <i class="@if($starFill >= 1) fas fa-star @elseif($starFill >= 0.5) fas fa-star-half-alt @else far fa-star @endif"></i>
+                                @endfor
+                            </div>
+                        </strong>
+                        <span>Đánh giá ({{ $totalReviews }})</span>
+                    </li>
                 </ul>
-                <div class="course-hero__meta">
-                    <div class="instructor-card">
-                        <div class="instructor-card__avatar" aria-hidden="true">{{ $teacherInitial }}</div>
-                        <div class="instructor-card__body">
-                            <span class="instructor-card__label">Giảng viên</span>
-                            <h3>{{ $teacherName }}</h3>
-                            <p>{{ $teacherSpeciality }}</p>
-                        </div>
-                    </div>
-
-                </div>
             </div>
 
             <div class="course-hero__actions" data-reveal-from-right>
@@ -184,7 +194,7 @@
          hidden></div>
 
     <!-- Main Content -->
-    <section class="section">
+    <section id="course-content" class="section">
         <div class="oc-container course-layout">
             @if (!$isEnrolled)
                 <div id="lockedNotice" class="course-locked-notice" role="alert" hidden>
@@ -207,9 +217,9 @@
 
                 <!-- Chapters -->
                 @foreach ($course->chapters as $chapter)
-                    <article class="module is-open" data-accordion data-reveal-on-scroll>
+                    <article class="module" data-accordion data-accordion-autopen="false" data-reveal-on-scroll>
                         <header class="module__header">
-                            <button class="module__toggle" type="button" aria-expanded="true">
+                            <button class="module__toggle" type="button" aria-expanded="false">
                                 <div class="module__info">
                                     <span class="module__eyebrow">Chương {{ $chapter->thuTu }}</span>
                                     <span class="module__title">{{ $chapter->tenChuong }}</span>
@@ -251,7 +261,7 @@
 
                                 <!-- Mini Tests -->
                                 @if ($chapter->miniTests->count())
-                                    <article class="module module--nested" data-accordion style="margin-top: 24px;">
+                                    <article class="module module--nested" data-accordion data-accordion-autopen="false" style="margin-top: 24px;">
                                         <header class="module__header">
                                             <button class="module__toggle" type="button" aria-expanded="false">
                                                 <div class="module__info">
@@ -468,6 +478,25 @@
                     {{ $courseReviews->links() }}
                 </div>
             @endif
+            <div class="course-instructor-highlight" data-reveal-on-scroll>
+                <div class="course-instructor-highlight__intro">
+                    <span class="course-instructor-highlight__eyebrow">Giảng viên đồng hành</span>
+                    <p>Đội ngũ OCC và giảng viên phụ trách theo sát từng chương, phản hồi câu hỏi trong vòng 24 giờ và điều phối mentor khi cần thiết.</p>
+                    <p class="course-instructor-highlight__meta-text">
+                        {{ $totalReviews > 0 ? $totalReviews . ' học viên đã để lại đánh giá tích cực.' : 'Hãy là người đầu tiên đánh giá trải nghiệm học tập.' }}
+                    </p>
+                </div>
+                <div class="course-instructor-highlight__profile">
+                    <div class="instructor-card">
+                        <div class="instructor-card__avatar" aria-hidden="true">{{ $teacherInitial }}</div>
+                        <div class="instructor-card__body">
+                            <span class="instructor-card__label">Giảng viên</span>
+                            <h3>{{ $teacherName }}</h3>
+                            <p>{{ $teacherSpeciality }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
