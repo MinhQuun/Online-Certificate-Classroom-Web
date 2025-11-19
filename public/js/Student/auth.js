@@ -76,6 +76,26 @@ function clearFormErrors() {
     });
 }
 
+// ===================== Button loading helper =====================
+function attachSubmitLoadingState(
+    form,
+    buttonSelector = 'button[type="submit"]'
+) {
+    if (!form) return;
+    const submitBtn = form.querySelector(buttonSelector);
+    if (!submitBtn) return;
+
+    form.addEventListener("submit", (event) => {
+        setTimeout(() => {
+            if (event.defaultPrevented) return;
+            if (submitBtn.classList.contains("is-loading")) return;
+            submitBtn.classList.add("is-loading");
+            submitBtn.disabled = true;
+            submitBtn.setAttribute("aria-busy", "true");
+        }, 0);
+    });
+}
+
 // ===================== Toggle đăng nhập / đăng ký =====================
 (() => {
     const signUpButton = qs("#signUp");
@@ -406,6 +426,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
+    attachSubmitLoadingState(signupForm);
+    attachSubmitLoadingState(loginForm);
 });
 
 // ===================== Redirect handling =====================
