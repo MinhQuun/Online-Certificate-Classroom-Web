@@ -12,7 +12,11 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: linear-gradient(120deg, var(--color-accent), var(--color-accent-soft));
+    background: linear-gradient(
+        120deg,
+        var(--color-accent),
+        var(--color-accent-soft)
+    );
     border: none;
     color: white;
     font-size: 24px;
@@ -38,7 +42,7 @@
 .dictionary-panel {
     position: fixed;
     bottom: 100px;
-    right: 30px;
+    left: 30px;
     width: 420px;
     max-height: 600px;
     background: white;
@@ -73,7 +77,11 @@
     align-items: center;
     justify-content: space-between;
     padding: 18px 20px;
-    background: linear-gradient(120deg, var(--color-accent), var(--color-accent-soft));
+    background: linear-gradient(
+        120deg,
+        var(--color-accent),
+        var(--color-accent-soft)
+    );
     color: white;
 }
 
@@ -147,7 +155,11 @@
 
 .dictionary-search-btn {
     padding: 12px 24px;
-    background: linear-gradient(120deg, var(--color-accent), var(--color-accent-soft));
+    background: linear-gradient(
+        120deg,
+        var(--color-accent),
+        var(--color-accent-soft)
+    );
     border: none;
     border-radius: 10px;
     color: white;
@@ -192,7 +204,7 @@
     accent-color: var(--color-accent);
 }
 
-.search-option input[type="radio"]:checked+span {
+.search-option input[type="radio"]:checked + span {
     color: var(--color-accent);
     font-weight: 600;
 }
@@ -271,7 +283,11 @@
     font-weight: 700;
     color: #111827;
     margin-bottom: 8px;
-    background: linear-gradient(120deg, var(--color-accent), var(--color-accent-soft));
+    background: linear-gradient(
+        120deg,
+        var(--color-accent),
+        var(--color-accent-soft)
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -292,7 +308,11 @@
 }
 
 .pronunciation-audio {
-    background: linear-gradient(120deg, var(--color-accent), var(--color-accent-soft));
+    background: linear-gradient(
+        120deg,
+        var(--color-accent),
+        var(--color-accent-soft)
+    );
     color: white;
     border: none;
     padding: 6px 14px;
@@ -316,7 +336,11 @@
 .word-type {
     display: inline-block;
     padding: 6px 14px;
-    background: linear-gradient(120deg, rgba(var(--color-accent-rgb, 59, 130, 246), 0.1), rgba(var(--color-accent-rgb, 59, 130, 246), 0.05));
+    background: linear-gradient(
+        120deg,
+        rgba(var(--color-accent-rgb, 59, 130, 246), 0.1),
+        rgba(var(--color-accent-rgb, 59, 130, 246), 0.05)
+    );
     color: var(--color-accent);
     border-radius: 8px;
     font-size: 13px;
@@ -418,7 +442,11 @@
 }
 
 .history-item:hover {
-    background: linear-gradient(120deg, var(--color-accent), var(--color-accent-soft));
+    background: linear-gradient(
+        120deg,
+        var(--color-accent),
+        var(--color-accent-soft)
+    );
     color: white;
     border-color: transparent;
     transform: translateY(-2px);
@@ -506,7 +534,11 @@
 }
 
 .dictionary-body::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, var(--color-accent), var(--color-accent-soft));
+    background: linear-gradient(
+        180deg,
+        var(--color-accent),
+        var(--color-accent-soft)
+    );
     border-radius: 4px;
 }
 
