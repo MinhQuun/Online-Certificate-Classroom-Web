@@ -108,7 +108,7 @@
                                                             @if($item->enrollment->trangThai === 'ACTIVE')
                                                                 <span class="status-badge status-active">
                                                                     <i class="fa-solid fa-circle-check"></i>
-                                                                    Đã kích hoạt
+                                                                    Đã sở hữu
                                                                 </span>
                                                             @elseif($item->enrollment->trangThai === 'EXPIRED')
                                                                 <span class="status-badge status-expired">
