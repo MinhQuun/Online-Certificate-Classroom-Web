@@ -67,7 +67,7 @@ class GradingController extends Controller
     protected function buildIndex(Request $request, string $skillType, string $view, string $mode): View
     {
         $teacher = Auth::user();
-        $teacherId = $teacher?->getKey() ?? 0;
+        $teacherId = Auth::id() ?? 0;
 
         $courses = Course::where('maND', $teacherId)
             ->orderBy('tenKH')
