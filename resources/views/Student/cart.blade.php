@@ -201,17 +201,20 @@
 
                             <div class="summary-row">
                                 <span>Combo</span>
-                                <strong>{{ number_format($comboTotal, 0, ',', '.') }} VND</strong>
+                                {{-- THAY ĐỔI: Sử dụng data-cart-combo-total và khởi tạo 0 VND --}}
+                                <strong data-cart-combo-total>0 VND</strong>
                             </div>
                             <div class="summary-row">
                                 <span>Khóa học lẻ</span>
-                                <strong>{{ number_format($courseTotal, 0, ',', '.') }} VND</strong>
+                                {{-- THAY ĐỔI: Sử dụng data-cart-course-total và khởi tạo 0 VND --}}
+                                <strong data-cart-course-total>0 VND</strong>
                             </div>
 
                             <div class="summary-total">
                                 <span>Tổng thanh toán</span>
-                                <strong data-cart-total>{{ number_format($total, 0, ',', '.') }} VND</strong>
-                            </div>
+                                {{-- THAY ĐỔI: Khởi tạo data-cart-total là 0 VND --}}
+                                <strong data-cart-total>0 VND</strong>
+                            </div>                            
 
                             <button
                                 type="submit"

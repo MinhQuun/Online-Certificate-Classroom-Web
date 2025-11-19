@@ -15,6 +15,8 @@
     const selectedCountEl = document.querySelector("[data-cart-selected-count]");
     const totalEl = document.querySelector("[data-cart-total]");
     const submitButton = document.querySelector("[data-cart-submit]");
+    const comboTotalEl = document.querySelector("[data-cart-combo-total]");
+    const courseTotalEl = document.querySelector("[data-cart-course-total]");
     const clearForm = cartScope.querySelector("[data-cart-clear-form]");
     const removeForm = cartScope.querySelector("[data-cart-remove-form]");
     const removeInputsContainer =
@@ -123,6 +125,8 @@
     function updateState() {
         let selected = 0;
         let subtotal = 0;
+        let selectedComboTotal = 0; // Biến mới để lưu tổng tiền Combo đã chọn
+        let selectedCourseTotal = 0; // Biến mới để lưu tổng tiền Khóa học lẻ đã chọn
 
         itemCheckboxes.forEach((checkbox) => {
             if (!checkbox.checked) {
@@ -130,9 +134,29 @@
             }
             selected += 1;
             const item = checkbox.closest("[data-cart-item]");
-            const price = item ? Number(item.dataset.price || 0) : 0;
-            subtotal += price;
+
+            if (item) {
+                const price = Number(item.dataset.price || 0);
+                subtotal += price;
+
+                // Phân biệt và tính tổng riêng cho Combo và Khóa học lẻ
+                if (item.classList.contains("cart-item--combo")) {
+                    selectedComboTotal += price;
+                } else {
+                    selectedCourseTotal += price;
+                }
+            }
         });
+
+        // Cập nhật hiển thị tổng tiền Combo đã chọn
+        if (comboTotalEl) {
+            comboTotalEl.textContent = formatCurrency(selectedComboTotal);
+        }
+
+        // Cập nhật hiển thị tổng tiền Khóa học lẻ đã chọn
+        if (courseTotalEl) {
+            courseTotalEl.textContent = formatCurrency(selectedCourseTotal);
+        }
 
         if (selectedCountEl) {
             if (selected === 0) {
@@ -145,6 +169,7 @@
         }
 
         if (totalEl) {
+            // Tổng thanh toán (Total) vẫn là tổng của subtotal
             totalEl.textContent = formatCurrency(subtotal);
         }
 
