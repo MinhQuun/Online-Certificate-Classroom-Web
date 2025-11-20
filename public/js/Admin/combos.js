@@ -417,6 +417,27 @@
         const promotionField = form.querySelector('select[name="promotion_id"]');
         if (promotionField) promotionField.value = payload.promotion_id || "";
 
+        const certificateEnabledField = form.querySelector(
+            "[data-certificate-enabled]"
+        );
+        if (certificateEnabledField) {
+            certificateEnabledField.value = Number(
+                payload.certificate_enabled ? 1 : 0
+            );
+        }
+
+        const certificateProgressField = form.querySelector(
+            "[data-certificate-progress]"
+        );
+        if (certificateProgressField) {
+            const progressValue =
+                payload.certificate_progress_required === null ||
+                payload.certificate_progress_required === undefined
+                    ? 100
+                    : payload.certificate_progress_required;
+            certificateProgressField.value = progressValue;
+        }
+
         const promotionPriceField = form.querySelector(
             'input[name="promotion_price"]'
         );
@@ -426,25 +447,6 @@
                 payload.promotion_price !== undefined
                     ? payload.promotion_price
                     : "";
-        }
-
-        const certificateToggle = form.querySelector(
-            "#combo-edit-certificate-enabled"
-        );
-        if (certificateToggle) {
-            certificateToggle.checked = Boolean(payload.certificate_enabled);
-        }
-
-        const certificateProgressField = form.querySelector(
-            "#combo-edit-certificate-progress"
-        );
-        if (certificateProgressField) {
-            const progressValue =
-                payload.certificate_progress_required === null ||
-                payload.certificate_progress_required === undefined
-                    ? 100
-                    : payload.certificate_progress_required;
-            certificateProgressField.value = progressValue;
         }
 
         const promotionWrapper = form.querySelector(

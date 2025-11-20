@@ -6,11 +6,13 @@
     const MAX_HISTORY = 10;
 
     // DOM Elements
-    let toggleBtn, panel, closeBtn, searchInput, searchBtn, resultContainer, loadingContainer, historyList;
+    let toggleBtn, panel, closeBtn, searchInput, searchBtn, resultContainer, loadingContainer, historyList, tooltip;
 
     // State
     let searchHistory = [];
     let currentSearchType = 'en-vi';
+    let tooltipShowTimeout;
+    let tooltipHideTimeout;
 
     // Initialize
     document.addEventListener('DOMContentLoaded', function() {
@@ -18,6 +20,7 @@
         loadHistory();
         attachEventListeners();
         renderHistory();
+        setupTooltipNudge();
     });
 
     function initializeElements() {
@@ -73,6 +76,62 @@
         });
     }
 
+    function setupTooltipNudge() {
+        if (!toggleBtn) return;
+
+        tooltip = document.createElement('div');
+        tooltip.id = 'dictionaryTooltip';
+        tooltip.className = 'dictionary-tooltip';
+        tooltip.textContent = 'Tra từ vựng';
+        document.body.appendChild(tooltip);
+
+        const hasSeen = sessionStorage.getItem('dictionaryTooltipSeen') === '1';
+
+        if (!hasSeen) {
+            tooltipShowTimeout = setTimeout(() => {
+                showTooltip();
+                sessionStorage.setItem('dictionaryTooltipSeen', '1');
+            }, 1800);
+        }
+
+        toggleBtn.addEventListener('mouseenter', showTooltip);
+        toggleBtn.addEventListener('mouseleave', hideTooltip);
+        toggleBtn.addEventListener('click', hideTooltip);
+        window.addEventListener('resize', positionTooltip);
+        document.addEventListener('scroll', positionTooltip, true);
+    }
+
+    function showTooltip() {
+        if (!tooltip || !toggleBtn) return;
+
+        clearTimeout(tooltipShowTimeout);
+        sessionStorage.setItem('dictionaryTooltipSeen', '1');
+        positionTooltip();
+        tooltip.classList.add('visible');
+
+        clearTimeout(tooltipHideTimeout);
+        tooltipHideTimeout = setTimeout(hideTooltip, 3500);
+    }
+
+    function hideTooltip() {
+        if (!tooltip) return;
+
+        tooltip.classList.remove('visible');
+        clearTimeout(tooltipHideTimeout);
+        clearTimeout(tooltipShowTimeout);
+    }
+
+    function positionTooltip() {
+        if (!tooltip || !toggleBtn) return;
+
+        const rect = toggleBtn.getBoundingClientRect();
+        const top = rect.top + window.scrollY + (rect.height / 2) - (tooltip.offsetHeight / 2);
+        const left = rect.right + window.scrollX + 14;
+
+        tooltip.style.top = `${top}px`;
+        tooltip.style.left = `${left}px`;
+    }
+
     function togglePanel() {
         if (panel) {
             panel.classList.toggle('active');
@@ -80,6 +139,7 @@
                 searchInput.focus();
             }
         }
+        hideTooltip();
     }
 
     function closePanel() {

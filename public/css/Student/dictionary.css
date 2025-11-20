@@ -38,6 +38,44 @@
     transform: translateY(-1px) scale(1.02);
 }
 
+/* Tooltip near toggle button */
+.dictionary-tooltip {
+    position: absolute;
+    padding: 10px 14px;
+    background: linear-gradient(
+        120deg,
+        var(--color-accent, #3b82f6),
+        var(--color-accent-soft, #60a5fa)
+    );
+    color: #fff;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 10000;
+}
+
+.dictionary-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dictionary-tooltip::after {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 8px;
+    border-style: solid;
+    border-color: transparent var(--color-accent, #3b82f6) transparent transparent;
+}
+
 /* Dictionary Panel */
 .dictionary-panel {
     position: fixed;
