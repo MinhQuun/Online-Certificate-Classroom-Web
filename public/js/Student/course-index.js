@@ -25,12 +25,30 @@
             headingBar.parentElement.insertBefore(sentinel, headingBar);
         }
 
-        const setStuckState = (isStuck) => {
-            const alreadyStuck = headingBar.classList.contains('is-stuck');
-            if (alreadyStuck === isStuck) {
+        const getStickyTop = () => {
+            const computedTop = window.getComputedStyle(headingBar).getPropertyValue('top');
+            const parsedTop = parseFloat(computedTop);
+            return Number.isFinite(parsedTop) ? parsedTop : 0;
+        };
+
+        let stickPoint = 0;
+        let isStuck = headingBar.classList.contains('is-stuck');
+        let ticking = false;
+        const STICK_HYSTERESIS = 16;
+        const RELEASE_HYSTERESIS = 28;
+
+        const recalcStickPoint = () => {
+            const rect = sentinel.getBoundingClientRect();
+            const scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+            stickPoint = scrollY + rect.top - getStickyTop();
+        };
+
+        const setStuckState = (nextState) => {
+            if (nextState === isStuck) {
                 return;
             }
 
+            isStuck = nextState;
             headingBar.classList.toggle('is-stuck', isStuck);
             headingBar.dispatchEvent(
                 new CustomEvent('stickychange', {
@@ -39,19 +57,36 @@
             );
         };
 
-        const observer = new IntersectionObserver(
-            (entries) => {
-                const entry = entries[0];
-                if (!entry) {
-                    return;
-                }
+        const evaluateStickiness = () => {
+            const scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
 
-                setStuckState(!entry.isIntersecting);
-            },
-            { threshold: [0] }
-        );
+            if (!isStuck && scrollY >= stickPoint + STICK_HYSTERESIS) {
+                setStuckState(true);
+            } else if (isStuck && scrollY < stickPoint - RELEASE_HYSTERESIS) {
+                setStuckState(false);
+            }
+        };
 
-        observer.observe(sentinel);
+        const onScroll = () => {
+            if (ticking) {
+                return;
+            }
+
+            ticking = true;
+            requestAnimationFrame(() => {
+                evaluateStickiness();
+                ticking = false;
+            });
+        };
+
+        recalcStickPoint();
+        window.addEventListener('load', recalcStickPoint, { once: true });
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', () => {
+            recalcStickPoint();
+            evaluateStickiness();
+        });
+        evaluateStickiness();
     }
 
     function initDynamicHeadingIndicator() {
@@ -69,6 +104,7 @@
         const bandNavItems = bandNav
             ? Array.from(bandNav.querySelectorAll('[data-band-target]'))
             : [];
+        const bandNavList = bandNav?.querySelector('.course-band-nav__items');
         const bandProgressCurrent = bandNav?.querySelector('[data-course-band-progress-current]');
         const bandProgressTotal = bandNav?.querySelector('[data-course-band-progress-total]');
         const bandTotal = Number(bandNav?.getAttribute('data-band-total')) || bands.length;
@@ -200,6 +236,20 @@
                     scrollToBand(targetBand);
                 });
             });
+        }
+
+        const updateNavScrollableState = () => {
+            if (!bandNavList) {
+                return;
+            }
+
+            const isOverflowing = bandNavList.scrollWidth > bandNavList.clientWidth + 4;
+            bandNavList.classList.toggle('is-scrollable', isOverflowing);
+        };
+
+        if (bandNavList) {
+            updateNavScrollableState();
+            window.addEventListener('resize', updateNavScrollableState);
         }
 
         const pickCurrentBand = () => {
