@@ -20,8 +20,8 @@
         $isCategoryView = isset($currentCategory) && $currentCategory;
         $headingTitle = $isCategoryView ? $currentCategory->tenDanhMuc : 'Khóa học nổi bật';
         $headingDescription = $isCategoryView
-            ? 'Kham pha cac khoa hoc noi bat thuoc chuyen de ' . $currentCategory->tenDanhMuc . '.'
-            : 'Lua chon lo trinh TOEIC Foundation, Intermediate va Advanced phu hop muc tieu, dong bo voi giao dien web.';
+            ? 'Khám phá các khóa học nổi bật thuộc chuyên đề ' . $currentCategory->tenDanhMuc . '.'
+            : 'Lộ trình rõ ràng, tài nguyên phong phú và bài kiểm tra cuối kỳ giúp bạn tự tin đạt mục tiêu chứng chỉ.';
         $groupedCourses = !$courses->isEmpty()
             ? $courses->getCollection()->groupBy(function ($c) {
                 return optional($c->category)->tenDanhMuc ?? 'Chua co danh muc';

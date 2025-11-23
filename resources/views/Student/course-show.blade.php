@@ -194,7 +194,7 @@
          hidden></div>
 
     <!-- Tab Switcher -->
-    <section class="section section--course-tabs" aria-label="�?i��?u h����>ng n��Ti dung khA3a h��?c">
+    <section class="section section--course-tabs" aria-label="Điều hướng nội dung khóa học">
         <div class="oc-container">
             <div class="course-tab-switcher" data-course-tab-wrapper>
                 <button
@@ -418,13 +418,13 @@
                         ? 'course-card__cta--active'
                         : ($isInCart ? 'course-card__cta--in-cart' : '');
                     $sidebarCtaText = $isEnrolled
-                        ? '�?A� s��Y h��_u'
-                        : ($isInCart ? '�?A� trong gi��? hA�ng' : 'ThA�m vA�o gi��? hA�ng');
+                        ? 'Đã sở hữu'
+                        : ($isInCart ? 'Đã trong giỏ hàng' : 'Thêm vào giỏ hàng');
                     $sidebarCtaAria = $isEnrolled
-                        ? 'B���n �`A� s��Y h��_u khA3a h��?c nA�y'
+                        ? 'Bạn đã sở hữu khóa học này'
                         : ($isInCart
-                            ? 'KhA3a h��?c �`A� trong gi��? hA�ng'
-                            : 'ThA�m ' . $course->tenKH . ' vA�o gi��? hA�ng');
+                            ? 'Khóa học đã trong giỏ hàng'
+                            : 'Thêm ' . $course->tenKH . ' vào giỏ hàng');
                 @endphp
 
 
