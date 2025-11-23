@@ -250,7 +250,7 @@
             <aside class="lesson-layout__aside">
                 <div class="aside-card">
                     <div class="aside-card__head">
-                        <h3>Lượt trình khóa học</h3>
+                        <h3>Lộ trình khóa học</h3>
                         <p class="muted">Theo dõi chương và chọn bài học để di chuyển nhanh.</p>
                     </div>
 
@@ -281,31 +281,34 @@
                                         @if ($chapter->miniTests->count())
                                             <div class="aside-mini">
                                                 <div class="aside-mini__header">
-                                                    
+
                                                     <span class="aside-mini__label">Review Exercises chương</span>
                                                 </div>
                                                 <ul class="mini-test-chip-list">
                                                     @foreach ($chapter->miniTests as $miniTest)
                                                         @php
                                                             $miniTestStats = $miniTestResults->get($miniTest->maMT) ?? null;
-                                                            $bestScore = $miniTestStats->best_score ?? null;
-                                                            $attemptsUsed = (int) ($miniTestStats->attempts_used ?? 0);
+                                                            $bestScore = $miniTestStats?->best_score;
+                                                            $latestStatus = $miniTestStats?->latest_status;
+                                                            $latestResultId = $miniTestStats?->latest_result_id;
+                                                            $inProgressResultId = $miniTestStats?->in_progress_result_id;
+                                                            $latestIsGraded = (bool) ($miniTestStats?->latest_is_fully_graded ?? false);
+                                                            $attemptsUsed = (int) ($miniTestStats?->attempts_used ?? 0);
                                                             $attemptLimit = (int) ($miniTest->attempts_allowed ?? 0);
+                                                            $attemptsLeft = $attemptLimit > 0 ? max(0, $attemptLimit - $attemptsUsed) : null;
                                                             $questionCount = $miniTest->questions->count();
                                                             $timeLimit = (int) ($miniTest->time_limit_min ?? 0);
                                                             $maxScore = number_format((float) ($miniTest->max_score ?? 0), 1);
                                                         @endphp
                                                         <li class="mini-test-chip">
                                                             @if ($isEnrolled)
-                                                                <form method="POST" action="{{ route('student.minitests.start', $miniTest->maMT) }}" class="mini-test-chip__form">
-                                                                    @csrf
-                                                                    <button type="submit" class="mini-test-chip__button">
+                                                                @if($inProgressResultId)
+                                                                    <a class="mini-test-chip__button mini-test-chip__button--ongoing" href="{{ route('student.minitests.attempt', $inProgressResultId) }}">
                                                                         <span class="mini-test-chip__heading">
-                                                                            {{-- <span class="mini-test-chip__eyebrow">MiniTest {{ $miniTest->thuTu }}</span> --}}
                                                                             <span class="mini-test-chip__title">{{ $miniTest->title }}</span>
                                                                         </span>
                                                                         <span class="mini-test-chip__arrow" aria-hidden="true">
-                                                                            <i class="bi bi-arrow-right"></i>
+                                                                            <i class="bi bi-play-fill"></i>
                                                                         </span>
                                                                         <ul class="mini-test-chip__meta">
                                                                             <li>
@@ -327,18 +330,107 @@
                                                                                 @if ($attemptLimit > 0)
                                                                                     {{ $attemptsUsed }}/{{ $attemptLimit }} lượt
                                                                                 @else
-                                                                                    {{ $attemptsUsed > 0 ? $attemptsUsed . ' luot da lam' : 'Chua lam' }}
+                                                                                    {{ $attemptsUsed > 0 ? $attemptsUsed . ' lượt đã làm' : 'Chưa làm' }}
                                                                                 @endif
                                                                             </span>
-                                                                            @if ($bestScore !== null)
-                                                                                <span class="mini-test-chip__score">
-                                                                                    <i class="bi bi-award"></i>
-                                                                                    Tot nhat: {{ number_format((float) $bestScore, 1) }}/{{ $maxScore }}
-                                                                                </span>
-                                                                            @endif
+                                                                            <span class="mini-test-chip__score mini-test-chip__score--pending">
+                                                                                <i class="bi bi-play"></i>
+                                                                                Đang làm dở
+                                                                            </span>
                                                                         </div>
-                                                                    </button>
-                                                                </form>
+                                                                    </a>
+                                                                @elseif($attemptLimit > 0 && $attemptsLeft === 0 && $latestResultId)
+                                                                    <a class="mini-test-chip__button mini-test-chip__button--history" href="{{ route('student.minitests.result', $latestResultId) }}">
+                                                                        <span class="mini-test-chip__heading">
+                                                                            <span class="mini-test-chip__title">{{ $miniTest->title }}</span>
+                                                                        </span>
+                                                                        <span class="mini-test-chip__arrow" aria-hidden="true">
+                                                                            <i class="bi bi-clock-history"></i>
+                                                                        </span>
+                                                                        <ul class="mini-test-chip__meta">
+                                                                            <li>
+                                                                                <i class="bi bi-clock"></i>
+                                                                                {{ $timeLimit > 0 ? $timeLimit . ' phút' : 'Không giới hạn' }}
+                                                                            </li>
+                                                                            <li>
+                                                                                <i class="bi bi-question-circle"></i>
+                                                                                {{ $questionCount }} câu
+                                                                            </li>
+                                                                            <li>
+                                                                                <i class="bi bi-trophy"></i>
+                                                                                {{ $maxScore }} điểm
+                                                                            </li>
+                                                                        </ul>
+                                                                        <div class="mini-test-chip__footer">
+                                                                            <span class="mini-test-chip__attempts">
+                                                                                <i class="bi bi-repeat"></i>
+                                                                                @if ($attemptLimit > 0)
+                                                                                    {{ $attemptsUsed }}/{{ $attemptLimit }} lượt
+                                                                                @else
+                                                                                    {{ $attemptsUsed > 0 ? $attemptsUsed . ' lượt đã làm' : 'Chưa làm' }}
+                                                                                @endif
+                                                                            </span>
+                                                                            <span class="mini-test-chip__score mini-test-chip__score--history">
+                                                                                <i class="bi bi-journal-check"></i>
+                                                                                Xem lịch sử
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="mini-test-chip__note">Đã hết lượt làm. Nhấn để xem kết quả gần nhất.</div>
+                                                                    </a>
+                                                                @else
+                                                                    <form method="POST" action="{{ route('student.minitests.start', $miniTest->maMT) }}" class="mini-test-chip__form">
+                                                                        @csrf
+                                                                        <button type="submit" class="mini-test-chip__button">
+                                                                            <span class="mini-test-chip__heading">
+                                                                                {{-- <span class="mini-test-chip__eyebrow">MiniTest {{ $miniTest->thuTu }}</span> --}}
+                                                                                <span class="mini-test-chip__title">{{ $miniTest->title }}</span>
+                                                                            </span>
+                                                                            <span class="mini-test-chip__arrow" aria-hidden="true">
+                                                                                <i class="bi bi-arrow-right"></i>
+                                                                            </span>
+                                                                            <ul class="mini-test-chip__meta">
+                                                                                <li>
+                                                                                    <i class="bi bi-clock"></i>
+                                                                                    {{ $timeLimit > 0 ? $timeLimit . ' phút' : 'Không giới hạn' }}
+                                                                                </li>
+                                                                                <li>
+                                                                                    <i class="bi bi-question-circle"></i>
+                                                                                    {{ $questionCount }} câu
+                                                                                </li>
+                                                                                <li>
+                                                                                    <i class="bi bi-trophy"></i>
+                                                                                    {{ $maxScore }} điểm
+                                                                                </li>
+                                                                            </ul>
+                                                                            <div class="mini-test-chip__footer">
+                                                                                <span class="mini-test-chip__attempts">
+                                                                                    <i class="bi bi-repeat"></i>
+                                                                                    @if ($attemptLimit > 0)
+                                                                                        {{ $attemptsUsed }}/{{ $attemptLimit }} lượt
+                                                                                    @else
+                                                                                        {{ $attemptsUsed > 0 ? $attemptsUsed . ' lượt đã làm' : 'Chưa làm' }}
+                                                                                    @endif
+                                                                                </span>
+                                                                                @if ($bestScore !== null)
+                                                                                    <span class="mini-test-chip__score">
+                                                                                        <i class="bi bi-award"></i>
+                                                                                        Tốt nhất: {{ number_format((float) $bestScore, 1) }}/{{ $maxScore }}
+                                                                                    </span>
+                                                                                @elseif($latestStatus === \App\Models\MiniTestResult::STATUS_IN_PROGRESS)
+                                                                                    <span class="mini-test-chip__score mini-test-chip__score--pending">
+                                                                                        <i class="bi bi-play"></i>
+                                                                                        Đang làm dở
+                                                                                    </span>
+                                                                                @elseif($latestResultId)
+                                                                                    <span class="mini-test-chip__score mini-test-chip__score--pending">
+                                                                                        <i class="bi bi-hourglass-split"></i>
+                                                                                        Chờ chấm
+                                                                                    </span>
+                                                                                @endif
+                                                                            </div>
+                                                                        </button>
+                                                                    </form>
+                                                                @endif
                                                             @else
                                                                 <div class="mini-test-chip__button mini-test-chip__button--locked">
                                                                     <span class="mini-test-chip__heading">
@@ -351,7 +443,7 @@
                                                                     <ul class="mini-test-chip__meta">
                                                                         <li>
                                                                             <i class="bi bi-clock"></i>
-                                                                            {{ $timeLimit > 0 ? $timeLimit . ' phut' : 'Khong gioi han' }}
+                                                                            {{ $timeLimit > 0 ? $timeLimit . ' phút' : 'Không giới hạn' }}
                                                                         </li>
                                                                         <li>
                                                                             <i class="bi bi-question-circle"></i>
@@ -364,7 +456,8 @@
                                                                     </ul>
                                                                     <div class="mini-test-chip__footer mini-test-chip__footer--locked">
                                                                         <i class="bi bi-info-circle"></i>
-                                                                        Đăng nhập - đăng ký khóa học để truy cập
+                                                                        Đăng nhập - Đăng ký khóa học để truy cập
+                                                                    </div>
                                                                 </div>
                                                             @endif
                                                         </li>
@@ -437,7 +530,7 @@
                                 <span>Đăng bình luận</span>
                             </button>
                         </div>
-                       
+
                     </form>
                 @else
                     <div class="discussion-form__placeholder">

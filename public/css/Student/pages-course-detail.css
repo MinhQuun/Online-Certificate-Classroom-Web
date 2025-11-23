@@ -1911,6 +1911,25 @@
     margin-bottom: 8px;
 }
 
+.mini-test-link--history,
+.mini-test-link--ongoing {
+    padding: 10px 12px;
+    border-radius: 12px;
+}
+
+.mini-test-link--history {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(14, 165, 233, 0.06));
+}
+
+.mini-test-link--ongoing {
+    background: linear-gradient(135deg, rgba(52, 211, 153, 0.12), rgba(16, 185, 129, 0.08));
+}
+
+.mini-test-note {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
 .mini-test-link .lesson-list__title {
     font-weight: 600;
     color: #1e293b;

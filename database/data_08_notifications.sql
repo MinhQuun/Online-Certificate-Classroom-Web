@@ -41,7 +41,7 @@ INSERT INTO thongbao (
 (@nd_luan, NULL, NULL, 'PROMOTION',
     'Mã ưu đãi học phí cuối tuần',
     'Nhập mã OCCWEEKEND để giảm 15% cho mỗi khóa lẻ đến 23:59 Chủ Nhật. Áp dụng cho cả khách hàng cũ.',
-    '/student/cart', 'Dung ma ngay', NULL,
+    '/student/cart', 'Dùng mã ngay', NULL,
     JSON_OBJECT('code', 'OCCWEEKEND'), 0, NULL, '2025-11-15 10:10:00', '2025-11-15 10:10:00'),
 
 (@nd_tri, @kh_reading_605_780, @goi_intermediate, 'SYSTEM',

@@ -1608,6 +1608,21 @@
     pointer-events: none;
 }
 
+.mini-test-chip__button--history,
+.mini-test-chip__button--ongoing {
+    text-decoration: none;
+}
+
+.mini-test-chip__button--history {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(14, 165, 233, 0.08));
+    border: 1px solid rgba(59, 130, 246, 0.18);
+}
+
+.mini-test-chip__button--ongoing {
+    background: linear-gradient(135deg, rgba(52, 211, 153, 0.18), rgba(16, 185, 129, 0.1));
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
 .mini-test-chip__heading {
     display: flex;
     flex-direction: column;
@@ -1695,6 +1710,24 @@
 
 .mini-test-chip__score {
     color: var(--color-primary);
+}
+
+.mini-test-chip__score--pending,
+.mini-test-chip__score--history {
+    color: #0f172a;
+    background: rgba(59, 130, 246, 0.12);
+    border-radius: 10px;
+    padding: 6px 10px;
+}
+
+.mini-test-chip__score--history {
+    background: rgba(14, 165, 233, 0.12);
+}
+
+.mini-test-chip__note {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--color-muted);
 }
 
 /* CSS cho Final Test ở cuối */

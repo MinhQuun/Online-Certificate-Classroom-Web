@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Category;
 use App\Models\CourseReview;
+use App\Models\MiniTestResult;
 use App\Support\Cart\StudentCart;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -83,12 +84,12 @@ class CourseController extends Controller
         $isAuthenticated = $enrollment['isAuthenticated'];
         $isEnrolled = in_array($course->maKH, $activeCourseIds, true);
 
-        // Load student's best scores for each minitest
+        // Load student's attempt stats for each mini-test
         $miniTestScores = [];
         if ($isAuthenticated && $enrollment['student']) {
             $studentId = $enrollment['student']->maHV;
             $miniTestIds = [];
-            
+
             foreach ($course->chapters as $chapter) {
                 foreach ($chapter->miniTests as $miniTest) {
                     $miniTestIds[] = $miniTest->maMT;
@@ -96,17 +97,27 @@ class CourseController extends Controller
             }
 
             if (!empty($miniTestIds)) {
-                $scores = DB::table('ketqua_minitest')
-                    ->select('maMT', DB::raw('MAX(diem) as best_score'), DB::raw('MAX(is_fully_graded) as is_fully_graded'))
+                $results = DB::table('ketqua_minitest')
                     ->where('maHV', $studentId)
                     ->whereIn('maMT', $miniTestIds)
-                    ->groupBy('maMT')
-                    ->get();
+                    ->orderByDesc('created_at')
+                    ->get()
+                    ->groupBy('maMT');
 
-                foreach ($scores as $score) {
-                    $miniTestScores[$score->maMT] = [
-                        'best_score' => $score->best_score,
-                        'is_fully_graded' => $score->is_fully_graded
+                foreach ($results as $miniTestId => $items) {
+                    $latest = $items->first();
+                    $inProgress = $items->first(function ($item) {
+                        return $item->status === MiniTestResult::STATUS_IN_PROGRESS;
+                    });
+
+                    $miniTestScores[$miniTestId] = [
+                        'best_score' => $items->max('diem'),
+                        'latest_score' => $latest->diem ?? null,
+                        'latest_status' => $latest->status ?? null,
+                        'latest_result_id' => $latest->maKQDG ?? null,
+                        'latest_is_fully_graded' => (bool) ($latest->is_fully_graded ?? false),
+                        'attempts_used' => $items->count(),
+                        'in_progress_result_id' => $inProgress?->maKQDG,
                     ];
                 }
             }

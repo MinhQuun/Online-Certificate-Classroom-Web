@@ -75,7 +75,21 @@ class MiniTestController extends Controller
         $result = $this->beginAttempt(
             $student,
             $miniTest,
-            fn () => back()->with('error', 'Bạn đã hết lượt làm bài. Vui lòng liên hệ giáo viên để được hỗ trợ thêm thời gian.')
+            function () use ($student, $miniTest) {
+                $latestResult = MiniTestResult::query()
+                    ->where('maHV', $student->maHV)
+                    ->where('maMT', $miniTest->maMT)
+                    ->latest('created_at')
+                    ->first();
+
+                if ($latestResult) {
+                    return redirect()
+                        ->route('student.minitests.result', $latestResult->maKQDG)
+                        ->with('warning', 'Bạn hết lượt làm bài. Đây là kết quả gần nhất của bạn.');
+                }
+
+                return back()->with('error', 'Bạn đã hết lượt làm bài');
+            }
         );
 
         if ($result instanceof RedirectResponse) {
@@ -273,6 +287,12 @@ class MiniTestController extends Controller
         $attemptsAllowed = (int) ($result->miniTest->attempts_allowed ?? 0);
         $attemptsLeft = max(0, $attemptsAllowed - $attemptsUsed);
 
+        $attemptHistory = MiniTestResult::query()
+            ->where('maMT', $result->maMT)
+            ->where('maHV', $student->maHV)
+            ->orderByDesc('created_at')
+            ->get();
+
         return view('Student.minitests', [
             'type' => 'result',
             'result' => $result,
@@ -281,6 +301,7 @@ class MiniTestController extends Controller
             'incorrectCount' => $incorrectCount,
             'essayCount' => $essayCount,
             'attemptsLeft' => $attemptsLeft,
+            'attemptHistory' => $attemptHistory,
         ]);
     }
 

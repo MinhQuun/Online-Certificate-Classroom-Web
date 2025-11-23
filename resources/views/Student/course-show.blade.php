@@ -290,21 +290,46 @@
 
                                                             $scoreData = $miniTestScores[$miniTest->maMT] ?? null;
                                                             $bestScore = $scoreData['best_score'] ?? null;
-                                                            $isGraded = $scoreData['is_fully_graded'] ?? false;
+                                                            $latestStatus = $scoreData['latest_status'] ?? null;
+                                                            $latestResultId = $scoreData['latest_result_id'] ?? null;
+                                                            $inProgressResultId = $scoreData['in_progress_result_id'] ?? null;
+                                                            $latestIsGraded = $scoreData['latest_is_fully_graded'] ?? false;
+                                                            $attemptsUsed = (int) ($scoreData['attempts_used'] ?? 0);
+                                                            $attemptLimit = (int) ($miniTest->attempts_allowed ?? 0);
+                                                            $attemptsLeft = $attemptLimit > 0 ? max(0, $attemptLimit - $attemptsUsed) : null;
+                                                            $hasAttempts = $attemptsUsed > 0;
                                                         @endphp
                                                         <li class="mini-test-item" data-mini-test-id="{{ $miniTest->maMT }}">
                                                             <span class="label {{ $labelClass }}">{{ $labelText }}</span>
                                                             @if($isEnrolled || $isFreeMiniTest)
-                                                                <form method="POST" action="{{ route('student.minitests.start', $miniTest->maMT) }}" class="mini-test-start-form" style="display:inline;">
-                                                                    @csrf
-                                                                    <button type="submit" class="mini-test-link" style="background:transparent;border:0;padding:0;text-align:left;width:100%;">
+                                                                @if($inProgressResultId)
+                                                                    <a href="{{ route('student.minitests.attempt', $inProgressResultId) }}" class="mini-test-link mini-test-link--ongoing">
                                                                         <div class="lesson-list__meta">
                                                                             <span class="lesson-list__eyebrow">Practice {{ $miniTest->thuTu }}</span>
                                                                             <span class="lesson-list__title">{{ $miniTest->title }}</span>
                                                                         </div>
-                                                                        <span class="badge badge--minitest">REVIEW EXERCISES</span>
-                                                                    </button>
-                                                                </form>
+                                                                        <span class="badge badge--minitest">TIẾP TỤC</span>
+                                                                    </a>
+                                                                @elseif($attemptLimit > 0 && $attemptsLeft === 0 && $latestResultId)
+                                                                    <a href="{{ route('student.minitests.result', $latestResultId) }}" class="mini-test-link mini-test-link--history">
+                                                                        <div class="lesson-list__meta">
+                                                                            <span class="lesson-list__eyebrow">Practice {{ $miniTest->thuTu }}</span>
+                                                                            <span class="lesson-list__title">{{ $miniTest->title }}</span>
+                                                                        </div>
+                                                                        <span class="badge badge--minitest">XEM KẾT QUẢ</span>
+                                                                    </a>
+                                                                @else
+                                                                    <form method="POST" action="{{ route('student.minitests.start', $miniTest->maMT) }}" class="mini-test-start-form" style="display:inline;">
+                                                                        @csrf
+                                                                        <button type="submit" class="mini-test-link" style="background:transparent;border:0;padding:0;text-align:left;width:100%;">
+                                                                            <div class="lesson-list__meta">
+                                                                                <span class="lesson-list__eyebrow">Practice {{ $miniTest->thuTu }}</span>
+                                                                                <span class="lesson-list__title">{{ $miniTest->title }}</span>
+                                                                            </div>
+                                                                            <span class="badge badge--minitest">REVIEW EXERCISES</span>
+                                                                        </button>
+                                                                    </form>
+                                                                @endif
                                                             @else
                                                                 <a href="#" class="mini-test-link" >
                                                                     <div class="lesson-list__meta">
@@ -318,13 +343,25 @@
                                                                 <li><i class="bi bi-clock"></i> {{ $miniTest->time_limit_min }} phút</li>
                                                                 <li><i class="bi bi-question-circle"></i> {{ $miniTest->questions->count() }} câu</li>
                                                                 <li><i class="bi bi-trophy"></i> {{ $miniTest->max_score }} điểm</li>
-                                                                @if($scoreData)
+                                                                <li>
+                                                                    <i class="bi bi-repeat"></i>
+                                                                    @if($attemptLimit > 0)
+                                                                        {{ $attemptsUsed }}/{{ $attemptLimit }} lượt
+                                                                    @else
+                                                                        {{ $attemptsUsed > 0 ? $attemptsUsed . ' lượt đã làm' : 'Chưa làm' }}
+                                                                    @endif
+                                                                </li>
+                                                                @if($scoreData && $hasAttempts)
                                                                     <li>
-                                                                        @if($isGraded)
+                                                                        @if($latestStatus === \App\Models\MiniTestResult::STATUS_IN_PROGRESS)
+                                                                            <span class="badge" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; padding: 4px 12px; border-radius: 12px; font-weight: 600;">
+                                                                                <i class="bi bi-play-circle me-1"></i>Đang làm dở
+                                                                            </span>
+                                                                        @elseif($latestIsGraded && $bestScore !== null)
                                                                             <span class="badge" style="background: linear-gradient(135deg, #34c759, #30b350); color: white; padding: 4px 12px; border-radius: 12px; font-weight: 600;">
                                                                                 <i class="bi bi-check-circle-fill me-1"></i>{{ number_format($bestScore, 1) }}/{{ $miniTest->max_score }}
                                                                             </span>
-                                                                        @else
+                                                                        @elseif($latestResultId)
                                                                             <span class="badge" style="background: linear-gradient(135deg, #ffc107, #ff9800); color: white; padding: 4px 12px; border-radius: 12px; font-weight: 600;">
                                                                                 <i class="bi bi-hourglass-split me-1"></i>Chờ chấm
                                                                             </span>
@@ -332,6 +369,9 @@
                                                                     </li>
                                                                 @endif
                                                             </ul>
+                                                            @if($attemptLimit > 0 && $attemptsLeft === 0 && $latestResultId)
+                                                                <p class="mini-test-note text-muted mb-0">Đã hết lượt làm. Xem lại lịch sử và kết quả chi tiết của bạn.</p>
+                                                            @endif
                                                         </li>
                                                     @endforeach
                                                 </ul>

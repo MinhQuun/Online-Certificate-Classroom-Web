@@ -335,6 +335,46 @@
                             </form>
                         @endif
                     </div>
+                    @if(!empty($attemptHistory) && $attemptHistory->count())
+                        <div class="sidebar-card sidebar-card--history">
+                            <div class="sidebar-card__head">
+                                <h5>Lịch sử bài làm</h5>
+                                <p class="text-muted small mb-0">Theo dõi các lần nộp mini-test trước đây</p>
+                            </div>
+                            <ul class="attempt-history">
+                                @foreach($attemptHistory as $attempt)
+                                    @php
+                                        $isCurrent = $attempt->maKQDG === $result->maKQDG;
+                                        $statusLabel = match($attempt->status) {
+                                            \App\Models\MiniTestResult::STATUS_IN_PROGRESS => 'Đang làm',
+                                            \App\Models\MiniTestResult::STATUS_EXPIRED => 'Hết giờ',
+                                            default => ($attempt->is_fully_graded ? 'Đã chấm' : 'Chờ chấm'),
+                                        };
+                                        $statusClass = match($attempt->status) {
+                                            \App\Models\MiniTestResult::STATUS_EXPIRED => 'is-warning',
+                                            \App\Models\MiniTestResult::STATUS_IN_PROGRESS => 'is-info',
+                                            default => ($attempt->is_fully_graded ? 'is-success' : 'is-muted'),
+                                        };
+                                        $scoreLabel = $attempt->diem !== null
+                                            ? number_format((float) $attempt->diem, 1) . '/' . number_format((float) $result->miniTest->max_score, 1)
+                                            : ($attempt->status === \App\Models\MiniTestResult::STATUS_IN_PROGRESS ? 'Đang làm' : 'Chưa cập nhật');
+                                    @endphp
+                                    <li class="attempt-history__item {{ $isCurrent ? 'is-current' : '' }}">
+                                        <a href="{{ route('student.minitests.result', $attempt->maKQDG) }}" class="attempt-pill">
+                                            <div class="attempt-pill__top">
+                                                <span class="attempt-pill__label">Lần {{ $attempt->attempt_no }}</span>
+                                                <span class="attempt-pill__status {{ $statusClass }}">{{ $statusLabel }}</span>
+                                            </div>
+                                            <div class="attempt-pill__meta">
+                                                <span><i class="bi bi-calendar3 me-1"></i>{{ optional($attempt->nop_luc)->format('d/m/Y H:i') ?? 'Chưa nộp' }}</span>
+                                                <span><i class="bi bi-star me-1"></i>{{ $scoreLabel }}</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                 </aside>
 
                 <div class="minitests-main">

@@ -7,6 +7,7 @@ use App\Models\Enrollment;
 use App\Models\Lesson;
 use App\Models\LessonDiscussion;
 use App\Models\LessonProgress;
+use App\Models\MiniTestResult;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -93,11 +94,25 @@ class LessonController extends Controller
                 $miniTestResults = DB::table('ketqua_minitest')
                     ->whereIn('maMT', $chapterMiniTestIds)
                     ->where('maHV', $student->maHV)
-                    ->where('is_fully_graded', 1)
-                    ->select('maMT', DB::raw('MAX(diem) as best_score'), DB::raw('COUNT(*) as attempts_used'))
-                    ->groupBy('maMT')
+                    ->orderByDesc('created_at')
                     ->get()
-                    ->keyBy('maMT');
+                    ->groupBy('maMT')
+                    ->map(function ($items) {
+                        $latest = $items->first();
+                        $inProgress = $items->first(function ($item) {
+                            return $item->status === MiniTestResult::STATUS_IN_PROGRESS;
+                        });
+
+                        return (object) [
+                            'best_score' => $items->max('diem'),
+                            'latest_score' => $latest->diem ?? null,
+                            'latest_status' => $latest->status ?? null,
+                            'latest_result_id' => $latest->maKQDG ?? null,
+                            'latest_is_fully_graded' => (bool) ($latest->is_fully_graded ?? false),
+                            'attempts_used' => $items->count(),
+                            'in_progress_result_id' => $inProgress?->maKQDG,
+                        ];
+                    });
             }
         }
 
