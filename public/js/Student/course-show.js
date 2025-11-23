@@ -109,19 +109,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     initAddToCartButtons();
 
-    const scrollToSelector = (selector) => {
-        if (!selector) {
-            return;
-        }
-
-        const target = document.querySelector(selector);
-        if (!target) {
+    const scrollToElement = (element) => {
+        if (!element) {
             return;
         }
 
         const header = document.querySelector("[data-site-header]");
         const headerHeight = header ? header.offsetHeight : 0;
-        const targetTop = target.getBoundingClientRect().top + window.scrollY;
+        const rect = element.getBoundingClientRect();
+        const targetTop = rect.top + window.scrollY;
         const offset = Math.max(targetTop - headerHeight - 24, 0);
         window.scrollTo({
             top: offset,
@@ -129,33 +125,104 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
 
-    const initScrollTriggers = () => {
-        const triggers = document.querySelectorAll("[data-scroll-target]");
-        if (!triggers.length) {
+    const initCourseTabs = () => {
+        const tabButtons = Array.from(
+            document.querySelectorAll("[data-course-tab-trigger]")
+        );
+        const statTriggers = Array.from(
+            document.querySelectorAll("[data-course-tab-target]")
+        );
+        const tabPanels = Array.from(
+            document.querySelectorAll("[data-course-tab-panel]")
+        );
+        const tabWrapper = document.querySelector("[data-course-tab-wrapper]");
+
+        if (!tabButtons.length || !tabPanels.length) {
             return;
         }
 
-        triggers.forEach((trigger) => {
-            const selector = trigger.dataset.scrollTarget;
-            if (!selector) {
-                return;
-            }
+        const setActiveTab = (target, options = {}) => {
+            if (!target) return;
 
-            trigger.addEventListener("click", (event) => {
-                event.preventDefault();
-                scrollToSelector(selector);
+            let activePanel = null;
+            tabPanels.forEach((panel) => {
+                const isActive =
+                    panel.dataset.courseTabPanel === target ||
+                    panel.id === target;
+                panel.classList.toggle("is-active", isActive);
+                panel.toggleAttribute("hidden", !isActive);
+                if (isActive) {
+                    activePanel = panel;
+                }
             });
 
-            trigger.addEventListener("keydown", (event) => {
+            tabButtons.forEach((button) => {
+                const isActive = button.dataset.courseTabTrigger === target;
+                button.classList.toggle("is-active", isActive);
+                button.setAttribute(
+                    "aria-selected",
+                    isActive ? "true" : "false"
+                );
+            });
+
+            statTriggers.forEach((stat) => {
+                const isActive =
+                    stat.dataset.courseTabTarget === target ||
+                    stat.dataset.courseTabTarget === `#${target}`;
+                stat.classList.toggle("is-active", isActive);
+            });
+
+            const shouldScroll = options.scroll !== false;
+            if (shouldScroll) {
+                const scrollTarget = tabWrapper || activePanel;
+                if (scrollTarget) {
+                    scrollToElement(scrollTarget);
+                }
+            }
+        };
+
+        const handleTriggerClick = (target, event) => {
+            if (event) {
+                event.preventDefault();
+            }
+            setActiveTab(target);
+        };
+
+        tabButtons.forEach((button) => {
+            const target = button.dataset.courseTabTrigger;
+            if (!target) return;
+
+            button.addEventListener("click", (event) =>
+                handleTriggerClick(target, event)
+            );
+            button.addEventListener("keydown", (event) => {
                 if (event.key === "Enter" || event.key === " ") {
-                    event.preventDefault();
-                    scrollToSelector(selector);
+                    handleTriggerClick(target, event);
                 }
             });
         });
+
+        statTriggers.forEach((trigger) => {
+            const target = trigger.dataset.courseTabTarget;
+            if (!target) return;
+
+            trigger.addEventListener("click", (event) =>
+                handleTriggerClick(target, event)
+            );
+            trigger.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                    handleTriggerClick(target, event);
+                }
+            });
+        });
+
+        const hash = window.location.hash.replace("#", "");
+        const initialTab = hash === "course-reviews" ? "reviews" : "content";
+        const shouldScrollOnInit = hash === "course-reviews";
+        setActiveTab(initialTab, { scroll: shouldScrollOnInit });
     };
 
-    initScrollTriggers();
+    initCourseTabs();
 
     const flags = document.getElementById("courseAccessFlags");
     const isAuthenticated = flags?.dataset.authenticated === "1";

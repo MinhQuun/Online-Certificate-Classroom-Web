@@ -18,15 +18,34 @@
     @php
         $firstCourse = $courses->first();
         $isCategoryView = isset($currentCategory) && $currentCategory;
-        $headingTitle = $isCategoryView ? $currentCategory->tenDanhMuc : 'Tất cả khóa học';
+        $headingTitle = $isCategoryView ? $currentCategory->tenDanhMuc : 'Khóa học nổi bật';
         $headingDescription = $isCategoryView
-            ? 'Khám phá các khóa học nổi bật thuộc chuyên đề ' . $currentCategory->tenDanhMuc . '.'
-            : 'Lộ trình rõ ràng, tài nguyên phong phú và bài kiểm tra cuối kỳ giúp bạn tự tin đạt mục tiêu chứng chỉ.';
+            ? 'Kham pha cac khoa hoc noi bat thuoc chuyen de ' . $currentCategory->tenDanhMuc . '.'
+            : 'Lua chon lo trinh TOEIC Foundation, Intermediate va Advanced phu hop muc tieu, dong bo voi giao dien web.';
         $groupedCourses = !$courses->isEmpty()
             ? $courses->getCollection()->groupBy(function ($c) {
-                return optional($c->category)->tenDanhMuc ?? 'Chưa có danh mục';
+                return optional($c->category)->tenDanhMuc ?? 'Chua co danh muc';
             })
             : collect();
+        $preferredBandOrder = [
+            'TOEIC Foundation (405-600)',
+            'TOEIC Intermediate (605-780)',
+            'TOEIC Advanced (785-990)',
+        ];
+        if ($groupedCourses->isNotEmpty()) {
+            $groupedCourses = $groupedCourses->sortKeysUsing(function ($a, $b) use ($preferredBandOrder) {
+                $indexA = array_search($a, $preferredBandOrder, true);
+                $indexB = array_search($b, $preferredBandOrder, true);
+                $scoreA = $indexA === false ? PHP_INT_MAX : $indexA;
+                $scoreB = $indexB === false ? PHP_INT_MAX : $indexB;
+
+                if ($scoreA === $scoreB) {
+                    return strnatcasecmp($a, $b);
+                }
+
+                return $scoreA <=> $scoreB;
+            });
+        }
         $bandTotal = $groupedCourses->count();
     @endphp
 

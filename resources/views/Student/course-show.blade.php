@@ -1,4 +1,4 @@
-@extends('layouts.student')
+﻿@extends('layouts.student')
 
 @section('title', $course->tenKH)
 
@@ -58,7 +58,7 @@
                     </li>
                     <li
                         class="course-hero__stat course-hero__stat--link"
-                        data-scroll-target="#course-content"
+                        data-course-tab-target="content"
                         role="button"
                         tabindex="0"
                         aria-label="Xem chi tiết {{ $course->chapters->count() }} chương học"
@@ -68,7 +68,7 @@
                     </li>
                     <li
                         class="course-hero__stat course-hero__stat--link"
-                        data-scroll-target="#course-reviews"
+                        data-course-tab-target="reviews"
                         role="button"
                         tabindex="0"
                         aria-label="Đi tới đánh giá khóa học ({{ $totalReviews }} đánh giá)"
@@ -193,8 +193,34 @@
          data-free-minitest="{{ $freeMiniTestId ?? '' }}"
          hidden></div>
 
+    <!-- Tab Switcher -->
+    <section class="section section--course-tabs" aria-label="�?i��?u h����>ng n��Ti dung khA3a h��?c">
+        <div class="oc-container">
+            <div class="course-tab-switcher" data-course-tab-wrapper>
+                <button
+                    type="button"
+                    class="course-tab-switcher__btn is-active"
+                    data-course-tab-trigger="content"
+                    aria-controls="course-content"
+                    aria-selected="true"
+                >
+                    Chương học
+                </button>
+                <button
+                    type="button"
+                    class="course-tab-switcher__btn"
+                    data-course-tab-trigger="reviews"
+                    aria-controls="course-reviews"
+                    aria-selected="false"
+                >
+                    Đánh giá
+                </button>
+            </div>
+        </div>
+    </section>
+
     <!-- Main Content -->
-    <section id="course-content" class="section">
+    <section id="course-content" class="section course-tab-panel is-active" data-course-tab-panel="content">
         <div class="oc-container course-layout">
             @if (!$isEnrolled)
                 <div id="lockedNotice" class="course-locked-notice" role="alert" hidden>
@@ -387,6 +413,21 @@
 
             <!-- Sidebar -->
             <aside class="course-sidebar" data-reveal-from-right>
+                @php
+                    $sidebarCtaClass = $isEnrolled
+                        ? 'course-card__cta--active'
+                        : ($isInCart ? 'course-card__cta--in-cart' : '');
+                    $sidebarCtaText = $isEnrolled
+                        ? '�?A� s��Y h��_u'
+                        : ($isInCart ? '�?A� trong gi��? hA�ng' : 'ThA�m vA�o gi��? hA�ng');
+                    $sidebarCtaAria = $isEnrolled
+                        ? 'B���n �`A� s��Y h��_u khA3a h��?c nA�y'
+                        : ($isInCart
+                            ? 'KhA3a h��?c �`A� trong gi��? hA�ng'
+                            : 'ThA�m ' . $course->tenKH . ' vA�o gi��? hA�ng');
+                @endphp
+
+
                 <div class="course-sidebar__card">
                     <h4>Trọn gói bao gồm</h4>
                     <ul class="course-sidebar__list">
@@ -414,7 +455,12 @@
     </section>
 
     <!-- Course Reviews -->
-    <section id="course-reviews" class="section section--course-reviews" data-reveal-on-scroll>
+    <section
+        id="course-reviews"
+        class="section section--course-reviews course-tab-panel"
+        data-course-tab-panel="reviews"
+        data-reveal-on-scroll
+    >
         <div class="oc-container">
             <div class="course-reviews__grid">
                 <div class="course-reviews__summary">
