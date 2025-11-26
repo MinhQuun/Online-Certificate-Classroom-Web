@@ -78,19 +78,22 @@ class ProgressController extends Controller
         $totalLearningSeconds = 0;
 
         foreach ($enrollments as $enrollment) {
-            $courseSnapshots[] = $this->buildCourseProgressSnapshot(
+            $lessonProgressCollection = $lessonProgressByCourse->get($enrollment->maKH, collect());
+            $miniTestResults = $bestMiniTests->get($enrollment->maKH, collect());
+
+            $snapshot = $this->buildCourseProgressSnapshot(
                 $enrollment,
-                $lessonProgressByCourse->get($enrollment->maKH, collect()),
-                $bestMiniTests->get($enrollment->maKH, collect())
+                $lessonProgressCollection,
+                $miniTestResults
             );
+
+            $courseSnapshots[] = $snapshot;
 
             if ($enrollment->progress_percent !== null) {
                 $progressAccumulator[] = (int) $enrollment->progress_percent;
             }
 
-            $totalLearningSeconds += $lessonProgressByCourse
-                ->get($enrollment->maKH, collect())
-                ->sum('thoiGianHoc');
+            $totalLearningSeconds += $snapshot['metrics']['total_learning_seconds'];
         }
 
         $summary = [
@@ -128,7 +131,15 @@ class ProgressController extends Controller
             ->where('trangThai', 'COMPLETED')
             ->count();
 
-        $learningSeconds = $lessonProgressCollection->sum('thoiGianHoc');
+        $learningSeconds = $lessonProgressCollection->reduce(function ($carry, $progress) {
+            $progressSeconds = (int) ($progress->video_progress_seconds ?? 0);
+
+            if ($progressSeconds <= 0) {
+                $progressSeconds = (int) ($progress->thoiGianHoc ?? 0);
+            }
+
+            return $carry + $progressSeconds;
+        }, 0);
         $lastLesson = $enrollment->lastLesson;
 
         return [
@@ -175,17 +186,26 @@ class ProgressController extends Controller
     protected function formatSecondsReadable(int $seconds): string
     {
         if ($seconds <= 0) {
-            return '0m';
+            return '0s';
         }
 
         $hours = intdiv($seconds, 3600);
         $minutes = intdiv($seconds % 3600, 60);
+        $secs = $seconds % 60;
+
+        $parts = [];
 
         if ($hours > 0) {
-            return sprintf('%dh %02dm', $hours, $minutes);
+            $parts[] = $hours . 'h';
         }
 
-        return sprintf('%dm', max(1, $minutes));
+        if ($hours > 0 || $minutes > 0) {
+            $parts[] = ($hours > 0 ? str_pad($minutes, 2, '0', STR_PAD_LEFT) : $minutes) . 'm';
+        }
+
+        $parts[] = str_pad($secs, 2, '0', STR_PAD_LEFT) . 's';
+
+        return implode(' ', $parts);
     }
 
     protected function formatSecondsToHours(int $seconds): float

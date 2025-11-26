@@ -53,9 +53,9 @@
                 <h1>{{ $course->tenKH }}</h1>
                 <p>{{ $course->moTa }}</p>
                 <ul class="course-hero__stats">
-                    <li class="course-hero__stat">
+                    {{-- <li class="course-hero__stat">
                         <strong>{{ $course->thoiHanNgay }}</strong> <span>Ngày học</span>
-                    </li>
+                    </li> --}}
                     <li
                         class="course-hero__stat course-hero__stat--link"
                         data-course-tab-target="content"

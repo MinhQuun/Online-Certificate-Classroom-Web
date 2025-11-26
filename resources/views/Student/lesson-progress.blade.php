@@ -13,6 +13,14 @@
     <script src="{{ asset('js/Student/lesson-progress.js') }}" defer></script>
 @endpush
 
+@php
+    $lessonStatusLabels = [
+        'NOT_STARTED' => 'Chưa bắt đầu',
+        'IN_PROGRESS' => 'Đang học',
+        'COMPLETED' => 'Hoàn thành',
+    ];
+@endphp
+
 @section('content')
     <div class="progress-page">
         <div class="oc-container">
@@ -159,6 +167,8 @@
                                                     @foreach($lessonItems as $lesson)
                                                         @php
                                                             $statusClass = strtolower($lesson['status']);
+                                                            $statusKey = strtoupper($lesson['status']);
+                                                            $statusLabel = $lessonStatusLabels[$statusKey] ?? $lesson['status'];
                                                         @endphp
                                                         <li class="lesson-item lesson-item--{{ $statusClass }}">
                                                             <div>
@@ -169,7 +179,7 @@
                                                                 @if($lesson['percent'] !== null)
                                                                     <span class="lesson-item__percent">{{ $lesson['percent'] }}%</span>
                                                                 @endif
-                                                                <span class="lesson-item__status">{{ $lesson['status'] }}</span>
+                                                                <span class="lesson-item__status">{{ $statusLabel }}</span>
                                                             </div>
                                                         </li>
                                                     @endforeach

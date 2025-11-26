@@ -223,6 +223,9 @@ class ProgressController extends Controller
         $totalViews = (int) ($aggregate->total_lesson_views ?? 0);
         $videoProgressSeconds = (int) ($aggregate->total_video_progress ?? 0);
         $videoDurationSeconds = (int) ($aggregate->total_video_duration ?? 0);
+        $displayLearningSeconds = $videoProgressSeconds > 0
+            ? $videoProgressSeconds
+            : $totalLearningSeconds;
 
         $lessonPercent = $totalLessons > 0
             ? (int) round(($completedLessons / $totalLessons) * 100)
@@ -304,8 +307,8 @@ class ProgressController extends Controller
                 'completed_videos' => $completedVideos,
                 'total_minitests' => $totalMiniTests,
                 'completed_minitests' => $completedMiniTests,
-                'total_learning_seconds' => $totalLearningSeconds,
-                'total_learning_readable' => $this->formatSeconds($totalLearningSeconds),
+                'total_learning_seconds' => $displayLearningSeconds,
+                'total_learning_readable' => $this->formatSeconds($displayLearningSeconds),
                 'total_lesson_views' => $totalViews,
                 'latest_activity' => $latestActivity,
                 'latest_activity_for_humans' => $latestActivity ? $latestActivity->diffForHumans() : null,
@@ -415,7 +418,7 @@ class ProgressController extends Controller
     private function formatSeconds(int $seconds): string
     {
         if ($seconds <= 0) {
-            return '0m';
+            return '0s';
         }
 
         $hours = intdiv($seconds, 3600);
@@ -423,17 +426,18 @@ class ProgressController extends Controller
         $secs = $seconds % 60;
 
         $parts = [];
+
         if ($hours > 0) {
             $parts[] = $hours . 'h';
         }
-        if ($minutes > 0) {
-            $parts[] = $minutes . 'm';
-        }
-        if ($hours === 0 && $minutes === 0 && $secs > 0) {
-            $parts[] = $secs . 's';
+
+        if ($hours > 0 || $minutes > 0) {
+            $parts[] = ($hours > 0 ? str_pad($minutes, 2, '0', STR_PAD_LEFT) : $minutes) . 'm';
         }
 
-        return implode(' ', array_slice($parts, 0, 2));
+        $parts[] = str_pad($secs, 2, '0', STR_PAD_LEFT) . 's';
+
+        return implode(' ', $parts);
     }
 
     private function toCarbon($value): ?Carbon
@@ -445,4 +449,3 @@ class ProgressController extends Controller
         return $value instanceof Carbon ? $value : Carbon::parse($value);
     }
 }
-
