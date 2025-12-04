@@ -303,10 +303,10 @@ Route::middleware(['auth', 'teacher'])->prefix('teacher')->name('teacher.')->gro
     Route::post('/lectures/{lesson}/materials', [LectureController::class, 'storeMaterial'])->name('lectures.materials.store');
     Route::delete('/materials/{material}',      [LectureController::class, 'destroyMaterial'])->name('lectures.materials.destroy');
 
-    // Theo dõi tiến độ
+    // Theo dõi tiến độ (read-only)
     Route::get('/progress', [ProgressController::class, 'index'])->name('progress.index');
+    Route::get('/progress/{course}', [ProgressController::class, 'show'])->name('progress.show');
     Route::get('/certificates', [TeacherCertificateController::class, 'index'])->name('certificates.index');
-    Route::patch('/progress/{course}/{student}', [ProgressController::class, 'update'])->name('progress.update');
 
     // Mini-tests (giáo viên)
     Route::get('/minitests',                         [TeacherMiniTestController::class, 'index'])->name('minitests.index');

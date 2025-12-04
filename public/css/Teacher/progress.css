@@ -38,6 +38,10 @@
     overflow: hidden;
     background: linear-gradient(180deg, #ffffff, #f7fcff);
 }
+.progress-card.is-active {
+    border: 1px solid rgba(58, 134, 255, 0.3);
+    box-shadow: 0 10px 26px rgba(58, 134, 255, 0.16);
+}
 .progress-card::after {
     content: '';
     position: absolute;
@@ -118,6 +122,72 @@
     background: rgba(220, 53, 69, 0.12);
     border-color: rgba(220, 53, 69, 0.28);
     color: #8c2f3c;
+}
+
+.status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    border: 1px solid transparent;
+    color: #0f172a;
+    background: #f8fafc;
+}
+.status-chip.chip-success {
+    background: rgba(25, 135, 84, 0.12);
+    border-color: rgba(25, 135, 84, 0.24);
+    color: #0f603a;
+}
+.status-chip.chip-info {
+    background: rgba(58, 134, 255, 0.12);
+    border-color: rgba(58, 134, 255, 0.24);
+    color: #1f63b8;
+}
+.status-chip.chip-muted {
+    background: rgba(15, 23, 42, 0.06);
+    border-color: rgba(15, 23, 42, 0.12);
+    color: #3f4c6b;
+}
+
+.chapter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 12px;
+    font-size: 0.82rem;
+    border: 1px solid var(--card-brd);
+    background: #f7fbff;
+}
+.chapter-pill.chapter-completed {
+    background: rgba(25, 135, 84, 0.12);
+    border-color: rgba(25, 135, 84, 0.24);
+    color: #0f603a;
+}
+.chapter-pill.chapter-in-progress {
+    background: rgba(58, 134, 255, 0.12);
+    border-color: rgba(58, 134, 255, 0.24);
+    color: #1f63b8;
+}
+.chapter-pill.chapter-not-started {
+    background: rgba(255, 193, 7, 0.12);
+    border-color: rgba(255, 193, 7, 0.24);
+    color: #8c6204;
+}
+.chapter-pill.chapter-no-lessons {
+    background: rgba(15, 23, 42, 0.06);
+    border-color: rgba(15, 23, 42, 0.12);
+    color: #3f4c6b;
+}
+
+.legend-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
 }
 
 @media (max-width: 992px) {
