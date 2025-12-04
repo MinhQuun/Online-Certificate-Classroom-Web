@@ -19,98 +19,206 @@
             Bạn chưa có khóa học nào. Khi có học viên ghi danh, dữ liệu sẽ hiển thị tại đây.
         </div>
     @else
-        <div class="card border-0 shadow-sm mb-4">
-            <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center flex-wrap gap-3">
-                <div>
-                    <h5 class="mb-1">Khóa học đang phụ trách</h5>
-                    <p class="mb-0 text-muted small">Xem nhanh số lượng học viên và mức độ hoàn thành.</p>
-                </div>
-                <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-light text-muted text-uppercase">Chỉ xem</span>
-                    <a href="{{ route('teacher.progress.index') }}" class="btn btn-outline-secondary btn-sm">Tải lại</a>
-                </div>
-            </div>
+        <div class="card border-0 shadow-sm mb-4 course-panel">
             <div class="card-body">
-                <div class="row g-3">
+                <div class="course-panel__header d-flex align-items-center justify-content-between flex-wrap gap-3">
+                    <div>
+                        <p class="text-uppercase text-muted small mb-1">Tổng quan khóa học</p>
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <h4 class="mb-0">Khóa học đang phụ trách</h4>
+                            <span class="pill">Chỉ xem</span>
+                        </div>
+                        <p class="mb-0 text-muted small">Xem nhanh số lượng học viên và mức độ hoàn thành.</p>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <a href="{{ route('teacher.progress.index') }}" class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-arrow-clockwise me-1"></i> Tải lại
+                        </a>
+                    </div>
+                </div>
+                <div class="course-panel__controls">
+                    <div class="course-panel__row">
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <span class="pill pill-ghost">Tổng: <span data-course-total>{{ count($courseSummaries) }}</span> khóa</span>
+                            <span class="pill pill-ghost">Trung bình: {{ $metrics['average'] ?? '0' }}%</span>
+                            <span class="pill pill-ghost" data-course-count>Đang hiển thị: {{ count($courseSummaries) }}</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <div class="search-input" data-search-wrapper>
+                                <i class="bi bi-search"></i>
+                                <input type="search" class="form-control" placeholder="Tìm tên khóa học..."
+                                       data-course-search aria-label="Tìm tên khóa học">
+                            </div>
+                            <select class="form-select form-select-sm w-auto" data-course-sort aria-label="Sắp xếp">
+                                <option value="name-asc">Sắp xếp: Tên (A-Z)</option>
+                                <option value="progress-desc">Tiến độ giảm dần</option>
+                                <option value="students-desc">Học viên nhiều nhất</option>
+                                <option value="active-first">Đang xem lên trước</option>
+                            </select>
+                            <div class="btn-group btn-group-sm course-view-toggle" role="group">
+                                <button type="button" class="btn btn-outline-secondary active" data-course-view="grid">
+                                    <i class="bi bi-grid-3x3-gap-fill me-1"></i> Lưới
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" data-course-view="list">
+                                    <i class="bi bi-list-ul me-1"></i> Danh sách
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-chips">
+                        <button type="button" class="filter-chip is-active" data-course-filter="all">Tất cả</button>
+                        <button type="button" class="filter-chip" data-course-filter="has-learners">Có học viên</button>
+                        <button type="button" class="filter-chip" data-course-filter="no-learners">Chưa có học viên</button>
+                        <button type="button" class="filter-chip" data-course-filter="in-progress">Trung bình > 0%</button>
+                        <button type="button" class="filter-chip" data-course-filter="active">Đang xem</button>
+                    </div>
+                </div>
+                <div class="course-grid" data-course-grid data-view="grid">
                     @foreach($courseSummaries as $summary)
                         @php $isActive = $activeCourse && $activeCourse->maKH === $summary['id']; @endphp
-                        <div class="col-md-6 col-xl-4">
-                            <div class="progress-card summary-card h-100 {{ $isActive ? 'is-active' : '' }}">
-                                <div class="d-flex justify-content-between align-items-start gap-3">
-                                    <div>
-                                        <div class="fw-semibold mb-1">{{ $summary['name'] }}</div>
-                                        <div class="text-muted small">Học viên: {{ $summary['total'] }}</div>
-                                        <div class="text-muted small">Tiến độ trung bình: {{ $summary['average'] }}%</div>
+                        <div class="course-grid__item" data-course-item
+                             data-title="{{ $summary['name'] }}"
+                             data-average="{{ (int) $summary['average'] }}"
+                             data-learners="{{ (int) $summary['total'] }}"
+                             data-active="{{ $isActive ? '1' : '0' }}">
+                            <div class="course-card h-100 {{ $isActive ? 'is-active' : '' }}">
+                                <div class="course-card__top">
+                                    <div class="flex-grow-1">
+                                        <div class="course-card__eyebrow">Học viên: {{ $summary['total'] }}</div>
+                                        <div class="course-card__title">{{ $summary['name'] }}</div>
+                                        <div class="course-card__meta">
+                                            <span>Tiến độ trung bình</span>
+                                            <strong>{{ $summary['average'] }}%</strong>
+                                        </div>
                                     </div>
-                                    <a class="btn btn-outline-primary btn-sm"
-                                       href="{{ route('teacher.progress.show', $summary['id']) }}">
-                                        {{ $isActive ? 'Đang xem' : 'Xem chi tiết' }}
-                                    </a>
+                                    <div class="d-flex flex-column align-items-end gap-2">
+                                        @if($isActive)
+                                            <span class="pill pill-live">Đang xem</span>
+                                        @endif
+                                        <a class="btn btn-outline-primary btn-sm"
+                                           href="{{ route('teacher.progress.show', $summary['id']) }}">
+                                            Xem chi tiết
+                                        </a>
+                                    </div>
                                 </div>
-                                <div class="mt-3">
-                                    <div class="progress small rounded-pill bg-light mb-2">
+                                <div class="course-card__progress">
+                                    <div class="d-flex justify-content-between small text-muted mb-1">
+                                        <span>Hoàn thành</span>
+                                        <span>{{ $summary['average'] }}%</span>
+                                    </div>
+                                    <div class="progress">
                                         <div class="progress-bar" role="progressbar"
                                              style="width: {{ $summary['average'] }}%;"
                                              aria-valuenow="{{ $summary['average'] }}" aria-valuemin="0" aria-valuemax="100">
                                         </div>
                                     </div>
-                                    <div class="d-flex flex-wrap gap-2">
-                                        <span class="status-chip chip-success">Hoàn thành: {{ $summary['completed'] }}</span>
-                                        <span class="status-chip chip-info">Đang học: {{ $summary['in_progress'] }}</span>
-                                        <span class="status-chip chip-muted">Chưa bắt đầu: {{ $summary['not_started'] }}</span>
+                                </div>
+                                <div class="course-card__stats">
+                                    <div class="course-card__stat">
+                                        <span class="dot dot-success"></span>
+                                        <div>
+                                            <span class="text-muted small d-block">Hoàn thành</span>
+                                            <strong>{{ $summary['completed'] }}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="course-card__stat">
+                                        <span class="dot dot-info"></span>
+                                        <div>
+                                            <span class="text-muted small d-block">Đang học</span>
+                                            <strong>{{ $summary['in_progress'] }}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="course-card__stat">
+                                        <span class="dot dot-muted"></span>
+                                        <div>
+                                            <span class="text-muted small d-block">Chưa bắt đầu</span>
+                                            <strong>{{ $summary['not_started'] }}</strong>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
+                <div class="course-grid-wrapper" data-course-scroll>
+                    <div class="course-grid" data-course-grid data-view="grid">
+                        @foreach($courseSummaries as $summary)
+                            @php $isActive = $activeCourse && $activeCourse->maKH === $summary['id']; @endphp
+                            <div class="course-grid__item" data-course-item
+                                 data-title="{{ $summary['name'] }}"
+                                 data-average="{{ (int) $summary['average'] }}"
+                                 data-learners="{{ (int) $summary['total'] }}"
+                                 data-active="{{ $isActive ? '1' : '0' }}">
+                                <div class="course-card h-100 {{ $isActive ? 'is-active' : '' }}">
+                                    <div class="course-card__top">
+                                        <div class="flex-grow-1">
+                                            <div class="course-card__eyebrow">Học viên: {{ $summary['total'] }}</div>
+                                            <div class="course-card__title">{{ $summary['name'] }}</div>
+                                            <div class="course-card__meta">
+                                                <span>Tiến độ trung bình</span>
+                                                <strong>{{ $summary['average'] }}%</strong>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-end gap-2">
+                                            @if($isActive)
+                                                <span class="pill pill-live">Đang xem</span>
+                                            @endif
+                                            <a class="btn btn-outline-primary btn-sm"
+                                               href="{{ route('teacher.progress.show', $summary['id']) }}">
+                                                Xem chi tiết
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="course-card__progress">
+                                        <div class="d-flex justify-content-between small text-muted mb-1">
+                                            <span>Hoàn thành</span>
+                                            <span>{{ $summary['average'] }}%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar"
+                                                 style="width: {{ $summary['average'] }}%;"
+                                                 aria-valuenow="{{ $summary['average'] }}" aria-valuemin="0" aria-valuemax="100">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="course-card__stats">
+                                        <div class="course-card__stat">
+                                            <span class="dot dot-success"></span>
+                                            <div>
+                                                <span class="text-muted small d-block">Hoàn thành</span>
+                                                <strong>{{ $summary['completed'] }}</strong>
+                                            </div>
+                                        </div>
+                                        <div class="course-card__stat">
+                                            <span class="dot dot-info"></span>
+                                            <div>
+                                                <span class="text-muted small d-block">Đang học</span>
+                                                <strong>{{ $summary['in_progress'] }}</strong>
+                                            </div>
+                                        </div>
+                                        <div class="course-card__stat">
+                                            <span class="dot dot-muted"></span>
+                                            <div>
+                                                <span class="text-muted small d-block">Chưa bắt đầu</span>
+                                                <strong>{{ $summary['not_started'] }}</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="course-empty text-center py-4" data-course-empty hidden>
+                    <i class="bi bi-search fs-3 text-muted d-block mb-2"></i>
+                    <p class="mb-1 fw-semibold">Không tìm thấy khóa học phù hợp</p>
+                    <p class="text-muted small mb-0">Hãy thử từ khóa khác hoặc thay đổi bộ lọc.</p>
+                </div>
             </div>
         </div>
 
         @if($activeCourse)
-            <form class="card border-0 shadow-sm mb-4 progress-filter" method="GET"
-                action="{{ route('teacher.progress.show', ['course' => $activeCourse->maKH]) }}" id="progressFilterForm">
-                <div class="card-body row g-3 align-items-end">
-                    <div class="col-md-4">
-                        <label class="form-label text-muted text-uppercase small mb-1">Khóa học</label>
-                        <select class="form-select form-select-lg" name="course" id="progressCourseSelector"
-                            data-show-template="{{ route('teacher.progress.show', ['course' => '__COURSE__']) }}">
-                            @foreach($courses as $course)
-                                <option value="{{ $course->maKH }}" @selected($activeCourse && $activeCourse->maKH === $course->maKH)>
-                                    {{ $course->tenKH }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label text-muted text-uppercase small mb-1">Trạng thái</label>
-                        <select class="form-select" name="status" id="progressStatusFilter">
-                            <option value="">Tất cả</option>
-                            @foreach($statusLabels as $key => $label)
-                                <option value="{{ $key }}" @selected($filters['status'] === $key)>{{ $label }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label text-muted text-uppercase small mb-1">Tìm kiếm</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-search"></i></span>
-                            <input type="search" class="form-control" name="search" id="progressSearchInput" value="{{ $filters['search'] }}"
-                                placeholder="Nhập tên học viên hoặc email">
-                        </div>
-                    </div>
-                    <div class="col-md-2 d-grid gap-2">
-                        <button class="btn btn-primary">
-                            <i class="bi bi-filter me-1"></i> Lọc
-                        </button>
-                        <button type="button" class="btn btn-outline-secondary" id="progressFilterReset">
-                            Xóa lọc
-                        </button>
-                    </div>
-                </div>
-            </form>
-
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3 mt-4">
                 <div>
                     <h5 class="mb-1">{{ $activeCourse->tenKH }}</h5>
                     <p class="mb-0 text-muted small">Chi tiết tiến độ học viên (chỉ xem, không chỉnh sửa).</p>
