@@ -1,9 +1,19 @@
-﻿.hero--courses .hero__text h1 {
-    max-width: 540px;
-}
-
 .hero--courses .hero__meta span {
     background: rgba(37, 99, 235, 0.16);
+}
+
+.hero--courses .hero__text h1 {
+    max-width: 900px;
+    font-size: clamp(30px, 3vw + 6px, 44px);
+    letter-spacing: -0.01em;
+}
+
+@media (min-width: 960px) {
+    .hero--courses .hero__grid {
+        grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+        gap: clamp(32px, 4vw, 64px);
+        align-items: center;
+    }
 }
 
 .hero-banner {
@@ -11,9 +21,12 @@
     padding: 0;
     overflow: hidden;
     width: 100%;
-    height: clamp(240px, 28vw, 360px);
+    aspect-ratio: 16 / 9;
+    height: auto;
+    min-height: clamp(240px, 22vw, 340px);
+    max-height: 420px;
     display: flex;
-    align-items: stretch;
+    align-items: center;
 }
 
 .hero--courses .hero__media::before {
@@ -51,6 +64,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     border-radius: var(--radius-lg);
     display: block;
 }

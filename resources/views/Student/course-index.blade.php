@@ -57,7 +57,7 @@
                 <div class="hero__meta">
                     <span>Thư viện tài liệu số</span>
                     <span>Review Exercises từng chương</span>
-                    <span>Mentor theo sát</span>
+                    <span>Theo dõi tiến độ</span>
                 </div>
             </div>
             <div class="hero__media hero-banner" data-hero-banner data-reveal-from-right>
