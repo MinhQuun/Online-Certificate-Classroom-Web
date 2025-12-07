@@ -331,14 +331,4 @@
     </div>
 </div>
 
-@push('styles')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="{{ asset('css/Student/notifications.css') }}?v={{ student_asset_version('css/Student/notifications.css') }}">
-@endpush
-
-@push('scripts')
-    <script src="{{ asset('js/Student/dropdown.js') }}" defer></script>
-    <script src="{{ asset('js/Student/notifications.js') }}" defer></script>
-@endpush
-
 

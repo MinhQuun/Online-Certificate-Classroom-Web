@@ -47,7 +47,13 @@ class ProgressController extends Controller
 
         abort_unless($course->maND === $teacherId, 404);
 
-        $course->loadMissing(['chapters.lessons' => fn ($query) => $query->orderBy('thuTu')]);
+        $course->load([
+            'chapters' => function ($query) {
+                $query->select('maChuong', 'maKH', 'tenChuong', 'thuTu')
+                    ->withCount('lessons')
+                    ->orderBy('thuTu');
+            },
+        ]);
 
         $courses = $this->loadTeacherCourses($teacherId);
         $courseSummaries = $this->buildCourseSummaries($courses);
@@ -74,7 +80,8 @@ class ProgressController extends Controller
 
     private function loadTeacherCourses(int $teacherId): Collection
     {
-        return Course::with(['chapters.lessons' => fn ($query) => $query->orderBy('thuTu')])
+        return Course::query()
+            ->select(['maKH', 'tenKH'])
             ->where('maND', $teacherId)
             ->orderBy('tenKH')
             ->get();
@@ -88,34 +95,30 @@ class ProgressController extends Controller
             return [];
         }
 
-        $enrollments = DB::table('hocvien_khoahoc')
+        $stats = DB::table('hocvien_khoahoc')
             ->whereIn('maKH', $courseIds)
-            ->select([
-                'maKH',
-                'progress_percent',
-            ])
+            ->select('maKH')
+            ->selectRaw('COUNT(*) as total')
+            ->selectRaw('AVG(COALESCE(progress_percent, 0)) as average_progress')
+            ->selectRaw("SUM(CASE WHEN COALESCE(progress_percent, 0) >= 100 THEN 1 ELSE 0 END) as completed")
+            ->selectRaw("SUM(CASE WHEN COALESCE(progress_percent, 0) > 0 AND COALESCE(progress_percent, 0) < 100 THEN 1 ELSE 0 END) as in_progress")
+            ->selectRaw("SUM(CASE WHEN COALESCE(progress_percent, 0) <= 0 THEN 1 ELSE 0 END) as not_started")
+            ->groupBy('maKH')
             ->get()
-            ->groupBy('maKH');
+            ->keyBy('maKH');
 
-        return $courses->map(function (Course $course) use ($enrollments) {
-            $courseEnrollments = $enrollments->get($course->maKH, collect());
-            $total = $courseEnrollments->count();
-
-            $completed = $courseEnrollments->filter(fn ($row) => (int) ($row->progress_percent ?? 0) >= 100)->count();
-            $inProgress = $courseEnrollments->filter(function ($row) {
-                $value = (int) ($row->progress_percent ?? 0);
-                return $value > 0 && $value < 100;
-            })->count();
-            $notStarted = $courseEnrollments->filter(fn ($row) => (int) ($row->progress_percent ?? 0) <= 0)->count();
+        return $courses->map(function (Course $course) use ($stats) {
+            $row = $stats->get($course->maKH);
+            $total = (int) ($row->total ?? 0);
 
             return [
                 'id'           => $course->maKH,
                 'name'         => $course->tenKH,
                 'total'        => $total,
-                'average'      => $total > 0 ? round($courseEnrollments->avg('progress_percent'), 1) : 0,
-                'completed'    => $completed,
-                'in_progress'  => $inProgress,
-                'not_started'  => $notStarted,
+                'average'      => $total > 0 ? round((float) ($row->average_progress ?? 0), 1) : 0,
+                'completed'    => (int) ($row->completed ?? 0),
+                'in_progress'  => (int) ($row->in_progress ?? 0),
+                'not_started'  => (int) ($row->not_started ?? 0),
             ];
         })->values()->all();
     }
@@ -183,7 +186,13 @@ class ProgressController extends Controller
 
         $chapterIds = $course->chapters->pluck('maChuong');
         $chapterLessons = $course->chapters
-            ->mapWithKeys(fn ($chapter) => [$chapter->maChuong => max(0, $chapter->lessons->count())]);
+            ->mapWithKeys(function ($chapter) {
+                $count = property_exists($chapter, 'lessons_count')
+                    ? (int) $chapter->lessons_count
+                    : $chapter->lessons->count();
+
+                return [$chapter->maChuong => max(0, $count)];
+            });
 
         $progressRows = DB::table('tiendo_hoctap as tp')
             ->join('baihoc as bh', 'tp.maBH', '=', 'bh.maBH')
@@ -195,7 +204,10 @@ class ProgressController extends Controller
             ->selectRaw('COUNT(tp.maBH) as tracked_lessons')
             ->groupBy('tp.maHV', 'bh.maChuong')
             ->get()
-            ->groupBy('maHV');
+            ->groupBy('maHV')
+            ->map(function ($rows) {
+                return $rows->keyBy('maChuong');
+            });
 
         $chapterProgress = [];
 
@@ -204,7 +216,7 @@ class ProgressController extends Controller
 
             foreach ($course->chapters as $chapter) {
                 $chapterRow = $progressRows->get($enrollment->maHV, collect())
-                    ->firstWhere('maChuong', $chapter->maChuong);
+                    ->get($chapter->maChuong);
 
                 $totalLessons = (int) ($chapterLessons[$chapter->maChuong] ?? 0);
                 $trackedLessons = (int) ($chapterRow->tracked_lessons ?? 0);

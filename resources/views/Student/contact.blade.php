@@ -63,7 +63,7 @@
             <h2 class="card-title"><i class="fa-solid fa-circle-info"></i> Thông tin liên hệ</h2>
             <ul class="info-list">
                 <li><i class="fa-solid fa-location-dot"></i> 140 Lê Trọng Tấn, Tây Thạnh, Tân Phú, Hồ Chí Minh</li>
-                <li><i class="fa-solid fa-phone"></i> +84 901 234 567</li>
+                <li><i class="fa-solid fa-phone"></i> 0968 000 000</li>
                 <li><i class="fa-solid fa-envelope"></i> support@occ.edu.vn</li>
                 <li><i class="fa-solid fa-clock"></i> 08:00 – 21:00 (Thứ 2 – Thứ 7)</li>
             </ul>
@@ -90,6 +90,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/Student/ajax-forms.js') }}"></script>
+    <script src="{{ asset('js/Student/ajax-forms.js') }}" defer></script>
 @endpush
-

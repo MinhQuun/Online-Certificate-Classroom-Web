@@ -182,7 +182,7 @@
 
                 <div class="email-body">
                     <p class="greeting">Xin chào {{ $name }},</p>
-                    
+
                     <p>Cảm ơn bạn đã liên hệ với Online Certificate Classroom. Chúng tôi đã nhận được tin nhắn của bạn và xin gửi lại phản hồi dưới đây.</p>
 
                     @if(!empty($originalMessage))
@@ -212,7 +212,7 @@
                 <footer class="email-footer">
                     <p><strong>Online Certificate Classroom</strong></p>
                     <p>Địa chỉ: 140 Lê Trọng Tấn, Tây Thạnh, Tân Phú, TP.HCM</p>
-                    <p>Hotline: +84 901 234 567 · Email: support@occ.edu.vn</p>
+                    <p>Hotline: 0968 000 000 · Email: support@occ.edu.vn</p>
                     <p style="margin-top: 16px;">© {{ date('Y') }} Online Certificate Classroom. All rights reserved.</p>
                 </footer>
             </div>

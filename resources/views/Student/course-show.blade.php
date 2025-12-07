@@ -706,7 +706,7 @@
 
 @push('scripts')
     <script src="{{ asset('js/Student/course-show.js') }}" defer></script>
-    <script src="{{ asset('js/Student/ajax-forms.js') }}"></script>
+    <script src="{{ asset('js/Student/ajax-forms.js') }}" defer></script>
 @endpush
 
 <!-- Enroll Prompt Modal -->

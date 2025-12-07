@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Category;
 use App\Models\CourseReview;
 use App\Models\MiniTestResult;
+use App\Models\Promotion;
 use App\Support\Cart\StudentCart;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -23,8 +24,25 @@ class CourseController extends Controller
         $currentCategory = null;
 
         $query = Course::published()
-            ->select('khoahoc.*')
-            ->with(['category', 'promotions'])
+            ->select([
+                'khoahoc.maKH',
+                'khoahoc.maDanhMuc',
+                'khoahoc.tenKH',
+                'khoahoc.slug',
+                'khoahoc.hocPhi',
+                'khoahoc.hinhanh',
+                'khoahoc.created_at',
+            ])
+            ->with([
+                'category' => function ($categoryQuery) {
+                    $categoryQuery->select('maDanhMuc', 'tenDanhMuc', 'slug');
+                },
+                'promotions' => function ($promotionQuery) {
+                    $promotionQuery->active()
+                        ->whereIn('apDungCho', [Promotion::TARGET_COURSE, Promotion::TARGET_BOTH])
+                        ->orderByDesc('khuyen_mai_khoahoc.created_at');
+                },
+            ])
             ->withCount('reviews as rating_count')
             ->selectSub(
                 CourseReview::selectRaw('AVG(diemSo)')
@@ -73,7 +91,11 @@ class CourseController extends Controller
                     ]);
                 },
                 'teacher',
-                'promotions',
+                'promotions' => function ($promotionQuery) {
+                    $promotionQuery->active()
+                        ->whereIn('apDungCho', [Promotion::TARGET_COURSE, Promotion::TARGET_BOTH])
+                        ->orderByDesc('khuyen_mai_khoahoc.created_at');
+                },
             ])
             ->firstOrFail();
 
@@ -126,7 +148,16 @@ class CourseController extends Controller
         $relatedCourses = Course::published()
             ->where('maDanhMuc', $course->maDanhMuc)
             ->where('maKH', '!=', $course->maKH)
-            ->with(['category', 'promotions'])
+            ->with([
+                'category' => function ($categoryQuery) {
+                    $categoryQuery->select('maDanhMuc', 'tenDanhMuc', 'slug');
+                },
+                'promotions' => function ($promotionQuery) {
+                    $promotionQuery->active()
+                        ->whereIn('apDungCho', [Promotion::TARGET_COURSE, Promotion::TARGET_BOTH])
+                        ->orderByDesc('khuyen_mai_khoahoc.created_at');
+                },
+            ])
             ->orderByDesc('created_at')
             ->limit(4)
             ->get();

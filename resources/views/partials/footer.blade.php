@@ -5,7 +5,7 @@
             <p>Hệ sinh thái học chứng chỉ trực tuyến với lộ trình rõ ràng, tài nguyên đa định dạng và theo dõi tiến độ thông minh.</p>
             <div class="footer-contact">
                 <a href="mailto:support@occ.edu.vn">support@occ.edu.vn</a>
-                <a href="tel:+84901234567">+84 901 234 567</a>
+                <a href="tel:+84968000000">0968 000 000</a>
             </div>
         </div>
         <div class="footer-column">

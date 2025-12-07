@@ -64,7 +64,11 @@
                 <div class="hero-banner__slides">
                     @foreach ($heroBanners as $banner)
                         <div class="hero-banner__slide {{ $loop->first ? 'is-active' : '' }}">
-                            <img src="{{ asset($banner['file']) }}" alt="{{ $banner['alt'] }}">
+                            <img
+                                src="{{ asset($banner['file']) }}"
+                                alt="{{ $banner['alt'] }}"
+                                loading="{{ $loop->first ? 'eager' : 'lazy' }}"
+                            >
                         </div>
                     @endforeach
                 </div>
@@ -320,7 +324,7 @@
 
 @push('scripts')
     <script src="{{ asset('js/Student/hero-banner.js') }}" defer></script>
-    <script src="{{ asset('js/Student/ajax-forms.js') }}"></script>
+    <script src="{{ asset('js/Student/ajax-forms.js') }}" defer></script>
     <script src="{{ asset('js/Student/course-index.js') }}" defer></script>
-    <script src="{{ asset('js/Student/home-index.js') }}"></script>
+    <script src="{{ asset('js/Student/home-index.js') }}" defer></script>
 @endpush

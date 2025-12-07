@@ -148,7 +148,7 @@
             <p class="contact-note">
                 Mọi thắc mắc và góp ý xin vui lòng liên hệ qua email:
                 <a href="mailto:support@occ.edu.vn">support@occ.edu.vn</a> hoặc hotline:
-                <a href="tel:+84901234567">+84 901 234 567</a>. Chúng tôi luôn sẵn sàng lắng nghe
+                <a href="tel:+84968000000">0968 000 000</a>. Chúng tôi luôn sẵn sàng lắng nghe
                 và hỗ trợ bạn!
             </p>
         </aside>
