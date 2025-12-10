@@ -1,68 +1,69 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
     initCourseAccordions();
     initLessonVideoProgress();
-    
 });
 
 function initCourseAccordions() {
-    const accordions = document.querySelectorAll('.accordion');
+    const accordions = document.querySelectorAll(".accordion");
 
     accordions.forEach((accordion) => {
-        const toggle = accordion.querySelector('.module__toggle');
-        const panel = accordion.querySelector('.module__panel');
+        const toggle = accordion.querySelector(".module__toggle");
+        const panel = accordion.querySelector(".module__panel");
 
         if (!toggle || !panel) {
             return;
         }
 
-        accordion.setAttribute('aria-expanded', 'false');
-        panel.style.maxHeight = '0';
+        accordion.setAttribute("aria-expanded", "false");
+        panel.style.maxHeight = "0";
 
-        toggle.addEventListener('click', (event) => {
+        toggle.addEventListener("click", (event) => {
             event.preventDefault();
 
-            const isExpanded = accordion.getAttribute('aria-expanded') === 'true';
+            const isExpanded =
+                accordion.getAttribute("aria-expanded") === "true";
 
             accordions.forEach((other) => {
                 if (other === accordion) {
                     return;
                 }
-                const otherPanel = other.querySelector('.module__panel');
-                other.setAttribute('aria-expanded', 'false');
+                const otherPanel = other.querySelector(".module__panel");
+                other.setAttribute("aria-expanded", "false");
                 if (otherPanel) {
-                    otherPanel.style.maxHeight = '0';
+                    otherPanel.style.maxHeight = "0";
                 }
             });
 
-            accordion.setAttribute('aria-expanded', String(!isExpanded));
+            accordion.setAttribute("aria-expanded", String(!isExpanded));
             if (!isExpanded) {
-                panel.style.maxHeight = panel.scrollHeight + 'px';
+                panel.style.maxHeight = panel.scrollHeight + "px";
             } else {
-                panel.style.maxHeight = '0';
+                panel.style.maxHeight = "0";
             }
         });
 
-        const isActive = accordion.querySelector('.lesson-list li.is-active');
+        const isActive = accordion.querySelector(".lesson-list li.is-active");
         if (isActive) {
-            accordion.setAttribute('aria-expanded', 'true');
+            accordion.setAttribute("aria-expanded", "true");
             setTimeout(() => {
-                panel.style.maxHeight = panel.scrollHeight + 'px';
+                panel.style.maxHeight = panel.scrollHeight + "px";
             }, 100);
         }
     });
 
     let resizeTimer;
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => {
             accordions.forEach((accordion) => {
-                const isExpanded = accordion.getAttribute('aria-expanded') === 'true';
+                const isExpanded =
+                    accordion.getAttribute("aria-expanded") === "true";
                 if (!isExpanded) {
                     return;
                 }
-                const panel = accordion.querySelector('.module__panel');
+                const panel = accordion.querySelector(".module__panel");
                 if (panel) {
-                    panel.style.maxHeight = panel.scrollHeight + 'px';
+                    panel.style.maxHeight = panel.scrollHeight + "px";
                 }
             });
         }, 250);
@@ -70,18 +71,18 @@ function initCourseAccordions() {
 }
 
 function initLessonVideoProgress() {
-    const video = document.querySelector('[data-lesson-video]');
+    const video = document.querySelector("[data-lesson-video]");
     const config = window.lessonProgressConfig;
 
     if (!video || !config) {
         return;
     }
 
-    if (video.dataset.progressEnabled !== '1') {
+    if (video.dataset.progressEnabled !== "1") {
         return;
     }
 
-    const warningNode = document.querySelector('[data-progress-warning]');
+    const warningNode = document.querySelector("[data-progress-warning]");
     const handler = new LessonVideoProgress(video, warningNode, config);
     handler.init();
 }
@@ -92,6 +93,11 @@ class LessonVideoProgress {
         this.warningNode = warningNode;
         this.config = config;
 
+        this.hasCompletedBefore = Boolean(config.isCompleted);
+        this.allowSeekAfterComplete = config.allowSeekAfterComplete !== false;
+        this.watchCount = Number(config.watchCount ?? 0);
+        this.allowUnrestrictedSeek =
+            this.allowSeekAfterComplete && this.hasCompletedBefore === true;
         this.sessionStarted = false;
         this.sessionStartPending = false;
         this.isSeeking = false;
@@ -122,16 +128,16 @@ class LessonVideoProgress {
         this.onVisibilityChange = this.onVisibilityChange.bind(this);
         this.onBeforeUnload = this.onBeforeUnload.bind(this);
 
-        this.video.addEventListener('loadedmetadata', this.onLoadedMetadata);
-        this.video.addEventListener('play', this.onPlay);
-        this.video.addEventListener('pause', this.onPause);
-        this.video.addEventListener('ended', this.onEnded);
-        this.video.addEventListener('timeupdate', this.onTimeUpdate);
-        this.video.addEventListener('seeking', this.onSeeking);
-        this.video.addEventListener('seeked', this.onSeeked);
-        this.video.addEventListener('ratechange', this.onRateChange);
-        document.addEventListener('visibilitychange', this.onVisibilityChange);
-        window.addEventListener('beforeunload', this.onBeforeUnload);
+        this.video.addEventListener("loadedmetadata", this.onLoadedMetadata);
+        this.video.addEventListener("play", this.onPlay);
+        this.video.addEventListener("pause", this.onPause);
+        this.video.addEventListener("ended", this.onEnded);
+        this.video.addEventListener("timeupdate", this.onTimeUpdate);
+        this.video.addEventListener("seeking", this.onSeeking);
+        this.video.addEventListener("seeked", this.onSeeked);
+        this.video.addEventListener("ratechange", this.onRateChange);
+        document.addEventListener("visibilitychange", this.onVisibilityChange);
+        window.addEventListener("beforeunload", this.onBeforeUnload);
 
         if (this.video.readyState >= 1) {
             this.onLoadedMetadata();
@@ -151,7 +157,10 @@ class LessonVideoProgress {
             }
         }
 
-        this.furthestTime = Math.max(this.furthestTime, this.video.currentTime || 0);
+        this.furthestTime = Math.max(
+            this.furthestTime,
+            this.video.currentTime || 0
+        );
         this.lastTimeUpdate = this.video.currentTime || 0;
     }
 
@@ -166,6 +175,10 @@ class LessonVideoProgress {
 
     onEnded() {
         this.furthestTime = this.getDuration();
+        this.hasCompletedBefore = true;
+        if (this.allowSeekAfterComplete) {
+            this.allowUnrestrictedSeek = true;
+        }
         this.flushProgress({ completed: true, force: true, useBeacon: true });
     }
 
@@ -197,6 +210,13 @@ class LessonVideoProgress {
     onSeeked() {
         this.isSeeking = false;
         const target = this.video.currentTime || 0;
+
+        if (this.allowUnrestrictedSeek) {
+            this.lastTimeUpdate = target;
+            this.furthestTime = Math.max(this.furthestTime, target);
+            return;
+        }
+
         const limit = this.furthestTime + this.seekLeeway;
 
         if (target > limit) {
@@ -204,7 +224,7 @@ class LessonVideoProgress {
             if (!Number.isNaN(safeTarget) && safeTarget >= 0) {
                 this.video.currentTime = safeTarget;
             }
-            this.showWarning('Không thể tua quá nhanh, Vui lòng xem lần lượt!.');
+            this.showWarning("Không thể tua quá nhanh, vui lòng xem lần lượt.");
         }
 
         this.lastTimeUpdate = this.video.currentTime || 0;
@@ -213,7 +233,7 @@ class LessonVideoProgress {
     onRateChange() {
         if (this.video.playbackRate > 1.25) {
             this.video.playbackRate = 1.25;
-            this.showWarning('Tốc độ phát chỉ tối đa 1.25x.');
+            this.showWarning("Tốc độ phát chỉ tối đa 1.25x.");
         }
     }
 
@@ -234,7 +254,7 @@ class LessonVideoProgress {
 
         this.sessionStartPending = true;
         const payload = {
-            event: 'start',
+            event: "start",
             current_time: Math.floor(this.video.currentTime || 0),
             duration: this.getDuration(),
             watched_delta: 0,
@@ -246,7 +266,9 @@ class LessonVideoProgress {
                 this.sessionStarted = true;
             })
             .catch(() => {
-                this.showWarning('Không ghi nhận được tiến độ, vui lòng kiểm tra kết nối.');
+                this.showWarning(
+                    "Không ghi nhận được tiến độ, vui lòng kiểm tra kết nối."
+                );
             })
             .finally(() => {
                 this.sessionStartPending = false;
@@ -264,7 +286,7 @@ class LessonVideoProgress {
         }
 
         const payload = {
-            event: 'progress',
+            event: "progress",
             current_time: Math.floor(this.video.currentTime || 0),
             duration: this.getDuration(),
             watched_delta: Math.max(0, integerDelta),
@@ -279,7 +301,7 @@ class LessonVideoProgress {
         this.lastSentAt = Date.now();
 
         this.sendPayload(payload, useBeacon).catch((error) => {
-            console.warn('Failed to record lesson progress', error);
+            console.warn("Failed to record lesson progress", error);
         });
     }
 
@@ -288,7 +310,9 @@ class LessonVideoProgress {
 
         if (useBeacon && navigator.sendBeacon) {
             try {
-                const blob = new Blob([JSON.stringify(requestPayload)], { type: 'application/json' });
+                const blob = new Blob([JSON.stringify(requestPayload)], {
+                    type: "application/json",
+                });
                 navigator.sendBeacon(this.config.progressUrl, blob);
                 return Promise.resolve(true);
             } catch (error) {
@@ -297,13 +321,13 @@ class LessonVideoProgress {
         }
 
         return fetch(this.config.progressUrl, {
-            method: 'POST',
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': this.config.csrfToken,
-                Accept: 'application/json',
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": this.config.csrfToken,
+                Accept: "application/json",
             },
-            credentials: 'same-origin',
+            credentials: "same-origin",
             body: JSON.stringify(requestPayload),
         }).then((response) => {
             if (!response.ok) {
@@ -339,13 +363,13 @@ class LessonVideoProgress {
 
         this.warningNode.textContent = message;
         this.warningNode.hidden = false;
-        this.warningNode.classList.add('is-visible');
+        this.warningNode.classList.add("is-visible");
 
         if (this.warningTimer) {
             clearTimeout(this.warningTimer);
         }
         this.warningTimer = setTimeout(() => {
-            this.warningNode.classList.remove('is-visible');
+            this.warningNode.classList.remove("is-visible");
             this.warningNode.hidden = true;
         }, 3000);
     }

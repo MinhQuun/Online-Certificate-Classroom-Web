@@ -291,6 +291,48 @@ class ProgressController extends Controller
 
         $nextLesson = $this->resolveNextLesson($course, $lessonProgressByLesson);
         $chapterSummaries = $this->buildChapterSummaries($course, $lessonProgressByLesson, $miniTestResultsByMiniTest);
+        $videoLessons = collect($chapterSummaries)
+            ->flatMap(fn($chapter) => $chapter['lessons']->filter(fn($lesson) => strtolower((string) ($lesson['type'] ?? '')) === 'video'))
+            ->values();
+
+        $videoViewCount = (int) $videoLessons->sum('view_count');
+        $videoReplayedLessons = (int) $videoLessons->filter(fn($lesson) => ($lesson['view_count'] ?? 0) > 1)->count();
+
+        $latestVideoView = $videoLessons
+            ->filter(fn($lesson) => !empty($lesson['last_viewed_at']))
+            ->sortByDesc(function ($lesson) {
+                $value = $lesson['last_viewed_at'] ?? null;
+                if ($value instanceof Carbon) {
+                    return $value->timestamp;
+                }
+
+                return $this->toCarbon($value)?->timestamp ?? 0;
+            })
+            ->first();
+
+        $latestVideoViewCarbon = $latestVideoView
+            ? $this->toCarbon($latestVideoView['last_viewed_at'])
+            : null;
+
+        $videoInsights = [
+            'most_viewed' => $videoLessons
+                ->filter(fn($lesson) => ($lesson['view_count'] ?? 0) > 0)
+                ->sortByDesc('view_count')
+                ->take(3)
+                ->map(function ($lesson) {
+                    return [
+                        'title' => $lesson['title'],
+                        'view_count' => (int) ($lesson['view_count'] ?? 0),
+                        'last_viewed_at' => $lesson['last_viewed_at'] ?? null,
+                        'last_viewed_for_humans' => !empty($lesson['last_viewed_at'])
+                            ? $this->toCarbon($lesson['last_viewed_at'])?->diffForHumans()
+                            : null,
+                    ];
+                })
+                ->values(),
+            'last_viewed_at' => $latestVideoViewCarbon,
+            'last_viewed_for_humans' => $latestVideoViewCarbon?->diffForHumans(),
+        ];
 
         return [
             'course' => $course,
@@ -310,9 +352,13 @@ class ProgressController extends Controller
                 'total_learning_seconds' => $displayLearningSeconds,
                 'total_learning_readable' => $this->formatSeconds($displayLearningSeconds),
                 'total_lesson_views' => $totalViews,
+                'video_view_count' => $videoViewCount,
+                'video_replayed_lessons' => $videoReplayedLessons,
                 'latest_activity' => $latestActivity,
                 'latest_activity_for_humans' => $latestActivity ? $latestActivity->diffForHumans() : null,
                 'latest_minitest_at' => $latestMiniTest,
+                'last_video_view_at' => $latestVideoViewCarbon,
+                'last_video_view_for_humans' => $latestVideoViewCarbon?->diffForHumans(),
             ],
             'video_progress' => [
                 'watched_seconds' => $videoProgressSeconds,
@@ -321,6 +367,7 @@ class ProgressController extends Controller
             ],
             'nextLesson' => $nextLesson,
             'chapters' => $chapterSummaries,
+            'video_insights' => $videoInsights,
         ];
     }
 
@@ -380,6 +427,11 @@ class ProgressController extends Controller
                     'percent' => $percent,
                     'is_video_completed' => (bool) ($progress->is_video_completed ?? false),
                     'updated_at' => $progress->updated_at ?? null,
+                    'view_count' => (int) ($progress->soLanXem ?? 0),
+                    'last_viewed_at' => $progress->lanXemCuoi ?? null,
+                    'last_viewed_for_humans' => $progress?->lanXemCuoi?->diffForHumans(),
+                    'progress_seconds' => (int) ($progress->video_progress_seconds ?? 0),
+                    'duration_seconds' => (int) ($progress->video_duration_seconds ?? 0),
                 ];
             });
 

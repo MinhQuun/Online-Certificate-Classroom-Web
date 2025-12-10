@@ -38,6 +38,13 @@
         $resumeSeconds = $canTrackProgress ? (int) ($lessonProgress->video_progress_seconds ?? 0) : 0;
         $watchedSeconds = $canTrackProgress ? (int) ($lessonProgress->thoiGianHoc ?? 0) : 0;
         $progressStatus = $canTrackProgress ? ($lessonProgress->trangThai ?? 'NOT_STARTED') : 'NOT_STARTED';
+        $watchCount = $canTrackProgress ? (int) ($lessonProgress->soLanXem ?? 0) : 0;
+        $videoDurationSeconds = $canTrackProgress ? ($lessonProgress?->video_duration_seconds ?? null) : null;
+        $videoProgressSeconds = $canTrackProgress ? ($lessonProgress?->video_progress_seconds ?? null) : null;
+        $isVideoCompleted = $canTrackProgress ? (
+            $progressStatus === 'COMPLETED'
+            || ($videoDurationSeconds && $videoDurationSeconds > 0 && $videoProgressSeconds >= floor($videoDurationSeconds * 0.9))
+        ) : false;
         $progressConfig = $canTrackProgress ? [
             'lessonId' => $lesson->maBH,
             'courseId' => $course->maKH,
@@ -47,7 +54,10 @@
             'watchedSeconds' => $watchedSeconds,
             'status' => $progressStatus,
             'maxSeekAheadSeconds' => 12,
-            'durationSeconds' => $lessonProgress->video_duration_seconds ?? null,
+            'durationSeconds' => $videoDurationSeconds,
+            'watchCount' => $watchCount,
+            'isCompleted' => $isVideoCompleted,
+            'allowSeekAfterComplete' => true,
         ] : null;
     @endphp
 
