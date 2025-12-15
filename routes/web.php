@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -118,6 +119,22 @@ Route::get('/services', fn () => view('Student.services'))->name('student.servic
 Route::get('/about-us', fn () => view('Student.about-us'))->name('student.about');
 Route::get('/contact', fn () => view('Student.contact'))->name('student.contact');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
+
+// Serve certificate PDFs từ disk public khi host không hỗ trợ storage:link
+Route::get('/storage/{path}', function (string $path) {
+    $cleanPath = ltrim($path, '/');
+
+    // Chỉ cho phép truy cập thư mục certificates để tránh lộ file khác
+    if (!str_starts_with($cleanPath, 'certificates/')) {
+        abort(404);
+    }
+
+    if (!Storage::disk('public')->exists($cleanPath)) {
+        abort(404);
+    }
+
+    return Storage::disk('public')->response($cleanPath);
+})->where('path', '.*');
 
 /*
 |--------------------------------------------------------------------------
