@@ -83,9 +83,9 @@ class CertificateService
                 return;
             }
 
-            $title = sprintf('Chung chi hoan thanh khoa \"%s\"', Str::limit($course->tenKH ?? 'OCC Course', 70));
+            $title = sprintf('Chứng chỉ hoàn thành khóa \"%s\"', Str::limit($course->tenKH ?? 'OCC Course', 70));
             $description = sprintf(
-                'Hoan thanh khoa %s vao %s',
+                'Hoàn thành khóa %s vào %s',
                 $course->tenKH ?? 'OCC Course',
                 $issuedAt->format('d/m/Y')
             );

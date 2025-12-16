@@ -302,12 +302,12 @@
                 </div>
                 <div class="minitests-hero__aside">
                     <div class="score-card">
-                        <span class="score-card__label">Điểm tự động</span>
-                        <span class="score-card__value">{{ $autoScore }}</span>
+                        <span class="score-card__label">Tổng điểm</span>
+                        <span class="score-card__value">{{ $totalScore }}</span>
                         @if(!$result->is_fully_graded)
                             <span class="score-card__note text-warning">Đang chờ chấm tự luận</span>
                         @else
-                            <span class="score-card__note">Tổng điểm: {{ $totalScore }}</span>
+                            <span class="score-card__note">Điểm tự động: {{ $autoScore }}</span>
                         @endif
                     </div>
                 </div>

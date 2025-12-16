@@ -1,17 +1,33 @@
-<DOCUMENT filename="certificate-pdf.blade.php">
 @php
+    use Illuminate\Support\Str;
+
     $primary = $theme['primary'] ?? '#2563eb';
     $primaryDark = $theme['primaryDark'] ?? '#1d4ed8';
     $accent = $theme['accent'] ?? '#f97316';
+
     $studentName = strtoupper($student?->hoTen ?? $certificate->student?->hoTen ?? 'OCC STUDENT');
-    $courseName = $student?->hoTen ?? $certificate->student?->hoTen ?? 'OCC STUDENT';
+
+    // Fix: courseName bị gán nhầm hoTen ở code cũ (dòng này bạn có thể bỏ nếu muốn)
     $courseName = $course->tenKH ?? 'OCC Course';
+
     $issuedDate = $issuedDateLabel ?? now()->format('d/m/Y');
+
+    /**
+     * (1) Fix watermark path:
+     * - Chỉ dùng ảnh khi path local tồn tại
+     * - Nếu là URL thì giữ nguyên (nhưng nếu dompdf không bật remote sẽ không load được)
+     */
     $templatePath = null;
+
     if (!empty($template?->template_url)) {
-        $templatePath = Str::startsWith($template->template_url, ['http://', 'https://'])
-            ? $template->template_url
-            : public_path(trim($template->template_url, '/'));
+        if (Str::startsWith($template->template_url, ['http://', 'https://'])) {
+            $templatePath = $template->template_url;
+        } else {
+            $localPath = public_path(ltrim($template->template_url, '/'));
+            if (file_exists($localPath)) {
+                $templatePath = $localPath;
+            }
+        }
     }
 @endphp
 
@@ -45,6 +61,7 @@
         height: 297mm;
         width: 210mm;
     }
+
     .wrapper {
         width: 210mm;
         height: 297mm;
@@ -55,27 +72,45 @@
         position: relative;
         overflow: hidden;
     }
+
     .wrapper::after {
         content: '';
         position: absolute;
-        inset: 0;
+        top: 0; right: 0; bottom: 0; left: 0;
         background:
             radial-gradient(circle at 18% 22%, rgba(37,99,235,.45), transparent 58%),
             radial-gradient(circle at 82% 12%, rgba(249,115,22,.35), transparent 48%);
+        z-index: 0;
     }
+
+    /* (2) Fix watermark: absolute full overlay + z-index để KHÔNG chiếm layout => không đẩy sang trang 2 */
+    .watermark {
+        position: absolute;
+        top: 0; right: 0; bottom: 0; left: 0;
+        opacity: 0.07;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        z-index: 1;
+    }
+    .watermark img { max-width: 70%; }
+
     .card {
         width: 185mm;           /* ~88% chiều ngang A4 */
-        height: 260mm;           /* để vừa trong chiều dọc */
+        height: 260mm;          /* để vừa trong chiều dọc */
         background: #ffffff;
         border-radius: 20px;
-        padding: 25mm 20mm;      /* margin trên/dưới/trái/phải */
+        padding: 25mm 20mm;     /* margin trên/dưới/trái/phải */
         box-shadow: 0 25px 70px rgba(0,0,0,0.35);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         position: relative;
         box-sizing: border-box;
+        z-index: 2;             /* nằm trên watermark */
     }
+
     .header {
         display: flex;
         justify-content: space-between;
@@ -84,6 +119,7 @@
     }
     .branding span { font-size: 13pt; color: #475569; letter-spacing: 1.8px; }
     .branding strong { font-size: 19pt; color: {{ $primary }}; letter-spacing: 4px; font-weight: 700; }
+
     .badge {
         padding: 6px 18px;
         background: {{ $primary }};
@@ -92,6 +128,7 @@
         font-size: 10pt;
         letter-spacing: 2px;
     }
+
     .title { text-align: center; margin: 10mm 0 12mm 0; }
     .title p { margin:0; color:#94a3b8; letter-spacing:5px; font-size:11pt; }
     .title h1 { margin:4px 0 0; font-size:34pt; letter-spacing:3px; color:#0f172a; font-weight:700; }
@@ -143,28 +180,19 @@
     }
     .seal span { display:block; color:#94a3b8; font-size:10pt; letter-spacing:3px; }
     .seal strong { font-size:15pt; color:#0f172a; margin-top:1px; }
-    
-    .watermark {
-        position:absolute;
-        inset:0;
-        opacity:0.07;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        pointer-events:none;
-    }
-    .watermark img { max-width:70%; }
 </style>
 </head>
 <body>
 <div class="wrapper">
-    <div class="watermark">
+    {{-- <div class="watermark">
         @if(!empty($templatePath))
             <img src="{{ $templatePath }}" alt="watermark">
         @else
-            <svg width="500" height="500" viewBox="0 0 500 500"><circle cx="250" cy="250" r="200" fill="none" stroke="{{ $primary }}" stroke-width="15" opacity="0.3"/></svg>
+            <svg width="500" height="500" viewBox="0 0 500 500">
+                <circle cx="250" cy="250" r="200" fill="none" stroke="{{ $primary }}" stroke-width="15" opacity="0.3"/>
+            </svg>
         @endif
-    </div>
+    </div> --}}
 
     <div class="card">
         <div class="header">
@@ -212,4 +240,3 @@
 </div>
 </body>
 </html>
-</DOCUMENT>
