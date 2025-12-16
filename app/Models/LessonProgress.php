@@ -27,6 +27,9 @@ class LessonProgress extends Model
         'video_progress_seconds',
         'video_duration_seconds',
         'completed_at',
+        'demo_passed_by',
+        'demo_passed_at',
+        'demo_pass_reason',
         'ghiChu',
     ];
 
@@ -38,6 +41,8 @@ class LessonProgress extends Model
         'is_video_completed'     => 'boolean',
         'lanXemCuoi'             => 'datetime',
         'completed_at'           => 'datetime',
+        'demo_passed_by'         => 'integer',
+        'demo_passed_at'         => 'datetime',
     ];
 
     // Học viên

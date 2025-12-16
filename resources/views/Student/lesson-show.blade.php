@@ -6,9 +6,11 @@
     @php
         $pageStyle = 'css/Student/pages-lesson.css';
         $discussionStyle = 'css/Student/lesson-discussion.css';
+        $demoPassStyle = 'css/Student/lesson-pass.css';
     @endphp
     <link rel="stylesheet" href="{{ asset($pageStyle) }}?v={{ student_asset_version($pageStyle) }}">
     <link rel="stylesheet" href="{{ asset($discussionStyle) }}?v={{ student_asset_version($discussionStyle) }}">
+    <link rel="stylesheet" href="{{ asset($demoPassStyle) }}?v={{ student_asset_version($demoPassStyle) }}">
 @endpush
 
 @section('content')
@@ -24,6 +26,7 @@
 
     @php
         $courseCover = $course->cover_image_url;
+        $authUser = auth()->user();
         $videos = $lesson->materials->filter(fn ($m) => strtolower($m->loai) === 'video');
         $audios = $lesson->materials->filter(fn ($m) => strtolower($m->loai) === 'audio');
         $pdfs = $lesson->materials->filter(fn ($m) => strtolower($m->loai) === 'pdf');
@@ -41,6 +44,9 @@
         $watchCount = $canTrackProgress ? (int) ($lessonProgress->soLanXem ?? 0) : 0;
         $videoDurationSeconds = $canTrackProgress ? ($lessonProgress?->video_duration_seconds ?? null) : null;
         $videoProgressSeconds = $canTrackProgress ? ($lessonProgress?->video_progress_seconds ?? null) : null;
+        $canDemoPassVideo = $canTrackProgress && (
+            ($authUser && in_array($authUser->vaiTro, ['ADMIN', 'GIANG_VIEN'])) || config('app.debug')
+        );
         $isVideoCompleted = $canTrackProgress ? (
             $progressStatus === 'COMPLETED'
             || ($videoDurationSeconds && $videoDurationSeconds > 0 && $videoProgressSeconds >= floor($videoDurationSeconds * 0.9))
@@ -58,6 +64,12 @@
             'watchCount' => $watchCount,
             'isCompleted' => $isVideoCompleted,
             'allowSeekAfterComplete' => true,
+            'demoPass' => $canDemoPassVideo ? [
+                'enabled' => true,
+                'url' => route('student.lessons.progress.pass', ['lesson' => $lesson->maBH]),
+                'note' => 'Chức năng thực hiện pass video.',
+                'role' => $authUser?->vaiTro,
+            ] : null,
         ] : null;
     @endphp
 
@@ -127,6 +139,27 @@
                             </video>
                         </div>
                         <div class="lesson-media__warning" data-progress-warning hidden></div>
+                        @if ($canTrackProgress && $canDemoPassVideo)
+                            <div class="lesson-demo-pass" data-demo-pass>
+                                <div class="lesson-demo-pass__header">
+                                    <span class="lesson-demo-pass__badge">Demo</span>
+                                    <div class="lesson-demo-pass__heading">
+                                        <p class="lesson-demo-pass__title">Pass nhanh video</p>
+                                        
+                                    </div>
+                                </div>
+                                <div class="lesson-demo-pass__body">
+                                    <div class="lesson-demo-pass__status" data-demo-pass-status>
+                                        Hệ thống sẽ cập nhật tiến độ ~100% và mở tua sau khi pass.
+                                    </div>
+                                    <div class="lesson-demo-pass__actions">
+                                        <button type="button" class="btn btn--primary lesson-demo-pass__btn" data-demo-pass-action>
+                                            Pass video ngay
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         @if ($primaryVideo->tenTL)
                             <p class="lesson-media__caption muted">{{ $primaryVideo->tenTL }}</p>
                         @endif

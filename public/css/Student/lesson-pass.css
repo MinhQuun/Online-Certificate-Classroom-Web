@@ -1,0 +1,110 @@
+/* Demo pass control for lesson video */
+.lesson-demo-pass {
+    margin-top: 16px;
+    padding: 16px 18px;
+    border: 1.5px dashed var(--color-accent, #2563eb);
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(37, 99, 235, 0.02));
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 10px 28px rgba(37, 99, 235, 0.08);
+}
+
+.lesson-demo-pass__header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.lesson-demo-pass__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--color-accent, #2563eb);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.16);
+}
+
+.lesson-demo-pass__heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.lesson-demo-pass__title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--color-heading, #0f172a);
+}
+
+.lesson-demo-pass__subtitle {
+    margin: 0;
+    font-size: 14px;
+    color: var(--color-text, #334155);
+}
+
+.lesson-demo-pass__body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.lesson-demo-pass__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-accent-strong, #1d4ed8);
+    background: #fff;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+    min-height: 44px;
+}
+
+.lesson-demo-pass__status.is-error {
+    color: #b91c1c;
+    border-color: rgba(185, 28, 28, 0.3);
+    background: #fff8f5;
+}
+
+.lesson-demo-pass__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.lesson-demo-pass__btn {
+    min-width: 160px;
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .lesson-demo-pass {
+        padding: 14px;
+    }
+
+    .lesson-demo-pass__body {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .lesson-demo-pass__actions {
+        width: 100%;
+    }
+
+    .lesson-demo-pass__btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

@@ -186,6 +186,8 @@ Route::middleware('auth')->prefix('student')->name('student.')->group(function (
     Route::get('/progress', [StudentProgressController::class, 'index'])->name('progress.index');
     Route::post('/lessons/{lesson}/progress', [StudentLessonProgressController::class, 'store'])
         ->name('lessons.progress.store');
+    Route::post('/lessons/{lesson}/progress/pass', [StudentLessonProgressController::class, 'pass'])
+        ->name('lessons.progress.pass');
 
     // Thảo luận bài học (hành động cần đăng nhập)
     Route::post('/lessons/{lesson}/discussions', [StudentLessonDiscussionController::class, 'store'])

@@ -436,6 +436,9 @@ CREATE TABLE tiendo_hoctap (
         END
     ) STORED COMMENT '1 nếu học viên đã coi gần hết (>=90%) hoặc đánh dấu COMPLETED',
     completed_at DATETIME COMMENT 'Thời điểm hoàn thành bài học',
+    demo_passed_by INT NULL COMMENT 'Người kích hoạt pass nhanh (demo)',
+    demo_passed_at DATETIME NULL COMMENT 'Thời điểm kích hoạt pass nhanh',
+    demo_pass_reason VARCHAR(255) NULL COMMENT 'Ghi chú pass nhanh (demo)',
     ghiChu VARCHAR(500),                      -- Ghi chú
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -444,8 +447,10 @@ CREATE TABLE tiendo_hoctap (
     KEY IX_TD_ENROLL (maHV, maKH),
     KEY IX_TD_BAIHOC (maBH),
     KEY IX_TD_STATUS (trangThai),
+    KEY IX_TD_DEMO (demo_passed_by, demo_passed_at),
     CONSTRAINT FK_TD_ENROLL FOREIGN KEY (maHV, maKH) REFERENCES HOCVIEN_KHOAHOC(maHV, maKH) ON DELETE CASCADE,
-    CONSTRAINT FK_TD_BAIHOC FOREIGN KEY (maBH) REFERENCES baihoc(maBH) ON DELETE CASCADE
+    CONSTRAINT FK_TD_BAIHOC FOREIGN KEY (maBH) REFERENCES baihoc(maBH) ON DELETE CASCADE,
+    CONSTRAINT FK_TD_DEMO_USER FOREIGN KEY (demo_passed_by) REFERENCES nguoidung(maND) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =========================================================

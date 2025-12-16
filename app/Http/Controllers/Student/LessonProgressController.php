@@ -144,6 +144,117 @@ class LessonProgressController extends Controller
         ]);
     }
 
+    public function pass(Request $request, Lesson $lesson): JsonResponse
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+        $isPrivilegedRole = in_array($user->vaiTro, ['ADMIN', 'GIANG_VIEN'], true);
+        $isDebug = (bool) config('app.debug');
+        if (!$isPrivilegedRole && !$isDebug) {
+            return response()->json(['message' => 'Bạn không có quyền pass nhanh video.'], 403);
+        }
+
+        $student = DB::table('hocvien')->where('maND', $user->getAuthIdentifier())->first();
+        if (!$student) {
+            return response()->json(['message' => 'Chức năng pass nhanh chỉ áp dụng cho tài khoản học viên.'], 403);
+        }
+
+        $lesson->loadMissing('chapter');
+        $courseId = optional($lesson->chapter)->maKH;
+        if (!$courseId) {
+            return response()->json(['message' => 'Không xác định được khóa học.'], 422);
+        }
+
+        $enrollment = Enrollment::where('maHV', $student->maHV)
+            ->where('maKH', $courseId)
+            ->where('trangThai', 'ACTIVE')
+            ->first();
+
+        if (!$enrollment) {
+            return response()->json(['message' => 'Khóa học chưa được kích hoạt.'], 403);
+        }
+
+        $validated = $request->validate([
+            'duration_seconds' => ['nullable', 'integer', 'min:0'],
+            'pass_reason' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $progressData = DB::transaction(function () use ($validated, $lesson, $student, $courseId, $enrollment, $user) {
+            $now = Carbon::now('Asia/Ho_Chi_Minh');
+            $progress = LessonProgress::firstOrNew([
+                'maHV' => $student->maHV,
+                'maKH' => $courseId,
+                'maBH' => $lesson->maBH,
+            ]);
+
+            if (!$progress->exists) {
+                $progress->trangThai = 'NOT_STARTED';
+                $progress->thoiGianHoc = 0;
+                $progress->soLanXem = 0;
+                $progress->video_progress_seconds = 0;
+                $progress->video_duration_seconds = 0;
+            }
+
+            $duration = max(0, (int) ($validated['duration_seconds'] ?? 0));
+            if ($duration > 0) {
+                $progress->video_duration_seconds = max(
+                    (int) $progress->video_duration_seconds,
+                    $duration
+                );
+            }
+
+            $targetProgress = max(
+                (int) $progress->video_progress_seconds,
+                (int) $progress->video_duration_seconds,
+                $duration
+            );
+
+            if ($targetProgress > 0) {
+                $progress->video_progress_seconds = $targetProgress;
+            }
+
+            $progress->soLanXem = max(1, (int) $progress->soLanXem);
+            $progress->thoiGianHoc = max((int) $progress->thoiGianHoc, $targetProgress);
+            $progress->lanXemCuoi = $now;
+            $progress->trangThai = 'COMPLETED';
+            $progress->completed_at = $now;
+            $progress->demo_passed_at = $now;
+            $progress->demo_passed_by = $user->maND;
+            if (!empty($validated['pass_reason'])) {
+                $progress->demo_pass_reason = $validated['pass_reason'];
+            }
+
+            $progress->save();
+
+            $metrics = $this->recalculateEnrollmentProgress($enrollment, $lesson);
+
+            return [
+                'lesson_progress' => [
+                    'status' => $progress->trangThai,
+                    'video_progress_seconds' => (int) $progress->video_progress_seconds,
+                    'video_duration_seconds' => (int) $progress->video_duration_seconds,
+                    'watched_seconds' => (int) $progress->thoiGianHoc,
+                    'completed_at' => $progress->completed_at?->toIso8601String(),
+                    'demo_passed_at' => $progress->demo_passed_at?->toIso8601String(),
+                    'demo_passed_by' => $progress->demo_passed_by,
+                ],
+                'enrollment' => $metrics,
+            ];
+        });
+
+        $enrollment->refresh();
+        $this->certificateService->issueCourseCertificateIfEligible($enrollment);
+
+        return response()->json([
+            'status' => 'ok',
+            'message' => 'Đã pass nhanh video cho mục đích demo tiến độ.',
+            'data' => $progressData,
+        ]);
+    }
+
     /**
      * @throws ValidationException
      */

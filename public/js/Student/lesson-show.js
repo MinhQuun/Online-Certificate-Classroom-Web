@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     initCourseAccordions();
-    initLessonVideoProgress();
+    const videoHandler = initLessonVideoProgress();
+    initLessonDemoPass(videoHandler);
 });
 
 function initCourseAccordions() {
@@ -75,16 +76,42 @@ function initLessonVideoProgress() {
     const config = window.lessonProgressConfig;
 
     if (!video || !config) {
-        return;
+        return null;
     }
 
     if (video.dataset.progressEnabled !== "1") {
-        return;
+        return null;
     }
 
     const warningNode = document.querySelector("[data-progress-warning]");
     const handler = new LessonVideoProgress(video, warningNode, config);
     handler.init();
+    return handler;
+}
+
+function initLessonDemoPass(videoHandler) {
+    const video = document.querySelector("[data-lesson-video]");
+    const config = window.lessonProgressConfig;
+    const container = document.querySelector("[data-demo-pass]");
+
+    if (!video || !config || !container) {
+        return null;
+    }
+
+    const demoConfig = config.demoPass;
+    if (!demoConfig || demoConfig.enabled !== true) {
+        return null;
+    }
+
+    const handler = new LessonDemoPass(
+        video,
+        container,
+        demoConfig,
+        config,
+        videoHandler
+    );
+    handler.init();
+    return handler;
 }
 
 class LessonVideoProgress {
@@ -337,6 +364,26 @@ class LessonVideoProgress {
         });
     }
 
+    markCompletedByDemo(durationSeconds = null) {
+        if (Number.isFinite(durationSeconds) && durationSeconds > 0) {
+            const safeDuration = Math.floor(durationSeconds);
+            this.duration = Math.max(this.duration, safeDuration);
+            const targetTime = Math.min(this.getDuration(), safeDuration);
+            if (!Number.isNaN(targetTime) && targetTime >= 0) {
+                this.video.currentTime = targetTime;
+            }
+            this.furthestTime = Math.max(this.furthestTime, this.getDuration());
+        } else {
+            this.furthestTime = Math.max(this.furthestTime, this.getDuration());
+        }
+
+        this.hasCompletedBefore = true;
+        if (this.allowSeekAfterComplete) {
+            this.allowUnrestrictedSeek = true;
+        }
+        this.lastTimeUpdate = this.video.currentTime || 0;
+    }
+
     getDuration() {
         if (this.duration > 0) {
             return this.duration;
@@ -372,5 +419,110 @@ class LessonVideoProgress {
             this.warningNode.classList.remove("is-visible");
             this.warningNode.hidden = true;
         }, 3000);
+    }
+}
+
+class LessonDemoPass {
+    constructor(video, container, demoConfig, baseConfig, videoProgressHandler) {
+        this.video = video;
+        this.container = container;
+        this.demoConfig = demoConfig;
+        this.baseConfig = baseConfig;
+        this.videoProgressHandler = videoProgressHandler;
+        this.passButton = container.querySelector("[data-demo-pass-action]");
+        this.statusNode = container.querySelector("[data-demo-pass-status]");
+        this.isSubmitting = false;
+        this.defaultLabel = this.passButton ? this.passButton.textContent.trim() : "Pass video";
+    }
+
+    init() {
+        if (!this.passButton) {
+            return;
+        }
+        this.setStatus(
+            this.demoConfig.note ||
+                "Pass video."
+        );
+        this.passButton.addEventListener("click", () => this.handlePass());
+    }
+
+    setStatus(message, isError = false) {
+        if (!this.statusNode) {
+            return;
+        }
+        this.statusNode.textContent = message;
+        this.statusNode.classList.toggle("is-error", Boolean(isError));
+    }
+
+    setLoading(state) {
+        this.isSubmitting = state;
+        if (this.passButton) {
+            this.passButton.disabled = state;
+            this.passButton.textContent = state
+                ? "Đang pass..."
+                : this.defaultLabel;
+        }
+    }
+
+    handlePass() {
+        if (this.isSubmitting) {
+            return;
+        }
+
+        const durationSeconds = Math.floor(
+            this.video?.duration || this.baseConfig.durationSeconds || 0
+        );
+        const payload = {
+            _token: this.baseConfig.csrfToken,
+            pass_reason: "demo_pass_video",
+        };
+        if (durationSeconds > 0) {
+            payload.duration_seconds = durationSeconds;
+        }
+
+        this.setLoading(true);
+        this.setStatus("Đang pass video để demo tiến độ...");
+
+        fetch(this.demoConfig.url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": this.baseConfig.csrfToken,
+                Accept: "application/json",
+            },
+            credentials: "same-origin",
+            body: JSON.stringify(payload),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(() => {
+                this.setStatus(
+                    "Đã pass video ",
+                    false
+                );
+                if (
+                    this.videoProgressHandler &&
+                    typeof this.videoProgressHandler.markCompletedByDemo ===
+                        "function"
+                ) {
+                    this.videoProgressHandler.markCompletedByDemo(
+                        durationSeconds
+                    );
+                }
+            })
+            .catch((error) => {
+                this.setStatus(
+                    "Không pass được, vui lòng kiểm tra quyền hoặc mạng.",
+                    true
+                );
+                console.warn("Demo pass failed", error);
+            })
+            .finally(() => {
+                this.setLoading(false);
+            });
     }
 }
