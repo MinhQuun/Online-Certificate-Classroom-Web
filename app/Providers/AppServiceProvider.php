@@ -51,43 +51,30 @@ class AppServiceProvider extends ServiceProvider
                 $user = Auth::user();
 
                 try {
-                    $cacheKey = 'student.nav.notifications.' . $user->getAuthIdentifier();
-                    $cacheTtl = now()->addSeconds(60);
+                    $notifier = app(StudentNotificationService::class);
+                    $certificateService = app(CertificateService::class);
 
-                    $notificationData = Cache::remember($cacheKey, $cacheTtl, function () use ($user) {
-                        $notifier = app(StudentNotificationService::class);
-                        $certificateService = app(CertificateService::class);
+                    $enrollments = Enrollment::query()
+                        ->where('maHV', $user->student->maHV)
+                        ->with(['course', 'student', 'course.certificateTemplate'])
+                        ->get();
 
-                        try {
-                            $enrollments = Enrollment::query()
-                                ->where('maHV', $user->student->maHV)
-                                ->with(['course', 'student', 'course.certificateTemplate'])
-                                ->get();
+                    foreach ($enrollments as $enrollment) {
+                        $certificateService->issueCourseCertificateIfEligible($enrollment);
+                    }
 
-                            foreach ($enrollments as $enrollment) {
-                                $certificateService->issueCourseCertificateIfEligible($enrollment);
-                            }
-                        } catch (\Throwable $exception) {
-                            report($exception);
-                        }
+                    $notifier->syncActivePromotionsForUser($user);
+                    $notifier->syncCertificatesForUser($user);
 
-                        $notifier->syncActivePromotionsForUser($user);
-                        $notifier->syncCertificatesForUser($user);
+                    $notificationPreview = StudentNotification::with(['course', 'combo'])
+                        ->forUser($user->getAuthIdentifier())
+                        ->latestFirst()
+                        ->limit(5)
+                        ->get();
 
-                        return [
-                            'preview' => StudentNotification::with(['course', 'combo'])
-                                ->forUser($user->getAuthIdentifier())
-                                ->latestFirst()
-                                ->limit(5)
-                                ->get(),
-                            'unread' => StudentNotification::forUser($user->getAuthIdentifier())
-                                ->unread()
-                                ->count(),
-                        ];
-                    });
-
-                    $notificationPreview = $notificationData['preview'] ?? collect();
-                    $notificationUnread = $notificationData['unread'] ?? 0;
+                    $notificationUnread = StudentNotification::forUser($user->getAuthIdentifier())
+                        ->unread()
+                        ->count();
                 } catch (\Throwable $exception) {
                     report($exception);
                     $notificationPreview = collect();

@@ -32,19 +32,15 @@ class CertificateService
         }
 
         $required = $course->certificateProgressThreshold();
-        $progress = (int) ($enrollment->progress_percent ?? 0);
-
-        if ($progress < $required) {
-            return null;
-        }
 
         $issuedAt = $enrollment->completed_at
             ? $enrollment->completed_at->copy()->timezone($this->timezone())
             : null;
 
         $certificate = null;
+        $wasIssued = false;
 
-        DB::transaction(function () use (&$certificate, &$issuedAt, $enrollment, $student, $course, $required) {
+        DB::transaction(function () use (&$certificate, &$issuedAt, &$wasIssued, $enrollment, $student, $course, $required) {
             $locked = Enrollment::query()
                 ->where('maHV', $enrollment->maHV)
                 ->where('maKH', $enrollment->maKH)
@@ -67,22 +63,29 @@ class CertificateService
                 $locked->forceFill(['completed_at' => $issuedAt])->save();
             }
 
-            $duplicateExists = Certificate::query()
+            $existingCertificate = Certificate::query()
                 ->where('maHV', $student->maHV)
                 ->where('maKH', $course->maKH)
                 ->where('loaiCC', Certificate::TYPE_COURSE)
                 ->where('issue_mode', Certificate::ISSUE_MODE_AUTO)
                 ->where('trangThai', Certificate::STATUS_ISSUED)
-                ->where('issued_at', $issuedAt)
-                ->exists();
+                ->lockForUpdate()
+                ->latest('issued_at')
+                ->first();
 
-            if ($duplicateExists) {
+            if ($existingCertificate) {
+                $certificate = $existingCertificate;
+
+                if (!$certificate->issued_at && $issuedAt) {
+                    $certificate->forceFill(['issued_at' => $issuedAt])->save();
+                }
+
                 return;
             }
 
-            $title = sprintf('Chứng chỉ hoàn thành khóa "%s"', Str::limit($course->tenKH ?? 'OCC Course', 70));
+            $title = sprintf('Chung chi hoan thanh khoa \"%s\"', Str::limit($course->tenKH ?? 'OCC Course', 70));
             $description = sprintf(
-                'Hoàn thành khóa %s vào %s',
+                'Hoan thanh khoa %s vao %s',
                 $course->tenKH ?? 'OCC Course',
                 $issuedAt->format('d/m/Y')
             );
@@ -100,6 +103,8 @@ class CertificateService
                 'issue_mode' => Certificate::ISSUE_MODE_AUTO,
                 'issued_at' => $issuedAt,
             ]);
+
+            $wasIssued = true;
         });
 
         if (!$certificate) {
@@ -107,20 +112,25 @@ class CertificateService
         }
 
         $template = $this->resolveCourseTemplate($course);
-        $this->attachPdfToCertificate($certificate, [
-            'student' => $student,
-            'course' => $course,
-            'template' => $template,
-        ]);
+        if ($wasIssued || !$certificate->pdf_url) {
+            $this->attachPdfToCertificate($certificate, [
+                'student' => $student,
+                'course' => $course,
+                'template' => $template,
+            ]);
+        }
 
         try {
-            app(StudentNotificationService::class)->notifyCertificateIssued($certificate);
+            if ($wasIssued) {
+                app(StudentNotificationService::class)->notifyCertificateIssued($certificate);
+            }
         } catch (Throwable $exception) {
             report($exception);
         }
 
         return $certificate->refresh();
     }
+
 
     public function issueManualCourseCertificate(
         Student $student,
