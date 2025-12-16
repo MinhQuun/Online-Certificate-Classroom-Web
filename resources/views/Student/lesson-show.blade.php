@@ -300,6 +300,7 @@
                     {{-- THÊM WRAPPER NÀY ĐỂ TẠO VÙNG CUỘN --}}
                     <div class="aside-card__content">
                         <a class="btn btn--ghost" href="{{ route('student.courses.show', $course->slug) }}">Xem khóa học</a>
+                        @php $lessonProgressMap = $lessonProgressMap ?? collect(); @endphp
 
                         @foreach ($course->chapters as $chapter)
                             <div class="accordion" data-accordion>
@@ -314,8 +315,9 @@
                                     <div class="module__body">
                                         <ul class="lesson-list lesson-list--compact">
                                             @foreach ($chapter->lessons as $item)
-                                                <li class="{{ $item->maBH === $lesson->maBH ? 'is-active' : '' }}">
-                                                    <a href="{{ route('student.lessons.show', $item->maBH) }}">Bài {{ $item->thuTu }}: {{ $item->tieuDe }}</a>
+                                                @php $itemProgress = $lessonProgressMap->get($item->maBH); $itemCompleted = ($itemProgress->trangThai ?? null) === 'COMPLETED'; @endphp
+                                                <li class="{{ $item->maBH === $lesson->maBH ? 'is-active' : '' }} {{ $itemCompleted ? 'is-completed' : '' }}">
+                                                    <a href="{{ route('student.lessons.show', $item->maBH) }}">Bài {{ $item->thuTu }}: {{ $item->tieuDe }} @if($itemCompleted)<span class=\"lesson-list__check\" aria-hidden=\"true\">&#10003;@endif</a>
                                                 </li>
                                             @endforeach
                                         </ul>

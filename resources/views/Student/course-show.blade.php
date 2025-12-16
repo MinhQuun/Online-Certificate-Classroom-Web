@@ -241,6 +241,9 @@
                     <p>Khóa học được chia thành các chương kèm theo bài ôn luyện (review exercises), giúp bạn đánh giá tiến độ trước khi chuyển sang nội dung mới.</p>
                 </div>
 
+                @php
+                    $lessonProgressByLesson = $lessonProgressByLesson ?? collect();
+                @endphp
                 <!-- Chapters -->
                 @foreach ($course->chapters as $chapter)
                     <article class="module" data-accordion data-accordion-autopen="false" data-reveal-on-scroll>
@@ -270,13 +273,16 @@
                                                     $labelClass = $isFreeLesson ? 'label--free' : 'label--paid';
                                                     $labelText = $isFreeLesson ? 'Free' : 'Paid';
                                                 }
+
+                                                $progressRow = $lessonProgressByLesson->get($lesson->maBH);
+                                                $isCompletedLesson = ($progressRow->trangThai ?? null) === 'COMPLETED';
                                             @endphp
-                                            <li class="lesson-item">
+                                            <li class="lesson-item {{ $isCompletedLesson ? 'is-completed' : '' }}">
                                                 <span class="label {{ $labelClass }}">{{ $labelText }}</span>
                                                 <a href="{{ route('student.lessons.show', $lesson->maBH) }}" data-lesson-id="{{ $lesson->maBH }}">
                                                     <div class="lesson-list__meta">
                                                         <span class="lesson-list__eyebrow">Bài {{ $lesson->thuTu }}</span>
-                                                        <span class="lesson-list__title">{{ $lesson->tieuDe }}</span>
+                                                        <span class="lesson-list__title-wrap"><span class="lesson-list__title">{{ $lesson->tieuDe }}</span>@if($isCompletedLesson)<span class="lesson-list__check" aria-hidden="true">&#10003;</span><span class="sr-only">Da hoan thanh</span>@endif</span>
                                                     </div>
                                                     <span class="badge badge--{{ strtolower($lesson->loai) }}">{{ strtoupper($lesson->loai) }}</span>
                                                 </a>

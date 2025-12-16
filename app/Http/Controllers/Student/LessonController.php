@@ -76,6 +76,7 @@ class LessonController extends Controller
         $lessonProgress = null;
         $enrollment = null;
         $miniTestResults = collect();
+        $lessonProgressMap = collect();
 
         if (!empty($student) && $isEnrolled) {
             $enrollment = Enrollment::where('maHV', $student->maHV)
@@ -88,7 +89,11 @@ class LessonController extends Controller
                 ->where('maBH', $lesson->maBH)
                 ->first();
 
-  
+            $lessonProgressMap = LessonProgress::where('maHV', $student->maHV)
+                ->where('maKH', $course->maKH)
+                ->get()
+                ->keyBy('maBH');
+
             $chapterMiniTestIds = $lesson->chapter->miniTests->pluck('maMT');
             if ($chapterMiniTestIds->isNotEmpty()) {
                 $miniTestResults = DB::table('ketqua_minitest')
@@ -186,6 +191,7 @@ class LessonController extends Controller
             'isEnrolled' => $isEnrolled,
             'enrollment' => $enrollment,
             'lessonProgress' => $lessonProgress,
+            'lessonProgressMap' => $lessonProgressMap,
             'miniTestResults' => $miniTestResults,
             'discussionBootstrap' => $discussionBootstrap,
         ]);

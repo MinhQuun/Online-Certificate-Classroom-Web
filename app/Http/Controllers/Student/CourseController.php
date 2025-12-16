@@ -108,6 +108,7 @@ class CourseController extends Controller
 
         // Load student's attempt stats for each mini-test
         $miniTestScores = [];
+        $lessonProgressByLesson = collect();
         if ($isAuthenticated && $enrollment['student']) {
             $studentId = $enrollment['student']->maHV;
             $miniTestIds = [];
@@ -143,6 +144,15 @@ class CourseController extends Controller
                     ];
                 }
             }
+
+            $progressRows = DB::table('tiendo_hoctap')
+                ->select('maBH', 'trangThai')
+                ->where('maHV', $studentId)
+                ->where('maKH', $course->maKH)
+                ->get()
+                ->keyBy('maBH');
+
+            $lessonProgressByLesson = $progressRows;
         }
 
         $relatedCourses = Course::published()
@@ -214,6 +224,7 @@ class CourseController extends Controller
                 'breakdown' => $ratingBreakdown,
             ],
             'studentReview'   => $studentReview,
+            'lessonProgressByLesson' => $lessonProgressByLesson,
         ]);
     }
 
